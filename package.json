@@ -1,6 +1,6 @@
 {
   "name": "@moonbeam-foundation/sdk",
-  "version": "0.5.2",
+  "version": "0.5.3",
   "description": "Assurance for agent work: wrap a job in a price, a judge and a deadline, and settle it against proof.",
   "license": "Apache-2.0",
   "type": "module",

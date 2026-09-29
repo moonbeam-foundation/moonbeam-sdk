@@ -3,7 +3,7 @@
 **Assurance for AI agent work: a price, a judge and a deadline, settled against proof.**
 
 - **What:** the SDK for Moonbeam's assurance layer on Base. It models a covered job end to end: the seller's deposit,
-  the buyer's premium, cover from a GLMR pool, the verdict, and a settlement in which every ledger sums to zero.
+  the buyer's premium, cover from a pool, the verdict, and a settlement in which every ledger sums to zero.
 - **Why:** agent escrow refunds the price of a failed job, never the cost of the failure, and the judge has no capital
   behind its verdict. Moonbeam adds the deposit, the pool and a grader (Jev by TypeSafe).
 - **How:** `npm install @moonbeam-foundation/sdk`, then replay Moonbeam's first covered hire on Base, offline, in a few seconds:
@@ -14,9 +14,8 @@ npx moonbeam demo
 
 ![moonbeam demo: a covered hire on Base, Jev's grade of that same job checked against its Base record, and the settlement](docs/demo.gif)
 
-> Moonbeam ACP is a pilot with selected partners on Base. The contracts are source-verified, and the GLMR pools are
-> not open yet. Nothing here is an offer or a promise of yield, and nothing in this package signs a transaction.
-> Building on Moonbeam and want early access? Write to [builders@moonbeam.foundation](mailto:builders@moonbeam.foundation).
+Moonbeam ACP is in a pilot on Base with selected partners. For early access, write to
+[builders@moonbeam.foundation](mailto:builders@moonbeam.foundation).
 
 ## Install
 
@@ -42,16 +41,16 @@ behind its verdict. This SDK models the layer that closes both gaps.
 ```ts
 import { settle, parseUnits } from '@moonbeam-foundation/sdk';
 
-const usdc = (v: string) => parseUnits(v); // USDC has 6 decimals
+const units = (v: string) => parseUnits(v); // amounts in the token's smallest units
 
 const { ledger, locked } = settle({
   terms: {
-    pay: usdc('100'),           // what the client pays for the work
-    premium: usdc('1'),         // what it pays for cover
-    deposit: usdc('120'),       // the provider's bond, sized above the job
-    evaluatorBond: usdc('25'),  // the judge's bond
-    poolCapital: usdc('5000'),  // backers standing behind the provider
-    damage: usdc('70'),         // consequential loss if the work is bad
+    pay: units('100'),           // what the client pays for the work
+    premium: units('1'),         // what it pays for cover
+    deposit: units('120'),       // the provider's bond, sized above the job
+    evaluatorBond: units('25'),  // the judge's bond
+    poolCapital: units('5000'),  // backers standing behind the provider
+    damage: units('70'),         // consequential loss if the work is bad
   },
   verdict: 'cheated',
 });
@@ -227,7 +226,7 @@ immediately, rather than producing a transaction addressed to nothing.
 
 ## Judging a job on the Base hook
 
-`@moonbeam-foundation/sdk/judge` grades a GLMR job on Moonbeam's assurance hook on Base
+`@moonbeam-foundation/sdk/judge` grades a job on Moonbeam's assurance hook on Base
 (`0xc0578657Eda85e0a246771aa1839ce79b54eE80d`) and builds the call that ends it. The grade works like this:
 
 - Code checks the facts first. A failed check rejects the job, and the model is never asked.
@@ -251,7 +250,7 @@ const check = await verifyGrade(receipt, { chain: false });
 
 `endJob` is signed by the job's buyer or by an evaluator the hook registered. For needs_review it returns `null`: the
 job stays held until one of those parties decides, or until anyone calls `expire` after the deadline. The tests
-re-encode the hook's `complete` from the covered GLMR hire on Base,
+re-encode the hook's `complete` from the covered hire on Base,
 [`0xc606d00f…3116`](https://basescan.org/tx/0xc606d00fed64e912585bbc93feb15a9289cfcde94289f49f7c74a7a468903116),
 byte for byte.
 
@@ -327,20 +326,20 @@ import { runSeason, breakEvenFailureRate, clearingFeeIsCoherent } from '@moonbea
 // the damage leaves the pool at zero, which is the intended steady state.
 runSeason({
   jobs: 5_000,
-  premiumPerJob: usdc('1'),
+  premiumPerJob: units('1'),
   failureRate: 0.006,
-  damagePerFailure: usdc('70'),
-  depositPerJob: usdc('40'),
+  damagePerFailure: units('70'),
+  depositPerJob: units('40'),
 });
 // → premium 4_970, absorbed by deposits 1_200, paid by pool 900, net +4_070
 
-breakEvenFailureRate(usdc('1'), usdc('70'), usdc('40')); // ≈ 0.032
-clearingFeeIsCoherent(34, usdc('1'), usdc('70'), usdc('40')); // false
+breakEvenFailureRate(units('1'), units('70'), units('40')); // ≈ 0.032
+clearingFeeIsCoherent(34, units('1'), units('70'), units('40')); // false
 
 // Raise the bond above the damage and the residual disappears:
-runSeason({ /* …as above… */ depositPerJob: usdc('120') });
+runSeason({ /* …as above… */ depositPerJob: units('120') });
 // → premium 4_970, absorbed by deposits 2_100, paid by pool 0, net +4_970
-breakEvenFailureRate(usdc('1'), usdc('70'), usdc('120')); // null — no rate breaks it
+breakEvenFailureRate(units('1'), units('70'), units('120')); // null — no rate breaks it
 ```
 
 That last call is the useful one. A published clearing fee is a claim about the
