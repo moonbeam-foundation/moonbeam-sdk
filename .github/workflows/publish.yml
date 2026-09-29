@@ -1,0 +1,31 @@
+# Publishes @moonbeam-foundation/sdk to npm when a GitHub release vX.Y.Z is published (a deliberate step, never on push).
+# Needs the repository secret NPM_TOKEN: an npm token that may publish to the @moonbeam-foundation npm organisation. npm provenance is added only while this repository is public.
+name: publish
+on:
+  release:
+    types: [published]
+permissions:
+  contents: read
+  id-token: write
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: https://registry.npmjs.org
+      - name: NPM_TOKEN must be set (its value is never printed)
+        run: test -n "$NODE_AUTH_TOKEN" || { echo "Set the repository secret NPM_TOKEN (an npm token that may publish @moonbeam-foundation/sdk)."; exit 1; }
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - run: npm ci
+      - run: npx tsc --noEmit && npm run build && npm test
+      - run: node bin/moonbeam.mjs demo
+      - name: The tag must match package.json
+        run: test "v$(node -p "require('./package.json').version")" = "${{ github.event.release.tag_name }}"
+      - name: Publish
+        run: npm publish --access public ${{ github.event.repository.private && ' ' || '--provenance' }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

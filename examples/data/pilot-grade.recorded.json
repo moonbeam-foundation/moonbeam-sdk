@@ -1,0 +1,78 @@
+{
+  "_about": "Moonbeam's first covered hire on Base, graded by Jev (jev-1.13.0) and recorded on Base on 28 September 2026. Copied from the recorded decision; the demo re-derives its digest offline.",
+  "job": {
+    "what": "Moonbeam covered hire",
+    "ref": "0x5bf26c8eece0ca8a7cd3df7389860e323291b002f7e6ab6ce07470bf73a7027d",
+    "chainId": 8453
+  },
+  "subject": {
+    "chainId": 8453,
+    "ref": "0x5bf26c8eece0ca8a7cd3df7389860e323291b002f7e6ab6ce07470bf73a7027d"
+  },
+  "evidence": "job: assurance-hook job 0x5bf26c8eece0ca8a7cd3df7389860e323291b002f7e6ab6ce07470bf73a7027d on chain 8453, held by the Moonbeam ACP assurance hook (Moonbeam ACP on Base), hook 0xc0578657Eda85e0a246771aa1839ce79b54eE80d\nwhat the buyer asked (job description on chain): not on chain: the hook records no job description\nprice: 10 GLMR funded into escrow in JobFunded by 0x90db8fb40a3429233b2a3ce5d143f3edbca764bb (the buyer); token 0xb3846fd356c2149ee8d30b0449088dc74e265459\npremium: 0.1 GLMR, paid by the buyer together with the price\nseller deposit: 12.000000000000000001 GLMR, pulled from the seller when the job was funded (the hook requires it above the price)\ncover: pool 0x2f8e5378a2d850a18d857ad8ad30f242b89e3a58 reserved a cover cap of 10 GLMR for this job (JobCovered); the reservation was released at 2026-09-26 15:26:29 UTC\nbuyer: 0x90db8fb40a3429233b2a3ce5d143f3edbca764bb\nseller: 0xdca0f0166bbc52a94073781d3971d8aa1938ef20\nevaluator: none recorded on the hook job\ncreated: 2026-09-26 15:21:49 UTC\nfunded: 2026-09-26 15:21:49 UTC (0 s after creation)\ndeadline: 2026-09-27 15:21:44 UTC (24.0 h after funding)\nchallenge window: 60 min (set when the job was funded)\nsubmitted: 2026-09-26 15:24:41 UTC (3 min after funding), 24.0 h before the deadline\nwhat was delivered: the seller sealed a 32-byte evidence digest 0x432872327170eee40585de07538fba8e745a00ee9f4c0518c127adb00de372ec with submit; the content behind it is not published on chain\nhow it ended: completed on the hook: the price was released to the seller, at 2026-09-26 15:26:29 UTC; sent by 0x90db8fb40a3429233b2a3ce5d143f3edbca764bb (the buyer)\npayment to the seller: 10 GLMR released to 0xdca0f0166bbc52a94073781d3971d8aa1938ef20 (the seller) in the completion transaction\npremium to the pool: 0.1 GLMR at completion\nevents in order: JobCreated (block 51823381) → JobFunded (block 51823381) → JobCovered (block 51823381) → Encumbered (block 51823381) → JobSubmitted (block 51823467) → JobCompleted (block 51823521) → PaymentReleased (block 51823521) → PremiumReceived (block 51823521) → Released (block 51823521)\nseller record (paid jobs that ended): 1 completed and paid, 0 delivered then rejected or paid and never delivered, 0 paid and expired after delivery with no ruling; 1 jobs in all\nseller speed: median 3 min from funding to delivery over 1 paid jobs\nseller buyers: 1 distinct buyers; the largest placed 100% of its jobs\nnot known:\n- the task the buyer asked for is not on chain: the hook records the parties, the amounts, the deadline and the evidence digest, not a specification of the work\n- the delivered content itself is not on chain, only its evidence digest",
+  "facts": {
+    "delivered": true,
+    "checks": {
+      "funded": true,
+      "submitted": true
+    }
+  },
+  "model": "jev-1.13.0",
+  "answers": [
+    {
+      "id": "spec_met",
+      "value": "no",
+      "confidence": 0.94,
+      "probabilities": {
+        "no": 0.97,
+        "yes": 0.03
+      }
+    },
+    {
+      "id": "unsupported_claim",
+      "value": "no",
+      "confidence": 0.94,
+      "probabilities": {
+        "no": 0.97,
+        "yes": 0.03
+      }
+    },
+    {
+      "id": "ending",
+      "value": "complete",
+      "confidence": 0.98,
+      "probabilities": {
+        "complete": 0.98,
+        "expire": 0,
+        "needs_review": 0.02,
+        "reject": 0
+      }
+    },
+    {
+      "id": "cheat_shaped",
+      "value": "no",
+      "confidence": 0.45,
+      "probabilities": {
+        "no": 0.72,
+        "yes": 0.28
+      }
+    }
+  ],
+  "recorded": {
+    "decision": "decision-1790596700677-ae89127c1f",
+    "digest": "0xae89127c1f345c560d379fd8adf60baa0ab6e1fa22b4f23cf71597332a2aeb3c",
+    "input_digest": "0x2bf9c6b462863183b3209ed9dbc2d4d63a77db21a031152c5f033731ab7ff5e0",
+    "confidence_bps": 4500,
+    "base": {
+      "contract": "0x209490d6A0FFC5368A42b0c2208BDCda853f6a92",
+      "tx": "0x25c51d53c57f67224c1df7064a145893b72da3b96609fc8017ce3a3af4bf01b3",
+      "block": 51903684
+    },
+    "answers": {
+      "contract": "0x8e9B9cE86a2d55c10318607b0c815B7B8C66254d",
+      "tx": "0x2238a05579e9b4d5ff6c05bd83b103c87ed4790c9f8b01462206b96564b2f3a8",
+      "block": 51903685,
+      "answers_digest": "0xe40386e613ffc49204a8731cb3fee55aa61e51ab3ed8dd0697fbfd5ef7b988c1"
+    }
+  }
+}

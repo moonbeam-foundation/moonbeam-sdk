@@ -1,0 +1,35 @@
+{
+  "_about": "Moonbeam's first covered hire on Base, 26 September 2026: a pilot run between our own wallets. Every figure is read from these public transactions.",
+  "chainId": 8453,
+  "hook": "0xc0578657Eda85e0a246771aa1839ce79b54eE80d",
+  "jobId": "0x5bf26c8eece0ca8a7cd3df7389860e323291b002f7e6ab6ce07470bf73a7027d",
+  "token": {
+    "symbol": "GLMR",
+    "decimals": 18
+  },
+  "terms": {
+    "pay": "10",
+    "premium": "0.1",
+    "deposit": "12",
+    "evaluatorBond": "0",
+    "poolCapital": "10",
+    "damage": "0"
+  },
+  "txs": {
+    "funded": {
+      "hash": "0xfbe436ced5caf66dde0e96033f041480316fc5f62cd273006ad9c1852a57f193",
+      "block": 51823381,
+      "what": "buyer funds price + premium; the pool reserves cover; the seller's deposit is locked"
+    },
+    "delivered": {
+      "hash": "0x3c5afe1278a28894726a70263a253cf307211edda444750fb87d6b7ecfce428b",
+      "block": 51823467,
+      "what": "seller submits the digest of its deliverable"
+    },
+    "completed": {
+      "hash": "0xc606d00fed64e912585bbc93feb15a9289cfcde94289f49f7c74a7a468903116",
+      "block": 51823521,
+      "what": "buyer completes: seller paid, deposit back, premium to the pool"
+    }
+  }
+}

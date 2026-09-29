@@ -1,0 +1,72 @@
+{
+  "_about": "A real job on Base graded by Jev (jev-1.13.0) and recorded on Base on 27 September 2026: an Olas Mech marketplace request. Copied from the recorded decision; the demo re-derives its digest offline.",
+  "job": {
+    "what": "Olas Mech request",
+    "ref": "0x8872c9369af22be743b9d5cbc8cbe5d8f39aa8ee7e9468bec5ecbe74080d5c51",
+    "chainId": 8453
+  },
+  "subject": {
+    "chainId": 8453,
+    "ref": "0x8872c9369af22be743b9d5cbc8cbe5d8f39aa8ee7e9468bec5ecbe74080d5c51",
+    "label": "RUBRIC_v1 · 0x8872c9369af22be743b9d5cbc8cbe5d8f39aa8ee7e9468bec5ecbe74080d5c51"
+  },
+  "evidence": "marketplace: Olas Mech Marketplace (Base); request 0x8872c9369af22be743b9d5cbc8cbe5d8f39aa8ee7e9468bec5ecbe74080d5c51\nwhat the buyer asked: solve the equation x^2 - 4x + 4 = 0 (tool openai-gpt-3.5-turbo)\nbuyer: 0x0afc909c92967cfc6d89ad2f214d7c697a183e51\nseller: mech 0x723f6a7fc401a8d2eade269b5c65643b9ad3719f (service 111)\nfee: 0.000099 USD (100 CREDITS)\nrequested: 2025-03-19 08:52:39 UTC, tx 0x2bebcc81488d0c09bd844a4d36bc08a59f87eec2151a237fbb9574f1481e7077\ndelivered: 2025-03-19 08:54:03 UTC (84 s after the request), tx 0x150a1104f43459c41b20781189ed55006e2f3593d58f9506d20c137a941393f3, model [unhandled type]\nwhat came back: 225 characters, sha256 0x376d994ea14f0def83380353ef0adfa09c791804853623bc34d970ad135274c7:\nTo solve the equation x^2 - 4x + 4 = 0, we can first try to factor it:\n\n(x - 2)(x - 2) = 0\n\nSince both factors are the same, we have a repeated root at x = 2. Therefore, the solution to the equation x^2 - 4x + 4 = 0 is x = 2.\nhow it ended: the marketplace has no acceptance step: payment is the request fee, released to the mech at delivery; no buyer verdict exists on chain",
+  "facts": {
+    "delivered": true,
+    "checks": {
+      "delivered": true
+    }
+  },
+  "model": "jev-1.13.0",
+  "answers": [
+    {
+      "id": "spec_met",
+      "value": "yes",
+      "confidence": 0.96,
+      "probabilities": {
+        "no": 0.02,
+        "yes": 0.98
+      }
+    },
+    {
+      "id": "unsupported_claim",
+      "value": "no",
+      "confidence": 0.67,
+      "probabilities": {
+        "no": 0.83,
+        "yes": 0.17
+      }
+    },
+    {
+      "id": "ending",
+      "value": "complete",
+      "confidence": 0.99,
+      "probabilities": {
+        "complete": 0.99,
+        "expire": 0,
+        "needs_review": 0.01,
+        "reject": 0
+      }
+    },
+    {
+      "id": "cheat_shaped",
+      "value": "no",
+      "confidence": 1,
+      "probabilities": {
+        "no": 1,
+        "yes": 0
+      }
+    }
+  ],
+  "recorded": {
+    "decision": "decision-1790535328078-03f3008665",
+    "digest": "0x03f300866571588d48e3c7cef76082022f15603a4c44132963d7d2fe2a3a4610",
+    "input_digest": "0xe243de7b0ca6533f8a6fa94997902a00b4b19970b45830748cc47d2de6c0a9ae",
+    "confidence_bps": 6700,
+    "base": {
+      "contract": "0x209490d6A0FFC5368A42b0c2208BDCda853f6a92",
+      "tx": "0xb964a585fab3b445c6110277097ee31694083835ebdc87a00cc899826ec45ef6",
+      "block": 51872995
+    }
+  }
+}

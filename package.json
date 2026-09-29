@@ -1,0 +1,124 @@
+{
+  "name": "@moonbeam-foundation/sdk",
+  "version": "0.5.2",
+  "description": "Assurance for agent work: wrap a job in a price, a judge and a deadline, and settle it against proof.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./acp": {
+      "types": "./dist/acp/events.d.ts",
+      "import": "./dist/acp/events.js"
+    },
+    "./actors": {
+      "types": "./dist/actors/index.d.ts",
+      "import": "./dist/actors/index.js"
+    },
+    "./adapters/acp": {
+      "types": "./dist/adapters/acp.d.ts",
+      "import": "./dist/adapters/acp.js"
+    },
+    "./connect": {
+      "types": "./dist/connect/http.d.ts",
+      "import": "./dist/connect/http.js"
+    },
+    "./client": {
+      "types": "./dist/client/index.d.ts",
+      "import": "./dist/client/index.js"
+    },
+    "./launcher": {
+      "types": "./dist/launcher/index.d.ts",
+      "import": "./dist/launcher/index.js"
+    },
+    "./adapters/stamp": {
+      "types": "./dist/adapters/stamp.d.ts",
+      "import": "./dist/adapters/stamp.js"
+    },
+    "./onboard": {
+      "types": "./dist/onboard/index.d.ts",
+      "import": "./dist/onboard/index.js"
+    },
+    "./pools": {
+      "types": "./dist/pools/index.d.ts",
+      "import": "./dist/pools/index.js"
+    },
+    "./judge": {
+      "types": "./dist/judge/index.d.ts",
+      "import": "./dist/judge/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "skills",
+    "README.md",
+    "LICENSE",
+    "bin",
+    "examples",
+    "docs"
+  ],
+  "sideEffects": false,
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "lint": "tsc --noEmit && vitest run --reporter=dot",
+    "prepublishOnly": "npm run build && npm test"
+  },
+  "keywords": [
+    "moonbeam",
+    "assurance",
+    "escrow",
+    "ai-agents",
+    "agent-commerce-protocol",
+    "acp",
+    "settlement",
+    "base",
+    "agent-economy",
+    "escrow-settlement",
+    "ai-agent-skills",
+    "jev",
+    "judge",
+    "erc-8183"
+  ],
+  "devDependencies": {
+    "@types/node": "^22.20.0",
+    "@vitest/coverage-v8": "^4.1.8",
+    "typescript": "^5.7.3",
+    "viem": "^2.55.19",
+    "vitest": "^4.1.8"
+  },
+  "dependencies": {
+    "@taifoon/jev": "^0.2.13",
+    "@taifoon/jev-wilson": "^0.2.0",
+    "@taifoon/n8n-nodes-typesafe": "^2.0.4"
+  },
+  "bin": {
+    "moonbeam": "bin/moonbeam.mjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/moonbeam-foundation/moonbeam-sdk.git"
+  },
+  "homepage": "https://github.com/moonbeam-foundation/moonbeam-sdk#readme",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  },
+  "bugs": {
+    "url": "https://github.com/moonbeam-foundation/moonbeam-sdk/issues",
+    "email": "builders@moonbeam.foundation"
+  },
+  "author": "Moonbeam Foundation <builders@moonbeam.foundation>"
+}
