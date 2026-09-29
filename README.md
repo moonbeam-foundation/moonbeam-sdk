@@ -226,7 +226,7 @@ immediately, rather than producing a transaction addressed to nothing.
 
 ## Judging a job on the Base hook
 
-`@moonbeam-foundation/sdk/judge` grades a job on Moonbeam's assurance hook on Base
+`@moonbeam-foundation/sdk/judge` grades a GLMR job on Moonbeam's assurance hook on Base
 (`0xc0578657Eda85e0a246771aa1839ce79b54eE80d`) and builds the call that ends it. The grade works like this:
 
 - Code checks the facts first. A failed check rejects the job, and the model is never asked.
@@ -250,7 +250,7 @@ const check = await verifyGrade(receipt, { chain: false });
 
 `endJob` is signed by the job's buyer or by an evaluator the hook registered. For needs_review it returns `null`: the
 job stays held until one of those parties decides, or until anyone calls `expire` after the deadline. The tests
-re-encode the hook's `complete` from the covered hire on Base,
+re-encode the hook's `complete` from the covered GLMR hire on Base,
 [`0xc606d00f…3116`](https://basescan.org/tx/0xc606d00fed64e912585bbc93feb15a9289cfcde94289f49f7c74a7a468903116),
 byte for byte.
 
