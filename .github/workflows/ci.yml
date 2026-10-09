@@ -2,6 +2,8 @@ name: ci
 on:
   push: { branches: [main] }
   pull_request:
+  # the live layer and the published packages change without a commit here: check them every hour too
+  schedule: [{ cron: '23 * * * *' }]
 permissions: { contents: read }
 jobs:
   check:
@@ -13,3 +15,15 @@ jobs:
       - run: npm ci
       - run: npx tsc --noEmit && npm run build && npm test
       - run: node bin/moonbeam.mjs demo
+  # what a newcomer runs, live, on this commit's own build: npm install <packed sdk> && npx moonbeam demo, the demo's grade
+  # verified on Base, gradeJob with no key (the free grades on the Taifoon layer through @taifoon/jev), and the layer's
+  # policies (quickstart, MCP, discovery files, every open wall's 402 before payment, a live Jev grade). Keyless.
+  live:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - run: npm ci && npm run build && npm pack --pack-destination "$RUNNER_TEMP"
+      - name: live smoke (this build, the layer)
+        run: MOONBEAM_SDK_SPEC="$(ls "$RUNNER_TEMP"/moonbeam-foundation-sdk-*.tgz)" node .github/live-smoke.mjs moonbeam layer
