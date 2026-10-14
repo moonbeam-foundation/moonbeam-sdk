@@ -13,14 +13,14 @@
  *                    of a reseller's markup
  *   seller_share     what the doer receives: exactly its price on a paid ending
  *   reseller_markup  a reseller tenant's leg, when its child bought
- *   provider · graders · ecosystem   a metered call: the split of the wholesale (taifoon-web lib/usage-settle), unchanged
+ *   provider · graders · ecosystem   a metered call: the split of the wholesale (the site’s lib/usage-settle), unchanged
  * A venue that takes its fee out of the money on its own side (`taken: at_source`) is grossed up for: the amount that enters it is
  * the smallest one whose net is the price wanted, so the doer still receives its price and our fee does not move with the venue.
  *
  * The per-venue facts (VENUE_FEES) are typed HERE, once, each with the contract read it rests on; schemas/transitions.json
  * `seller_coord_buyer.payment_scheme` is generated from this module (schemas/scripts/seller-coord-buyer.src.mjs), and every caller
- * (redirect.mjs, escrow-job.mjs, olas-out.mjs, doer-pay.mjs, pipeline/reseller/fold.mjs; taifoon-web lib/acp-sales, venue-targets)
- * computes through the functions below. Pure and self-contained: no import, no I/O. taifoon-web keeps a byte-identical copy at
+ * (redirect.mjs, escrow-job.mjs, olas-out.mjs, doer-pay.mjs, pipeline/reseller/fold.mjs; the site’s lib/acp-sales, venue-targets)
+ * computes through the functions below. Pure and self-contained: no import, no I/O. The site keeps a byte-identical copy at
  * src/lib/payment-scheme.mjs (sha256 pinned on both sides).
  */
 
@@ -51,25 +51,25 @@ export const ENDING_LEGS = Object.freeze(['refund', 'loss']);
  *   wall       a class wall (an x402 payment, a venue job that names a wall, an MCP wall tool): max(20 %, 0.002 USDC) of the wall's list
  *              price, rounded up, never above the price. The list price is seller_price + our_fee: what the buyer pays where no venue
  *              takes anything
- *   job_quote  a job settled on the assurance hook: the answer of GET /v1/fees/quote (taifoon-web lib/job-fee: max(bps of the price,
+ *   job_quote  a job settled on the assurance hook: the answer of GET /v1/fees/quote (the site’s lib/job-fee: max(bps of the price,
  *              our gas + margin), at most the hook's 10 %), escrowed on top of the price. It needs live gas, so it comes in as units
  *   metered    a metered call (RPC, GPU, TEE, forecast): no fee leg; the wholesale is split provider · graders · ecosystem
  */
 export const OUR_FEE = Object.freeze({
   rules: Object.freeze({
     wall: Object.freeze({ id: 'wall', door: 'a class wall: an x402 payment, a venue job that names a wall, an MCP wall tool', bps: 2000, min_units: 2000, min_units_of: 'a token of 6 decimals (USDC): 0.002', rounding: 'ceil', base: 'the list price (seller_price + our_fee): what the buyer pays where no venue takes anything', never_above: 'the list price',
-      code: 'automatch/payment-scheme.mjs ourFeeOf (pipeline/reseller/fold.mjs resaleTerms and taifoon-web lib/venue-targets call it)' }),
+      code: 'automatch/payment-scheme.mjs ourFeeOf (pipeline/reseller/fold.mjs resaleTerms and the site’s lib/venue-targets call it)' }),
     job_quote: Object.freeze({ id: 'job_quote', door: 'a job settled on the assurance hook (POST /v1/settle, a demand)', base: 'the job’s price', on_top: true,
-      code: 'taifoon-web src/lib/job-fee.ts jobFee · GET /v1/fees/quote (it reads live gas: its answer comes in as units)' }),
+      code: 'site src/lib/job-fee.ts jobFee · GET /v1/fees/quote (it reads live gas: its answer comes in as units)' }),
     metered: Object.freeze({ id: 'metered', door: 'a metered call paid from a key’s balance or an own wall', base: 'the wholesale', legs: Object.freeze(['provider', 'graders', 'ecosystem']),
-      code: 'taifoon-web src/lib/usage-settle.ts usageLegs (TSUL_SPLIT_BPS)' }),
+      code: 'site src/lib/usage-settle.ts usageLegs (TSUL_SPLIT_BPS)' }),
   }),
 });
 
 // ── the per-venue facts ─────────────────────────────────────────────────────────────────────────────────────────────────────────
 const ON_REFUND_ESCROW = Object.freeze({ venue_ending: 'returned', venue_ending_why: 'the venue takes its fee only on the paid ending: on a reject or an expiry the whole budget goes back to the client, no fee was taken', after_paid_ending: 'lost', after_paid_ending_why: 'a paid ending is final on the venue: a refund coord makes afterwards comes from coord’s own money, the venue keeps its fee' });
 const ON_REFUND_NONE = Object.freeze({ venue_ending: 'none', venue_ending_why: 'the venue takes no fee and has no refund of its own', after_paid_ending: 'none', after_paid_ending_why: 'no venue fee was taken: nothing of it is lost or returned' });
-// A venue's contract is named by its entry of the address registry (taifoon-agents packages/addresses: system, chain, name), never by a
+// A venue's contract is named by its entry of the address registry (packages/addresses: system, chain, name), never by a
 // literal here: the registry is the one place a contract address lives, and whoever needs the address resolves the reference
 // (schemeBlock(facts, { addressOf })). A venue's own treasury is no registry contract: it is the third party's account, as its contract
 // reads it (platformTreasury()), and the fork proof holds it to the chain on every run.
@@ -345,7 +345,7 @@ export function schemeBlock(facts = VENUE_FEES, { addressOf = null } = {}) {
     refund: { rule: 'refunds follow the redirect’s refund policy per mode (seller_coord_buyer.redirect.refund_policy), unchanged; each venue states what happens to its fee', venue_ending: 'the venue’s own refund ending (a reject, an expiry): by_venue[].on_refund.venue_ending', after_paid_ending: 'a refund coord makes after a paid ending: by_venue[].on_refund.after_paid_ending' },
     invariant: 'Σ legs = the payment, to the smallest unit, for every pair of venues and every ending; our_fee is the rule’s answer; venue_fee is the venue’s declared basis points on the declared base; on a paid ending the seller receives exactly seller_price',
     modes: 'the scheme does not depend on the redirect mode (forward · share · period · markup) or on a release condition: those say WHEN and HOW a leg is sent, the scheme says WHICH legs a payment has',
-    code: { repo: 'taifoon-agents', path: 'automatch/payment-scheme.mjs', what: 'quoteSale({ venue_in, venue_out, class, seller_price, reseller? }) → { price_to_buyer, legs[] } · legsOfPayment(payment) → legs[] · venueFeeOf · grossUp · ourFeeOf', vendored: 'taifoon-web src/lib/payment-scheme.mjs (byte-identical, sha256 pinned)' },
+    code: { repo: 'layer', path: 'automatch/payment-scheme.mjs', what: 'quoteSale({ venue_in, venue_out, class, seller_price, reseller? }) → { price_to_buyer, legs[] } · legsOfPayment(payment) → legs[] · venueFeeOf · grossUp · ourFeeOf', vendored: 'site src/lib/payment-scheme.mjs (byte-identical, sha256 pinned)' },
     tests: { unit: 'automatch/payment-scheme.test.mjs', conformance: 'harvesters/conformance/payment-scheme.test.mjs (every adapter of the standard; an adapter without an entry fails it)', fork: 'automatch/escrow-job.fork.mjs (ERC-8183, the memo router, BitAgent) · automatch/olas-out.fork.mjs (the Olas marketplace): the amounts the contracts move equal the scheme’s legs' },
   };
 }

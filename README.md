@@ -71,14 +71,16 @@ job, which is the shape a flat premium cannot fund at realistic failure rates.
 
 ## Examples
 
-Nineteen runnable files in [`examples/`](examples), all offline except two, built on real Base jobs. `npm test` runs them.
+Twenty-five runnable files in [`examples/`](examples), built on Base jobs; all run offline except four (17 and 32 read live; 50 and
+51 read live, or run from recorded answers with `OFFLINE=1`). `npm test` runs them.
 
 | Start with | If you are |
 |---|---|
-| [`03-end-to-end-offline`](examples/03-end-to-end-offline.mjs) | new here: one real job read from Base, graded, settled |
+| [`03-end-to-end-offline`](examples/03-end-to-end-offline.mjs) | new here: one job read from Base, graded, settled |
 | [`20`–`23` onboarding](examples/README.md#before-you-take-part) | about to pay, work, judge or back: what you put up, what you can lose, what should stop you |
 | [`10`–`17` the grader](examples/README.md#the-grader-stage-by-stage) | judging jobs: evidence → facts → answers → verdict → record → end the job → verify, then live |
 | [`30`–`33` reading jobs](examples/README.md#reading-jobs-that-already-ran) | studying jobs that already ran, one or many, offline or from a Base RPC |
+| [`50`–`53`](examples/README.md) | paying an x402 wall on Base, reading a proof, arbitration, the records every step comes with |
 
 ```sh
 node examples/03-end-to-end-offline.mjs
@@ -150,7 +152,7 @@ waitingOn(state, clock);                     // who is holding this up
   but the provider can escalate to arbitration.
 - A silent **evaluator** cannot strand either: the deadline resolves the job.
 
-These are checked against real state rather than asserted in prose.
+These are checked against the chain's state rather than asserted in prose.
 
 ## Time carries its provenance
 
@@ -211,9 +213,11 @@ on Base (`@moonbeam-foundation/sdk/onboard`; the hook, the pool factory and the 
 address registry, never typed here):
 
 ```ts
-import { fundCalls, submitCalls, settleCalls, BASE_GLMR, BASE_USDC, MOONBEAM_HOOK } from '@moonbeam-foundation/sdk/onboard';
+import { fundCalls, sellerDepositCalls, coverPremium, submitCalls, settleCalls, BASE_GLMR, BASE_USDC, MOONBEAM_HOOK } from '@moonbeam-foundation/sdk/onboard';
 
 // a covered job is a GLMR job: the hook covers in GLMR only (the USDC route closed on 2026-09-29)
+const premium = coverPremium(terms.price, { k: 19, n: 20 });          // the seller's record → the premium (jev-wilson)
+sellerDepositCalls(terms);                                              // the seller approves exactly its deposit
 const [approve, fund] = fundCalls({ ...terms, token: BASE_GLMR }, { pool, premium, coverCap });   // approve price + premium, then fundJobWithCover
 const [approveU, fundU] = fundCalls({ ...terms, token: BASE_USDC });                               // an uncovered USDC job: no pool, premium 0
 submitCalls({ jobId, evidenceDigest, correlator });                     // the seller seals its delivery
@@ -223,10 +227,12 @@ settleCalls(jobId, 'completed');                                         // comp
 `fundJob`'s last address word is the **cover pool**, not an evaluator: the hook keeps no per-job evaluator (evaluators are the
 owner's allowlist). `premium` is an argument the hook checks against the pool. A USDC job with a pool is refused before any call
 (the hook would revert `PoolAssetMismatch`). `MOONBEAM_HOOK.status` carries the registry's word on the hook row (`live`, or
-`scheduled-change` while a route change is announced).
+`scheduled-change` while a route change is announced). `test/fork/run-fork.mjs` sends these calls on a local fork of Base:
+deposit approval, approve, `fundJob` against a live pool, `submit`, `complete`, then the settle's attestation.
 
-Pools open by the council's yes, not by a release: `poolsOpenOn(transport)` (`./pools`) reads `GET /v1/pools/networks` through the
-site's proxy; the typed `POOLS_OPEN_ON` is only the fallback. The judge's quota is read the same way (`quotaOf(transport)`).
+Pools open by the council's yes, not by a release: `poolsOpenOn(transport)` (`./pools`) reads `GET /v1/pools/networks` (its
+`supported` lines and `closed_by_policy`) through the site's proxy and returns no chain while the GLMR pools are not open; the
+typed `POOLS_OPEN_ON` is only the fallback. Pass its `chains` to the pool builders as `openOn`. The judge's quota is read the same way (`quotaOf(transport)`).
 
 ## Judging a job on the Base hook
 
@@ -245,9 +251,9 @@ const receipt = await gradeJob({
   jobId,                                               // the hook's 32-byte job id
   evidence: { task, delivered },
   facts: jobFacts({ delivered: true, checks: { proof_verifies: () => checkProof(delivered) } }),
-  trial: true,                                         // 3 free calls; or key: <your TypeSafe key>
+  key: process.env.TYPESAFE_KEY,                       // your own TypeSafe key
 });
-const onchain = await recordGrade(receipt, { network: 'devnet' });  // none | devnet | base | both — unsigned calls
+const onchain = await recordGrade(receipt);            // unsigned calls on Base; { network: 'none' } turns it off
 const end = endJob(jobId, receipt);                    // complete(jobId) | reject(jobId, digest) | null (needs_review)
 const check = await verifyGrade(receipt, { chain: false });
 ```
@@ -283,6 +289,69 @@ A reseller is a tenant of the layer; its visitors buy on child keys from the res
 own leg, never part of the layer's fee. The venues are the five Base venues (`x402-base`, `erc8183-base`, `memoacp-base`,
 `bitagent-base`, `olas-base`): Moonbeam resells on Base only, and the assurance economy stays in GLMR. Solana rails and the other
 chains are in the coordination layer's own SDK, not here. Example: [`examples/24-resell-on-base.mjs`](examples/24-resell-on-base.mjs).
+
+## Attested by default
+
+Every step this SDK handles comes with its record: a grade (`recordGrade`), an assurance settle (`settleAttested`) and a
+resale step (`attestSale`). Each returns its mark (a digest anyone can recompute from the step's canonical body) and the
+unsigned calls that put the mark on Base, where Moonbeam runs:
+
+| contract on Base | call | built for |
+|---|---|---|
+| JevDecisionLog `0x209490d6A0FFC5368A42b0c2208BDCda853f6a92` | `record(subject, kind, digest, confidenceBps, model, uri)` | every step |
+| JevAnswerLog `0x8e9B9cE86a2d55c10318607b0c815B7B8C66254d` | `record(useCase, subject, inputDigest, answersDigest, decisionDigest, model, uri)` | a grade |
+| a grade stamp registry | `stamp(subject, digest, verdict, mode, model, uri)` | a step with a verdict |
+
+Base has no grade stamp registry, so the stamp comes back in `missing`, with no call. Pass `networks: [chainId]` to
+aim elsewhere, or `networks: 'none'` (`network: 'none'` for a grade) to turn recording off. The mark is returned
+either way. Your wallet signs the calls; nothing here sends.
+
+```ts
+import { settleAttested, hookQuote } from '@moonbeam-foundation/sdk/assurance';
+const s = settleAttested(job, hookQuote({ price, premium, deposit, covered: true }));
+s.legs;              // who receives what, from the job's own GLMR amounts
+s.attest.calls;      // [JevDecisionLog.record on 8453]
+s.attest.missing;    // [{ contract: 'GradeStampRegistry', chainId: 8453, why: … }]
+```
+
+## Paying an x402 wall on Base
+
+```ts
+import { quoteWall, transferAuthorization, paymentHeader } from '@moonbeam-foundation/sdk/x402';
+const { accept } = await quoteWall(transport, '/x402/class/mcp.digest');      // the 402's Base entry (USDC)
+const typed = transferAuthorization(accept, { from: myAddress });             // EIP-3009 TransferWithAuthorization
+const signature = await wallet.signTypedData(typed);                         // your wallet signs
+const header = paymentHeader(accept, typed.message, signature);              // the X-PAYMENT header
+```
+
+Only the `exact` entry on Base (`eip155:8453`) is taken; a wall that offers no Base entry is refused. `subscribe()` posts
+the top-up door and returns its 402 quote. `quoteSale` from `./resale` prices the same wall from the seller's price.
+
+## Proofs
+
+```ts
+import { readProof, verifyOnBase } from '@moonbeam-foundation/sdk/proof';
+import { baseReader } from '@moonbeam-foundation/sdk/rpc';
+const p = await readProof(transport, txHash);       // block, superroot, checks, proven, ref v5:8453:<tx>@<superroot>
+const c = await verifyOnBase(baseReader(), p.blob!); // verify(blob) by eth_call on the V5 verifier 0x2D475a53eAA8F9AC78B69bD2429275a622C644f8
+```
+
+`c.verified` is what the verifier returns. `c.anchored` is false while the verifier has no superroot anchor set. The
+block is bound to the snapshot the verifier folds by the inclusion path the layer serves (`c.inclusion`).
+
+## Arbitration
+
+`./arbitration` builds the calls of the three-tier ArbitratorRouter: `resolveByCode` (tier 0, anyone),
+`secondGraderTypedData` + `resolveBySecondGrader` (tier 1), and `councilApprove`, `pullOracle` and
+`resolveByCouncil` (tier 2). It also decodes `Escalated`, `CouncilApproved` and `Resolved`, and `recordEffectOf`
+says what a ruling writes into the seller's record. The router is not deployed on Base and the hook names no
+arbitrator (`ARBITRATION_ON_BASE`), so every builder takes the router's address.
+
+## The Base reader
+
+`baseReader()` from `./rpc` walks a measured rotation of Base endpoints: a rate limit or a refused range moves the call
+to the next endpoint, and a revert is thrown at once. `BASE_RPC` (a comma list) goes first. The live examples read
+through it.
 
 ## Skills for AI agents
 
@@ -326,7 +395,7 @@ Implement `AssuranceAdapter<HostJob, HostOutcome>`: say what a job costs and wha
 its outcome means. Adapters translate; they never settle.
 
 The interface is deliberately narrow because it currently has **one**
-implementation. One adapter is a hypothetical seam, two is a real one — so it is
+implementation. One adapter is a hypothetical seam, two is a working one — so it is
 better to keep this small until a second protocol shows what actually needs to
 be shared.
 
@@ -344,7 +413,7 @@ provider doing the work and the evaluator grading it. Everyone else opts in.
 
 Worth being precise about backing a pool: choosing to back one is optional, but once
 in, underwriting is not a separate opt-in — **the exposure is the yield**.
-There is no passive tier, because rewards come from real fees rather than
+There is no passive tier, because rewards come from fees paid rather than
 inflation.
 
 ## Pool economics

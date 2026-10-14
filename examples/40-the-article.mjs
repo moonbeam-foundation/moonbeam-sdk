@@ -19,7 +19,7 @@ const data = (f) => JSON.parse(readFileSync(new URL(`./data/${f}`, import.meta.u
 title('"It reads the chain. It decodes ERC-8183 logs into one job state, says who can act next, and says which endings need a grader."');
 {
   const state = foldTask(decodeAcpLogs(data('virtuals-job-74926.json')));
-  check('decodes a real Base job\'s logs into one state', state.work === 'graded' || state.escrow !== 'none', `job ${state.id}: ${state.work}`);
+  check('decodes a Base job\'s logs into one state', state.work === 'graded' || state.escrow !== 'none', `job ${state.id}: ${state.work}`);
   const clock = localClock(Math.floor(Date.UTC(2026, 8, 1) / 1000));
   const acts = availableActions(state, clock);
   check('says who can act next', Array.isArray(acts), `${acts.length} action(s) open · waiting on ${waitingOn(state, clock) ?? 'nobody (ended)'}`);

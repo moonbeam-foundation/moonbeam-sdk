@@ -294,3 +294,11 @@ export {
 export type {
   BaseAgentCandidate, Attestation, HireTerms, UnsignedCall as OnboardUnsignedCall, Delivery, JevGuard, JevDecision, JevOption, Ending as OnboardEnding, Settlement as OnboardSettlement, SellerRecord, Hireable, OnboardTransport, QuotaStanding,
 } from './onboard/index.js';
+
+// ── 0.7.0: x402 on Base, proofs, arbitration, the Base reader, attestations by default ──
+// Each is a subpath module as well ('./x402', './proof', './arbitration', './rpc', './attest'); the root carries them as namespaces.
+export * as x402 from './x402/index.js';
+export * as proof from './proof/index.js';
+export * as arbitration from './arbitration/index.js';
+export * as rpc from './rpc/index.js';
+export * as attestation from './attest/index.js';

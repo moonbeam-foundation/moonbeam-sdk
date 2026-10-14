@@ -1,27 +1,24 @@
-// Read live: one real job's events straight from a public Base RPC, decode and fold them. Read only; no key.
+// Read live: one job's events straight from Base, decode and fold them. Read only; no key.
+// The reads go through the SDK's Base reader: warmbed's measured rotation of Base endpoints, so a rate-limited or
+// range-capped endpoint moves the call to the next one.
 //   node examples/32-read-live-from-base.mjs          Virtuals ACP job 74926 (the one captured in data/)
 //   JOB=12345 FROM_BLOCK=50000000 node examples/32-read-live-from-base.mjs
-//   BASE_RPC=https://your-rpc node examples/32-read-live-from-base.mjs
+//   BASE_RPC=https://your-rpc node examples/32-read-live-from-base.mjs     (your endpoint goes first)
 import { decodeAcpLogs, foldTask, toOutcome, localClock, VIRTUALS_ACP_ADDRESS, ACP_TOPIC0 } from '@moonbeam-foundation/sdk';
+import { baseReader } from '@moonbeam-foundation/sdk/rpc';
 
-const RPC = process.env.BASE_RPC ?? 'https://mainnet.base.org';
+const reader = baseReader();
 const job = BigInt(process.env.JOB ?? 74926);
 const from = Number(process.env.FROM_BLOCK ?? 50_427_200);
 const SPAN = 500, WINDOWS = Number(process.env.WINDOWS ?? 4); // public RPCs cap the block range per call
-
-async function rpc(method, params) {
-  const res = await fetch(RPC, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ jsonrpc: '2.0', id: 1, method, params }) });
-  const body = await res.json();
-  if (body.error) throw new Error(`${method}: ${body.error.message}`);
-  return body.result;
-}
+const rpc = (method, params, need = 'call') => reader.call(method, params, need);
 
 const virtuals = ['jobCreated', 'budgetSet', 'jobFunded', 'paymentReleased', 'jobRefunded', 'jobSubmitted', 'jobCompleted', 'jobRejected', 'jobExpired', 'evaluatorFeePaid'].map((k) => ACP_TOPIC0[k]);
 const jobTopic = '0x' + job.toString(16).padStart(64, '0');
 const logs = [];
 for (let i = 0; i < WINDOWS; i++) {
   const lo = from + i * SPAN, hi = lo + SPAN - 1;
-  logs.push(...(await rpc('eth_getLogs', [{ address: VIRTUALS_ACP_ADDRESS, topics: [virtuals, jobTopic], fromBlock: '0x' + lo.toString(16), toBlock: '0x' + hi.toString(16) }])));
+  logs.push(...(await rpc('eth_getLogs', [{ address: VIRTUALS_ACP_ADDRESS, topics: [virtuals, jobTopic], fromBlock: '0x' + lo.toString(16), toBlock: '0x' + hi.toString(16) }], 'logs')));
 }
 const events = decodeAcpLogs(logs);
 console.log(`job ${job}, blocks ${from}–${from + WINDOWS * SPAN - 1}: ${events.length} events`);

@@ -37,7 +37,7 @@ import { foldTasks, findSelfGraded, independentShare, decodeAcpLogs } from '@moo
 
 const states = foldTasks(decodeAcpLogs(logs));
 findSelfGraded(states);      // verification 'self' or 'none'
-independentShare(states);    // how much of the population had a real judge
+independentShare(states);    // how much of the population had an independent judge
 ```
 
 On live agent-commerce traffic, independently graded jobs are a tiny fraction of

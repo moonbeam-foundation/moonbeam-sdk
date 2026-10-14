@@ -123,3 +123,31 @@ export async function readResellerView(t: OnboardTransport): Promise<Record<stri
   if (!r.ok || !j?.ok) throw new Error(j?.error ?? `GET /access/reseller → ${r.status}${j?.code ? ` (${j.code})` : ''}`);
   return j;
 }
+
+// ── quoteSale and the attested resale steps (0.7.0) ──────────────────────────────────────────────────────────────────
+import { attest, attestKeccak, type Attested, type MoonbeamAttestOptions } from '../attest/index.js';
+
+/** quoteSale over the Base venues: the layer's own quoteSale, refused outside Base (the same as quoteBase). Pure. */
+export const quoteSale = quoteBase;
+
+/** The steps of a resale the SDK attests: quoted (the terms), paid (the buyer's payment), delivered, settled (the legs). */
+export type SaleStep = 'quoted' | 'paid' | 'delivered' | 'settled' | 'refunded';
+const STEP_VERDICT: Partial<Record<SaleStep, 1 | 3>> = { delivered: 1, settled: 1, refunded: 3 };
+const quoteBody = (q: OkQuote) => JSON.parse(JSON.stringify(q, (_k, v) => (typeof v === 'bigint' ? v.toString() : v)));
+
+/**
+ * The attested mark, the decision-log attestation and (for delivered, settled, refunded) the stamp of one resale step,
+ * Base by default (`networks: 'none'` opts out). The subject is the sale key on the contract the step pays through (the
+ * wall's payTo, a venue escrow) or the zero address when there is none; the digest is keccak256 of the step's canonical body.
+ */
+export function attestSale(a: { saleKey: string; step: SaleStep; quote?: OkQuote; tx?: string | null; contract?: string; body?: unknown }, opts: MoonbeamAttestOptions = {}): Attested {
+  if (!a.saleKey) throw new RangeError('a sale key names the sale');
+  return attest({
+    kind: `resale.${a.step}`,
+    subject: { chainId: 8453, contract: a.contract ?? `0x${'0'.repeat(40)}`, jobId: attestKeccak(a.saleKey) },
+    body: { v: 'resale.step.v1', sale: a.saleKey, step: a.step, quote: a.quote ? quoteBody(a.quote) : null, tx: a.tx ?? null, extra: a.body ?? null },
+    model: `det:resale-${a.step}-v1`,
+    verdict: STEP_VERDICT[a.step] ?? null,
+    mode: 1,
+  }, opts);
+}

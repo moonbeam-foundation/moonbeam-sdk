@@ -2,7 +2,7 @@
   "about": "a copy of @taifoon/assurance (the core and this profile's venues); do not edit, re-sync it with the package's scripts/sync.mjs",
   "package": "@taifoon/assurance",
   "version": "0.1.0",
-  "commit": "f43acf07880df6fa13b3f59e5f964f1389f82e37",
+  "commit": "51d42de786be19d1b9dd4759473b09aa49f883c2",
   "profile": "moonbeam",
-  "sha256": "456db7d1129faa9175a8bce994b5653df3a6802cf1df775ab82a9ead7931cdba"
+  "sha256": "876761a282e66ca4cc88217c61402a6eecd35aeafec8dae0d324e7d58f2c2035"
 }

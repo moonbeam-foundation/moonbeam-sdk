@@ -1,4 +1,4 @@
-// The whole covered job, offline, from a real Base trail: read the job's logs, grade the delivery, settle the money.
+// The whole covered job, offline, from a Base trail: read the job's logs, grade the delivery, settle the money.
 // No key, no network. Every step asserts its own result, so this file doubles as a check.
 //   node examples/03-end-to-end-offline.mjs
 import { readFileSync } from 'node:fs';
@@ -8,7 +8,7 @@ import { gradeJob, verifyGrade } from '@moonbeam-foundation/sdk/judge';
 import { TERMS } from './data/terms.mjs';
 import { CLEAN } from './data/answers.mjs';
 
-// 1. read: the real trail of Virtuals ACP job 74926 on Base
+// 1. read: the trail of Virtuals ACP job 74926 on Base
 const logs = JSON.parse(readFileSync(new URL('./data/virtuals-job-74926.json', import.meta.url), 'utf8'));
 const prepared = prepareSettlement(logs, TERMS, localClock(Math.floor(Date.UTC(2026, 8, 1) / 1000)));
 assert.equal(prepared.ready, true);

@@ -1,4 +1,4 @@
-// Grade a job with Jev for real, on your own TypeSafe key (console.typesafe.ai). Without a key it explains and stops.
+// Grade a job with Jev live, on your own TypeSafe key (console.typesafe.ai). Without a key it explains and stops.
 //   TYPESAFE_KEY=… node examples/17-grade-live.mjs
 import { gradeJob, jobFacts, endJob } from '@moonbeam-foundation/sdk/judge';
 import { PILOT_JOB } from './data/answers.mjs';

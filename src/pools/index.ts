@@ -250,18 +250,24 @@ export const POOLS_OPEN_ON: readonly number[] = Object.freeze([DEVNET_CHAIN_ID])
 export type PoolNetwork = { chain_id: number; chain?: string; network?: string; line?: string; factory?: string; hook?: string; assets?: string[]; status: string; why?: string; pool_count?: number | null };
 
 /**
- * Where pools are open TODAY, read from the layer's policy (GET /v1/pools/networks: a line is `open` only when its factory has code
- * and the council's board does not block deposits) — so opening the Base pools is the council's yes, not an npm release. The typed
- * POOLS_OPEN_ON is the fallback when the read fails. The transport is the site's same-origin proxy (as ./onboard takes it).
+ * Where Moonbeam's pools are open TODAY, read from the layer's policy (GET /v1/pools/networks) — so opening them is the
+ * council's yes, not an npm release. A chain is open for Moonbeam when the layer lists Moonbeam's factory there with status
+ * `open` and does not name it under `closed_by_policy`. Today the layer names Moonbeam's factories (Base and the devnet)
+ * under closed_by_policy ("The GLMR pools are not open."), so the answer is no chain. The typed POOLS_OPEN_ON is the
+ * fallback when the read fails. Pass `chains` to the pool builders as `openOn`.
  */
-export async function poolsOpenOn(t: { fetch: (url: string, init?: { method?: string; headers?: Record<string, string> }) => Promise<{ ok: boolean; status: number; json(): Promise<unknown> }>; base: string }): Promise<{ chains: readonly number[]; networks: PoolNetwork[]; source: 'layer' | 'typed' }> {
+export async function poolsOpenOn(t: { fetch: (url: string, init?: { method?: string; headers?: Record<string, string> }) => Promise<{ ok: boolean; status: number; json(): Promise<unknown> }>; base: string }): Promise<{ chains: readonly number[]; networks: PoolNetwork[]; closedByPolicy: { chain_id: number; why: string }[]; source: 'layer' | 'typed' }> {
   try {
     const r = await t.fetch(`${t.base}/pools/networks`, { method: 'GET', headers: { accept: 'application/json' } });
-    const j = (await r.json().catch(() => null)) as { ok?: boolean; networks?: PoolNetwork[] } | null;
-    if (!r.ok || !j?.ok || !Array.isArray(j.networks)) return { chains: POOLS_OPEN_ON, networks: [], source: 'typed' };
-    const open = j.networks.filter((n) => n.status === 'open' && Number.isInteger(n.chain_id)).map((n) => n.chain_id);
-    return { chains: Object.freeze([...new Set(open)]), networks: j.networks, source: 'layer' };
-  } catch { return { chains: POOLS_OPEN_ON, networks: [], source: 'typed' }; }
+    const j = (await r.json().catch(() => null)) as { ok?: boolean; supported?: PoolNetwork[]; networks?: PoolNetwork[]; closed_by_policy?: { chain_id: number; system?: string; factory?: string; why?: string }[] } | null;
+    const rows = j?.supported ?? j?.networks;
+    if (!r.ok || !j?.ok || !Array.isArray(rows)) return { chains: POOLS_OPEN_ON, networks: [], closedByPolicy: [], source: 'typed' };
+    const ours = new Set(Object.values(POOL_FACTORY).map((a) => a.toLowerCase()));
+    const closed = (j.closed_by_policy ?? []).filter((c) => c.system === 'moonbeam-acp' || ours.has(String(c.factory ?? '').toLowerCase()));
+    const closedChains = new Set(closed.map((c) => c.chain_id));
+    const open = rows.filter((n) => n.status === 'open' && ours.has(String(n.factory ?? '').toLowerCase()) && !closedChains.has(n.chain_id)).map((n) => n.chain_id);
+    return { chains: Object.freeze([...new Set(open)]), networks: rows, closedByPolicy: closed.map((c) => ({ chain_id: c.chain_id, why: c.why ?? 'closed by policy' })), source: 'layer' };
+  } catch { return { chains: POOLS_OPEN_ON, networks: [], closedByPolicy: [], source: 'typed' }; }
 }
 
 export class PoolsNotOpenError extends Error {
@@ -271,8 +277,8 @@ export class PoolsNotOpenError extends Error {
   }
 }
 
-function assertPoolsOpen(chainId: number): void {
-  if (!POOLS_OPEN_ON.includes(chainId)) throw new PoolsNotOpenError(chainId);
+function assertPoolsOpen(chainId: number, openOn: readonly number[] = POOLS_OPEN_ON): void {
+  if (!openOn.includes(chainId)) throw new PoolsNotOpenError(chainId);
 }
 
 const word = (n: bigint) => { if (n < 0n) throw new RangeError('negative word'); return n.toString(16).padStart(64, '0'); };
@@ -280,8 +286,8 @@ const addrWord = (a: string) => { if (!isAddress(a)) throw new Error(`not an add
 const call = (chainId: number, to: Address, data: string, step: string, effect: string): UnsignedCall => ({ chainId, to, data: data as Hex, value: '0x0', step, signer: 'anyone', effect });
 
 /** The two calls a deposit takes, in order: an exact-amount approve to the pool, then deposit(assets, receiver). Never a standing allowance. */
-export function depositCalls(a: { chainId: number; pool: Address; asset: Address; amount: bigint; receiver: Address }): UnsignedCall[] {
-  assertPoolsOpen(a.chainId);
+export function depositCalls(a: { chainId: number; pool: Address; asset: Address; amount: bigint; receiver: Address; openOn?: readonly number[] }): UnsignedCall[] {
+  assertPoolsOpen(a.chainId, a.openOn);
   if (a.amount <= 0n) throw new RangeError('amount must be positive');
   return [
     call(a.chainId, a.asset, selector(POOL_SIGNATURES.approve) + addrWord(a.pool) + word(a.amount), 'approve', `Allow the pool to take exactly ${formatU(a.amount, 18, 4)} GLMR. Nothing moves yet.`),
@@ -290,8 +296,8 @@ export function depositCalls(a: { chainId: number; pool: Address; asset: Address
 }
 
 /** The one call a withdrawal takes: redeem(shares, receiver, owner). The pool pays today’s value of the shares, up to what nothing holds. */
-export function redeemCalls(a: { chainId: number; pool: Address; shares: bigint; owner: Address }): UnsignedCall[] {
-  assertPoolsOpen(a.chainId);
+export function redeemCalls(a: { chainId: number; pool: Address; shares: bigint; owner: Address; openOn?: readonly number[] }): UnsignedCall[] {
+  assertPoolsOpen(a.chainId, a.openOn);
   if (a.shares <= 0n) throw new RangeError('shares must be positive');
   return [call(a.chainId, a.pool, selector(POOL_SIGNATURES.redeem) + word(a.shares) + addrWord(a.owner) + addrWord(a.owner), 'redeem', `Redeem ${formatU(a.shares, 18, 4)} shares for GLMR at today’s value.`)];
 }
@@ -306,8 +312,8 @@ function stringWords(v: string): string {
  * The one call that opens a pool: createPool(seller, asset, name, symbol) on the chain's factory. Anyone may
  * send it; it costs gas and moves no money. Refused when the chain has no factory this surface knows.
  */
-export function createPoolCalls(a: { chainId: number; seller: Address; asset: Address; name: string; symbol: string }): UnsignedCall[] {
-  assertPoolsOpen(a.chainId);
+export function createPoolCalls(a: { chainId: number; seller: Address; asset: Address; name: string; symbol: string; openOn?: readonly number[] }): UnsignedCall[] {
+  assertPoolsOpen(a.chainId, a.openOn);
   const factory = POOL_FACTORY[a.chainId];
   if (!factory) throw new Error(`no pool factory known on chain ${a.chainId}`);
   if (!a.name.trim() || !a.symbol.trim()) throw new RangeError('a pool needs a name and a symbol');
