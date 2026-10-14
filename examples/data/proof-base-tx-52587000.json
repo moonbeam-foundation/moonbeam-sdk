@@ -1,0 +1,116 @@
+{
+ "ok": true,
+ "chain_id": 8453,
+ "tx": "0x48f87043df02dc8f97c3a70afb8c8748848d0efae865cb251c429cce57bc127f",
+ "block_number": 52587000,
+ "block_hash": "0xce0c4c585c9d88150cacfec796ab51a5acdb42b8b0570a0da2f90679ba74dbd3",
+ "is_finalized": true,
+ "proven": true,
+ "proof_state": "proven",
+ "super_root_hash": "af8134f8fc0de7a2ab4456adcbb847761102065a6e81da26cc5d957435628a04",
+ "batch_id": 1791967493,
+ "finality_block": 52588585,
+ "finalized_block_hash": "0x81a0d70ecfa2132d53e2759bd7b4e5639d43c559727e0d890f788aaf2d6776c1",
+ "verifiable_block": 52588585,
+ "checks": {
+  "receipt_found": true,
+  "tx_succeeded": true,
+  "proof_served": true,
+  "block_hash_matches": true,
+  "within_verifiable_range": true
+ },
+ "source": "receipt read from chain; block proof from the producer; block hash compared between the two",
+ "blob": {
+  "superroot": {
+   "superrootHash": "0xaf8134f8fc0de7a2ab4456adcbb847761102065a6e81da26cc5d957435628a04",
+   "batchId": 1791967493,
+   "chainCount": 76,
+   "totalTwigs": 15664981
+  },
+  "chainHeaders": [
+   {
+    "chainId": 8453,
+    "chainType": 0,
+    "blockNumber": 52587000,
+    "blockHash": "0xce0c4c585c9d88150cacfec796ab51a5acdb42b8b0570a0da2f90679ba74dbd3",
+    "miniMmrRoot": "0xa6b8213dd9ac171ad580db56a3eb7b640141d227f4b078d62f037f191140f24e",
+    "twigCount": 7316750,
+    "stateRoot": "0x24d77153e44b43a107b419502d81f114adb3826f02e804c5f51a08dc8de502de"
+   }
+  ],
+  "superrootProof": {
+   "targetChainIndex": 4,
+   "siblings": [
+    "0x0fd49ee3e6a6fbbbd6b84b6f8eaedd1b95866c9bca6e8578acff0a2bd99ef862",
+    "0xbd92daadb001856b635ced48ab36e974c4d49591833ae7fda4b5de5acf33ab13",
+    "0x508428f519638d847366a67192c9395fde6ddeccc4efa3c7be4d07ac0f54c9d0",
+    "0x231add3099e2ad97acbebe11f1f5b09d090a65018f18c3a26b432676dabc2028",
+    "0x2ba3594dfe41c71b787e4fd18ef48e35acca24f2e85e5c2bb10cb6e7602a0849",
+    "0x5bb6ec61927fec1e96c7ee107f2355ff2ec8e190b0325d6237e68135eb0d2bea",
+    "0xa7a60abbcdf5183a8cc8310db3b4c0237639125c5ec3f7e940b4b27e847ace83"
+   ]
+  },
+  "blockProof": {
+   "blockIndex": 52587000,
+   "siblings": [],
+   "l4Status": "block is bound by `inclusion`: its hash folds to miniMmrRoot at index = block number; `siblings` is left empty because the deployed v5.0 verifier folds the snapshot-tip header's hash, not this block's",
+   "inclusion": {
+    "blockNumber": 52587000,
+    "blockHash": "0xce0c4c585c9d88150cacfec796ab51a5acdb42b8b0570a0da2f90679ba74dbd3",
+    "index": 52587000,
+    "siblings": [
+     "0x043b28d01bbca81b36e04c4e7fd726e900e45e574db168ed13579f3a0d3e244f",
+     "0x100046450ce4770bae09f3a200cc2bd9ce3de122f090bbb187d3d1b987f73e54",
+     "0xe3618ea65f808242ffe9d3d7475dba837c2467554eb751c8efe1556e54f03bda",
+     "0xf76ff27d7bd09c305fdf7aa975b77ce0d1a8f3e197dcf6cf54d8c900d07fbf41",
+     "0x4d313f8ba598331677b797dea1a5cb1d551f72d10cbabf60b7ac61639246af30",
+     "0xe452f8df4808e6c3945417a8acfa6bc110041558b0b4b5570640f08e307464b4",
+     "0x8c6deaf63e1ad1f04ae481bcbb85a42aa6da7d9386a3b51bc9d1a56ca40815b6",
+     "0x96b5e1394de1d84aaccd42a7dae0ca697853fac22470952aad3d8916a51896fd",
+     "0x89b303cd5084be070a694010736650f52a28ba9f5030ca159e2edddc8f9a9f13",
+     "0x96c1e34609a7afdb4a4fb41f11a6e00b370e47b0eef7187c3984705f9862461d",
+     "0x7760cfe7149aecabfa7bfdf320fcdf140c3281af255143582bf54dd9dbd9aa94",
+     "0xbfe49b5957155850e6f748971be706595962973ad2bb635e2514458b3eb3eb4d",
+     "0x7765a9828a5f351e4585902b21419f09ef6ed395f8bda308f868267d8bc74921",
+     "0xc55a4d3f8b7d145f438028edec83bf2d7651e5f033434808d1d00f32bb1091c7",
+     "0x66cfa7c9b1a6bd60caaf2178736d803b8d8a58a7234a01cb0173ff7eb9708745",
+     "0xda7bce9f4e8618b6bd2f4132ce798cdc7a60e7e1460a7299e3c6342a579626d2",
+     "0x2733e50f526ec2fa19a22b31e8ed50f23cd1fdf94c9154ed3a7609a2f1ff981f",
+     "0xefc595b82ec8c78a5df2927bbe6bb5a096426f2cb78d20b367831d25a080c648",
+     "0x5a2dce0a8a7f68bb74560f8f71837c2c2ebbcbf7fffb42ae1896f13f7c7479a0",
+     "0xb46a28b6f55540f89444f63de0378e3d121be09e06cc9ded1c20e65876d36aa0",
+     "0xc65e9645644786b620e2dd2ad648ddfcbf4a7e5b1a3a4ecfe7f64667a3f0b7e2",
+     "0xb9565c463b5a2ce6e81d5eec6214a825a365276138419083c0e8aa57fc2a25b1",
+     "0x5a9c16dc00d6ef18b7933a6f8dc65ccb55667138776f7dea101070dc8796e377",
+     "0x4df84f40ae0c8229d0d6069e5c8f39a7c299677a09d367fc7b05e3bc380ee652",
+     "0xb863a0ce7902ee4f773f51c4e0606882d6890e17989bf7c06aa9227fa08546f4",
+     "0x0abf5ac974a1ed57f4050aa510dd9c74f508277b39d7973bb2dfccc5eeb0618d",
+     "0xb8cd74046ff337f0a7bf2c8e03e10f642c1886798d71806ab1e888d9e5ee87d0",
+     "0x838c5655cb21c6cb83313b5a631175dff4963772cce9108188b34ac87c81c41e",
+     "0x662ee4dd2dd7b2bc707961b1e646c4047669dcb6584f0d8d770daf5d7e7deb2e",
+     "0x388ab20e2573d171a88108e79d820e98f26c0b84aa8b2f4aa4968dbb818ea322",
+     "0x93237c50ba75ee485f4c22adf2f741400bdf8d6a9cc7df7ecae576221665d735",
+     "0x8448818bb4ae4562849e949e17ac16e0be16688e156b5cf15e098c627c0056a9"
+    ],
+    "root": "0xa6b8213dd9ac171ad580db56a3eb7b640141d227f4b078d62f037f191140f24e",
+    "tipBlockNumber": 52588585,
+    "tipBlockHash": "0x81a0d70ecfa2132d53e2759bd7b4e5639d43c559727e0d890f788aaf2d6776c1",
+    "twigCount": 7316750,
+    "treeVersion": 84269
+   }
+  },
+  "event": {
+   "chainType": 0,
+   "encoded": "0x"
+  },
+  "finality": {
+   "chainId": 8453,
+   "blockNumber": 52587000,
+   "finalityType": 12,
+   "proof": "0x000000000000000000000000b1d481571395a2f3e6672df8cfaa4331aafa2464c2091dcdd1299851b1321a8ee36ce19b3512a5aeff12b30f9a3409a98f287bec00000000000000000000000000000000000000000000000000000000031ea3680000000000000000000000000000000000000000000000000000000000000002",
+   "finalizedBlockNumber": 52588585,
+   "finalizedBlockHash": "0x81a0d70ecfa2132d53e2759bd7b4e5639d43c559727e0d890f788aaf2d6776c1"
+  },
+  "verifiableBlock": 52588585
+ }
+}

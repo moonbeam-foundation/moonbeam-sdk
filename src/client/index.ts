@@ -1,6 +1,10 @@
 import type { Address, Hex, Hex32 } from '../acp/hex.js';
 
 /**
+ * NOT DEPLOYED: the escrow these builders target (lock / release / refundOnTimeout / dispute) is deployed on no mainnet
+ * and never on Base. The live Moonbeam hook's calls are in './onboard' (fundCalls, sellerDepositCalls, submitCalls,
+ * settleCalls). This module stays for code written against it; CLIENT_STATUS says so to a program.
+ *
  * Building the transactions that drive an insured job.
  *
  * This module builds calls; it does not sign or send them. Two reasons, and
@@ -14,6 +18,9 @@ import type { Address, Hex, Hex32 } from '../acp/hex.js';
  * Pass the result to whatever your application already uses to send
  * transactions.
  */
+
+/** The escrow this module builds for is not deployed on Base (or any mainnet): use './onboard' for the live hook. */
+export const CLIENT_STATUS = Object.freeze({ deployed: false as const, use: './onboard', says: 'The escrow these calls target is not deployed on Base; the live hook\'s calls are in ./onboard.' });
 
 export interface CallRequest {
   readonly to: Address;
@@ -59,7 +66,7 @@ export const SUPPORTED_CHAIN_IDS: readonly number[] = [84532, 36927, 31337];
 export class UnsupportedChainError extends Error {
   constructor(chainId: number) {
     super(
-      `chain ${chainId} is not supported: the assurance contracts are not deployed there. ` +
+      `chain ${chainId} is not supported: the escrow this client builds for is not deployed there (on Base, use ./onboard for the live hook). ` +
         `Supported: ${SUPPORTED_CHAIN_IDS.join(', ')}.`,
     );
     this.name = 'UnsupportedChainError';

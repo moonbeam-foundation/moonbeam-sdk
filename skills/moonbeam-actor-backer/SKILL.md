@@ -11,7 +11,7 @@ Capital you put into a pool stands behind other people's work. When an adjudicat
 provider cheated, the provider's deposit is consumed first and **your pool pays
 whatever the deposit cannot**. That is the risk, and it is not optional once you
 have backed a pool — the exposure *is* the yield. There is no passive tier, because
-rewards come from real fees rather than from newly minted tokens.
+rewards come from fees paid rather than from newly minted tokens.
 
 You are **not** charged when work is merely graded bad. A rejection refunds the
 client and returns the deposit; the pool pays nothing.

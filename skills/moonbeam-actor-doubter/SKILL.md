@@ -21,7 +21,7 @@ doubtQuote(terms, usdc('30'), 34);
 ```
 
 `breakEvenProbability` is the failure rate at which the position is EV-neutral.
-Take it only if you believe the real failure rate is higher than the fee implies.
+Take it only if you believe the failure rate is higher than the fee implies.
 
 ## The cap you must check before sizing
 

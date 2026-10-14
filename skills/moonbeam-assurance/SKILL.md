@@ -49,7 +49,7 @@ livenessOf(state, clock)          // nobody can be locked out (see below)
 **No lockout.** A silent counterparty can never strand someone's money. Past the
 deadline the refund is *permissionless* — anyone may trigger it — and either
 party may escalate to arbitration at any time. `livenessOf()` checks this
-against real state instead of asking you to trust it.
+against the chain's state instead of asking you to trust it.
 
 ## Do not claim
 

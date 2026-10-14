@@ -1,0 +1,239 @@
+{
+ "ok": true,
+ "schema": "taifoon.pool-networks.v1",
+ "supported": [
+  {
+   "chain_id": 8453,
+   "chain": "Base",
+   "network": "mainnet",
+   "line": "layer",
+   "default": false,
+   "factory": "0x317D55623C974197B6dd1C107Cb0cfc3EF04f1eB",
+   "hook": "0x99Ab0C3756Ef3fd9b3Ce784cAE18d8f564b6B2f8",
+   "assets": [
+    {
+     "symbol": "USDC",
+     "address": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+     "decimals": 6
+    }
+   ],
+   "status": "line_closed",
+   "why": "poolImplementation() = 0x8c2c633277dB1b152FfA301d62f74Bab1918879c: poolImplementation() = the registry's first-line CoveragePool implementation: 9,466 bytes with neither encumbered() nor freeAssets(); both calls revert on the two pools of this factory",
+   "pool_count": 2,
+   "native_gas": "ETH",
+   "note": "the first line on Base (USDC). New pools here are not open: its vaults do not count the cover they reserve (line_closed); existing vaults stay readable and redeemable",
+   "explorer": "https://basescan.org/address/0x317D55623C974197B6dd1C107Cb0cfc3EF04f1eB"
+  },
+  {
+   "chain_id": 8453,
+   "chain": "Base",
+   "network": "mainnet",
+   "line": "v4",
+   "default": true,
+   "factory": "0xAF3F4F2221bb3D7E1a7306B7901dDf52d17A4cCA",
+   "hook": "0x93122A47d1824afFA3bAa5751aacf4919F67eb25",
+   "assets": [
+    {
+     "symbol": "USDC",
+     "address": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+     "decimals": 6
+    }
+   ],
+   "status": "phase0_deposits_blocked",
+   "why": "Phase 0: deposits stay blocked on every network with value until the premium split is signed off and audit gaps 4 and 5 are closed in the hook; items still open: split, deployed, banner",
+   "pool_count": 3,
+   "native_gas": "ETH",
+   "note": "Assurance V4 on Base (USDC): the line the assurance market and POST /v1/settle { via: \"us\" } run on; its pools count the cover they reserve",
+   "explorer": "https://basescan.org/address/0xAF3F4F2221bb3D7E1a7306B7901dDf52d17A4cCA"
+  },
+  {
+   "chain_id": 5042,
+   "chain": "Arc",
+   "network": "mainnet",
+   "line": "layer",
+   "default": false,
+   "factory": "0x317D55623C974197B6dd1C107Cb0cfc3EF04f1eB",
+   "hook": "0x99Ab0C3756Ef3fd9b3Ce784cAE18d8f564b6B2f8",
+   "assets": [
+    {
+     "symbol": "USDC",
+     "address": "0x3600000000000000000000000000000000000000",
+     "decimals": 6
+    }
+   ],
+   "status": "line_closed",
+   "why": "poolImplementation() = 0x8c2c633277dB1b152FfA301d62f74Bab1918879c: poolImplementation() = the same code as on Base, with neither encumbered() nor freeAssets(); poolCount() = 0",
+   "pool_count": 0,
+   "native_gas": "USDC (Arc gas, 18 decimals)",
+   "note": "the first line on Arc (USDC, same addresses as Base). New pools here are not open: its vaults do not count the cover they reserve (line_closed)",
+   "explorer": "https://explorer.arc.io/address/0x317D55623C974197B6dd1C107Cb0cfc3EF04f1eB"
+  },
+  {
+   "chain_id": 5042,
+   "chain": "Arc",
+   "network": "mainnet",
+   "line": "v4",
+   "default": true,
+   "factory": "0x146bfb0eBef9E647Ddd1152d744A47087E8D3086",
+   "hook": "0x1c7c44e1A43d661675A7f1E583d351adfD48F872",
+   "assets": [
+    {
+     "symbol": "USDC",
+     "address": "0x3600000000000000000000000000000000000000",
+     "decimals": 6
+    }
+   ],
+   "status": "phase0_deposits_blocked",
+   "why": "Phase 0: deposits stay blocked on every network with value until the premium split is signed off and audit gaps 4 and 5 are closed in the hook; items still open: split, deployed, banner",
+   "pool_count": 3,
+   "native_gas": "USDC (Arc gas, 18 decimals)",
+   "note": "Assurance V4 on Arc (USDC): the line the assurance market runs on; its pools count the cover they reserve",
+   "explorer": "https://explorer.arc.io/address/0x146bfb0eBef9E647Ddd1152d744A47087E8D3086"
+  },
+  {
+   "chain_id": 42161,
+   "chain": "Arbitrum One",
+   "network": "mainnet",
+   "line": "v4",
+   "default": true,
+   "factory": "0x7D93c3B6Cca19581010bA2543e39F3DD231965eb",
+   "hook": "0x6423B2250d41Cf0F786F5e4F8b962b03c8483A0B",
+   "assets": [
+    {
+     "symbol": "USDC",
+     "address": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
+     "decimals": 6
+    }
+   ],
+   "status": "phase0_deposits_blocked",
+   "why": "Phase 0: deposits stay blocked on every network with value until the premium split is signed off and audit gaps 4 and 5 are closed in the hook; items still open: split, deployed, banner",
+   "pool_count": 3,
+   "native_gas": "ETH",
+   "note": "Assurance V4 on Arbitrum One (USDC); its pools count the cover they reserve",
+   "explorer": "https://arbiscan.io/address/0x7D93c3B6Cca19581010bA2543e39F3DD231965eb"
+  },
+  {
+   "chain_id": 4663,
+   "chain": "Robinhood Chain",
+   "network": "mainnet",
+   "line": "v4",
+   "default": true,
+   "factory": "0x785F4701C681dCBa8762FcfaF18db4048215c0ca",
+   "hook": "0xBf4283b791d5a5541F01BC93ef5DD9B9dC8f334c",
+   "assets": [
+    {
+     "symbol": "USDG",
+     "address": "0x5fc5360D0400a0Fd4f2af552ADD042D716F1d168",
+     "decimals": 6
+    }
+   ],
+   "status": "phase0_deposits_blocked",
+   "why": "Phase 0: deposits stay blocked on every network with value until the premium split is signed off and audit gaps 4 and 5 are closed in the hook; items still open: split, deployed, banner",
+   "pool_count": 3,
+   "native_gas": "ETH",
+   "note": "Assurance V4 on Robinhood Chain (USDG); its pools count the cover they reserve",
+   "explorer": "https://robinhoodchain.blockscout.com/address/0x785F4701C681dCBa8762FcfaF18db4048215c0ca"
+  },
+  {
+   "chain_id": 143,
+   "chain": "Monad",
+   "network": "mainnet",
+   "line": "v4",
+   "default": true,
+   "factory": "0x785F4701C681dCBa8762FcfaF18db4048215c0ca",
+   "hook": "0xBf4283b791d5a5541F01BC93ef5DD9B9dC8f334c",
+   "assets": [
+    {
+     "symbol": "USDC",
+     "address": "0x754704Bc059F8C67012fEd69BC8A327a5aafb603",
+     "decimals": 6
+    }
+   ],
+   "status": "phase0_deposits_blocked",
+   "why": "Phase 0: deposits stay blocked on every network with value until the premium split is signed off and audit gaps 4 and 5 are closed in the hook; items still open: split, deployed, banner",
+   "pool_count": 3,
+   "native_gas": "MON",
+   "note": "Assurance V4 on Monad (USDC); its pools count the cover they reserve",
+   "explorer": "https://monadscan.com/address/0x785F4701C681dCBa8762FcfaF18db4048215c0ca"
+  },
+  {
+   "chain_id": 36927,
+   "chain": "Taifoon devnet",
+   "network": "devnet",
+   "line": "layer",
+   "default": true,
+   "factory": "0x9BeA381ab97Df2F10216C525D821412d8CAE0001",
+   "hook": "0x7110C8951d17B69054395742e265bbd98259564A",
+   "assets": [
+    {
+     "symbol": "dUSDC",
+     "address": "0x31854D915F31A1FBe57c2b06B5b60cbbD7D42D5b",
+     "decimals": 6
+    }
+   ],
+   "status": "open",
+   "pool_count": 3,
+   "native_gas": "FOON (devnet gas, free at faucet.taifoon.dev)",
+   "note": "the layer\u2019s devnet copy (Paris bytecode, storage reentrancy guard; not bytecode-identical to Base/Arc); test dUSDC, nothing of value",
+   "explorer": "https://www.taifoon.io/scan/36927/address/0x9BeA381ab97Df2F10216C525D821412d8CAE0001"
+  },
+  {
+   "chain_id": 36927,
+   "chain": "Taifoon devnet",
+   "network": "devnet",
+   "line": "v4",
+   "default": false,
+   "factory": "0x85417BD1EE4833182405e57308f2BbECB5C50888",
+   "hook": "0x9DE1E23445685a4fcF18CfF491ADad76A806c54d",
+   "assets": [
+    {
+     "symbol": "dUSDC",
+     "address": "0x31854D915F31A1FBe57c2b06B5b60cbbD7D42D5b",
+     "decimals": 6
+    }
+   ],
+   "status": "open",
+   "pool_count": 40,
+   "native_gas": "FOON (devnet gas, free at faucet.taifoon.dev)",
+   "note": "Assurance V4, the line POST /v1/settle { via: \"us\" } settles on (dUSDC); devnet only",
+   "explorer": "https://www.taifoon.io/scan/36927/address/0x85417BD1EE4833182405e57308f2BbECB5C50888"
+  },
+  {
+   "chain_id": 36927,
+   "chain": "Taifoon devnet",
+   "network": "devnet",
+   "line": "v4-glmr",
+   "default": false,
+   "factory": "0xfa1C556d095F4d1577F4D53c94C35EF2CF782494",
+   "hook": "0x944F40c11fe1F32bF8284Ce6371837846F81999C",
+   "assets": [
+    {
+     "symbol": "dGLMR",
+     "address": "0x1762c42d8e88F66c4966Ca982c7C6D23f26aD85A",
+     "decimals": 18
+    }
+   ],
+   "status": "open",
+   "pool_count": 0,
+   "native_gas": "FOON (devnet gas, free at faucet.taifoon.dev)",
+   "note": "Assurance V4 with job asset dGLMR (a mint-anyone test token); devnet only",
+   "explorer": "https://www.taifoon.io/scan/36927/address/0xfa1C556d095F4d1577F4D53c94C35EF2CF782494"
+  }
+ ],
+ "closed_by_policy": [
+  {
+   "chain_id": 8453,
+   "system": "moonbeam-acp",
+   "factory": "0x91f078D10E3f0D05fEBcEA35f114063c696aef54",
+   "status": "closed_by_policy",
+   "why": "The GLMR pools are not open. Moonbeam pool creation is closed by policy."
+  },
+  {
+   "chain_id": 36927,
+   "system": "moonbeam-acp",
+   "factory": "0xf0763843C72465cAceD4c94d73A3aa7e4cb36de0",
+   "status": "closed_by_policy",
+   "why": "The GLMR pools are not open. Moonbeam pool creation is closed by policy."
+  }
+ ]
+}

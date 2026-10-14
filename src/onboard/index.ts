@@ -679,3 +679,31 @@ export async function assess(t: OnboardTransport, c: BaseAgentCandidate): Promis
   const [a, r] = await Promise.all([attest(t, c), record(t, c.address)]);
   return hireable(c, a, r);
 }
+
+// ── one onboarding module (0.7.0): the readiness checks of every role live here too ─────────────────────────────────
+// ./onboard is where a party starts: the hook's calls and the judge's guard above, and the capital and readiness checks
+// below (the same functions the root exports; `readiness` groups them all).
+export {
+  readinessForClient, readinessForProvider, readinessForEvaluator, readinessForBacker, readinessForDoubter, readinessForChallenger,
+  blockers as readinessBlockers, summarise as summariseReadiness, MIN_SAFE_POOL_HEADROOM,
+} from '../onboarding/index.js';
+export type { Readiness, Finding, Severity, ClientIntent, ProviderIntent, EvaluatorIntent, BackerIntent, DoubterIntent, ChallengerIntent } from '../onboarding/index.js';
+export * as readiness from '../onboarding/index.js';
+
+// ── the premium and the seller's deposit approval (0.7.0) ──────────────────────────────────────────────────────────────
+import { premiumAmount, wilsonUpperFailure } from '@taifoon/jev-wilson';
+
+/** The premium of a covered job, in the job's token units: price × the upper Wilson bound on the seller's failure rate
+ *  (k correct of n), floored exactly as the layer's pool quote computes it (jev-wilson). Pass it to fundCalls({ premium }). */
+export function coverPremium(price: bigint, record: { k: number; n: number }): bigint {
+  if (!(Number.isInteger(record.k) && Number.isInteger(record.n) && record.n >= 0 && record.k >= 0 && record.k <= record.n)) throw new RangeError('a record is k correct of n settled, 0 ≤ k ≤ n');
+  return premiumAmount(price, wilsonUpperFailure(record.k, record.n));
+}
+
+/** The seller's call before funding: approve the hook for exactly its deposit (the hook pulls it at fundJob). */
+export function sellerDepositCalls(terms: Pick<HireTerms, 'token' | 'deposit' | 'price'>): UnsignedCall[] {
+  const d = checkDeposit(terms.price, terms.deposit);
+  if (!d.ok) throw new RangeError(d.reason);
+  return [call(terms.token, selector(SIGNATURES.approve) + addrWord(BASE_ASSURANCE_HOOK) + word(terms.deposit), 'approve-deposit', 'seller',
+    `Lets the hook take exactly your ${terms.deposit} deposit when the job is funded; it comes back with the price when the job completes. Exact amount, never a standing allowance.`)];
+}

@@ -1,6 +1,6 @@
 {
   "name": "@moonbeam-foundation/sdk",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "Assurance for agent work: wrap a job in a price, a judge and a deadline, and settle it against proof.",
   "license": "Apache-2.0",
   "type": "module",
@@ -60,6 +60,30 @@
       "types": "./dist/resale/index.d.ts",
       "import": "./dist/resale/index.js"
     },
+    "./x402": {
+      "types": "./dist/x402/index.d.ts",
+      "import": "./dist/x402/index.js"
+    },
+    "./proof": {
+      "types": "./dist/proof/index.d.ts",
+      "import": "./dist/proof/index.js"
+    },
+    "./arbitration": {
+      "types": "./dist/arbitration/index.d.ts",
+      "import": "./dist/arbitration/index.js"
+    },
+    "./rpc": {
+      "types": "./dist/rpc/index.d.ts",
+      "import": "./dist/rpc/index.js"
+    },
+    "./attest": {
+      "types": "./dist/attest/index.d.ts",
+      "import": "./dist/attest/index.js"
+    },
+    "./abi": {
+      "types": "./dist/abi/index.d.ts",
+      "import": "./dist/abi/index.js"
+    },
     "./package.json": "./package.json"
   },
   "files": [
@@ -87,7 +111,11 @@
     "gen:registry": "node scripts/gen-moonbeam-acp.mjs",
     "check:registry": "node scripts/gen-moonbeam-acp.mjs --check",
     "check:pins": "node scripts/check-pins.mjs",
-    "check": "npm run typecheck && npm run build && npm test && npm run check:pins"
+    "check": "npm run typecheck && npm run build && npm test && npm run check:pins",
+    "sync": "node scripts/sync.mjs",
+    "check:sync": "node scripts/sync.mjs --check",
+    "test:fork": "node test/fork/run-fork.mjs",
+    "test:live": "LIVE=1 vitest run test/live.test.ts"
   },
   "keywords": [
     "moonbeam",
@@ -106,16 +134,16 @@
     "erc-8183"
   ],
   "devDependencies": {
-    "@types/node": "^22.20.0",
-    "@vitest/coverage-v8": "^4.1.8",
-    "typescript": "^5.7.3",
-    "viem": "^2.55.19",
-    "vitest": "^4.1.8"
+    "@types/node": "^22.20.5",
+    "@vitest/coverage-v8": "^5.0.4",
+    "typescript": "^7.0.2",
+    "viem": "^2.57.6",
+    "vitest": "^5.0.4"
   },
   "dependencies": {
     "@taifoon/jev": "^0.2.18",
-    "@taifoon/jev-wilson": ">=0.2.0 <0.4.0",
-    "@taifoon/n8n-nodes-typesafe": "^2.0.4"
+    "@taifoon/jev-wilson": "^0.3.1",
+    "@taifoon/n8n-nodes-typesafe": "^2.0.5"
   },
   "bin": {
     "moonbeam": "bin/moonbeam.mjs"

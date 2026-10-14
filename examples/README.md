@@ -1,7 +1,9 @@
 # Examples
 
-Every example is one file you run with `node`. All except two run offline, with no key and no wallet; the jobs they use are real
-Base jobs captured into [`data/`](data). `npm test` runs every offline example and checks the line each one promises below.
+Every example is one file you run with `node`. All except four run offline, with no key and no wallet; the jobs they use are
+Base jobs captured into [`data/`](data). 17 and 32 read live; 50 and 51 read live and run offline with `OFFLINE=1`. `npm test`
+runs every offline example and checks the line each one promises below. `test/fork/run-fork.mjs` sends the write paths on a
+local fork of Base.
 
 ```sh
 npm i @moonbeam-foundation/sdk
@@ -23,7 +25,7 @@ reading jobs that already ran ────────▶ 30, 31, 33, then 32 li
 
 | # | File | Best for | You see |
 |---|---|---|---|
-| 03 | [end-to-end-offline](03-end-to-end-offline.mjs) | **Start here.** One real job from its Base trail to who ends up with what | `3 settle client -101 · provider +100 · pool +1 · sums to zero` |
+| 03 | [end-to-end-offline](03-end-to-end-offline.mjs) | **Start here.** One job from its Base trail to who ends up with what | `3 settle client -101 · provider +100 · pool +1 · sums to zero` |
 | 01 | [settle-a-covered-job](01-settle-a-covered-job.mjs) | The four ways a covered job can end, in money | four ledgers, each `sums to zero: true` |
 | 02 | [negotiate-a-hire](02-negotiate-a-hire.mjs) | A buyer posts, two agents bid, the thin bond is refused | `agent-b refused: DEPOSIT_BELOW_JOB` |
 
@@ -38,7 +40,7 @@ Stages 1–7 run offline on recorded answers; 17 runs the same thing live.
 | 11 | [facts](11-grade-facts.mjs) | Code checks what code can check. A failed check rejects without asking a model | `checksOk: false` |
 | 12 | [answers](12-grade-answers.mjs) | Four closed questions, each answered with a full probability distribution | `spec_met yes {"yes":0.95,"no":0.05}` |
 | 13 | [verdict](13-grade-verdict.mjs) | complete, reject or needs_review, from published thresholds | `UNSURE → needs_review mid band: …` |
-| 14 | [record](14-grade-record.mjs) | Optional: the unsigned calls that put the grade on Base. Off by default | `network none → 0 calls` |
+| 14 | [record](14-grade-record.mjs) | The unsigned calls that put the grade on Base, built by default; `network: 'none'` turns them off | `network none → 0 calls` |
 | 15 | [end the job](15-grade-end-the-job.mjs) | The one unsigned call that completes or rejects the job on the hook | `complete → complete(bytes32) to 0xc057…` |
 | 16 | [verify](16-grade-verify.mjs) | Anyone can recompute a grade; a changed verdict is caught | `tampered: false` |
 | 17 | [live](17-grade-live.mjs) | The same grade, answered live on your own key | a receipt, or how to get a key |
@@ -59,9 +61,9 @@ Each role gets a readiness report: what you put up, what you can lose, and anyth
 
 | # | File | What it shows | You see |
 |---|---|---|---|
-| 30 | [read-a-real-job](30-read-a-real-job.mjs) | Decode two real Virtuals ACP jobs from their Base logs | `settles as: rejected (evaluatorRejected)` |
+| 30 | [read-a-job](30-read-a-job.mjs) | Decode two Virtuals ACP jobs from their Base logs | `settles as: rejected (evaluatorRejected)` |
 | 31 | [read-the-ending](31-read-the-ending.mjs) | Which endings the trail decides alone, and which need a grader | `cannot_determine (needs a grader)` |
-| 32 | [read-live-from-base](32-read-live-from-base.mjs) | The same, straight from a public Base RPC | `6 events` for job 74926 |
+| 32 | [read-live-from-base](32-read-live-from-base.mjs) | The same, straight from Base through the SDK's Base reader | `6 events` for job 74926 |
 | 33 | [read-many-jobs](33-read-many-jobs.mjs) | Many jobs at once: how many were judged by someone other than the buyer | `2 jobs · self-judged: 2` |
 
 ## The article, claim by claim
@@ -69,6 +71,10 @@ Each role gets a readiness report: what you put up, what you can lose, and anyth
 | # | File | What it shows | You see |
 |---|---|---|---|
 | 40 | [the-article](40-the-article.mjs) | Every claim the launch article makes about the SDK, checked. Live, it also finds the equation job's grade on Base (`OFFLINE=1` skips that) | `every claim holds` |
+| 50 | [x402-pay-a-wall](50-x402-pay-a-wall.mjs) | A wall's 402 on Base, `quoteSale`'s price for it, and the EIP-3009 typed data your wallet signs | `signs TransferWithAuthorization under USD Coin v2 on chain 8453` |
+| 51 | [read-a-proof](51-read-a-proof.mjs) | A Base transaction's proof from the layer, then `verify(blob)` on the V5 verifier on Base | `verify(blob) on Base: true` |
+| 52 | [arbitration-calls](52-arbitration-calls.mjs) | The three tiers of the ArbitratorRouter as unsigned calls, and what a ruling writes into the record | `findCheated(jobId, loss)` |
+| 53 | [attested-by-default](53-attested-by-default.mjs) | A settle, a grade and a resale step, each with its mark and its calls on Base; the stamp Base lacks said | `missing: GradeStampRegistry@8453` |
 
 ## Settings
 

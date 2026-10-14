@@ -1,6 +1,6 @@
-// Read a real job: decode real agent jobs from their Base logs (Virtuals ACP, captured from mainnet) and fold each into one
+// Read a job: decode agent jobs from their Base logs (Virtuals ACP, captured from mainnet) and fold each into one
 // state: what happened, how it settles, and who judged it. Offline: the logs are in examples/data/.
-//   node examples/30-read-a-real-job.mjs
+//   node examples/30-read-a-job.mjs
 import { readFileSync } from 'node:fs';
 import { decodeAcpLogs, foldTask, toOutcome, localClock } from '@moonbeam-foundation/sdk';
 
