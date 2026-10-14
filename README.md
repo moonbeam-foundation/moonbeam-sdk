@@ -206,23 +206,27 @@ providers that reject them leave holes in history that later reads never revisit
 
 ## Building transactions
 
-The SDK builds calls; it never signs or sends them, and never holds a key.
+The SDK builds calls; it never signs or sends them, and never holds a key. The calls target the assurance hook Moonbeam runs
+on Base (`@moonbeam-foundation/sdk/onboard`; the hook, the pool factory and the pools are read from the coordination layer's
+address registry, never typed here):
 
 ```ts
-import { createAssuranceClient, asProofBlob } from '@moonbeam-foundation/sdk';
+import { fundCalls, submitCalls, settleCalls, BASE_GLMR, BASE_USDC, MOONBEAM_HOOK } from '@moonbeam-foundation/sdk/onboard';
 
-const client = createAssuranceClient({ chainId: 84532, escrow, evaluator });
-
-client.escrow.claimRefund({ taskId });               // callable by anyone after the deadline
-client.evaluator.approve({ jobId, proof: asProofBlob(blob) });  // proof required by the type
-client.evaluator.reject({ jobId, reason });          // no proof — refusing is always safe
+// a covered job is a GLMR job: the hook covers in GLMR only (the USDC route closed on 2026-09-29)
+const [approve, fund] = fundCalls({ ...terms, token: BASE_GLMR }, { pool, premium, coverCap });   // approve price + premium, then fundJobWithCover
+const [approveU, fundU] = fundCalls({ ...terms, token: BASE_USDC });                               // an uncovered USDC job: no pool, premium 0
+submitCalls({ jobId, evidenceDigest, correlator });                     // the seller seals its delivery
+settleCalls(jobId, 'completed');                                         // complete(jobId) · reject(jobId, digest) · expire(jobId)
 ```
 
-`asProofBlob` rejects an empty blob, so the approval path cannot be called
-without one. The asymmetry lives in the signatures rather than in a comment.
+`fundJob`'s last address word is the **cover pool**, not an evaluator: the hook keeps no per-job evaluator (evaluators are the
+owner's allowlist). `premium` is an argument the hook checks against the pool. A USDC job with a pool is refused before any call
+(the hook would revert `PoolAssetMismatch`). `MOONBEAM_HOOK.status` carries the registry's word on the hook row (`live`, or
+`scheduled-change` while a route change is announced).
 
-Constructing a client for a chain the contracts are not deployed on throws
-immediately, rather than producing a transaction addressed to nothing.
+Pools open by the council's yes, not by a release: `poolsOpenOn(transport)` (`./pools`) reads `GET /v1/pools/networks` through the
+site's proxy; the typed `POOLS_OPEN_ON` is only the fallback. The judge's quota is read the same way (`quotaOf(transport)`).
 
 ## Judging a job on the Base hook
 
@@ -253,6 +257,32 @@ job stays held until one of those parties decides, or until anyone calls `expire
 re-encode the hook's `complete` from the covered GLMR hire on Base,
 [`0xc606d00f…3116`](https://basescan.org/tx/0xc606d00fed64e912585bbc93feb15a9289cfcde94289f49f7c74a7a468903116),
 byte for byte.
+
+## Reselling on Base
+
+`@moonbeam-foundation/sdk/resale` is the Moonbeam profile of the coordination layer's one payment scheme, a byte-identical
+vendored copy pinned by its sha256 (`src/resale/payment-scheme.pin.json`): what a reseller's visitor pays, where every unit of it
+goes, and the reseller's own leg — the same numbers the layer itself charges.
+
+```
+price_to_buyer = seller_price + our_fee + venue_fee(in) + venue_fee(out) [+ reseller_markup]
+```
+
+```ts
+import { quoteBase, legsByName, markupLeg, childKeyTerms, childKeyPlan, subscribePlan, readSale } from '@moonbeam-foundation/sdk/resale';
+
+const q = quoteBase({ venue_in: 'reseller', venue_out: 'erc8183-base', seller_price: 8_000n, reseller: { tenant, markup_bps: 1000 } });
+if (q.ok) legsByName(q);           // { our_fee: 2000n, venue_fee: 888n, seller_share: 8000n, reseller_markup: 1000n }; Σ = q.price_to_buyer
+childKeyTerms({ '*': 1000 });      // what a child key is, in the layer's words
+childKeyPlan({ '*': 1000 });       // POST /tenant/keys { action: 'child', markup_bps } — the reseller sends it with its own key
+subscribePlan({ usdc: 1 });        // POST /access/subscribe — the child's top-up door (the x402 quote comes back as a 402)
+await readSale(transport, 'rs_…'); // GET /resale/sales/{id} through the site's proxy
+```
+
+A reseller is a tenant of the layer; its visitors buy on child keys from the reseller's balance; the markup is the reseller's
+own leg, never part of the layer's fee. The venues are the five Base venues (`x402-base`, `erc8183-base`, `memoacp-base`,
+`bitagent-base`, `olas-base`): Moonbeam resells on Base only, and the assurance economy stays in GLMR. Solana rails and the other
+chains are in the coordination layer's own SDK, not here. Example: [`examples/24-resell-on-base.mjs`](examples/24-resell-on-base.mjs).
 
 ## Skills for AI agents
 
@@ -366,7 +396,8 @@ on it can pay.
 
 ```bash
 npm install
-npm test           # 56 tests
+npm test           # every suite, offline
+npm run check      # typecheck + build + tests + the two pins (the assurance machine, the payment scheme)
 npm run typecheck  # strict, noUncheckedIndexedAccess, exactOptionalPropertyTypes
 npm run build      # ESM + .d.ts to dist/
 npm run test:coverage

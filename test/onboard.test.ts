@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import {
-  BASE_ASSURANCE_HOOK, BASE_USDC, BASE_JOB_CONTRACT, JEV_OPTIONS, DEFAULT_GUARD, SIGNATURES, QUOTA_BLOCK,
+  BASE_ASSURANCE_HOOK, BASE_USDC, BASE_GLMR, BASE_JOB_CONTRACT, JEV_OPTIONS, DEFAULT_GUARD, SIGNATURES, QUOTA_BLOCK, QUOTA_FREE, quotaOf,
   isAddress, isHex32, isJevOption, isCandidate, isDecision,
   depositFor, checkDeposit, wilson, isCalibrated, emptyRecord, admit, blocksFor, priceOfBlocks,
   attestationState, decisionEnding, endingOf, ENDING_MONEY, hireable,
@@ -16,6 +16,7 @@ const SELLER = '0xccf57d593aa2cf8f8329e5e8353f69f2b21e34e9' as const;
 const BUYER = '0x0000000000000000000000000000000000000001' as const;
 const JOB = ('0x' + '11'.repeat(32)) as `0x${string}`;
 const DIGEST = ('0x' + '22'.repeat(32)) as `0x${string}`;
+const POOL = '0x9C1eC3E4250Abe356FB440FF7a8aD158De9bdf39' as const; // a coverage pool of the registry (test data only)
 const w = (s: string) => s.padStart(64, '0');
 
 const registryRow = { agentId: 17449, cardHost: 'api.xona-agent.com', chainId: 8453, corroboration: 3, endpoint: 'https://api.xona-agent.com/mcp', endpointKind: 'Mcp', owner: '0x515e7bce44baa5f6e42d16d4b5f27768e7f2f8cc', registrationTx: null, skillCount: 15, status: 'Live', teeServed: false, trust: 560, wire: 'ready', wireProtocol: 'mcp', wireReadyAt: 1790186283 };
@@ -262,9 +263,31 @@ describe('fundCalls', () => {
     const live = '0x48625a99' + '11'.repeat(32) + w('ccf57d593aa2cf8f8329e5e8353f69f2b21e34e9') + w('833589fcd6edb6e08f4c7c32d4f71b54bda02913') + w('2710') + w('0') + w('2ee0') + w('6ab75600') + w('93a80') + w('0');
     expect(fundCalls(t, { jobId: JOB })[1]!.data).toBe(live);
   });
-  it('an evaluator and a grade window land in the last two words', () => {
-    const d = fundCalls(t, { jobId: JOB, evaluator: BUYER, gradeWindow: 200 })[1]!.data;
-    expect(d.slice(-128, -64)).toBe(w('c8')); expect(d.slice(-64)).toBe(w('1'));
+  it('the cover POOL and the grade window land in the last two words (the hook keeps no per-job evaluator)', () => {
+    const glmr = terms({ token: BASE_GLMR });
+    const d = fundCalls(glmr, { jobId: JOB, pool: POOL, premium: 5n, gradeWindow: 200 })[1]!.data;
+    expect(d.slice(-128, -64)).toBe(w('c8')); expect(d.slice(-64)).toBe(w(POOL.slice(2).toLowerCase()));
+    expect(d.slice(10 + 64 * 4, 10 + 64 * 5)).toBe(w('5'));                      // the premium is an argument, the fifth word
+    expect(() => fundCalls(t, { jobId: JOB, evaluator: BUYER } as never)).toThrow(/cover POOL/);
+  });
+  it('a covered job is a GLMR job: a USDC job with a pool is refused before any call; a premium without a pool too', () => {
+    expect(() => fundCalls(t, { jobId: JOB, pool: POOL })).toThrow(/GLMR/);
+    expect(() => fundCalls(t, { jobId: JOB, premium: 1n })).toThrow(/name the pool/);
+    const approve = fundCalls(terms({ token: BASE_GLMR }), { jobId: JOB, pool: POOL, premium: 7n })[0]!;
+    expect(approve.to).toBe(BASE_GLMR); expect(approve.data.slice(-64)).toBe(w((10_000n + 7n).toString(16)));   // price + premium, exact
+  });
+  it('fundJobWithCover carries the cover cap as the tenth word and is capped at the price', () => {
+    const glmr = terms({ token: BASE_GLMR });
+    const c = fundCalls(glmr, { jobId: JOB, pool: POOL, premium: 5n, coverCap: 4_000n })[1]!;
+    expect(c.step).toBe('fundJobWithCover'); expect(c.data.slice(0, 10)).toBe(selector(SIGNATURES.fundJobWithCover));
+    expect(c.data.length).toBe(10 + 64 * 10); expect(c.data.slice(-64)).toBe(w('fa0'));
+    expect(() => fundCalls(glmr, { jobId: JOB, pool: POOL, premium: 5n, coverCap: 10_001n })).toThrow(/at most the price/);
+  });
+  it('quotaOf reads the layer’s quota and falls back to the typed values', async () => {
+    const layer = { base: '/api/onboard', fetch: async () => ({ ok: true, status: 200, json: async () => ({ ok: true, grades: { free: { per_user: 3 }, per_block: 3, per_minute: 5 }, price: { grid_per_block: 15, usdc_per_block: 0.15 } }) }) };
+    expect(await quotaOf(layer)).toMatchObject({ free: 3, blockCalls: 3, blockGrid: 15, burstPerMinute: 5, usdcPerBlock: 0.15, source: 'layer' });
+    const down = { base: '/api/onboard', fetch: async () => ({ ok: false, status: 503, json: async () => ({ ok: false }) }) };
+    expect(await quotaOf(down)).toMatchObject({ free: QUOTA_FREE, blockCalls: 3, blockGrid: 15, source: 'typed' });
   });
   it('derives the job id from the terms when none is given', () => { expect(fundCalls(t)[1]!.data.slice(10, 74)).toBe(jobIdOf(t).slice(2)); });
   it('refuses a deposit below the rule, a zero price and a bad deadline', () => {

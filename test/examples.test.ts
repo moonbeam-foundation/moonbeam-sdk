@@ -29,6 +29,7 @@ const EXPECT: Record<string, RegExp> = {
   '21-onboard-provider.mjs': /\[block\] this job needs a 40 deposit/,
   '22-onboard-evaluator.mjs': /without a verifiable proof you can reject but never approve/,
   '23-onboard-backer.mjs': /breaks even at/,
+  '24-resell-on-base.mjs': /the doer keeps 8000 on every venue/,
   '30-read-a-real-job.mjs': /settles as: rejected/,
   '31-read-the-ending.mjs': /cannot_determine .*needs a grader/,
   '33-read-many-jobs.mjs': /2 jobs · self-judged: 2/,

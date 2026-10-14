@@ -20,6 +20,7 @@
 import { endingFromTrail } from '../launcher/index.js';
 import { WILSON_Z, wilsonScore } from '../actors/track-record.js';
 import type { TrailEvent } from '../launcher/index.js';
+import { BASE_GLMR_TOKEN, BASE_USDC_TOKEN, JEV_DECISION_LOG, MOONBEAM_HOOK, MOONBEAM_POOL_FACTORY } from '../acp/moonbeam-acp.generated.js';
 
 export type Hex = `0x${string}`;
 export type Address = Hex;
@@ -28,12 +29,16 @@ export type Address = Hex;
 
 /** The ERC-8183 job contract most observed Base jobs live in (Virtuals ACP). */
 export const BASE_JOB_CONTRACT = '0x238E541BfefD82238730D00a2208E5497F1832E0' as const;
-/** USDC on Base, 6 decimals. */
-export const BASE_USDC = '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913' as const;
-/** The assurance hook on Base: deposit, premium and verdict attached to a job. */
-export const BASE_ASSURANCE_HOOK = '0xc0578657Eda85e0a246771aa1839ce79b54eE80d' as const;
-/** One ERC-4626 cover pool per seller comes from here. */
-export const BASE_POOL_FACTORY = '0x91f078D10E3f0D05fEBcEA35f114063c696aef54' as const;
+/** USDC on Base, 6 decimals: the token of an UNCOVERED job (pool = 0). Read from the address registry (acp/moonbeam-acp.generated.ts). */
+export const BASE_USDC = BASE_USDC_TOKEN.address;
+/** GLMR on Base, 18 decimals: the only asset the hook covers in since the USDC route closed on 2026-09-29. A COVERED job is a GLMR job. */
+export const BASE_GLMR = BASE_GLMR_TOKEN.address;
+/** The assurance hook on Base (the proxy): deposit, premium and verdict attached to a job. Read from the address registry. */
+export const BASE_ASSURANCE_HOOK = MOONBEAM_HOOK.address;
+/** The registry's status of the hook row: `live`, or `scheduled-change` while a route change is announced. */
+export const BASE_ASSURANCE_HOOK_STATUS = MOONBEAM_HOOK.status;
+/** One ERC-4626 cover pool per seller comes from here. Read from the address registry. */
+export const BASE_POOL_FACTORY = MOONBEAM_POOL_FACTORY.address;
 /** The ERC-8004 identity registry, one address on every chain it is deployed to. */
 export const ERC8004_IDENTITY_REGISTRY = '0x8004a169fb4a3325136eb29fa0ceb6d2e539a432' as const;
 export const BASE_CHAIN_ID = 8453 as const;
@@ -71,7 +76,8 @@ export interface Attestation {
 export interface HireTerms {
   chainId: 8453;
   jobContract: typeof BASE_JOB_CONTRACT;
-  token: typeof BASE_USDC;
+  /** USDC for an uncovered job; GLMR for a covered one (the hook covers in GLMR only) */
+  token: typeof BASE_USDC | typeof BASE_GLMR;
   buyer: Address;
   seller: Address;
   /** in token units (USDC has 6 decimals) */
@@ -197,8 +203,26 @@ export const DEFAULT_GUARD: JevGuard = Object.freeze({
   question: DEFAULT_QUESTION,
   options: JEV_OPTIONS,
   quota: { free: 3, per: 'address', burstPerMinute: 5, block: { calls: 3, grid: 15, usdcAtPeg: 0.15 } },
-  anchor: { chain: 36927, log: '0x1D622511862DD7DEffB8fEeBc225E0FAdA1e9A05' },
+  anchor: { chain: 8453, log: JEV_DECISION_LOG.address },
 }) as JevGuard;
+
+/**
+ * The judge's quota as the layer states it today (GET /v1/judge/credits, keyless: the free grades per address, the grades a
+ * block buys, the burst cap, the price of a block), with the typed values as the fallback when the read fails. The layer's
+ * numbers win: the constants above are what they were on 2026-09-24 and may drift from what it charges.
+ */
+export async function quotaOf(t: OnboardTransport): Promise<{ free: number; blockCalls: number; blockGrid: number; burstPerMinute: number; usdcPerBlock: number | null; source: 'layer' | 'typed' }> {
+  const typed = { free: QUOTA_FREE, blockCalls: QUOTA_BLOCK.calls, blockGrid: QUOTA_BLOCK.grid, burstPerMinute: QUOTA_BURST_PER_MINUTE, usdcPerBlock: null, source: 'typed' as const };
+  try {
+    const r = await t.fetch(`${t.base}/judge/credits`, { method: 'GET', headers: headers(t) });
+    const j = (await r.json().catch(() => null)) as { ok?: boolean; grades?: { free?: { per_user?: number }; per_block?: number; per_minute?: number }; free?: { calls?: number }; price?: { grid_per_block?: number; usdc_per_block?: number; grid?: number; usdc?: number } } | null;
+    if (!r.ok || !j?.ok) return typed;
+    const free = j.grades?.free?.per_user ?? j.free?.calls; const per = j.grades?.per_block; const burst = j.grades?.per_minute;
+    const grid = j.price?.grid_per_block ?? j.price?.grid; const usdc = j.price?.usdc_per_block ?? j.price?.usdc;
+    if (typeof free !== 'number' || typeof per !== 'number') return typed;
+    return { free, blockCalls: per, blockGrid: typeof grid === 'number' ? grid : typed.blockGrid, burstPerMinute: typeof burst === 'number' ? burst : typed.burstPerMinute, usdcPerBlock: typeof usdc === 'number' ? usdc : null, source: 'layer' };
+  } catch { return typed; }
+}
 
 // ── Shape guards ──────────────────────────────────────────────────────────────
 
@@ -384,6 +408,7 @@ export function selector(signature: string): Hex { return keccakHex(utf8(signatu
 export const SIGNATURES = Object.freeze({
   approve: 'approve(address,uint256)',
   fundJob: 'fundJob(bytes32,address,address,uint256,uint256,uint256,uint64,uint64,address)',
+  fundJobWithCover: 'fundJobWithCover(bytes32,address,address,uint256,uint256,uint256,uint64,uint64,address,uint256)',
   submit: 'submit(bytes32,bytes32)',
   complete: 'complete(bytes32)',
   reject: 'reject(bytes32,bytes32)',
@@ -412,26 +437,46 @@ const ZERO: Address = '0x0000000000000000000000000000000000000000';
 const call = (to: Address, data: string, step: string, signer: UnsignedCall['signer'], effect: string, chainId = 8453): UnsignedCall => ({ chainId, to, data: data as Hex, value: '0x0', step, signer, effect });
 
 /**
- * The calls the buyer signs to fund an insured job on Base, in order: an exact-amount USDC approve to
- * the hook, then fundJob. The seller must already have approved the hook for exactly its deposit for
- * this job (never a standing allowance: the live contract pulls the deposit from whichever seller the
- * funder names). Refuses terms whose deposit is below the rule.
+ * The calls the buyer signs to fund a job on Base, in order: an exact-amount token approve to the hook (the price plus the
+ * premium, when a pool covers the job), then fundJob — or fundJobWithCover when a cover cap is named. The seller must already
+ * have approved the hook for exactly its deposit for this job (never a standing allowance: the live contract pulls the deposit
+ * from whichever seller the funder names). Refuses terms whose deposit is below the rule.
+ *
+ * The hook's signature (spinner taifoon-eco/assurance/src/AssuranceHook.sol:264-276, 292-305):
+ *   fundJob(bytes32 jobId, address seller, address token, uint256 price, uint256 premium, uint256 deposit, uint64 deadline, uint64 challengeWindow, address pool)
+ *   fundJobWithCover(…the same…, address pool, uint256 coverCap)
+ * The LAST address word is the COVER POOL, not an evaluator: the hook keeps no per-job evaluator (evaluators are the owner's
+ * allowlist, setEvaluator). `premium` is an ARGUMENT the hook checks against the pool (CoverNotPaidFor when a pool is set and the
+ * premium is below what it asks); it is not read from the pool. A covered job (pool ≠ 0) is a GLMR job: the hook's USDC route closed
+ * on 2026-09-29, and a USDC job with a GLMR pool reverts PoolAssetMismatch. Uncovered jobs (pool = 0, premium = 0) may be USDC.
  */
-export function fundCalls(terms: HireTerms, opts: { jobId?: Hex; evaluator?: Address; gradeWindow?: number } = {}): UnsignedCall[] {
+export function fundCalls(terms: HireTerms, opts: { jobId?: Hex; pool?: Address; premium?: bigint; coverCap?: bigint; gradeWindow?: number; evaluator?: never } = {}): UnsignedCall[] {
+  if ((opts as { evaluator?: unknown }).evaluator !== undefined) {
+    throw new TypeError('fundCalls: the hook takes no per-job evaluator (evaluators are the owner’s allowlist, setEvaluator); the last word of fundJob is the cover POOL — pass { pool }');
+  }
   const d = checkDeposit(terms.price, terms.deposit);
   if (!d.ok) throw new RangeError(d.reason);
   if (terms.price <= 0n) throw new RangeError('price must be positive');
   if (!Number.isInteger(terms.deadline) || terms.deadline <= 0) throw new RangeError('deadline must be unix seconds');
   const jobId = opts.jobId ?? jobIdOf(terms);
-  const evaluator = opts.evaluator ?? ZERO;
+  const pool = opts.pool ?? ZERO;
+  const premium = opts.premium ?? 0n;
   const gradeWindow = opts.gradeWindow ?? DEFAULT_GRADE_WINDOW;
-  const premium = 0n; // the premium is what the pool charges at funding; the hook reads it from the seller's pool, the buyer approves only the price here
-  const approve = call(terms.token, selector(SIGNATURES.approve) + addrWord(BASE_ASSURANCE_HOOK) + word(terms.price), 'approve', 'buyer',
-    `Lets the hook move exactly ${terms.price} of USDC from you for this job. Nothing moves until the job is funded. Exact amount, never a standing allowance.`);
+  if (premium < 0n || (opts.coverCap !== undefined && opts.coverCap < 0n)) throw new RangeError('premium and coverCap are non-negative');
+  if (pool === ZERO && premium !== 0n) throw new RangeError('a premium is paid to a pool: name the pool, or fund the job uncovered with premium 0');
+  if (pool !== ZERO && terms.token.toLowerCase() !== BASE_GLMR.toLowerCase()) {
+    throw new RangeError(`a covered job is a GLMR job: the hook covers in GLMR only (${BASE_GLMR}); fund an uncovered job (no pool) in ${terms.token}, or price the job in GLMR`);
+  }
+  if (pool !== ZERO && opts.coverCap !== undefined && opts.coverCap > terms.price) throw new RangeError('the cover cap is at most the price (the hook caps cover at the price)');
+  const approved = terms.price + premium;
+  const approve = call(terms.token, selector(SIGNATURES.approve) + addrWord(BASE_ASSURANCE_HOOK) + word(approved), 'approve', 'buyer',
+    `Lets the hook move exactly ${approved} of the token from you for this job${premium > 0n ? ` (${terms.price} price + ${premium} premium)` : ''}. Nothing moves until the job is funded. Exact amount, never a standing allowance.`);
+  const common = b32Word(jobId) + addrWord(terms.seller) + addrWord(terms.token) + word(terms.price) + word(premium) + word(terms.deposit) + word(terms.deadline) + word(gradeWindow) + addrWord(pool);
+  const withCover = pool !== ZERO && opts.coverCap !== undefined;
   const fund = call(BASE_ASSURANCE_HOOK,
-    selector(SIGNATURES.fundJob) + b32Word(jobId) + addrWord(terms.seller) + addrWord(terms.token) + word(terms.price) + word(premium) + word(terms.deposit) + word(terms.deadline) + word(gradeWindow) + addrWord(evaluator),
-    'fundJob', 'buyer',
-    `Locks ${terms.price} in escrow from you and ${terms.deposit} from the seller, creating insured job ${jobId.slice(0, 10)}…; deadline ${terms.deadline}. ${evaluator === ZERO ? 'You complete or reject it yourself.' : `Evaluator ${evaluator.slice(0, 10)}… may complete or reject it.`}`);
+    withCover ? selector(SIGNATURES.fundJobWithCover) + common + word(opts.coverCap as bigint) : selector(SIGNATURES.fundJob) + common,
+    withCover ? 'fundJobWithCover' : 'fundJob', 'buyer',
+    `Locks ${terms.price} in escrow from you and ${terms.deposit} from the seller, creating ${pool === ZERO ? 'uncovered' : 'covered'} job ${jobId.slice(0, 10)}…; deadline ${terms.deadline}. ${pool === ZERO ? 'No pool covers it; you complete or reject it yourself, or an evaluator the hook registered does.' : `Pool ${pool.slice(0, 10)}… covers it${withCover ? ` up to ${opts.coverCap}` : ' up to the price'} for a premium of ${premium}.`}`);
   return [approve, fund];
 }
 

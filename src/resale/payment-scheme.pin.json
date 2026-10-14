@@ -1,0 +1,6 @@
+{
+  "about": "a byte-identical copy of the coordination layer’s ONE payment scheme (taifoon-agents packages/resale/core/payment-scheme.mjs, ONE_PAYMENT_SCHEME_v1); do not edit, re-copy it and update the sha256 (npm run sync:scheme)",
+  "source": "taifoon-agents packages/resale/core/payment-scheme.mjs",
+  "commit": "6a973b08",
+  "sha256": "696c4f37832093d7b0e5b8af68b9df413f5868cc473a4be7f9580aad222efdb8"
+}

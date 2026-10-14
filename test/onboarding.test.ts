@@ -245,9 +245,10 @@ describe('the watch list a proof layer indexes from', () => {
     expect(manifest.ledgers.some((l) => l.deployed)).toBe(true);
   });
 
-  it('records that only one of the two lifecycles is actually deployed', () => {
+  it('records both lifecycles as deployed on Base: Virtuals ACP and Moonbeam ACP (the hook, from the address registry)', () => {
     const manifest = watchManifest();
-    expect(manifest.ledgers.find((l) => l.id === 'moonbeam-acp')?.deployed).toBe(false);
+    const mb = manifest.ledgers.find((l) => l.id === 'moonbeam-acp');
+    expect(mb?.deployed).toBe(true); expect(mb?.chainId).toBe(8453); expect(mb?.address).toMatch(/^0x[0-9a-fA-F]{40}$/);
   });
 });
 
