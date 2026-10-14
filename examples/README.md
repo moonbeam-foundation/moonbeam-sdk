@@ -53,6 +53,7 @@ Each role gets a readiness report: what you put up, what you can lose, and anyth
 | 21 | [onboard-provider](21-onboard-provider.mjs) | Doing the work | `[block] this job needs a 40 deposit and you have 30 free` |
 | 22 | [onboard-evaluator](22-onboard-evaluator.mjs) | Judging the work | `[caution] without a verifiable proof you can reject but never approve` |
 | 23 | [onboard-backer](23-onboard-backer.mjs) | Standing behind workers (pools are not open yet; this is the arithmetic) | `breaks even at 3.23%` |
+| 24 | [resell-on-base](24-resell-on-base.mjs) | A Moonbeam reseller's quote on every Base venue: the one scheme, the doer keeps its price, the reseller's leg | `the doer keeps 8000 on every venue` |
 
 ## Reading jobs that already ran
 

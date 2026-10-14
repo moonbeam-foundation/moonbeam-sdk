@@ -1,5 +1,6 @@
 import { ACP_SIGNATURES, ACP_TOPIC0, VIRTUALS_ACP_ADDRESS, VIRTUALS_ACP_CHAIN_ID } from './events.js';
 import type { Hex } from './hex.js';
+import { MOONBEAM_HOOK, MOONBEAM_POOL_COUNT, MOONBEAM_POOL_FACTORY } from './moonbeam-acp.generated.js';
 
 /**
  * The decoder's own account of what it watches.
@@ -111,9 +112,10 @@ export const LEDGERS: readonly LedgerSpec[] = Object.freeze([
   },
   {
     id: 'moonbeam-acp',
-    chainId: 84532,
-    deployed: false,
-    note: 'assurance-side escrow and task space; test networks only, no mainnet deployment',
+    chainId: MOONBEAM_HOOK.chainId,
+    address: MOONBEAM_HOOK.address,
+    deployed: true,
+    note: `Moonbeam ACP on Base: the assurance hook (${MOONBEAM_HOOK.name}, registry status ${MOONBEAM_HOOK.status}), the pool factory ${MOONBEAM_POOL_FACTORY.address} and ${MOONBEAM_POOL_COUNT} coverage pools; GLMR only (the USDC route closed 2026-09-29); read from the address registry, never typed`,
   },
 ]);
 

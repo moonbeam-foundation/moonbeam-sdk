@@ -19,7 +19,7 @@ export const POOL_CAP = 50_000n * D18;
 /** The smallest deposit the card accepts. */
 export const MIN_DEPOSIT = 10n * D18;
 /** The dispute window a withdrawal waits out when the pool holds the exit, in seconds. */
-/** The layer's default challenge window (V2 holds cover only until each job ends; the window is recorded, not enforced). */
+/** The layer's default challenge window in seconds: the hook (V3 since 2026-09-28) holds cover through the job's challenge window. */
 export const DISPUTE_WINDOW_S = 3600;
 /** The premium is a share of each job's price; 100 % of it goes to shares. */
 export const PREMIUM_TO_SHARES_BPS = 10_000;
@@ -245,6 +245,24 @@ export const POOL_FACTORY: Readonly<Record<number, Address>> = Object.freeze({ 8
  * everywhere. Add 8453 here, and to nothing else, on the day pools open.
  */
 export const POOLS_OPEN_ON: readonly number[] = Object.freeze([DEVNET_CHAIN_ID]);
+
+/** One network of GET /v1/pools/networks: where a pool can be opened today, as the layer states it (status `open`, or why not). */
+export type PoolNetwork = { chain_id: number; chain?: string; network?: string; line?: string; factory?: string; hook?: string; assets?: string[]; status: string; why?: string; pool_count?: number | null };
+
+/**
+ * Where pools are open TODAY, read from the layer's policy (GET /v1/pools/networks: a line is `open` only when its factory has code
+ * and the council's board does not block deposits) — so opening the Base pools is the council's yes, not an npm release. The typed
+ * POOLS_OPEN_ON is the fallback when the read fails. The transport is the site's same-origin proxy (as ./onboard takes it).
+ */
+export async function poolsOpenOn(t: { fetch: (url: string, init?: { method?: string; headers?: Record<string, string> }) => Promise<{ ok: boolean; status: number; json(): Promise<unknown> }>; base: string }): Promise<{ chains: readonly number[]; networks: PoolNetwork[]; source: 'layer' | 'typed' }> {
+  try {
+    const r = await t.fetch(`${t.base}/pools/networks`, { method: 'GET', headers: { accept: 'application/json' } });
+    const j = (await r.json().catch(() => null)) as { ok?: boolean; networks?: PoolNetwork[] } | null;
+    if (!r.ok || !j?.ok || !Array.isArray(j.networks)) return { chains: POOLS_OPEN_ON, networks: [], source: 'typed' };
+    const open = j.networks.filter((n) => n.status === 'open' && Number.isInteger(n.chain_id)).map((n) => n.chain_id);
+    return { chains: Object.freeze([...new Set(open)]), networks: j.networks, source: 'layer' };
+  } catch { return { chains: POOLS_OPEN_ON, networks: [], source: 'typed' }; }
+}
 
 export class PoolsNotOpenError extends Error {
   constructor(readonly chainId: number) {

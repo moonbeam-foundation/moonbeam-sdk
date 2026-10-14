@@ -1,0 +1,8 @@
+{
+  "about": "a copy of @taifoon/assurance (the core and this profile's venues); do not edit, re-sync it with the package's scripts/sync.mjs",
+  "package": "@taifoon/assurance",
+  "version": "0.1.0",
+  "commit": "f43acf07880df6fa13b3f59e5f964f1389f82e37",
+  "profile": "moonbeam",
+  "sha256": "456db7d1129faa9175a8bce994b5653df3a6802cf1df775ab82a9ead7931cdba"
+}

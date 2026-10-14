@@ -115,6 +115,10 @@ export type { CoverageReport } from './acp/coverage.js';
 
 // ── The watch list, for a proof layer indexing the same events ──
 export { WATCHED_EVENTS, LEDGERS, watchedTopics, terminalTopics, watchManifest } from './acp/registry.js';
+export { MOONBEAM_HOOK, MOONBEAM_HOOK_IMPLEMENTATION, MOONBEAM_POOL_FACTORY, MOONBEAM_COVERAGE_POOLS, MOONBEAM_POOL_COUNT, MOONBEAM_ACP_SINCE, BASE_GLMR_TOKEN, BASE_USDC_TOKEN, JEV_DECISION_LOG, JEV_DECISION_LOG_DEVNET } from './acp/moonbeam-acp.generated.js';
+export type { RegistryContract, RegistryStatus } from './acp/moonbeam-acp.generated.js';
+// Two modules carry the word "onboard": `./onboard` (the live hook's calls, the judge's guard, the nine stages) and `onboarding`
+// (the capital-readiness checks exported below). Both names are kept: renaming an export is a breaking change; the README names which is which.
 export type { WatchedEvent, LedgerId, LedgerSpec } from './acp/registry.js';
 
 export { prepareSettlement } from './acp/pipeline.js';

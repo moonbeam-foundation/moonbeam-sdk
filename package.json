@@ -1,6 +1,6 @@
 {
   "name": "@moonbeam-foundation/sdk",
-  "version": "0.5.3",
+  "version": "0.6.0",
   "description": "Assurance for agent work: wrap a job in a price, a judge and a deadline, and settle it against proof.",
   "license": "Apache-2.0",
   "type": "module",
@@ -52,6 +52,14 @@
       "types": "./dist/judge/index.d.ts",
       "import": "./dist/judge/index.js"
     },
+    "./assurance": {
+      "types": "./dist/assurance/index.d.ts",
+      "import": "./dist/assurance/index.js"
+    },
+    "./resale": {
+      "types": "./dist/resale/index.d.ts",
+      "import": "./dist/resale/index.js"
+    },
     "./package.json": "./package.json"
   },
   "files": [
@@ -74,7 +82,12 @@
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
     "lint": "tsc --noEmit && vitest run --reporter=dot",
-    "prepublishOnly": "npm run build && npm test"
+    "prepublishOnly": "npm run check",
+    "postbuild": "node scripts/postbuild.mjs",
+    "gen:registry": "node scripts/gen-moonbeam-acp.mjs",
+    "check:registry": "node scripts/gen-moonbeam-acp.mjs --check",
+    "check:pins": "node scripts/check-pins.mjs",
+    "check": "npm run typecheck && npm run build && npm test && npm run check:pins"
   },
   "keywords": [
     "moonbeam",
@@ -100,8 +113,8 @@
     "vitest": "^4.1.8"
   },
   "dependencies": {
-    "@taifoon/jev": "^0.2.13",
-    "@taifoon/jev-wilson": "^0.2.0",
+    "@taifoon/jev": "^0.2.18",
+    "@taifoon/jev-wilson": ">=0.2.0 <0.4.0",
     "@taifoon/n8n-nodes-typesafe": "^2.0.4"
   },
   "bin": {
