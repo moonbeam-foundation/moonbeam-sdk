@@ -21,6 +21,7 @@ Every write path now runs on a local fork of Base (`test/fork/run-fork.mjs`), an
   `secondGraderTypedData` + `verdictDigest` + `resolveBySecondGrader`, then `councilApprove`, `pullOracle` and
   `resolveByCouncil`. It also decodes `Escalated`, `CouncilApproved` and `Resolved`, and `recordEffectOf` says what a
   ruling writes into the seller's record. The router is not deployed on Base (`ARBITRATION_ON_BASE`).
+- **Depends on `@taifoon/jev` ^0.3.0**, the grader release that records and stamps by default (its calls stay unsigned).
 - **The Base reader (`./rpc`).** `baseReader()` walks a measured rotation of Base endpoints. Example 32 reads through it
   (**P8**: in 0.6.0 it still called `mainnet.base.org` directly).
 - **Resale.** `quoteSale` (Base venues only) prices a wall the way the layer does: a seller's 9,207 becomes the

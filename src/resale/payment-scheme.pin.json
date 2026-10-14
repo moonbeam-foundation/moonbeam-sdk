@@ -1,6 +1,6 @@
 {
   "about": "a byte-identical copy of the coordination layer’s ONE payment scheme (packages/resale/core/payment-scheme.mjs, ONE_PAYMENT_SCHEME_v1); do not edit, re-sync it with npm run sync",
   "source": "the coordination layer: packages/resale/core/payment-scheme.mjs",
-  "commit": "930e7748",
-  "sha256": "696c4f37832093d7b0e5b8af68b9df413f5868cc473a4be7f9580aad222efdb8"
+  "commit": "51d42de7",
+  "sha256": "f34a6eb7830089d11c0b22850e4cbb299000b08e44e4eb0f4ad8df4456a08020"
 }
