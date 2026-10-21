@@ -1,5 +1,50 @@
 # Changelog
 
+## 0.8.0
+
+Aligned with the coordination layer as it answers on 2026-10-21. Every shape below was read from its OpenAPI document and
+from live read-only calls; the recorded answers are the test fixtures.
+
+- **Cover quotes name their venue (`./cover`).** `GET /v1/cover/quote` now refuses a request without `venue`
+  (`400 bad_param: venue is required`). `coverQuotePlan` and `quoteCover` always send it: `erc8183` by default, `venue` to
+  choose, or the venue a keyed job id names (`bitagent:8453:8566`). A job that cannot be covered now comes back as
+  `{ insurable: false, why[] }`, not as a throw.
+- **Refusals in both shapes (`./errors`).** `refusalOf` reads the layer's `{ ok: false, code, error: "<words>" }` and the
+  OpenAI error object `{ error: { message, type, param, code } }` (the chat and System One doors). Every read throws one
+  `CoordError` (status, code, type, param, nextStep, body). This covers proof, resale, onboard, cover, jobs, x402 and the
+  judge's System One call. `OnboardError` is a `CoordError`. An object `error` never crashes a read or shows as
+  `[object Object]`. `subscribe` returns its refusal as `refusal`.
+- **Jev over System One, two doors (`./judge`).** `gradeJob({ …, key, systemOne })` asks TypeSafe
+  (`api.typesafe.ai/v1/systemone`) by default. `systemOne: { via: 'coord', base, apiKey }` sends the same request through a
+  coordination endpoint's `/systemone` door, with `X-API-Key` and your provider key in `x-systemone-key`. `askSystemOne`
+  (also `askJev`) asks once. Model aliases: `jev-1-13-0` → `jev-1.13.0`, `jev-1-14-0` → `jev-1.14.0`,
+  `typesafe-jev` → `jev-latest`.
+- **x402 v2 (`./x402`).** The payment travels in `PAYMENT-SIGNATURE` and carries the accepted entry whole
+  (`{ x402Version: 2, accepted, payload }`). 0.7.0 sent v2 with a top-level scheme and network, and the wall refused it:
+  "accepted.scheme must be exact". `paymentHeaders` adds `X-PAYMENT` with `legacy` (the walls still read it) and sends only
+  `X-PAYMENT` for v1. `pickAccept(body, { network })` chooses the offer by network: Base, Arbitrum, Arc, Robinhood Chain,
+  Monad and Solana are all on the walls today. `transferAuthorization` signs on the entry's own chain and refuses a Solana
+  entry rather than build the wrong thing. A 402 is also read from its `PAYMENT-REQUIRED` header.
+- **The seller is paid on its own venue (SETTLE_ON_SELLER_VENUE_v1).** `sellerRailOf(offer)` resolves the network, token
+  and payTo of a seller's leg: its own x402 entry first, then its venue's rail. A seller with no paid rail of its own is
+  paid in USDC on Base. Otherwise the leg is held (`network_not_served`, `token_not_served`, `no_payee`), never moved. It
+  passes every vector the layer publishes for the rule. `quoteSale` takes the seller's own venue (any venue the scheme
+  prices); the buyer still pays on Base, and `quoteBase` keeps both sides on Base. The network is a field in `attestSale`
+  (`chainId`), `subscribePlan` (`chainId`), `readProof` (`chain`) and the pool builders (`chainId` or `network`).
+  Moonbeam's pool line stays GLMR on Base (`POOL_LINE`).
+- **Job views (`./jobs`).** `parseJobRef` reads a bare number as a Virtuals ACP v3 job on Base. `<label>:<chainId>:<jobId>`
+  is a contract-keyed job (`bitagent:8453:8566`), and a 32-byte id is a hook job. `readJobs` reads up to 50 of them in one
+  call. `needs_review` is its own hold (`holdOf`, `JobRow.hold`, and `toOutcome(…, { verdict: 'needs_review' })` →
+  `pending: 'needsReview'`), not "awaiting grade".
+- **Both answer logs, and the evaluator adapter on Base.** The registry adds JevAnswerLogV2
+  `0xC08dfc61d702AEA45d1EF2515d8BDA36d548C75c` and JudgeAdapterV5 `0x5242dE388a846d16641744dEB095eD63990E7be8`.
+  `answerRecordedAt` looks a digest up in both logs, `answerLogTotals` reads each log's `total()`, and `readJudgeAdapter`
+  reads the adapter's hook, decision log and release delay from Base.
+- **Dependencies.** One fewer: the grader's workflow-node package is no longer listed, because no file of this package
+  imports it. `@taifoon/jev` and `@taifoon/jev-wilson` remain.
+- Examples 50 and 51 read live only when `MOONBEAM_API` names your coordination endpoint; otherwise they use their
+  recorded answers. Example 50 picks the entry of `NETWORK`.
+
 ## 0.7.0
 
 Every write path now runs on a local fork of Base (`test/fork/run-fork.mjs`), and every read on Base itself

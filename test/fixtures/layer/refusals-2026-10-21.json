@@ -1,0 +1,75 @@
+{
+  "recorded": "live refusals of the coordination layer, 2026-10-21 (next_step and hints trimmed)",
+  "openai_invalid_key": {
+    "status": 401,
+    "body": {
+      "error": {
+        "message": "that API key is not valid, or has been revoked",
+        "type": "authentication_error",
+        "code": "invalid_api_key",
+        "param": null
+      },
+      "ok": false,
+      "code": "invalid_api_key"
+    }
+  },
+  "cover_no_venue": {
+    "status": 400,
+    "body": {
+      "ok": false,
+      "code": "bad_param",
+      "error": "venue is required",
+      "message": "venue is required"
+    }
+  },
+  "cover_not_insurable": {
+    "status": 409,
+    "body": {
+      "ok": false,
+      "insurable": false,
+      "why": [
+        "only the job’s client can buy cover on it",
+        "cover is sold within 600 s of funding",
+        "the job already moved past funding (delivered or ended): its outcome is known",
+        "the deadline is less than 30 s away"
+      ],
+      "job": {
+        "venue": "erc8183",
+        "chain_id": 36927,
+        "escrow": "0xcd3433BeB61A95205F40608B33973245019Ea4E1",
+        "job_id": "1",
+        "client": "0x115bEDE7fbdDB5e781184881e7F7E9CFb968825c",
+        "provider": "0x1f41286D43aC2F888Ec41A894BA7bC84C2930E2c",
+        "price": "10000000",
+        "funded_at": 1791227893,
+        "deadline": 1791228021,
+        "events": [
+          "JobCreated",
+          "BudgetSet",
+          "JobFunded",
+          "JobSubmitted",
+          "PaymentReleased",
+          "JobCompleted"
+        ],
+        "refund_rule": "claim"
+      },
+      "network": "devnet",
+      "contract": "0xA085bB99A42188Ce279CA6E57a92379Eab295818",
+      "asset": "0x31854D915F31A1FBe57c2b06B5b60cbbD7D42D5b",
+      "next": null,
+      "rule": "pays min(cap, price − refunded − refundable) when nothing was delivered by the venue’s deadline and the market kept money, or when an arbitrator’s finding goes against delivered work; nothing otherwise",
+      "code": "conflict",
+      "error": "conflict",
+      "message": "conflict"
+    }
+  },
+  "systemone_no_key": {
+    "status": 401,
+    "body": {
+      "ok": false,
+      "error": "X-API-Key header required (a relayer key)",
+      "code": "unauthorized",
+      "message": "X-API-Key header required (a relayer key)"
+    }
+  }
+}

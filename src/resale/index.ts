@@ -6,8 +6,9 @@
  *
  *   price_to_buyer = seller_price + our_fee + venue_fee(in) + venue_fee(out) [+ reseller_markup]
  *
- * The Moonbeam profile restricts the venues to Base (the owner's rule: Moonbeam resells on Base only) and GLMR stays the money of
- * the assurance hook; the markup is the reseller's own leg (`reseller_markup`), never part of the layer's fee. Everything here is
+ * The Moonbeam profile sells on Base (the buyer pays on a Base venue) and GLMR stays the money of the assurance hook; the
+ * seller's leg is paid where the seller was hired, on the network, token and payTo of its own offer (sellerRailOf,
+ * SETTLE_ON_SELLER_VENUE_v1). The markup is the reseller's own leg (`reseller_markup`), never part of the layer's fee. Everything here is
  * pure except the two reads, which take a transport (a fetch and the site's own same-origin proxy base, as ./onboard does).
  */
 import {
@@ -15,6 +16,7 @@ import {
   type Quote, type Reseller, type FeeRule, type SchemeLeg, type Units,
 } from './payment-scheme.mjs';
 import type { OnboardTransport } from '../onboard/index.js';
+import { jsonOf, okOrThrow } from '../errors/index.js';
 
 export { legsOfPayment, venueFeeOf, grossUp, sumOf, FORMULA, RULE, SCHEME_ID, LEGS, VENUE_FEES, OUR_FEE };
 export type { Quote, Reseller, FeeRule, SchemeLeg, Units };
@@ -97,10 +99,12 @@ export function childKeyPlan(markup: MarkupPolicy = { '*': 0 }, label: string | 
 }
 
 /** The unsigned plan of a child topping up its balance through the layer's subscribe door (the x402 quote comes back as a 402). Pure. */
-export function subscribePlan(o: { chainId?: 8453; usdc: number; create_key?: boolean } = { usdc: 1 }): { method: 'POST'; path: '/access/subscribe'; body: { chainId: 8453; usdc: number; create_key: boolean }; says: string } {
+export function subscribePlan(o: { chainId?: number; usdc: number; create_key?: boolean } = { usdc: 1 }): { method: 'POST'; path: '/access/subscribe'; body: { chainId: number; usdc: number; create_key: boolean }; says: string } {
   if (!(Number.isFinite(o.usdc) && o.usdc > 0)) throw new RangeError('usdc must be a positive amount');
-  return { method: 'POST', path: '/access/subscribe', body: { chainId: 8453, usdc: o.usdc, create_key: o.create_key ?? false },
-    says: 'the layer answers with the x402 quote (a 402: accepts[] with the vault as payTo on Base); the child signs the USDC transferWithAuthorization with its own wallet; the balance is credited to the key' };
+  const chainId = o.chainId ?? 8453;
+  if (!Number.isSafeInteger(chainId) || chainId <= 0) throw new RangeError('chainId is a positive chain id');
+  return { method: 'POST', path: '/access/subscribe', body: { chainId, usdc: o.usdc, create_key: o.create_key ?? false },
+    says: `the layer answers with the x402 quote (a 402: accepts[] with the vault as payTo, one entry per network it settles on; the SDK picks chain ${chainId}'s); the child signs the dollar token's transferWithAuthorization with its own wallet; the balance is credited to the key` };
 }
 
 /** One resale sale as the layer records it (GET /v1/resale/sales/{id}): the delivery grade and the seller's listing as it stands. */
@@ -111,24 +115,35 @@ export const SALE_ID_RE = /^rs_[0-9a-z]+_[0-9a-f]{10}$/i;
 export async function readSale(t: OnboardTransport, saleId: string): Promise<ResaleSale> {
   if (!SALE_ID_RE.test(saleId)) throw new RangeError('a sale id is rs_<stamp>_<10 hex> (the `sale.id` of a class wall’s 200 answer)');
   const r = await t.fetch(`${t.base}/resale/sales/${saleId}`, { method: 'GET', headers: { accept: 'application/json', ...(t.apiKey ? { 'x-api-key': t.apiKey } : {}) } });
-  const j = (await r.json().catch(() => null)) as { ok?: boolean; error?: string } | null;
-  if (!r.ok || !j?.ok) throw new Error(j?.error ?? `GET /resale/sales/${saleId} → ${r.status}`);
-  return j as ResaleSale;
+  return okOrThrow<ResaleSale>(r, await jsonOf(r), `GET /resale/sales/${saleId}`);
 }
 
 /** The reseller's own view (GET /v1/access/reseller): its children, their calls, what it paid at list, what they owe, the margin. */
 export async function readResellerView(t: OnboardTransport): Promise<Record<string, unknown>> {
   const r = await t.fetch(`${t.base}/access/reseller`, { method: 'GET', headers: { accept: 'application/json', ...(t.apiKey ? { 'x-api-key': t.apiKey } : {}) } });
-  const j = (await r.json().catch(() => null)) as { ok?: boolean; error?: string; code?: string } | null;
-  if (!r.ok || !j?.ok) throw new Error(j?.error ?? `GET /access/reseller → ${r.status}${j?.code ? ` (${j.code})` : ''}`);
-  return j;
+  return okOrThrow<Record<string, unknown>>(r, await jsonOf(r), 'GET /access/reseller');
 }
 
 // ── quoteSale and the attested resale steps (0.7.0) ──────────────────────────────────────────────────────────────────
 import { attest, attestKeccak, type Attested, type MoonbeamAttestOptions } from '../attest/index.js';
 
-/** quoteSale over the Base venues: the layer's own quoteSale, refused outside Base (the same as quoteBase). Pure. */
-export const quoteSale = quoteBase;
+/** Every venue the payment scheme prices: where a seller can be hired (venue_out), on its own network. */
+export const SELLER_VENUES = Object.freeze(Object.keys(VENUE_FEES)) as readonly string[];
+
+/**
+ * quoteSale: the buyer pays on a Base venue (or one of the layer's own doors), as the Moonbeam profile requires; the seller's
+ * leg is on the venue it was hired on, any venue the scheme prices (x402 on Solana or Arbitrum, ACP v3 on Arc, …), never
+ * moved to Base for it (SETTLE_ON_SELLER_VENUE_v1: sellerRailOf says where that leg settles). quoteBase keeps both sides
+ * on Base. Pure.
+ */
+export function quoteSale(i: Omit<BaseQuoteInput, 'venue_out'> & { venue_out: string }): Quote | { ok: false; why: string } {
+  if (!allowed(i.venue_in)) return { ok: false, why: `venue_in ${i.venue_in} is not a Base venue of the Moonbeam profile (${BASE_VENUES.join(' · ')}) nor one of the layer's own labels (${OWN_LABELS.join(' · ')})` };
+  if (!SELLER_VENUES.includes(i.venue_out) && !(OWN_LABELS as readonly string[]).includes(i.venue_out)) return { ok: false, why: `venue_out ${i.venue_out} is not a venue the payment scheme prices (${SELLER_VENUES.join(' · ')})` };
+  return coreQuoteSale({ venue_in: i.venue_in, venue_out: i.venue_out, class: i.class ?? null, seller_price: i.seller_price, reseller: i.reseller ?? null, our_fee: i.our_fee ?? { rule: 'wall' } });
+}
+
+export { SETTLE_RULE, PAY_TOKENS, SETTLE_NETWORK_ALIASES, VENUE_RAILS, FREE_ENROLLED, sellerRailOf } from './settle-rule.js';
+export type { SettleToken, SellerOffer, SellerRail } from './settle-rule.js';
 
 /** The steps of a resale the SDK attests: quoted (the terms), paid (the buyer's payment), delivered, settled (the legs). */
 export type SaleStep = 'quoted' | 'paid' | 'delivered' | 'settled' | 'refunded';
@@ -140,11 +155,12 @@ const quoteBody = (q: OkQuote) => JSON.parse(JSON.stringify(q, (_k, v) => (typeo
  * Base by default (`networks: 'none'` opts out). The subject is the sale key on the contract the step pays through (the
  * wall's payTo, a venue escrow) or the zero address when there is none; the digest is keccak256 of the step's canonical body.
  */
-export function attestSale(a: { saleKey: string; step: SaleStep; quote?: OkQuote; tx?: string | null; contract?: string; body?: unknown }, opts: MoonbeamAttestOptions = {}): Attested {
+export function attestSale(a: { saleKey: string; step: SaleStep; quote?: OkQuote; tx?: string | null; contract?: string; body?: unknown; chainId?: number }, opts: MoonbeamAttestOptions = {}): Attested {
   if (!a.saleKey) throw new RangeError('a sale key names the sale');
   return attest({
     kind: `resale.${a.step}`,
-    subject: { chainId: 8453, contract: a.contract ?? `0x${'0'.repeat(40)}`, jobId: attestKeccak(a.saleKey) },
+    // the chain the step pays through (a seller paid on its own venue names that chain); Base by default
+    subject: { chainId: a.chainId ?? 8453, contract: a.contract ?? `0x${'0'.repeat(40)}`, jobId: attestKeccak(a.saleKey) },
     body: { v: 'resale.step.v1', sale: a.saleKey, step: a.step, quote: a.quote ? quoteBody(a.quote) : null, tx: a.tx ?? null, extra: a.body ?? null },
     model: `det:resale-${a.step}-v1`,
     verdict: STEP_VERDICT[a.step] ?? null,

@@ -32,6 +32,8 @@ export type PendingReason =
   | 'awaitingFunding'
   | 'awaitingDelivery'
   | 'awaitingGrading'
+  /** Delivered and graded, not finally (a needs_review verdict): a person reviews the decision. Not `awaitingGrading`. */
+  | 'needsReview'
   /** Mutually exclusive facts were folded in; the log set cannot be trusted. */
   | 'contradictory'
   /** The deadline has passed but nobody has claimed the refund yet. */
@@ -65,7 +67,7 @@ export type AcpOutcome = SettledOutcome | PendingOutcome;
  * a neutral arbitrator beats an evaluator's grade, which beats a bare escrow
  * movement, which beats a timeout.
  */
-export function toOutcome(state: TaskState, clock: Clock): AcpOutcome {
+export function toOutcome(state: TaskState, clock: Clock, grade?: { readonly verdict?: string | null } | null): AcpOutcome {
   const phase = phaseOf(state, clock);
 
   // A job whose logs contradict each other has no settlement. Picking one of
@@ -156,7 +158,8 @@ export function toOutcome(state: TaskState, clock: Clock): AcpOutcome {
     // called. Until someone calls it the money is still locked.
     return { verdict: null, pending: 'refundClaimable' };
   }
-  if (state.work === 'submitted') return { verdict: null, pending: 'awaitingGrading' };
+  // A grade that came back needs_review holds the job for a person; it is not a job nobody has graded.
+  if (state.work === 'submitted') return { verdict: null, pending: grade?.verdict === 'needs_review' ? 'needsReview' : 'awaitingGrading' };
   if (state.escrow === 'locked' || state.work === 'funded') {
     return { verdict: null, pending: 'awaitingDelivery' };
   }

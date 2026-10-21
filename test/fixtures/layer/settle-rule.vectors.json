@@ -1,0 +1,274 @@
+{
+ "rule": "SETTLE_ON_SELLER_VENUE_v1",
+ "source": "the layer's settle rule (lang settle_on_seller_venue), vectors as published 2026-10-21; one id reworded",
+ "core": {
+  "pay_tokens": {
+   "eip155:8453": {
+    "symbol": "USDC",
+    "address": "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+    "decimals": 6
+   },
+   "eip155:42161": {
+    "symbol": "USDC",
+    "address": "0xaf88d065e77c8cc2239327c5edb3a432268e5831",
+    "decimals": 6
+   },
+   "eip155:5042": {
+    "symbol": "USDC",
+    "address": "0x3600000000000000000000000000000000000000",
+    "decimals": 6
+   },
+   "eip155:4663": {
+    "symbol": "USDG",
+    "address": "0x5fc5360d0400a0fd4f2af552add042d716f1d168",
+    "decimals": 6
+   },
+   "eip155:143": {
+    "symbol": "USDC",
+    "address": "0x754704bc059f8c67012fed69bc8a327a5aafb603",
+    "decimals": 6
+   },
+   "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp": {
+    "symbol": "USDC",
+    "address": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+    "decimals": 6
+   }
+  },
+  "network_aliases": {
+   "base": "eip155:8453",
+   "base-sepolia": "eip155:84532",
+   "arbitrum": "eip155:42161",
+   "polygon": "eip155:137",
+   "avalanche": "eip155:43114",
+   "monad": "eip155:143",
+   "robinhood": "eip155:4663",
+   "arc": "eip155:5042",
+   "solana": "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp"
+  },
+  "free_enrolled": {
+   "network": "eip155:8453",
+   "token": {
+    "symbol": "USDC",
+    "address": "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+    "decimals": 6
+   }
+  }
+ },
+ "rails": {
+  "x402-base": "eip155:8453",
+  "x402-solana": "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp",
+  "x402-arbitrum": "eip155:42161",
+  "x402-robinhood": "eip155:4663",
+  "x402-monad": "eip155:143",
+  "erc8183-base": "eip155:8453",
+  "memoacp-base": "eip155:8453",
+  "acpv3-arc": "eip155:5042",
+  "acpv3-robinhood": "eip155:4663",
+  "bitagent-base": "eip155:8453",
+  "olas-gnosis": "eip155:100",
+  "olas-base": "eip155:8453",
+  "olas-polygon": "eip155:137",
+  "moonbeam-acp": "eip155:8453",
+  "pons-robinhood": "eip155:4663",
+  "nosana": "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp"
+ },
+ "vectors": [
+  {
+   "id": "own x402 on Base",
+   "in": {
+    "accepts": {
+     "network": "eip155:8453",
+     "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+     "payTo": "0xEC5275d5b03bc390fca63d902d0b2d0db2eb5573"
+    },
+    "registered_pay_to": "0xec5275d5b03bc390fca63d902d0b2d0db2eb5573"
+   },
+   "want": {
+    "source": "x402_accepts",
+    "network": "eip155:8453",
+    "token": {
+     "symbol": "USDC",
+     "address": "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+     "decimals": 6
+    },
+    "pay_to": "0xec5275d5b03bc390fca63d902d0b2d0db2eb5573",
+    "state": "owed",
+    "held_by": null
+   }
+  },
+  {
+   "id": "own x402 on Arbitrum (v1 name): paid there, never on Base",
+   "in": {
+    "accepts": {
+     "network": "arbitrum",
+     "asset": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
+     "payTo": "0x1111111111111111111111111111111111111111"
+    },
+    "registered_pay_to": "0x2222222222222222222222222222222222222222"
+   },
+   "want": {
+    "source": "x402_accepts",
+    "network": "eip155:42161",
+    "token": {
+     "symbol": "USDC",
+     "address": "0xaf88d065e77c8cc2239327c5edb3a432268e5831",
+     "decimals": 6
+    },
+    "pay_to": "0x1111111111111111111111111111111111111111",
+    "state": "owed",
+    "held_by": null
+   }
+  },
+  {
+   "id": "own x402 on Robinhood in USDG",
+   "in": {
+    "accepts": {
+     "network": "eip155:4663",
+     "asset": "0x5fc5360D0400a0Fd4f2af552ADD042D716F1d168",
+     "payTo": "0x3333333333333333333333333333333333333333"
+    }
+   },
+   "want": {
+    "source": "x402_accepts",
+    "network": "eip155:4663",
+    "token": {
+     "symbol": "USDG",
+     "address": "0x5fc5360d0400a0fd4f2af552add042d716f1d168",
+     "decimals": 6
+    },
+    "pay_to": "0x3333333333333333333333333333333333333333",
+    "state": "owed",
+    "held_by": null
+   }
+  },
+  {
+   "id": "own x402 on Polygon: we pay with no token there, so Held, not moved to Base",
+   "in": {
+    "accepts": {
+     "network": "eip155:137",
+     "asset": "0x3c499c542cef5e3811e1192ce70d8cc03d5c3359",
+     "payTo": "0x4444444444444444444444444444444444444444"
+    }
+   },
+   "want": {
+    "source": "x402_accepts",
+    "network": "eip155:137",
+    "token": null,
+    "pay_to": "0x4444444444444444444444444444444444444444",
+    "state": "held",
+    "held_by": "network_not_served"
+   }
+  },
+  {
+   "id": "own x402 in another asset on Base: Held, never swapped",
+   "in": {
+    "accepts": {
+     "network": "base",
+     "asset": "0x50c5725949a6f0c72e6c4a641f24049a917db0cb",
+     "payTo": "0x5555555555555555555555555555555555555555"
+    }
+   },
+   "want": {
+    "source": "x402_accepts",
+    "network": "eip155:8453",
+    "token": null,
+    "pay_to": "0x5555555555555555555555555555555555555555",
+    "state": "held",
+    "held_by": "token_not_served"
+   }
+  },
+  {
+   "id": "own x402 on Solana: its mint, its payTo kept exactly",
+   "in": {
+    "accepts": {
+     "network": "solana",
+     "asset": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+     "payTo": "GQcEn5pLcweo7qaiy3rDdsiUPiygygmFBaixNtNqhQVD"
+    }
+   },
+   "want": {
+    "source": "x402_accepts",
+    "network": "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp",
+    "token": {
+     "symbol": "USDC",
+     "address": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+     "decimals": 6
+    },
+    "pay_to": "GQcEn5pLcweo7qaiy3rDdsiUPiygygmFBaixNtNqhQVD",
+    "state": "owed",
+    "held_by": null
+   }
+  },
+  {
+   "id": "delivered on ACP v3 on Arc: the venue's rail",
+   "in": {
+    "venue": "acpv3-arc",
+    "registered_pay_to": "0x6666666666666666666666666666666666666666"
+   },
+   "want": {
+    "source": "venue_rail",
+    "network": "eip155:5042",
+    "token": {
+     "symbol": "USDC",
+     "address": "0x3600000000000000000000000000000000000000",
+     "decimals": 6
+    },
+    "pay_to": "0x6666666666666666666666666666666666666666",
+    "state": "owed",
+    "held_by": null
+   }
+  },
+  {
+   "id": "delivered on Olas on Gnosis: we pay with no token there",
+   "in": {
+    "venue": "olas-gnosis",
+    "registered_pay_to": "0x7777777777777777777777777777777777777777"
+   },
+   "want": {
+    "source": "venue_rail",
+    "network": "eip155:100",
+    "token": null,
+    "pay_to": "0x7777777777777777777777777777777777777777",
+    "state": "held",
+    "held_by": "network_not_served"
+   }
+  },
+  {
+   "id": "a free workflow node we resell, payTo registered: free-enrolled, Base",
+   "in": {
+    "venue": "workflow",
+    "registered_pay_to": "0x8888888888888888888888888888888888888888"
+   },
+   "want": {
+    "source": "free_enrolled",
+    "network": "eip155:8453",
+    "token": {
+     "symbol": "USDC",
+     "address": "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+     "decimals": 6
+    },
+    "pay_to": "0x8888888888888888888888888888888888888888",
+    "state": "owed",
+    "held_by": null
+   }
+  },
+  {
+   "id": "a free MCP tool, no payTo registered: Base, Held no_payee",
+   "in": {
+    "registered_pay_to": null
+   },
+   "want": {
+    "source": "free_enrolled",
+    "network": "eip155:8453",
+    "token": {
+     "symbol": "USDC",
+     "address": "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+     "decimals": 6
+    },
+    "pay_to": null,
+    "state": "held",
+    "held_by": "no_payee"
+   }
+  }
+ ]
+}

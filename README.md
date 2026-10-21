@@ -258,6 +258,17 @@ const end = endJob(jobId, receipt);                    // complete(jobId) | reje
 const check = await verifyGrade(receipt, { chain: false });
 ```
 
+With `key`, Jev is asked over System One: the request `{ model, state, questions }` and its answer are the same at
+TypeSafe (`https://api.typesafe.ai/v1/systemone`, the default) and at a coordination endpoint's System One door. To use the
+door, pass `systemOne: { via: 'coord', base, apiKey }`: your coordination key travels as `X-API-Key`, and your TypeSafe
+key travels in `x-systemone-key` for that call only. `askSystemOne` (also exported as `askJev`) asks once, with any model
+spelling (`jev-1-13-0` → `jev-1.13.0`, `jev-1-14-0` → `jev-1.14.0`, `typesafe-jev` → `jev-latest`).
+
+Jev's answers are recorded in two answer logs on Base: JevAnswerLog `0x8e9B9cE86a2d55c10318607b0c815B7B8C66254d` and
+JevAnswerLogV2 `0xC08dfc61d702AEA45d1EF2515d8BDA36d548C75c`. `answerRecordedAt(reader, digest)` looks a digest up in
+both. `readJudgeAdapter(reader)` reads JudgeAdapterV5 `0x5242dE388a846d16641744dEB095eD63990E7be8` on Base: the hook it
+posts verdicts to, the decision log it anchors on, and its release delay.
+
 `endJob` is signed by the job's buyer or by an evaluator the hook registered. For needs_review it returns `null`: the
 job stays held until one of those parties decides, or until anyone calls `expire` after the deadline. The tests
 re-encode the hook's `complete` from the covered GLMR hire on Base,
@@ -286,9 +297,13 @@ await readSale(transport, 'rs_…'); // GET /resale/sales/{id} through the site'
 ```
 
 A reseller is a tenant of the layer; its visitors buy on child keys from the reseller's balance; the markup is the reseller's
-own leg, never part of the layer's fee. The venues are the five Base venues (`x402-base`, `erc8183-base`, `memoacp-base`,
-`bitagent-base`, `olas-base`): Moonbeam resells on Base only, and the assurance economy stays in GLMR. Solana rails and the other
-chains are in the coordination layer's own SDK, not here. Example: [`examples/24-resell-on-base.mjs`](examples/24-resell-on-base.mjs).
+own leg, never part of the layer's fee. The buyer pays on one of the five Base venues (`x402-base`, `erc8183-base`,
+`memoacp-base`, `bitagent-base`, `olas-base`), and the assurance economy stays in GLMR. The seller is paid where it was hired:
+`quoteSale` takes the seller's own venue (x402 on Solana or Arbitrum, ACP v3 on Arc, and the others the scheme prices), and
+`sellerRailOf(offer)` says which network, token and payTo its leg settles on. A seller's own x402 entry comes first, then its
+venue's rail. A seller with no paid rail of its own is paid in USDC on Base. A network the seller did not publish is never
+chosen for it: its leg is held instead. `quoteBase` keeps both sides on Base. Example:
+[`examples/24-resell-on-base.mjs`](examples/24-resell-on-base.mjs).
 
 ## Attested by default
 
@@ -314,18 +329,50 @@ s.attest.calls;      // [JevDecisionLog.record on 8453]
 s.attest.missing;    // [{ contract: 'GradeStampRegistry', chainId: 8453, why: … }]
 ```
 
-## Paying an x402 wall on Base
+## Paying an x402 wall
 
 ```ts
-import { quoteWall, transferAuthorization, paymentHeader } from '@moonbeam-foundation/sdk/x402';
-const { accept } = await quoteWall(transport, '/x402/class/mcp.digest');      // the 402's Base entry (USDC)
-const typed = transferAuthorization(accept, { from: myAddress });             // EIP-3009 TransferWithAuthorization
+import { quoteWall, transferAuthorization, paymentHeaders } from '@moonbeam-foundation/sdk/x402';
+const { accept } = await quoteWall(transport, '/x402/class/mcp.digest', { network: 'eip155:8453' }); // the entry of your network
+const typed = transferAuthorization(accept, { from: myAddress });             // EIP-3009 TransferWithAuthorization, on that chain
 const signature = await wallet.signTypedData(typed);                         // your wallet signs
-const header = paymentHeader(accept, typed.message, signature);              // the X-PAYMENT header
+const headers = paymentHeaders(accept, typed.message, signature);            // { 'PAYMENT-SIGNATURE': … } (x402 v2)
 ```
 
-Only the `exact` entry on Base (`eip155:8453`) is taken; a wall that offers no Base entry is refused. `subscribe()` posts
-the top-up door and returns its 402 quote. `quoteSale` from `./resale` prices the same wall from the seller's price.
+A wall's 402 lists one `exact` entry per network it settles on. `pickAccept(body, { network })` takes the entry of the
+network you pay from: a CAIP-2 id, a v1 name such as `arbitrum`, or a preference list. With no network named, it takes
+Base. Network, token, payTo and amount all come from the entry. A Solana entry is picked like any other, but
+`transferAuthorization` refuses it: your Solana wallet builds that transfer. The x402 v2 payment carries the accepted
+entry whole, in `PAYMENT-SIGNATURE`. `{ legacy: true }` adds `X-PAYMENT` beside it, and `x402Version: 1` sends only
+`X-PAYMENT`. `subscribe()` posts the top-up door and returns its 402 quote. `quoteSale` from `./resale` prices the same
+wall from the seller's price.
+
+## Cover quotes
+
+```ts
+import { quoteCover, coverQuotePlan } from '@moonbeam-foundation/sdk/cover';
+const q = await quoteCover(transport, { buyer: myAddress, job: 'bitagent:8453:8566' }); // venue bitagent, chain 8453, job 8566
+if (!q.ok) q.why;                                                                      // why it is not insurable now
+```
+
+`GET /v1/cover/quote` requires the venue the job is on. These helpers always send it: `erc8183` (the Virtuals ACP v3
+contract) unless you pass `venue`, or unless the job id names its own. Inputs a venue cannot be quoted from are refused
+before any call.
+
+## Job ids and holds
+
+`./jobs` reads a job id from any market. A bare number is a Virtuals ACP v3 job on Base. `<label>:<chainId>:<jobId>` names
+the contract the job lives in, as in `bitagent:8453:8566`. A 32-byte id is an assurance-hook job. `readJobs(transport, ids)`
+reads up to 50 of them in one call. A job whose grade came back `needs_review` has its own hold, separate from
+`awaiting_grade`: a person reviews the decision. `toOutcome(state, clock, { verdict: 'needs_review' })` returns
+`pending: 'needsReview'` for such a job.
+
+## Refusals
+
+Every read throws a `CoordError` on a refusal (`./errors`): `status`, `code`, `type`, `param`, `nextStep` and the words as
+its message. The layer refuses in two shapes, `{ ok: false, code, error: "<words>" }` and the OpenAI error object
+`{ error: { message, type, param, code } }`, and `refusalOf` reads both. An `error` that is an object never surfaces as
+`[object Object]`.
 
 ## Proofs
 
@@ -333,6 +380,7 @@ the top-up door and returns its 402 quote. `quoteSale` from `./resale` prices th
 import { readProof, verifyOnBase } from '@moonbeam-foundation/sdk/proof';
 import { baseReader } from '@moonbeam-foundation/sdk/rpc';
 const p = await readProof(transport, txHash);       // block, superroot, checks, proven, ref v5:8453:<tx>@<superroot>
+                                                    // { chain: 42161 } reads a transaction on another chain the layer proves
 const c = await verifyOnBase(baseReader(), p.blob!); // verify(blob) by eth_call on the V5 verifier 0x2D475a53eAA8F9AC78B69bD2429275a622C644f8
 ```
 

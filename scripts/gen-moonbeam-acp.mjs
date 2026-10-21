@@ -41,6 +41,8 @@ const usdc = one('tokens', BASE, /^USDC$/);
 const log = one('jev', BASE, /^JevDecisionLog$/);
 const logDevnet = one('jev', DEVNET, /^JevDecisionLog/);
 const answerLog = one('jev', BASE, /^JevAnswerLog$/);
+const answerLogV2 = one('jev', BASE, /^JevAnswerLogV2$/);
+const adapterV5 = one('jev', BASE, /^JudgeAdapterV5$/);
 const v5 = one('v5-verifier', BASE, /^TaifoonV5ProofVerifier \(gated\)$/);
 const since = rows('moonbeam-acp').map((c) => c.deploy?.at ?? c.deployed_at ?? c.since ?? null).filter((x) => typeof x === 'string').sort()[0] ?? null;
 
@@ -73,10 +75,15 @@ export const JEV_DECISION_LOG: RegistryContract = Object.freeze({ name: ${q(log.
 export const JEV_DECISION_LOG_DEVNET: RegistryContract = Object.freeze({ name: ${q(logDevnet.name)}, address: ${q(logDevnet.address)} as Address, chainId: ${DEVNET}, status: ${q(logDevnet.status)} as RegistryStatus, note: ${note(logDevnet)} });
 /** The judge's answer log on Base (jev.answer.v1 digests). */
 export const JEV_ANSWER_LOG: RegistryContract = Object.freeze({ name: ${q(answerLog.name)}, address: ${q(answerLog.address)} as Address, chainId: ${BASE}, status: ${q(answerLog.status)} as RegistryStatus, note: ${note(answerLog)} });
+/** The judge's second answer log on Base (the same JevAnswered event and recordedAt; a guardian rotates its recorder). A
+ *  reader looks up an answers digest in both logs. */
+export const JEV_ANSWER_LOG_V2: RegistryContract = Object.freeze({ name: ${q(answerLogV2.name)}, address: ${q(answerLogV2.address)} as Address, chainId: ${BASE}, status: ${q(answerLogV2.status)} as RegistryStatus, note: ${note(answerLogV2)} });
+/** The evaluator adapter on Base that posts an anchored verdict to its hook after a vetoable delay. */
+export const JUDGE_ADAPTER_V5: RegistryContract = Object.freeze({ name: ${q(adapterV5.name)}, address: ${q(adapterV5.address)} as Address, chainId: ${BASE}, status: ${q(adapterV5.status)} as RegistryStatus, note: ${note(adapterV5)} });
 /** The V5 proof verifier on Base (verify(blob) answers whether a served proof blob verifies). */
 export const V5_PROOF_VERIFIER: RegistryContract = Object.freeze({ name: 'V5 proof verifier', address: ${q(v5.address)} as Address, chainId: ${BASE}, status: ${q(v5.status)} as RegistryStatus, note: '' });
 /** The addresses by role, for code that only needs the address. */
-export const REGISTRY = Object.freeze({ hook: MOONBEAM_HOOK.address, poolFactory: MOONBEAM_POOL_FACTORY.address, glmr: BASE_GLMR_TOKEN.address, usdc: BASE_USDC_TOKEN.address, decisionLog: JEV_DECISION_LOG.address, answerLog: JEV_ANSWER_LOG.address, v5Verifier: V5_PROOF_VERIFIER.address });
+export const REGISTRY = Object.freeze({ hook: MOONBEAM_HOOK.address, poolFactory: MOONBEAM_POOL_FACTORY.address, glmr: BASE_GLMR_TOKEN.address, usdc: BASE_USDC_TOKEN.address, decisionLog: JEV_DECISION_LOG.address, answerLog: JEV_ANSWER_LOG.address, answerLogV2: JEV_ANSWER_LOG_V2.address, judgeAdapterV5: JUDGE_ADAPTER_V5.address, v5Verifier: V5_PROOF_VERIFIER.address });
 /** The earliest deployment date the registry records for the system, when it records one. */
 export const MOONBEAM_ACP_SINCE: string | null = ${since === null ? 'null' : q(since)};
 /** How many coverage pools the registry lists as live. */

@@ -2,7 +2,8 @@
  * @moonbeam-foundation/sdk/proof: read the proof that a Base transaction is inside the layer's superroot, name it with a
  * ref (`v5:<chain>:<tx>@<superroot>`), and check the served blob with the V5 proof verifier on Base itself.
  *
- *   readProof(t, tx)          GET /v1/proof/tx/8453/<tx>: the block, the superroot, `checks`, `proven`, the blob
+ *   readProof(t, tx, o?)      GET /v1/proof/tx/<chain>/<tx> (Base by default; `chain` names another EVM chain the layer
+ *                             proves, e.g. where a seller was paid): the block, the superroot, `checks`, `proven`, the blob
  *   proofRef / parseProofRef  the one-line name of a proof, and back
  *   verifyCall(blob)          the unsigned eth_call the verifier answers (`verify(blob)`)
  *   verifyOnBase(reader, p)   that eth_call on Base: true, false, or the verifier's own error name
@@ -17,6 +18,7 @@ import { encodeFunction, decodeStatic, encodeParams } from '../abi/index.js';
 import { keccakHex, hexToBytes } from '../onboard/index.js';
 import { ethCall, RpcReverted, type BaseReader } from '../rpc/index.js';
 import { REGISTRY } from '../acp/moonbeam-acp.generated.js';
+import { jsonOf, okOrThrow } from '../errors/index.js';
 
 /** TaifoonV5ProofVerifier (gated) on Base, from the address registry */
 export const V5_VERIFIER = REGISTRY.v5Verifier;
@@ -39,12 +41,14 @@ export type TxProof = {
 
 const TX_RE = /^0x[0-9a-fA-F]{64}$/;
 
-/** Read the proof of one Base transaction from the layer (keyless). Throws on a malformed hash or a refused read. */
-export async function readProof(t: OnboardTransport, tx: string): Promise<TxProof> {
+/** Read the proof of one transaction from the layer (keyless): Base unless `chain` names another chain id. Throws a
+ *  RangeError on a malformed hash or chain, and a CoordError (either refusal shape, ./errors) on a refused read. */
+export async function readProof(t: OnboardTransport, tx: string, o: { chain?: number } = {}): Promise<TxProof> {
   if (!TX_RE.test(tx)) throw new RangeError('a transaction hash is 0x + 64 hex');
-  const r = await t.fetch(`${t.base}/proof/tx/8453/${tx}`, { method: 'GET', headers: { accept: 'application/json', ...(t.apiKey ? { 'x-api-key': t.apiKey } : {}) } });
-  const j = (await r.json().catch(() => null)) as (Omit<TxProof, 'proven' | 'ref'> & { proven?: boolean; error?: string }) | null;
-  if (!r.ok || !j?.ok) throw new Error(j?.error ?? `GET /proof/tx/8453/${tx} → ${r.status}`);
+  const chain = o.chain ?? 8453;
+  if (!Number.isSafeInteger(chain) || chain <= 0) throw new RangeError('a chain is a positive chain id');
+  const r = await t.fetch(`${t.base}/proof/tx/${chain}/${tx}`, { method: 'GET', headers: { accept: 'application/json', ...(t.apiKey ? { 'x-api-key': t.apiKey } : {}) } });
+  const j = okOrThrow<Omit<TxProof, 'proven' | 'ref'> & { proven?: boolean }>(r, await jsonOf(r), `GET /proof/tx/${chain}/${tx}`);
   const checks = j.checks ?? {};
   const proven = Object.keys(checks).length > 0 && Object.values(checks).every(Boolean) && j.blob !== null;
   const root = j.super_root_hash ? (j.super_root_hash.startsWith('0x') ? j.super_root_hash : `0x${j.super_root_hash}`) : null;

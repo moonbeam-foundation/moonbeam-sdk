@@ -2139,7 +2139,9 @@ export function attest(input: AttestInput, opts: AttestOptions = {}): Attested {
   const networks = [...(opts.networks ?? ATTEST_PROFILES[opts.profile ?? 'taifoon'])];
   const calls: AttestCall[] = []; const missing: AttestMissing[] = [];
   for (const chainId of networks) {
-    const t = { name: `chain ${chainId}`, decisionLog: null, answerLog: null, stampRegistry: null, ...ATTEST_TARGETS[chainId], ...opts.targets?.[chainId] };
+    // the defaults as their own value: written inline before a spread of a fully typed target, tsc refuses them (TS2783)
+    const unknownChain: (typeof ATTEST_TARGETS)[number] = { name: `chain ${chainId}`, decisionLog: null, answerLog: null, stampRegistry: null };
+    const t = { ...unknownChain, ...ATTEST_TARGETS[chainId], ...opts.targets?.[chainId] };
     const gap = (contract: AttestMissing['contract']) => missing.push({ chainId, network: t.name, contract, why: `no ${contract} on ${t.name} (${chainId}) in the address registry` });
     // the answers first, then the decision that cites them (the order the layer's recorder sends)
     if (input.answers) {

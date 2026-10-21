@@ -71,19 +71,21 @@ Each role gets a readiness report: what you put up, what you can lose, and anyth
 | # | File | What it shows | You see |
 |---|---|---|---|
 | 40 | [the-article](40-the-article.mjs) | Every claim the launch article makes about the SDK, checked. Live, it also finds the equation job's grade on Base (`OFFLINE=1` skips that) | `every claim holds` |
-| 50 | [x402-pay-a-wall](50-x402-pay-a-wall.mjs) | A wall's 402 on Base, `quoteSale`'s price for it, and the EIP-3009 typed data your wallet signs | `signs TransferWithAuthorization under USD Coin v2 on chain 8453` |
+| 50 | [x402-pay-a-wall](50-x402-pay-a-wall.mjs) | A wall's 402 (six networks), the entry of your network, `quoteSale`'s price, where a seller on Solana is paid, the EIP-3009 typed data your wallet signs and the PAYMENT-SIGNATURE header | `signs TransferWithAuthorization under USD Coin v2 on chain 8453` |
 | 51 | [read-a-proof](51-read-a-proof.mjs) | A Base transaction's proof from the layer, then `verify(blob)` on the V5 verifier on Base | `verify(blob) on Base: true` |
 | 52 | [arbitration-calls](52-arbitration-calls.mjs) | The three tiers of the ArbitratorRouter as unsigned calls, and what a ruling writes into the record | `findCheated(jobId, loss)` |
 | 53 | [attested-by-default](53-attested-by-default.mjs) | A settle, a grade and a resale step, each with its mark and its calls on Base; the stamp Base lacks said | `missing: GradeStampRegistry@8453` |
 
 ## Settings
 
-Only the two live examples read anything from the environment.
+Only the live examples read anything from the environment.
 
 | Variable | Used by | Required | Default |
 |---|---|---|---|
 | `TYPESAFE_KEY` | 17 | yes, for 17 | none: 17 explains how to get one and stops. Your key is sent to TypeSafe only |
 | `BASE_RPC` | 32 | no | `https://mainnet.base.org` |
+| `MOONBEAM_API` | 50, 51 | no | none: they use their recorded answers. Set it to your coordination endpoint (`…/v1`) to read live |
+| `NETWORK` | 50 | no | `eip155:8453` (any network the wall offers: `arbitrum`, `eip155:5042`, `solana`, …) |
 | `JOB` | 32 | no | `74926` |
 | `FROM_BLOCK`, `WINDOWS` | 32 | no | `50427200`, `4` windows of 500 blocks |
 
