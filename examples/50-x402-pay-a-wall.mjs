@@ -1,17 +1,28 @@
-// x402 on Base: read a wall's 402 quote, pick its Base entry, and build the USDC payment your wallet signs (EIP-3009
-// transferWithAuthorization) and the X-PAYMENT header that carries it. Nothing is signed or paid here.
-//   node examples/50-x402-pay-a-wall.mjs          a paid answer of the class mcp.digest, quoted live
-//   OFFLINE=1 node examples/50-x402-pay-a-wall.mjs  the same, from the recorded quote
+// x402: read a wall's 402 quote, pick the entry of the network you pay from, and build the payment your wallet signs
+// (EIP-3009 transferWithAuthorization) and the PAYMENT-SIGNATURE header that carries it. Nothing is signed or paid here.
+//   node examples/50-x402-pay-a-wall.mjs                                 the recorded quote (six networks, Solana included)
+//   MOONBEAM_API=<your coordination endpoint>/v1 node examples/50-x402-pay-a-wall.mjs   the same, quoted live
+//   NETWORK=eip155:42161 node examples/50-x402-pay-a-wall.mjs           pay from another network the wall offers
 //   test/fork/run-fork.mjs signs it and executes it on a Base fork
-import { quoteWall, baseAccept, transferAuthorization, subscribePlan } from '@moonbeam-foundation/sdk/x402';
-import { quoteSale } from '@moonbeam-foundation/sdk/resale';
+import { readFileSync } from 'node:fs';
+import { quoteWall, pickAccept, chainIdOf, transferAuthorization, paymentHeaders, subscribePlan } from '@moonbeam-foundation/sdk/x402';
+import { quoteSale, sellerRailOf } from '@moonbeam-foundation/sdk/resale';
 
-const t = { base: 'https://coord.taifoon.dev/v1', fetch: (u, i) => fetch(u, i) };
-const recorded = { x402: { x402Version: 2, accepts: [{ scheme: 'exact', network: 'eip155:8453', amount: '11509', asset: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913', payTo: '0x3574999dd4c96eB73Bd6e11D4177010C83E14f5b', maxTimeoutSeconds: 300, extra: { name: 'USD Coin', version: '2' } }] } };
-const accept = process.env.OFFLINE ? baseAccept(recorded) : (await quoteWall(t, '/x402/class/mcp.digest')).accept;
-console.log(`the wall asks ${accept.amount} USDC units on ${accept.network}, paid to ${accept.payTo}`);
+const network = process.env.NETWORK ?? 'eip155:8453';
+const recorded = JSON.parse(readFileSync(new URL('./data/x402-wall-402.json', import.meta.url), 'utf8'));
+const api = process.env.OFFLINE ? null : process.env.MOONBEAM_API ?? null;
+const live = api ? await quoteWall({ base: api, fetch: (u, i) => fetch(u, i) }, '/x402/class/mcp.digest', { network }) : null;
+const accept = live ? live.accept : pickAccept(recorded, { network });
+console.log(`the wall offers ${(live ? live.body : recorded.x402).accepts.map((a) => a.network).join(', ')}; on ${accept.network} it asks ${accept.amount} units of ${accept.asset}, paid to ${accept.payTo}`);
 const q = quoteSale({ venue_in: 'x402-base', venue_out: 'x402-base', seller_price: 9207n });
 console.log(`quoteSale: the seller's 9207 → the buyer pays ${q.price_to_buyer} (the same scheme the wall prices with)`);
+const rail = sellerRailOf({ accepts: { network: 'solana', asset: 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v', payTo: 'GQcEn5pLcweo7qaiy3rDdsiUPiygygmFBaixNtNqhQVD' } });
+console.log(`a seller who published a Solana offer is paid there: ${rail.network} ${rail.token?.symbol} to ${rail.pay_to} (${rail.state})`);
+if (chainIdOf(accept.network) === null) {
+  console.log(`${accept.network} is not an EIP-3009 network: your Solana wallet sends ${accept.amount} units of ${accept.asset} to ${accept.payTo} (fee payer ${accept.extra?.feePayer ?? 'yours'})`);
+  process.exit(0);
+}
 const typed = transferAuthorization(accept, { from: '0x000000000000000000000000000000000000dEaD' });
 console.log(`your wallet signs ${typed.primaryType} under ${typed.domain.name} v${typed.domain.version} on chain ${typed.domain.chainId}: value ${typed.message.value}, valid before ${typed.message.validBefore}`);
-console.log('then paymentHeader(accept, typed.message, signature) is the X-PAYMENT header; a top-up starts at', JSON.stringify(subscribePlan({ usdc: 1 }).body));
+const headers = paymentHeaders(accept, typed.message, `0x${'11'.repeat(65)}`);
+console.log(`then the request carries ${Object.keys(headers).join(' + ')} (x402 v2: the accepted entry and the signed authorization); a top-up starts at`, JSON.stringify(subscribePlan({ usdc: 1 }).body));

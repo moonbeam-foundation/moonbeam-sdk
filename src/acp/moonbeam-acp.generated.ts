@@ -52,10 +52,15 @@ export const JEV_DECISION_LOG: RegistryContract = Object.freeze({ name: "JevDeci
 export const JEV_DECISION_LOG_DEVNET: RegistryContract = Object.freeze({ name: "JevDecisionLog (devnet)", address: "0x1D622511862DD7DEffB8fEeBc225E0FAdA1e9A05" as Address, chainId: 36927, status: "devnet-only" as RegistryStatus, note: "" });
 /** The judge's answer log on Base (jev.answer.v1 digests). */
 export const JEV_ANSWER_LOG: RegistryContract = Object.freeze({ name: "JevAnswerLog", address: "0x8e9B9cE86a2d55c10318607b0c815B7B8C66254d" as Address, chainId: 8453, status: "live" as RegistryStatus, note: "Records every Jev answer (JevAnswered); one trusted recorder fixed in the constructor." });
+/** The judge's second answer log on Base (the same JevAnswered event and recordedAt; a guardian rotates its recorder). A
+ *  reader looks up an answers digest in both logs. */
+export const JEV_ANSWER_LOG_V2: RegistryContract = Object.freeze({ name: "JevAnswerLogV2", address: "0xC08dfc61d702AEA45d1EF2515d8BDA36d548C75c" as Address, chainId: 8453, status: "live" as RegistryStatus, note: "Jev answers on Base: a guardian with a delayed, tombstoned rotation." });
+/** The evaluator adapter on Base that posts an anchored verdict to its hook after a vetoable delay. */
+export const JUDGE_ADAPTER_V5: RegistryContract = Object.freeze({ name: "JudgeAdapterV5", address: "0x5242dE388a846d16641744dEB095eD63990E7be8" as Address, chainId: 8453, status: "live" as RegistryStatus, note: "Evaluator adapter on Base for the V4 hook 0x93122A47d1824afFA3bAa5751aacf4919F67eb25: anchored verdict + a vetoable delay." });
 /** The V5 proof verifier on Base (verify(blob) answers whether a served proof blob verifies). */
 export const V5_PROOF_VERIFIER: RegistryContract = Object.freeze({ name: 'V5 proof verifier', address: "0x2D475a53eAA8F9AC78B69bD2429275a622C644f8" as Address, chainId: 8453, status: "live" as RegistryStatus, note: '' });
 /** The addresses by role, for code that only needs the address. */
-export const REGISTRY = Object.freeze({ hook: MOONBEAM_HOOK.address, poolFactory: MOONBEAM_POOL_FACTORY.address, glmr: BASE_GLMR_TOKEN.address, usdc: BASE_USDC_TOKEN.address, decisionLog: JEV_DECISION_LOG.address, answerLog: JEV_ANSWER_LOG.address, v5Verifier: V5_PROOF_VERIFIER.address });
+export const REGISTRY = Object.freeze({ hook: MOONBEAM_HOOK.address, poolFactory: MOONBEAM_POOL_FACTORY.address, glmr: BASE_GLMR_TOKEN.address, usdc: BASE_USDC_TOKEN.address, decisionLog: JEV_DECISION_LOG.address, answerLog: JEV_ANSWER_LOG.address, answerLogV2: JEV_ANSWER_LOG_V2.address, judgeAdapterV5: JUDGE_ADAPTER_V5.address, v5Verifier: V5_PROOF_VERIFIER.address });
 /** The earliest deployment date the registry records for the system, when it records one. */
 export const MOONBEAM_ACP_SINCE: string | null = "2026-09-24";
 /** How many coverage pools the registry lists as live. */

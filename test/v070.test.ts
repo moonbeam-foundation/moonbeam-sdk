@@ -45,7 +45,9 @@ describe('x402 on Base: the EIP-3009 typed data, signed and recovered', () => {
     const sig = await acct.signTypedData(t as never);
     expect(await recoverTypedDataAddress({ ...(t as unknown as Record<string, unknown>), signature: sig } as never)).toBe(acct.address);
     const h = JSON.parse(Buffer.from(paymentHeader(a, t.message, sig), 'base64').toString('utf8'));
-    expect(h).toEqual({ x402Version: 2, scheme: 'exact', network: 'eip155:8453', payload: { signature: sig, authorization: t.message } });
+    // 0.8.0: x402 v2 carries the accepted entry whole (the wall refused 0.7.0's top-level scheme/network: "accepted.scheme must be exact")
+    expect(h).toEqual({ x402Version: 2, accepted: a, payload: { signature: sig, authorization: t.message } });
+    expect(JSON.parse(Buffer.from(paymentHeader(a, t.message, sig, 1), 'base64').toString('utf8'))).toEqual({ x402Version: 1, scheme: 'exact', network: 'eip155:8453', payload: { signature: sig, authorization: t.message } });
     expect(hashTypedData(t as never)).toMatch(/^0x[0-9a-f]{64}$/);
   });
 });
@@ -173,7 +175,8 @@ describe('attestations by default: every step on Base unless told otherwise', ()
     const q = quoteSale({ venue_in: 'x402-base', venue_out: 'x402-base', seller_price: 9207n });
     if (!q.ok) throw new Error(q.why);
     expect(String(q.price_to_buyer)).toBe('11509');
-    expect(quoteSale).toBe(quoteBase);
+    // 0.8.0: quoteSale takes the seller's own venue (any the scheme prices); quoteBase keeps both sides on Base
+    expect(quoteBase({ venue_in: 'x402-base', venue_out: 'x402-base', seller_price: 9207n })).toEqual(q);
     const a = attestSale({ saleKey: 'rs_x_0123456789', step: 'settled', quote: q });
     expect(a.mark.kind).toBe('resale.settled'); expect(a.calls[0]!.to).toBe(REGISTRY.decisionLog); expect(a.mark.verdict).toBe(1);
     expect(attestSale({ saleKey: 'rs_x_0123456789', step: 'quoted', quote: q }).missing).toEqual([]);

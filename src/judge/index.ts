@@ -11,6 +11,7 @@ import type { EvaluatorCall, FactsInput, GradeInput, Network, Receipt, Recorded,
 import { keccak256Hex } from '../adapters/stamp.js';
 import { attest } from '../attest/index.js';
 import type { AttestCall, AttestMissing, StampVerdict } from '../attest/index.js';
+import { CoordError, jsonOf, refusalOf } from '../errors/index.js';
 
 /** Moonbeam ACP on Base: the hook, the GLMR token, its tenant. */
 export const MOONBEAM_JUDGE = Object.freeze({
@@ -26,12 +27,86 @@ const jobIdOf = (jobId: string): string => {
   return jobId.toLowerCase();
 };
 
-export type GradeJobInput = Omit<GradeInput, 'subject' | 'caller'> & { jobId: string };
+export type GradeJobInput = Omit<GradeInput, 'subject' | 'caller'> & {
+  jobId: string;
+  /** where Jev is asked with your `key`: TypeSafe itself (the default), or a coordination endpoint's System One door */
+  systemOne?: SystemOneRoute;
+};
 
-/** Grade one job on the hook: facts first (a failed check rejects without asking Jev), then RUBRIC_v1, then the receipt. */
+/** Grade one job on the hook: facts first (a failed check rejects without asking Jev), then RUBRIC_v1, then the receipt.
+ *  With `key`, Jev is asked over System One: at api.typesafe.ai by default, or through `systemOne: { via: 'coord', … }`. */
 export async function gradeJob(input: GradeJobInput): Promise<Receipt> {
-  const { jobId, ...rest } = input;
-  return grade({ ...rest, subject: { chainId: MOONBEAM_JUDGE.chainId, at: MOONBEAM_JUDGE.hook, ref: jobIdOf(jobId) }, caller: MOONBEAM_JUDGE.tenant });
+  const { jobId, systemOne, ...rest } = input;
+  const routed = systemOne && input.key ? { endpoint: systemOne.via === 'coord' ? systemOne.base : systemOne.endpoint ?? SYSTEM_ONE_URL, fetch: systemOneFetch(systemOne, input.fetch) } : {};
+  return grade({ ...rest, ...routed, subject: { chainId: MOONBEAM_JUDGE.chainId, at: MOONBEAM_JUDGE.hook, ref: jobIdOf(jobId) }, caller: MOONBEAM_JUDGE.tenant });
+}
+
+// ── System One: one request, one answer, two doors ─────────────────────────────────────────────────────────────────────
+// The System One request { model, state, questions } and its answer { model, answers, usage } are the same at TypeSafe
+// (POST https://api.typesafe.ai/v1/systemone, your TypeSafe key as Bearer) and at a coordination endpoint's door
+// (POST <base>/systemone: your coordination key as X-API-Key, the provider's key in x-systemone-key for that one call).
+
+/** TypeSafe's own System One host (the default door). */
+export const SYSTEM_ONE_URL = 'https://api.typesafe.ai';
+/** Other spellings of the Jev models, and the name each stands for. */
+export const JEV_MODEL_ALIASES: Readonly<Record<string, string>> = Object.freeze({ 'jev-1-13-0': 'jev-1.13.0', 'jev-1-14-0': 'jev-1.14.0', 'typesafe-jev': 'jev-latest' });
+/** A Jev model name, with an alias read as the model it stands for (`jev-1-14-0` → `jev-1.14.0`). */
+export const jevModel = (m: string): string => JEV_MODEL_ALIASES[m] ?? m;
+
+export type SystemOneRoute =
+  /** TypeSafe itself: your TypeSafe key as Bearer. `endpoint` overrides the host (https only). */
+  | { via?: 'typesafe'; endpoint?: string; model?: string }
+  /** a coordination endpoint's door: `base` as the other transports take it (…/v1), `apiKey` your coordination key
+   *  (sent as X-API-Key); your provider key (`key`) travels in x-systemone-key for that call only. */
+  | { via: 'coord'; base: string; apiKey: string; provider?: string; model?: string };
+export type SystemOneQuestion = { type: 'noul' | 'choice' | 'score'; instructions: string; criteria?: unknown };
+export type SystemOneAnswer = { model: string | null; answers: Record<string, Record<string, unknown>>; usage?: { input_tokens?: number; output_tokens?: number } };
+
+type FetchLike = (url: string, init: { method: string; headers: Record<string, string>; body: string; signal?: AbortSignal }) => Promise<{ ok: boolean; status: number; json(): Promise<unknown> }>;
+
+const httpsOnly = (u: string) => { if (!/^https:\/\//.test(u)) throw new RangeError('a key is only sent over https'); return u.replace(/\/$/, ''); };
+/** The URL and headers of one System One call on a route. Pure. */
+export function systemOneRequest(route: SystemOneRoute | undefined, key: string, body: { model: string; state: unknown; questions: Record<string, SystemOneQuestion> }): { url: string; headers: Record<string, string>; body: string } {
+  if (!key) throw new RangeError('System One takes your provider key (TypeSafe: console.typesafe.ai)');
+  const model = jevModel(route?.model ?? body.model);
+  const json = JSON.stringify({ ...body, model });
+  if (route?.via === 'coord') {
+    if (!route.apiKey) throw new RangeError('the coordination door takes your coordination key (apiKey, sent as X-API-Key)');
+    return { url: `${httpsOnly(route.base)}/systemone`, headers: { 'content-type': 'application/json', accept: 'application/json', 'x-api-key': route.apiKey, 'x-systemone-key': key, ...(route.provider ? { 'x-systemone-provider': route.provider } : {}) }, body: json };
+  }
+  return { url: `${httpsOnly(route?.endpoint ?? SYSTEM_ONE_URL)}/v1/systemone`, headers: { 'content-type': 'application/json', accept: 'application/json', authorization: `Bearer ${key}` }, body: json };
+}
+
+/** Ask System One once: the same request and answer on either door. A refusal (either shape) throws a CoordError. */
+export async function askSystemOne(a: { state: unknown; questions: Record<string, SystemOneQuestion>; key: string; model?: string; route?: SystemOneRoute; fetch?: FetchLike }): Promise<SystemOneAnswer> {
+  const req = systemOneRequest(a.route, a.key, { model: a.model ?? 'jev-1.13.0', state: a.state, questions: a.questions });
+  const f = a.fetch ?? (globalThis.fetch as unknown as FetchLike);
+  const r = await f(req.url, { method: 'POST', headers: req.headers, body: req.body, signal: AbortSignal.timeout(65_000) });
+  const j = await jsonOf(r);
+  if (!r.ok) throw new CoordError(refusalOf(j, r.status, `System One answered ${r.status}`));
+  const o = (j ?? {}) as Partial<SystemOneAnswer>;
+  if (!o.answers || typeof o.answers !== 'object') throw new CoordError(refusalOf(j, r.status, 'System One answered with no answers'));
+  return { model: o.model ?? null, answers: o.answers, ...(o.usage ? { usage: o.usage } : {}) };
+}
+/** askJev: askSystemOne with the Jev model (the default, jev-1.13.0, or any alias). */
+export const askJev = askSystemOne;
+
+/**
+ * A fetch for the Jev SDK's grader that sends its System One call through `route`: the body is kept (the model read
+ * through its alias), the headers are the route's, and a refusal throws a CoordError with the door's own words.
+ */
+export function systemOneFetch(route: SystemOneRoute, inner?: typeof fetch): typeof fetch {
+  const f = (inner ?? globalThis.fetch) as unknown as FetchLike;
+  return (async (_url: unknown, init?: { body?: unknown; headers?: unknown; signal?: AbortSignal }) => {
+    const h = (init?.headers ?? {}) as Record<string, string>;
+    const key = String(h['authorization'] ?? h['Authorization'] ?? '').replace(/^Bearer\s+/i, '');
+    const body = JSON.parse(String(init?.body ?? '{}')) as { model: string; state: unknown; questions: Record<string, SystemOneQuestion> };
+    const req = systemOneRequest(route, key, body);
+    const r = await f(req.url, { method: 'POST', headers: req.headers, body: req.body, ...(init?.signal ? { signal: init.signal } : {}) });
+    const j = await jsonOf(r);
+    if (!r.ok) throw new CoordError(refusalOf(j, r.status, `System One answered ${r.status}`));
+    return { ok: true, status: r.status, json: async () => j } as unknown as Response;
+  }) as typeof fetch;
 }
 
 /** The deterministic checks for a job: delivered, and whatever the job's class can prove (values or functions). */
@@ -115,4 +190,41 @@ export function taskMessage(p: { jobId: string; task: string; chainId?: number; 
 /** The body a partner sends to put a job's task and delivery in its record; `task_signature` is the buyer's signature over taskMessage(). */
 export function jobRecordBody(p: { task?: string; taskSignature?: string; delivery?: string; chainId?: number }): { chainId: number; task?: string; task_signature?: string; delivery?: string } {
   return { chainId: p.chainId ?? MOONBEAM_JUDGE.chainId, ...(p.task !== undefined ? { task: p.task } : {}), ...(p.taskSignature ? { task_signature: p.taskSignature } : {}), ...(p.delivery !== undefined ? { delivery: p.delivery } : {}) };
+}
+
+// ── the answer logs and the evaluator adapter on Base (0.8.0) ─────────────────────────────────────────────────────────
+// Jev's answers are recorded in two logs on Base: JevAnswerLog and JevAnswerLogV2 (the same JevAnswered event and
+// recordedAt(digest); V2's recorder rotates under a guardian). A reader looks a digest up in both. JudgeAdapterV5 is the
+// evaluator adapter that posts an anchored verdict to its hook after a vetoable delay; readJudgeAdapter reads what it is
+// bound to from the chain itself.
+import { JEV_ANSWER_LOG, JEV_ANSWER_LOG_V2, JUDGE_ADAPTER_V5 } from '../acp/moonbeam-acp.generated.js';
+import { encodeFunction, decodeStatic } from '../abi/index.js';
+import { ethCall, type BaseReader } from '../rpc/index.js';
+
+/** The answer logs on Base, oldest first. */
+export const ANSWER_LOGS = Object.freeze([
+  Object.freeze({ name: 'JevAnswerLog', address: JEV_ANSWER_LOG.address }),
+  Object.freeze({ name: 'JevAnswerLogV2', address: JEV_ANSWER_LOG_V2.address }),
+] as const);
+export { JEV_ANSWER_LOG, JEV_ANSWER_LOG_V2, JUDGE_ADAPTER_V5 };
+
+/** The block of the first trusted record of an answers digest in each answer log on Base (0: none there). */
+export async function answerRecordedAt(reader: BaseReader, answersDigest: string): Promise<{ digest: string; recorded: boolean; logs: { name: string; address: string; block: number }[] }> {
+  if (!/^0x[0-9a-fA-F]{64}$/.test(answersDigest)) throw new RangeError('an answers digest is 32 bytes');
+  const data = encodeFunction('recordedAt(bytes32)', [answersDigest]);
+  const logs = await Promise.all(ANSWER_LOGS.map(async (l) => ({ name: l.name, address: l.address, block: Number(decodeStatic(['uint64'], await ethCall(reader, l.address, data))[0]) })));
+  return { digest: answersDigest.toLowerCase(), recorded: logs.some((l) => l.block > 0), logs };
+}
+
+/** How many answers each log on Base holds (total()). */
+export async function answerLogTotals(reader: BaseReader): Promise<{ name: string; address: string; total: bigint }[]> {
+  const data = encodeFunction('total()', []);
+  return Promise.all(ANSWER_LOGS.map(async (l) => ({ name: l.name, address: l.address, total: decodeStatic(['uint256'], await ethCall(reader, l.address, data))[0] as bigint })));
+}
+
+/** JudgeAdapterV5 on Base, read from the chain: the hook it posts verdicts to, the decision log it anchors on, its delay. */
+export async function readJudgeAdapter(reader: BaseReader, address: string = JUDGE_ADAPTER_V5.address): Promise<{ address: string; hook: string; decisionLog: string; releaseDelay: number }> {
+  const read = async (fn: string, t: string) => decodeStatic([t], await ethCall(reader, address, encodeFunction(fn, [])))[0];
+  const [hook, decisionLog, releaseDelay] = await Promise.all([read('hook()', 'address'), read('decisionLog()', 'address'), read('releaseDelay()', 'uint64')]);
+  return { address, hook: String(hook), decisionLog: String(decisionLog), releaseDelay: Number(releaseDelay) };
 }

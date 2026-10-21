@@ -302,3 +302,10 @@ export * as proof from './proof/index.js';
 export * as arbitration from './arbitration/index.js';
 export * as rpc from './rpc/index.js';
 export * as attestation from './attest/index.js';
+
+// ── 0.8.0: refusals in both shapes, cover quotes (venue named), job ids of every market ──
+export * as errors from './errors/index.js';
+export * as cover from './cover/index.js';
+export * as jobs from './jobs/index.js';
+export { CoordError, refusalOf } from './errors/index.js';
+export type { Refusal as CoordRefusal } from './errors/index.js';

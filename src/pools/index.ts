@@ -29,6 +29,19 @@ export const BASE_GLMR = '0xB3846fD356c2149ee8D30b0449088Dc74e265459' as const;
 export const BASE_CHAIN_ID = 8453 as const;
 export const DEVNET_CHAIN_ID = 36927 as const;
 
+/**
+ * Moonbeam's pool line: GLMR on Base, the product rule. The network is a field (CAIP-2 and chain id) so a reader takes it
+ * from here rather than assuming it; the pool builders take `chainId` or `network`.
+ */
+export const POOL_LINE = Object.freeze({ network: 'eip155:8453', chainId: BASE_CHAIN_ID, asset: BASE_GLMR, symbol: 'GLMR', decimals: GLMR_DECIMALS } as const);
+/** A pool builder's chain: `chainId`, else the chain id of a CAIP-2 `network` (eip155:<id>). */
+export function poolChainOf(a: { chainId?: number; network?: string }): number {
+  if (a.chainId !== undefined) return a.chainId;
+  const m = /^eip155:(\d+)$/.exec(a.network ?? '');
+  if (!m) throw new RangeError(`a pool call names its chain: chainId, or network as eip155:<id> (got ${a.network ?? 'none'})`);
+  return Number(m[1]);
+}
+
 // ── fixed-point strings ───────────────────────────────────────────────────────
 
 /** "1,234.5" → 1234500000000000000000n at 18 decimals. Anything that is not a decimal number is 0n; extra decimals are cut, never rounded. */
@@ -286,20 +299,22 @@ const addrWord = (a: string) => { if (!isAddress(a)) throw new Error(`not an add
 const call = (chainId: number, to: Address, data: string, step: string, effect: string): UnsignedCall => ({ chainId, to, data: data as Hex, value: '0x0', step, signer: 'anyone', effect });
 
 /** The two calls a deposit takes, in order: an exact-amount approve to the pool, then deposit(assets, receiver). Never a standing allowance. */
-export function depositCalls(a: { chainId: number; pool: Address; asset: Address; amount: bigint; receiver: Address; openOn?: readonly number[] }): UnsignedCall[] {
-  assertPoolsOpen(a.chainId, a.openOn);
+export function depositCalls(a: { chainId?: number; network?: string; pool: Address; asset: Address; amount: bigint; receiver: Address; openOn?: readonly number[] }): UnsignedCall[] {
+  const chainId = poolChainOf(a);
+  assertPoolsOpen(chainId, a.openOn);
   if (a.amount <= 0n) throw new RangeError('amount must be positive');
   return [
-    call(a.chainId, a.asset, selector(POOL_SIGNATURES.approve) + addrWord(a.pool) + word(a.amount), 'approve', `Allow the pool to take exactly ${formatU(a.amount, 18, 4)} GLMR. Nothing moves yet.`),
-    call(a.chainId, a.pool, selector(POOL_SIGNATURES.deposit) + word(a.amount) + addrWord(a.receiver), 'deposit', `Deposit ${formatU(a.amount, 18, 4)} GLMR; the pool mints your shares at today’s price.`),
+    call(chainId, a.asset, selector(POOL_SIGNATURES.approve) + addrWord(a.pool) + word(a.amount), 'approve', `Allow the pool to take exactly ${formatU(a.amount, 18, 4)} GLMR. Nothing moves yet.`),
+    call(chainId, a.pool, selector(POOL_SIGNATURES.deposit) + word(a.amount) + addrWord(a.receiver), 'deposit', `Deposit ${formatU(a.amount, 18, 4)} GLMR; the pool mints your shares at today’s price.`),
   ];
 }
 
 /** The one call a withdrawal takes: redeem(shares, receiver, owner). The pool pays today’s value of the shares, up to what nothing holds. */
-export function redeemCalls(a: { chainId: number; pool: Address; shares: bigint; owner: Address; openOn?: readonly number[] }): UnsignedCall[] {
-  assertPoolsOpen(a.chainId, a.openOn);
+export function redeemCalls(a: { chainId?: number; network?: string; pool: Address; shares: bigint; owner: Address; openOn?: readonly number[] }): UnsignedCall[] {
+  const chainId = poolChainOf(a);
+  assertPoolsOpen(chainId, a.openOn);
   if (a.shares <= 0n) throw new RangeError('shares must be positive');
-  return [call(a.chainId, a.pool, selector(POOL_SIGNATURES.redeem) + word(a.shares) + addrWord(a.owner) + addrWord(a.owner), 'redeem', `Redeem ${formatU(a.shares, 18, 4)} shares for GLMR at today’s value.`)];
+  return [call(chainId, a.pool, selector(POOL_SIGNATURES.redeem) + word(a.shares) + addrWord(a.owner) + addrWord(a.owner), 'redeem', `Redeem ${formatU(a.shares, 18, 4)} shares for GLMR at today’s value.`)];
 }
 
 /** ABI-encode a string: its length word, then the bytes padded to 32. */
@@ -312,14 +327,15 @@ function stringWords(v: string): string {
  * The one call that opens a pool: createPool(seller, asset, name, symbol) on the chain's factory. Anyone may
  * send it; it costs gas and moves no money. Refused when the chain has no factory this surface knows.
  */
-export function createPoolCalls(a: { chainId: number; seller: Address; asset: Address; name: string; symbol: string; openOn?: readonly number[] }): UnsignedCall[] {
-  assertPoolsOpen(a.chainId, a.openOn);
-  const factory = POOL_FACTORY[a.chainId];
-  if (!factory) throw new Error(`no pool factory known on chain ${a.chainId}`);
+export function createPoolCalls(a: { chainId?: number; network?: string; seller: Address; asset: Address; name: string; symbol: string; openOn?: readonly number[] }): UnsignedCall[] {
+  const chainId = poolChainOf(a);
+  assertPoolsOpen(chainId, a.openOn);
+  const factory = POOL_FACTORY[chainId];
+  if (!factory) throw new Error(`no pool factory known on chain ${chainId}`);
   if (!a.name.trim() || !a.symbol.trim()) throw new RangeError('a pool needs a name and a symbol');
   const name = stringWords(a.name), symbol = stringWords(a.symbol);
   const head = addrWord(a.seller) + addrWord(a.asset) + word(128n) + word(BigInt(128 + name.length / 2));
-  return [call(a.chainId, factory, selector(POOL_SIGNATURES.createPool) + head + name + symbol, 'createPool', `Open the pool behind ${a.seller} in ${a.symbol}: one pool per seller and asset, refused if one exists. Gas only; nothing is deposited.`)];
+  return [call(chainId, factory, selector(POOL_SIGNATURES.createPool) + head + name + symbol, 'createPool', `Open the pool behind ${a.seller} in ${a.symbol}: one pool per seller and asset, refused if one exists. Gas only; nothing is deposited.`)];
 }
 
 export { isAddress, isHex32 };

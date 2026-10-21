@@ -1,6 +1,6 @@
 {
   "name": "@moonbeam-foundation/sdk",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "description": "Assurance for agent work: wrap a job in a price, a judge and a deadline, and settle it against proof.",
   "license": "Apache-2.0",
   "type": "module",
@@ -84,6 +84,18 @@
       "types": "./dist/abi/index.d.ts",
       "import": "./dist/abi/index.js"
     },
+    "./cover": {
+      "types": "./dist/cover/index.d.ts",
+      "import": "./dist/cover/index.js"
+    },
+    "./jobs": {
+      "types": "./dist/jobs/index.d.ts",
+      "import": "./dist/jobs/index.js"
+    },
+    "./errors": {
+      "types": "./dist/errors/index.d.ts",
+      "import": "./dist/errors/index.js"
+    },
     "./package.json": "./package.json"
   },
   "files": [
@@ -142,8 +154,7 @@
   },
   "dependencies": {
     "@taifoon/jev": "^0.3.0",
-    "@taifoon/jev-wilson": "^0.3.1",
-    "@taifoon/n8n-nodes-typesafe": "^2.0.5"
+    "@taifoon/jev-wilson": "^0.3.1"
   },
   "bin": {
     "moonbeam": "bin/moonbeam.mjs"

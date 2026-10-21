@@ -21,6 +21,7 @@ import { endingFromTrail } from '../launcher/index.js';
 import { WILSON_Z, wilsonScore } from '../actors/track-record.js';
 import type { TrailEvent } from '../launcher/index.js';
 import { BASE_GLMR_TOKEN, BASE_USDC_TOKEN, JEV_DECISION_LOG, MOONBEAM_HOOK, MOONBEAM_POOL_FACTORY } from '../acp/moonbeam-acp.generated.js';
+import { CoordError, refusalOf, jsonOf } from '../errors/index.js';
 
 export type Hex = `0x${string}`;
 export type Address = Hex;
@@ -519,24 +520,24 @@ export interface OnboardTransport {
   apiKey?: string;
 }
 
-export class OnboardError extends Error {
-  constructor(public readonly status: number, message: string, public readonly body?: unknown) { super(message); this.name = 'OnboardError'; }
+/** A refusal from the layer (either shape: see ./errors). An OnboardError is a CoordError: status, code, type, param, nextStep, body. */
+export class OnboardError extends CoordError {
+  constructor(status: number, message: string, body?: unknown) { super(refusalOf(body ?? null, status, message)); this.name = 'OnboardError'; }
 }
 
 async function get<T>(t: OnboardTransport, path: string): Promise<T> {
   const r = await t.fetch(`${t.base}${path}`, { method: 'GET', headers: headers(t) });
-  const j = (await r.json().catch(() => null)) as unknown;
-  if (!r.ok) throw new OnboardError(r.status, errorOf(j, `GET ${path} → ${r.status}`), j);
+  const j = await jsonOf(r);
+  if (!r.ok) throw new OnboardError(r.status, `GET ${path} → ${r.status}`, j);
   return j as T;
 }
 async function post<T>(t: OnboardTransport, path: string, body: unknown): Promise<T> {
   const r = await t.fetch(`${t.base}${path}`, { method: 'POST', headers: { ...headers(t), 'content-type': 'application/json' }, body: JSON.stringify(body) });
-  const j = (await r.json().catch(() => null)) as unknown;
-  if (!r.ok) throw new OnboardError(r.status, errorOf(j, `POST ${path} → ${r.status}`), j);
+  const j = await jsonOf(r);
+  if (!r.ok) throw new OnboardError(r.status, `POST ${path} → ${r.status}`, j);
   return j as T;
 }
 const headers = (t: OnboardTransport): Record<string, string> => ({ accept: 'application/json', ...(t.apiKey ? { 'x-api-key': t.apiKey } : {}) });
-const errorOf = (j: unknown, fallback: string) => (j && typeof j === 'object' && typeof (j as { error?: unknown }).error === 'string' ? (j as { error: string }).error : fallback);
 
 type RegistryRow = { agentId: number | string; chainId: number; owner: string; endpoint?: string | null; endpointKind?: string | null; cardHost?: string | null; skills?: string[]; skillCount?: number; wire?: string | { status?: string; protocol?: string | null } | null; wireProtocol?: string | null; wireReadyAt?: number | null; registrationTx?: string | null; trust?: number };
 type FlowRow = { id: string; title?: string; task?: string; required_skills?: string[]; budget_usdc?: number; created_at?: string; candidate?: { chain?: number; id?: string | null; name?: string; owner?: string; endpoint?: string | null; endpoint_kind?: string | null; kind?: string; wire?: { protocol?: string | null; status?: string } | null; card_url?: string | null } };
