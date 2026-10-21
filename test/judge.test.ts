@@ -47,7 +47,8 @@ describe('judge (Moonbeam hook on Base)', () => {
     expect((fetch.mock.calls[0] as unknown as [string])[0]).toBe('https://api.typesafe.ai/v1/systemone');
     expect(r.model).toBe('jev-1.13.0');
     expect(r.via.connection).toBe('key');
-    await expect(gradeJob({ jobId: PILOT_JOB, evidence: 'x' })).rejects.toThrow(/TypeSafe key/);
+    // layer: false keeps the test off the network (with no key the grader would otherwise claim a free grade on the layer)
+    await expect(gradeJob({ jobId: PILOT_JOB, evidence: 'x', layer: false })).rejects.toThrow(/TypeSafe key/);
   });
   it('refuses a job id that is not the hook’s 32-byte id', async () => {
     await expect(gradeJob({ jobId: '42', evidence: 'x', answers: CLEAN })).rejects.toThrow(/32-byte/);

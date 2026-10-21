@@ -50,7 +50,7 @@ title('"It runs the grader end to end. Evidence, facts, Jev\'s answers, the verd
   const endC = endJob(PILOT_JOB, good), endR = endJob(PILOT_JOB, bad);
   check('the ending call: complete, or reject with the decision\'s fingerprint', endC && endR && /^0x/.test(endC.data) && endR.data.toLowerCase().includes(bad.decision.digest.slice(2).toLowerCase()), `to ${endC?.to}`);
   check('the ending call targets the job contract in the article', endC?.to?.toLowerCase() === '0xc0578657eda85e0a246771aa1839ce79b54ee80d');
-  const live = await gradeJob({ jobId: PILOT_JOB, evidence: 'x' }).then(() => 'answered', (e) => String(e?.message ?? e));
+  const live = await gradeJob({ jobId: PILOT_JOB, evidence: 'x', layer: false }).then(() => 'answered', (e) => String(e?.message ?? e));
   check('Jev is called only with your own TypeSafe key', /TypeSafe key/i.test(live), live.slice(0, 80));
   check('the input fingerprint is the SHA-256 of the text Jev read', (await verifyGrade(good, { chain: false })).checks.inputDigest === true);
 }
