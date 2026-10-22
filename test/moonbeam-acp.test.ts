@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { MOONBEAM_HOOK, MOONBEAM_HOOK_IMPLEMENTATION, MOONBEAM_POOL_FACTORY, MOONBEAM_COVERAGE_POOLS, MOONBEAM_POOL_COUNT, BASE_GLMR_TOKEN, BASE_USDC_TOKEN, JEV_DECISION_LOG, JEV_DECISION_LOG_DEVNET } from '../src/acp/moonbeam-acp.generated.js';
+import { MOONBEAM_HOOK, MOONBEAM_HOOK_IMPLEMENTATION, MOONBEAM_POOL_FACTORY, MOONBEAM_COVERAGE_POOLS, MOONBEAM_POOL_COUNT, BASE_GLMR_TOKEN, BASE_USDC_TOKEN, JEV_DECISION_LOG } from '../src/acp/moonbeam-acp.generated.js';
 import { LEDGERS, watchManifest } from '../src/acp/registry.js';
 import { BASE_ASSURANCE_HOOK, BASE_GLMR, BASE_USDC, BASE_POOL_FACTORY, DEFAULT_GUARD, isAddress } from '../src/onboard/index.js';
 import { MOONBEAM_JUDGE } from '../src/judge/index.js';
@@ -25,7 +25,7 @@ describe('the Moonbeam ACP registry file (generated from the address registry; n
   });
   it('the judge guard anchors to the Base decision log, the devnet log stays named for tests', () => {
     expect(DEFAULT_GUARD.anchor).toEqual({ chain: 8453, log: JEV_DECISION_LOG.address });
-    expect(JEV_DECISION_LOG.chainId).toBe(8453); expect(JEV_DECISION_LOG_DEVNET.chainId).toBe(36927);
+    expect(JEV_DECISION_LOG.chainId).toBe(8453);
   });
   it('the ledger manifest says Moonbeam ACP is deployed on Base, at the hook', () => {
     const mb = LEDGERS.find((l) => l.id === 'moonbeam-acp');

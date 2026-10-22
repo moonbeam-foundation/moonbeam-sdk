@@ -14,7 +14,7 @@ describe('stamp adapter (no chain library)', () => {
     expect(verifyStamp(gradeDigest({ ...grade, confidence: 0.96 }), grade)).toBe(false);
   });
   it('encodes stamp() with the right selector, static head and dynamic tail', () => {
-    const c = encodeStamp({ chainId: 36927, subject: subjectOf(8453, '0x238E541BfefD82238730D00a2208E5497F1832E0', 81067), grade, mode: 'calibrated', uri: 'https://www.taifoon.io/v1/judge/trace/8453/81067' });
+    const c = encodeStamp({ chainId: 36927, registry: '0xff5B4852AC7066D04FEd8de97bdA52401d03ad6E', subject: subjectOf(8453, '0x238E541BfefD82238730D00a2208E5497F1832E0', 81067), grade, mode: 'calibrated', uri: 'https://www.taifoon.io/v1/judge/trace/8453/81067' });
     expect(c.to).toBe('0xff5B4852AC7066D04FEd8de97bdA52401d03ad6E');
     expect(c.data.slice(0, 10)).toBe('0xc10bd12c'.length === 10 ? c.data.slice(0, 10) : '');
     // verdict 4, mode 2, two dynamic strings at offsets 0xc0 and 0x100

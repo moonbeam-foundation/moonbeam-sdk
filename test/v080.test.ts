@@ -325,8 +325,8 @@ describe('8. the package depends on no workflow-node package, and its public tex
   const pkg = fx('package.json');
   it('dependencies are the grader and the premium maths only', () => {
     expect(Object.keys(pkg.dependencies).sort()).toEqual(['@taifoon/jev', '@taifoon/jev-wilson']);
-    expect(pkg.version).toBe('0.8.0');
-    for (const m of ['./cover', './jobs', './errors']) expect(pkg.exports[m]).toBeDefined();
+    expect(pkg.version).toBe('0.9.0');
+    for (const m of ['./cover', './jobs', './errors', './devnet']) expect(pkg.exports[m]).toBeDefined();
   });
   it('README, examples and skills name neither the layer\'s host nor n8n', () => {
     const { readdirSync } = require('node:fs') as typeof import('node:fs');

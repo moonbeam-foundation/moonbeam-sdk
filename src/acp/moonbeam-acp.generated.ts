@@ -48,8 +48,6 @@ export const BASE_GLMR_TOKEN: RegistryContract & { readonly decimals: 18; readon
 export const BASE_USDC_TOKEN: RegistryContract & { readonly decimals: 6; readonly symbol: 'USDC' } = Object.freeze({ name: 'USDC', symbol: 'USDC', decimals: 6, address: "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913" as Address, chainId: 8453, status: "live" as RegistryStatus, note: "Circle USDC on Base, 6 decimals." });
 /** The judge's decision log on Base: every decision is recorded here before it is used. */
 export const JEV_DECISION_LOG: RegistryContract = Object.freeze({ name: "JevDecisionLog", address: "0x209490d6A0FFC5368A42b0c2208BDCda853f6a92" as Address, chainId: 8453, status: "live" as RegistryStatus, note: "Records every judge decision (Decided)." });
-/** The devnet copy of the decision log (chain 36927): tests and dry runs. */
-export const JEV_DECISION_LOG_DEVNET: RegistryContract = Object.freeze({ name: "JevDecisionLog (devnet)", address: "0x1D622511862DD7DEffB8fEeBc225E0FAdA1e9A05" as Address, chainId: 36927, status: "devnet-only" as RegistryStatus, note: "" });
 /** The judge's answer log on Base (jev.answer.v1 digests). */
 export const JEV_ANSWER_LOG: RegistryContract = Object.freeze({ name: "JevAnswerLog", address: "0x8e9B9cE86a2d55c10318607b0c815B7B8C66254d" as Address, chainId: 8453, status: "live" as RegistryStatus, note: "Records every Jev answer (JevAnswered); one trusted recorder fixed in the constructor." });
 /** The judge's second answer log on Base (the same JevAnswered event and recordedAt; a guardian rotates its recorder). A

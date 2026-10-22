@@ -443,7 +443,7 @@ const call = (to: Address, data: string, step: string, signer: UnsignedCall['sig
  * have approved the hook for exactly its deposit for this job (never a standing allowance: the live contract pulls the deposit
  * from whichever seller the funder names). Refuses terms whose deposit is below the rule.
  *
- * The hook's signature (spinner taifoon-eco/assurance/src/AssuranceHook.sol:264-276, 292-305):
+ * The hook's signature (AssuranceHook.sol, fundJob and fundJobWithCover):
  *   fundJob(bytes32 jobId, address seller, address token, uint256 price, uint256 premium, uint256 deposit, uint64 deadline, uint64 challengeWindow, address pool)
  *   fundJobWithCover(…the same…, address pool, uint256 coverCap)
  * The LAST address word is the COVER POOL, not an evaluator: the hook keeps no per-job evaluator (evaluators are the owner's

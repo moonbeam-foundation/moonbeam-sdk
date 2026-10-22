@@ -1,5 +1,28 @@
 # Changelog
 
+## 0.9.0 (prepared on a branch; not published)
+
+- **`./devnet`: onboarding on a test network, one call per step.** Find a seller on the worklist, check its answer, open
+  its edge (pool, agreement, record), fund the pool, quote, hire, deliver, grade (binary), settle, and read back the
+  edge's meter lines and agreement. The calls reuse `./onboard` (the transport and the hash helpers) and `./pools` (the
+  deposit calls). Every money call refuses a chain other than the profile's own, and any chain with value. The internal
+  note `DEVNET.md` (not in the package) lists the calls and the environment they read.
+- **No test-network address ships.** A devnet profile reads its chain id, RPC and contracts at runtime, from options,
+  from the environment, or from the API's own registry (`GET /pools/networks`, `GET /rpc/:chainId`). Removed from the
+  package:
+  - `JEV_DECISION_LOG_DEVNET`;
+  - the test-network row of `ERC8004_DEPLOYMENTS`;
+  - the test-network entry of `POOL_FACTORY`. Pass `factory` to `createPoolCalls`, and `factories` to `poolsOpenOn`;
+  - the test-network entry of `GRADE_STAMP_REGISTRY`. Pass `registry` to `encodeStamp`.
+
+  The registry generators no longer emit `devnet-only` rows. The vendored assurance copy still carries its own
+  test-network rows: it is pinned byte for byte, and changes only upstream.
+- **Grades are binary (`binaryVerdict`).** The grader's own complete or reject stands. Any other grade completes when
+  `spec_met > rejectSpecMax` and `cheat_shaped < cheatShapedMin`, both read from the grader's `RUBRIC_v1`. There is no
+  review queue.
+- `npm run e2e:devnet` runs `scripts/devnet-onboard.mjs`: one seller, end to end, on the test network the environment
+  names.
+
 ## 0.8.0
 
 Aligned with the coordination layer as it answers on 2026-10-21. Every shape below was read from its OpenAPI document and

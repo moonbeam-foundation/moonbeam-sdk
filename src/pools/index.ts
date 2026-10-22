@@ -249,8 +249,9 @@ export const POOL_SIGNATURES = Object.freeze({
   createPool: 'createPool(address,address,string,string)',
 } as const);
 
-/** The pool factories this surface knows: one pool per (seller, asset), permissionless to open. */
-export const POOL_FACTORY: Readonly<Record<number, Address>> = Object.freeze({ 8453: '0x91f078D10E3f0D05fEBcEA35f114063c696aef54', 36927: '0x9bea381ab97df2f10216c525d821412d8cae0001' });
+/** The pool factories this surface ships: one pool per (seller, asset), permissionless to open. A test network's factory is
+ *  never shipped: pass it as `factory` (./devnet reads it at runtime). */
+export const POOL_FACTORY: Readonly<Record<number, Address>> = Object.freeze({ 8453: '0x91f078D10E3f0D05fEBcEA35f114063c696aef54' });
 
 /**
  * Chains where the pool calls may be built. GLMR pools are not open, so Base mainnet is deliberately absent: a deposit,
@@ -267,15 +268,16 @@ export type PoolNetwork = { chain_id: number; chain?: string; network?: string; 
  * council's yes, not an npm release. A chain is open for Moonbeam when the layer lists Moonbeam's factory there with status
  * `open` and does not name it under `closed_by_policy`. Today the layer names Moonbeam's factories (Base and the devnet)
  * under closed_by_policy ("The GLMR pools are not open."), so the answer is no chain. The typed POOLS_OPEN_ON is the
- * fallback when the read fails. Pass `chains` to the pool builders as `openOn`.
+ * fallback when the read fails. Pass `chains` to the pool builders as `openOn`. A test network's factory is not shipped: pass
+ * it in `factories` (a devnet profile's `contracts.factory`) to count that network.
  */
-export async function poolsOpenOn(t: { fetch: (url: string, init?: { method?: string; headers?: Record<string, string> }) => Promise<{ ok: boolean; status: number; json(): Promise<unknown> }>; base: string }): Promise<{ chains: readonly number[]; networks: PoolNetwork[]; closedByPolicy: { chain_id: number; why: string }[]; source: 'layer' | 'typed' }> {
+export async function poolsOpenOn(t: { fetch: (url: string, init?: { method?: string; headers?: Record<string, string> }) => Promise<{ ok: boolean; status: number; json(): Promise<unknown> }>; base: string }, o: { factories?: readonly string[] } = {}): Promise<{ chains: readonly number[]; networks: PoolNetwork[]; closedByPolicy: { chain_id: number; why: string }[]; source: 'layer' | 'typed' }> {
   try {
     const r = await t.fetch(`${t.base}/pools/networks`, { method: 'GET', headers: { accept: 'application/json' } });
     const j = (await r.json().catch(() => null)) as { ok?: boolean; supported?: PoolNetwork[]; networks?: PoolNetwork[]; closed_by_policy?: { chain_id: number; system?: string; factory?: string; why?: string }[] } | null;
     const rows = j?.supported ?? j?.networks;
     if (!r.ok || !j?.ok || !Array.isArray(rows)) return { chains: POOLS_OPEN_ON, networks: [], closedByPolicy: [], source: 'typed' };
-    const ours = new Set(Object.values(POOL_FACTORY).map((a) => a.toLowerCase()));
+    const ours = new Set([...Object.values(POOL_FACTORY), ...(o.factories ?? [])].map((a) => a.toLowerCase()));
     const closed = (j.closed_by_policy ?? []).filter((c) => c.system === 'moonbeam-acp' || ours.has(String(c.factory ?? '').toLowerCase()));
     const closedChains = new Set(closed.map((c) => c.chain_id));
     const open = rows.filter((n) => n.status === 'open' && ours.has(String(n.factory ?? '').toLowerCase()) && !closedChains.has(n.chain_id)).map((n) => n.chain_id);
@@ -327,11 +329,11 @@ function stringWords(v: string): string {
  * The one call that opens a pool: createPool(seller, asset, name, symbol) on the chain's factory. Anyone may
  * send it; it costs gas and moves no money. Refused when the chain has no factory this surface knows.
  */
-export function createPoolCalls(a: { chainId?: number; network?: string; seller: Address; asset: Address; name: string; symbol: string; openOn?: readonly number[] }): UnsignedCall[] {
+export function createPoolCalls(a: { chainId?: number; network?: string; seller: Address; asset: Address; name: string; symbol: string; openOn?: readonly number[]; factory?: Address }): UnsignedCall[] {
   const chainId = poolChainOf(a);
   assertPoolsOpen(chainId, a.openOn);
-  const factory = POOL_FACTORY[chainId];
-  if (!factory) throw new Error(`no pool factory known on chain ${chainId}`);
+  const factory = a.factory ?? POOL_FACTORY[chainId];
+  if (!factory || !isAddress(factory)) throw new Error(`no pool factory known on chain ${chainId}: pass factory`);
   if (!a.name.trim() || !a.symbol.trim()) throw new RangeError('a pool needs a name and a symbol');
   const name = stringWords(a.name), symbol = stringWords(a.symbol);
   const head = addrWord(a.seller) + addrWord(a.asset) + word(128n) + word(BigInt(128 + name.length / 2));

@@ -9,7 +9,8 @@
  *   node scripts/gen-moonbeam-acp.mjs <path> --check   # exit 1 if the committed file is stale
  *
  * No dependencies. The generated file is committed; never hand-edit it. An address is never typed in this package: it is read
- * from the registry, with the status the registry gives it (live · scheduled-change · superseded · devnet-only).
+ * from the registry, with the status the registry gives it (live · scheduled-change · superseded · devnet-only). Test-network
+ * rows are never emitted: a test network's addresses are read at runtime (./devnet).
  */
 import { readFileSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
@@ -30,7 +31,6 @@ const one = (system, chain, re) => {
   return hit;
 };
 const BASE = 8453;
-const DEVNET = 36927;
 const hook = one('moonbeam-acp', BASE, /^AssuranceHook \(proxy\)$/);
 const hookImpl = one('moonbeam-acp', BASE, /^AssuranceHook V\d+ \(implementation\)$/);
 const factory = one('moonbeam-acp', BASE, /^PoolFactory \(proxy\)$/);
@@ -39,7 +39,6 @@ const pools = rows('moonbeam-acp').filter((c) => Number(c.chain) === BASE && /^C
 const glmr = one('tokens', BASE, /^GLMR$/);
 const usdc = one('tokens', BASE, /^USDC$/);
 const log = one('jev', BASE, /^JevDecisionLog$/);
-const logDevnet = one('jev', DEVNET, /^JevDecisionLog/);
 const answerLog = one('jev', BASE, /^JevAnswerLog$/);
 const answerLogV2 = one('jev', BASE, /^JevAnswerLogV2$/);
 const adapterV5 = one('jev', BASE, /^JudgeAdapterV5$/);
@@ -71,8 +70,6 @@ export const BASE_GLMR_TOKEN: RegistryContract & { readonly decimals: 18; readon
 export const BASE_USDC_TOKEN: RegistryContract & { readonly decimals: 6; readonly symbol: 'USDC' } = Object.freeze({ name: 'USDC', symbol: 'USDC', decimals: 6, address: ${q(usdc.address)} as Address, chainId: ${BASE}, status: ${q(usdc.status)} as RegistryStatus, note: ${note(usdc)} });
 /** The judge's decision log on Base: every decision is recorded here before it is used. */
 export const JEV_DECISION_LOG: RegistryContract = Object.freeze({ name: ${q(log.name)}, address: ${q(log.address)} as Address, chainId: ${BASE}, status: ${q(log.status)} as RegistryStatus, note: ${note(log)} });
-/** The devnet copy of the decision log (chain ${DEVNET}): tests and dry runs. */
-export const JEV_DECISION_LOG_DEVNET: RegistryContract = Object.freeze({ name: ${q(logDevnet.name)}, address: ${q(logDevnet.address)} as Address, chainId: ${DEVNET}, status: ${q(logDevnet.status)} as RegistryStatus, note: ${note(logDevnet)} });
 /** The judge's answer log on Base (jev.answer.v1 digests). */
 export const JEV_ANSWER_LOG: RegistryContract = Object.freeze({ name: ${q(answerLog.name)}, address: ${q(answerLog.address)} as Address, chainId: ${BASE}, status: ${q(answerLog.status)} as RegistryStatus, note: ${note(answerLog)} });
 /** The judge's second answer log on Base (the same JevAnswered event and recordedAt; a guardian rotates its recorder). A

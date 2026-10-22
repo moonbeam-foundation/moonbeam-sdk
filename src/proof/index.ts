@@ -20,7 +20,7 @@ import { ethCall, RpcReverted, type BaseReader } from '../rpc/index.js';
 import { REGISTRY } from '../acp/moonbeam-acp.generated.js';
 import { jsonOf, okOrThrow } from '../errors/index.js';
 
-/** TaifoonV5ProofVerifier (gated) on Base, from the address registry */
+/** The V5 proof verifier (gated) on Base, from the address registry */
 export const V5_VERIFIER = REGISTRY.v5Verifier;
 
 export type Header = { chainId: number; chainType: number; blockNumber: number; blockHash: string; miniMmrRoot: string; twigCount: number; stateRoot: string };
