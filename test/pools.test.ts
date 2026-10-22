@@ -158,13 +158,16 @@ describe('unsigned calls', () => {
     expect(c[0]!.data).toBe('0xba087652' + '0000000000000000000000000000000000000000000000000de0b6b3a7640000' + '000000000000000000000000f39fd6e51aad88f6f4ce6ab8827279cfffb92266'.repeat(2));
   });
   it('createPool(seller, asset, name, symbol): dynamic strings encoded as the factory decodes them, pinned against cast calldata for the devnet pool of 2026-09-24', () => {
-    const c = createPoolCalls({ chainId: 36927, seller: '0x70997970C51812dc3A010C7d01b50e0d17dc79C8', asset: ASSET, name: 'Moonbeam cover · dGLMR · seller 0x7099…79C8', symbol: 'mbp-cover-7099' });
-    expect(c).toHaveLength(1); expect(c[0]!.to).toBe(POOL_FACTORY[36927]);
+    const FACTORY = '0x9bea381ab97df2f10216c525d821412d8cae0001' as const; // a test network's factory is passed, never shipped
+    expect(POOL_FACTORY[36927]).toBeUndefined();
+    expect(() => createPoolCalls({ chainId: 36927, seller: ME, asset: ASSET, name: 'x', symbol: 'y' })).toThrow(/pass factory/);
+    const c = createPoolCalls({ chainId: 36927, factory: FACTORY, seller: '0x70997970C51812dc3A010C7d01b50e0d17dc79C8', asset: ASSET, name: 'Moonbeam cover · dGLMR · seller 0x7099…79C8', symbol: 'mbp-cover-7099' });
+    expect(c).toHaveLength(1); expect(c[0]!.to).toBe(FACTORY);
     expect(c[0]!.data).toBe('0x3d5c8e3100000000000000000000000070997970c51812dc3a010c7d01b50e0d17dc79c8000000000000000000000000948c28425a86be14b8a637af7471e87b8396318a000000000000000000000000000000000000000000000000000000000000008000000000000000000000000000000000000000000000000000000000000000e0000000000000000000000000000000000000000000000000000000000000002f4d6f6f6e6265616d20636f76657220c2b72064474c4d5220c2b72073656c6c657220307837303939e280a6373943380000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000e6d62702d636f7665722d37303939000000000000000000000000000000000000');
     // Base mainnet is refused until pools open: the call would be real, so it is not built.
     expect(() => createPoolCalls({ chainId: 8453, seller: '0x515e7bce44baa5f6e42d16d4b5f27768e7f2f8cc', asset: '0xB3846fD356c2149ee8D30b0449088Dc74e265459', name: 'x', symbol: 'y' })).toThrow(PoolsNotOpenError);
     expect(() => createPoolCalls({ chainId: 1, seller: ME, asset: ASSET, name: 'x', symbol: 'y' })).toThrow(PoolsNotOpenError);
-    expect(() => createPoolCalls({ chainId: 36927, seller: ME, asset: ASSET, name: ' ', symbol: 'y' })).toThrow(RangeError);
+    expect(() => createPoolCalls({ chainId: 36927, factory: FACTORY, seller: ME, asset: ASSET, name: ' ', symbol: 'y' })).toThrow(RangeError);
   });
   it('pools are not open: no deposit, redemption or new pool is built for Base mainnet', () => {
     expect(POOLS_OPEN_ON).toEqual([36927]);

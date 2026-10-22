@@ -1,9 +1,9 @@
 /**
  * Stamp adapter — a grade, stamped on chain, that anyone recomputes.
  *
- * Mirrors `@taifoon/stamp` so an integrator holding a Verdict from this SDK can put its digest on
- * chain in one of two places without a second dependency:
- *   - the GradeStampRegistry (immutable, append-only; deployed on the Taifoon devnet today), or
+ * An integrator holding a Verdict from this SDK can put its digest on chain in one of two places
+ * without a second dependency:
+ *   - the GradeStampRegistry (immutable, append-only; on a test network today: pass its address as `registry`), or
  *   - the ERC-8004 Reputation Registry, as feedback about the agent that did the work.
  *
  * Pure: everything here returns calldata or a hash. Nothing signs, nothing sends, nothing reads a
@@ -19,8 +19,8 @@ export const STAMP_VERDICT_CODE: Readonly<Record<StampVerdict, 1 | 2 | 3 | 4>> =
 export const STAMP_MODE = Object.freeze({ deterministic: 1, calibrated: 2 } as const);
 export type StampMode = keyof typeof STAMP_MODE;
 
-/** deployed registries; the devnet is the only one today (Base and Arc go through the deployer ceremony) */
-export const GRADE_STAMP_REGISTRY: Readonly<Record<number, string>> = Object.freeze({ 36927: '0xff5B4852AC7066D04FEd8de97bdA52401d03ad6E' });
+/** the registries this package ships: none yet on a chain with value (a test network's registry is passed as `registry`) */
+export const GRADE_STAMP_REGISTRY: Readonly<Record<number, string>> = Object.freeze({});
 /** the ERC-8004 Reputation Registry sits at one address on every chain it is deployed to */
 export const ERC8004_REPUTATION_REGISTRY = ERC8004_CANONICAL.reputation!.toLowerCase();
 
@@ -93,7 +93,7 @@ export interface UnsignedCall { chainId: number; to: string; data: string; value
 /** The unsigned `stamp(subject, digest, verdict, mode, model, uri)` call for the GradeStampRegistry. */
 export function encodeStamp(a: { chainId: number; subject: string; grade: Grade; mode: StampMode; uri: string; registry?: string }): UnsignedCall {
   const registry = a.registry ?? GRADE_STAMP_REGISTRY[a.chainId];
-  if (!registry) throw new Error(`no GradeStampRegistry known on chain ${a.chainId}`);
+  if (!registry) throw new Error(`no GradeStampRegistry known on chain ${a.chainId}: pass registry`);
   const data = selector('stamp(bytes32,bytes32,uint8,uint8,string,string)') + abiEncode([
     { kind: 'static', word: b32(a.subject) }, { kind: 'static', word: b32(gradeDigest(a.grade)) },
     { kind: 'static', word: word(STAMP_VERDICT_CODE[a.grade.value]) }, { kind: 'static', word: word(STAMP_MODE[a.mode]) },

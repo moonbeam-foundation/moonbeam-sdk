@@ -20,7 +20,6 @@ export interface Erc8004ChainDeployment {
 export const ERC8004_DEPLOYMENTS: Readonly<Record<number, Erc8004ChainDeployment>> = Object.freeze({
   5042: Object.freeze({ name: 'Arc', status: 'live', identity: '0x8004A169FB4a3325136EB29fA0ceB6D2e539a432', reputation: '0x8004BAa17C55a88189AE136b182e5fdA19dE9b63' }),
   8453: Object.freeze({ name: 'Base', status: 'live', identity: '0x8004A169FB4a3325136EB29fA0ceB6D2e539a432', reputation: '0x8004BAa17C55a88189AE136b182e5fdA19dE9b63' }),
-  36927: Object.freeze({ name: 'Taifoon devnet', status: 'devnet-only', identity: '0xCCB18A50e8D29F9B73eAbFc7E38DEA5e03a3f061', reputation: '0x6E868D9af3689af28E9f80010b7f37787ea2a1b4' }),
 });
 
 /** The canonical addresses, shared by every live chain above (Base 8453, Arc 5042). */

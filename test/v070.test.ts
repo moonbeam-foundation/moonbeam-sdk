@@ -200,7 +200,9 @@ describe('fixes P2 / P11 / P13 / P6, as 0.7.0 leaves them', () => {
     expect(r.closedByPolicy.map((c) => c.chain_id)).toContain(8453);
     expect(() => poolDeposit({ chainId: 36927, pool: pool0() as never, asset: REGISTRY.glmr as never, amount: 1n, receiver: pool0() as never, openOn: r.chains })).toThrow(PoolsNotOpenError);
     const opened = { ...live, closed_by_policy: [], supported: [...live.supported, { chain_id: 8453, factory: '0x91f078D10E3f0D05fEBcEA35f114063c696aef54', status: 'open' }] };
-    expect((await poolsOpenOn({ base: '/v1', fetch: async () => ({ ok: true, status: 200, json: async () => opened }) })).chains).toEqual([36927, 8453]);
+    expect((await poolsOpenOn({ base: '/v1', fetch: async () => ({ ok: true, status: 200, json: async () => opened }) })).chains).toEqual([8453]);
+    // a test network counts when its factory is passed (a devnet profile reads it at runtime; none is shipped)
+    expect((await poolsOpenOn({ base: '/v1', fetch: async () => ({ ok: true, status: 200, json: async () => opened }) }, { factories: ['0x9BeA381ab97Df2F10216C525D821412d8CAE0001'] })).chains).toEqual([36927, 8453]);
     expect((await poolsOpenOn({ base: '/v1', fetch: async () => { throw new Error('down'); } })).source).toBe('typed');
   });
   it('P13: ./onboard is the one onboarding module: the hook\'s path and every role\'s readiness checks', () => {

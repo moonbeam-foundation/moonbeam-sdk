@@ -40,6 +40,7 @@ const roleOf = (name) => {
 /** chainId -> { name, status, identity?, reputation?, validation? } */
 const byChain = new Map();
 for (const c of system.contracts) {
+  if (c.status === 'devnet-only') continue; // a test network's addresses are read at runtime (./devnet), never shipped
   if (!/^0x[0-9a-fA-F]{40}$/.test(c.address)) throw new Error(`bad address ${c.address}`);
   const role = roleOf(c.name);
   const row = byChain.get(c.chain) ?? { name: reg.chains?.[String(c.chain)]?.name ?? String(c.chain), status: c.status };

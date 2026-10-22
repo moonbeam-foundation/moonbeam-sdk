@@ -102,7 +102,7 @@ describe('the trail, pinned to what is on chain', () => {
   it('subject and calls are deterministic and carry the digest', () => {
     const subject = subjectOf(8453, '0x238e1b6d3cb5c3c07b6b6bd2b1cbb3e1d7d5a2e0', 81067);
     expect(subject).toMatch(/^0x[0-9a-f]{64}$/);
-    const stamp = encodeStamp({ chainId: 36927, subject, grade, mode: 'calibrated', uri: 'https://example.invalid/trail' });
+    const stamp = encodeStamp({ chainId: 36927, registry: '0xff5B4852AC7066D04FEd8de97bdA52401d03ad6E', subject, grade, mode: 'calibrated', uri: 'https://example.invalid/trail' });
     const fb = encodeErc8004Feedback({ chainId: 36927, agentId: 6, grade, endpoint: '', feedbackURI: 'https://example.invalid/trail', registry: '0x6E868D9af3689af28E9f80010b7f37787ea2a1b4' });
     expect(stamp.data).toContain(gradeDigest(grade).slice(2)); expect(fb.data).toContain(gradeDigest(grade).slice(2));
     expect(fb.to.toLowerCase()).toBe('0x6e868d9af3689af28e9f80010b7f37787ea2a1b4');
