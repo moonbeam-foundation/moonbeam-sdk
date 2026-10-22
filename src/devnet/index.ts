@@ -379,8 +379,8 @@ export async function settle(t: OnboardTransport, p: Pick<DevnetProfile, 'chainI
 
 // ── 10. the edge at work: calls, meter lines, the agreement ─────────────────────────────────────────────────────────────
 
-export interface MeterLine { id: string; edge_id: string; at: string; class: string; handshake_id: string | null; status: string; legs: Record<string, string>; unit: string }
-export interface AgreementState { edge_id: string; enforced: boolean; signed: boolean; signature_valid: boolean; recovered: string | null; signer: string; seller_of_record: string; scope: { tenant: string; class: string; chain_id: number }; state: string; refusals?: number }
+export interface MeterLine { id: string; edge_id: string; at: string; class: string; handshake_id: string | null; status: string; legs: Record<string, string>; unit: string; price?: string; rule?: string }
+export interface AgreementState { edge_id: string; id?: string; enforced: boolean; signed: boolean; signature_valid: boolean; recovered: string | null; signer: string; seller_of_record: string; scope: { tenant: string; class: string; chain_id: number }; state: string; refusals?: number }
 
 /** A layer op that is not routed yet answers 404 with no such operation: such a read is `pending`, not empty. */
 const notRouted = (e: unknown) => e instanceof OnboardError && e.status === 404 && /no operation/i.test(e.message + JSON.stringify((e as { body?: unknown }).body ?? ''));
