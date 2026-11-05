@@ -127,7 +127,8 @@
     "sync": "node scripts/sync.mjs",
     "check:sync": "node scripts/sync.mjs --check",
     "test:fork": "node test/fork/run-fork.mjs",
-    "test:live": "LIVE=1 vitest run test/live.test.ts"
+    "test:live": "LIVE=1 vitest run test/live.test.ts",
+    "pack:agensi": "node scripts/agensi-pack.mjs"
   },
   "keywords": [
     "moonbeam",
