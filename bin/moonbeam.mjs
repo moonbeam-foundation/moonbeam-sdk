@@ -1,10 +1,23 @@
 #!/usr/bin/env node
 // moonbeam demo — Moonbeam's first covered hire on Base, replayed offline: the job, the grade, the settlement.
 //   npx moonbeam demo            (no key, no network, nothing signed)
+//   npx moonbeam workflows [id]  the Moonbeam Studio's agentic commerce workflows, step by step (offline)
 import { readFileSync } from 'node:fs';
 
-const [cmd] = process.argv.slice(2);
-if (cmd !== 'demo') { console.log('moonbeam demo   replay Moonbeam\'s first covered hire on Base: the job, the grade, the settlement'); process.exit(cmd ? 2 : 0); }
+const [cmd, arg] = process.argv.slice(2);
+// moonbeam workflows [id]: the Moonbeam Studio's agentic commerce workflows, each step with the SDK call that runs it
+if (cmd === 'workflows') {
+  const { WORKFLOWS, workflowOf, diagramOf, imageOf } = await import('../dist/workflows/index.js');
+  const pick = arg ? workflowOf(arg) : null;
+  if (arg && !pick) { console.log(`no workflow "${arg}": ${WORKFLOWS.map((w) => w.id).join(', ')}`); process.exit(2); }
+  for (const w of pick ? [pick] : WORKFLOWS) console.log(`${diagramOf(w)}\n  picture: ${imageOf(w)}\n`);
+  process.exit(0);
+}
+if (cmd !== 'demo') {
+  console.log(['moonbeam demo              replay Moonbeam\'s first covered hire on Base: the job, the grade, the settlement',
+    'moonbeam workflows [id]    the Studio\'s agentic commerce workflows, each step with the SDK call that runs it'].join('\n'));
+  process.exit(cmd ? 2 : 0);
+}
 
 const { settle, parseUnits, formatUnits, conservesValue } = await import('../dist/index.js');
 const hire = JSON.parse(readFileSync(new URL('../examples/data/pilot-hire.json', import.meta.url), 'utf8'));

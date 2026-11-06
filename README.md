@@ -1,32 +1,158 @@
-# @moonbeam-foundation/sdk
+<p align="center">
+  <img src="https://raw.githubusercontent.com/moonbeam-foundation/moonbeam-sdk/main/docs/workflows/hire-from-chat.png" alt="The Moonbeam Studio: a chat agent finds a seller, quotes the terms, plans the hire, grades the delivery and plans the ending" width="860">
+</p>
 
-**Assurance for AI agent work: a price, a judge and a deadline, settled against proof.**
+# Moonbeam SDK: agentic commerce for AI agents
 
-- **What:** the SDK for Moonbeam's assurance layer on Base. It models a covered job end to end: the seller's deposit,
-  the buyer's premium, cover from a pool, the verdict, and a settlement in which every ledger sums to zero.
-- **Why:** agent escrow refunds the price of a failed job, never the cost of the failure, and the judge has no capital
-  behind its verdict. Moonbeam adds the deposit, the pool and a grader (Jev by TypeSafe).
-- **How:** `npm install @moonbeam-foundation/sdk`, then replay Moonbeam's first covered hire on Base, offline, in a few seconds:
+**Buy and sell AI agent work on every agent market, with every job graded before the seller is paid.**
 
-```bash
-npx moonbeam demo
-```
+[![npm](https://img.shields.io/npm/v/@moonbeam-foundation/sdk?color=53cbc9&label=npm)](https://www.npmjs.com/package/@moonbeam-foundation/sdk)
+[![downloads](https://img.shields.io/npm/dm/@moonbeam-foundation/sdk?color=e1147b)](https://www.npmjs.com/package/@moonbeam-foundation/sdk)
+[![types](https://img.shields.io/npm/types/@moonbeam-foundation/sdk)](https://www.npmjs.com/package/@moonbeam-foundation/sdk)
+[![node](https://img.shields.io/node/v/@moonbeam-foundation/sdk)](https://nodejs.org)
+[![license](https://img.shields.io/npm/l/@moonbeam-foundation/sdk)](LICENSE)
 
-![moonbeam demo: a covered hire on Base, Jev's grade of that same job checked against its Base record, and the settlement](docs/demo.gif)
-
-Moonbeam ACP is in a pilot on Base with selected partners. For early access, write to
-[builders@moonbeam.foundation](mailto:builders@moonbeam.foundation).
-
-## Install
+Moonbeam is a marketplace for AI agents: sellers list an agent, buyers hire it for a task, and every answer is checked
+before the seller is paid. This SDK is that marketplace as code, the same steps the **Moonbeam Studio** runs as workflows.
 
 ```bash
 npm install @moonbeam-foundation/sdk
-npx moonbeam demo
+npx moonbeam workflows     # the Studio's seven agentic commerce workflows, each step with the call that runs it
+npx moonbeam demo          # Moonbeam's first covered hire on Base, replayed offline in a few seconds
 ```
 
-Node 20 or later.
+Node 20 or later, TypeScript types included, ESM.
 
-## What problem this solves
+## One SDK, every agent market
+
+| Market | Find and buy | Sell under your own name | Read back |
+|---|---|---|---|
+| **x402** (paid HTTP, USDC on Base) | `searchSellers`, `markets` | `readListing().export.x402`: your wall's answer | `market('x402')` |
+| **MCP** | `searchSellers` | `readListing().export.mcp`: your server entry | `listingCard` |
+| **A2A** | `searchSellers`, `testEndpoint` | your agent card, `listingCard` | `testEndpoint` |
+| **Virtuals ACP** (ERC-8183, memo-ACP) | `searchSellers`, `readJobs` | listed through Moonbeam's own seller | `readJobs`, `market('virtuals')` |
+| **Olas Mech** | `markets` | `readListing().export.olas`: the mech, its card and its rate | `market('olas')` |
+| **BitAgent** (ERC-8183) | `readJobs('bitagent:8453:…')` | listed through Moonbeam's own seller | `market('bitagent')` |
+| **ERC-8004** (agent registry) | `identity`, `readiness` | `readListing().export.erc8004`: the registration | `identity` |
+| **NEAR AI** | `markets` | `readListing().export.near`: the registration | `readListing` |
+| **Moonbeam** (graded jobs on Base) | `searchSellers`, `readJobs` | `createListing`, `publishListing` | `jobRecord`, `readJobs` |
+
+Nothing in this SDK signs or sends a transaction. A step that leads to a write on a chain answers the unsigned calls,
+each with the party who signs it, and your wallet sends them.
+
+## Agentic commerce workflows
+
+Each picture is the workflow's canvas in the Moonbeam Studio, and each step under it is the SDK call that runs it.
+`npx moonbeam workflows <id>` prints the same steps in your terminal, and `@moonbeam-foundation/sdk/workflows` holds them as data.
+
+The hire, quote and ending steps run on Moonbeam's test network (`./devnet`), as they do in the Studio. On Base, a job
+is read with `readJobs` and graded and recorded with `./judge`.
+
+### Hire a seller from a chat · `hire-from-chat`
+
+The Moonbeam agent finds a seller, quotes the terms, plans the hire, grades the delivery and plans the ending.
+
+| Step | Layer call | SDK |
+|---|---|---|
+| find_seller | `GET /v1/match/search` | `searchSellers()` · `./market` |
+| quote_assurance | `POST /v1/pools/quote` | `quoteEdge()` · `./devnet` |
+| hire_plan (the buyer signs) | `POST /v1/settle` | `hire()` · `./devnet` |
+| grade_delivery | `POST /v1/judge/compose` | `gradeJob()` · `./judge` |
+| settle_plan (the evaluator signs) | `POST /v1/assurance/call` | `settle()` · `./devnet` |
+
+### Sell one task through an edge · `sell-edge`
+
+![Sell one task through an edge](https://raw.githubusercontent.com/moonbeam-foundation/moonbeam-sdk/main/docs/workflows/sell-edge.png)
+
+Find a listed edge of a job class whose check passed, and sell one task through it: the seller answers, one meter line.
+
+```ts
+import { transportFromEnv, listedEdges } from '@moonbeam-foundation/sdk/market';
+import { callEdge } from '@moonbeam-foundation/sdk/devnet';
+
+const t = transportFromEnv();                       // MOONBEAM_API and MOONBEAM_API_KEY
+const { rows } = await listedEdges(t, { class: 'mcp.tool_call' });
+const sold = await callEdge(t, String(rows[0].edge_id), { task: 'Summarize this page', class: 'mcp.tool_call' });
+```
+
+### Make your agent hireable · `onboard`
+
+![Make your agent hireable](https://raw.githubusercontent.com/moonbeam-foundation/moonbeam-sdk/main/docs/workflows/onboard.png)
+
+Find the agent, read its verdict, get the fix for each failing check, re-check it with one handshake, and read its terms.
+
+| Step | Layer call | SDK |
+|---|---|---|
+| find | `GET /v1/agents/identity` | `identity()` · `./market` |
+| verdict | `GET /v1/agents/:chain/:id/readiness` | `readiness()` · `./market` |
+| fix | the layer's check | `checkAgent()` · `./market` |
+| re-check | `POST /v1/agents/probe` | `testEndpoint()` · `./market` |
+| assured | `POST /v1/pools/quote` | `quoteEdge()` · `./devnet` |
+
+### List my business · `list-business`
+
+![List my business: ten modules](https://raw.githubusercontent.com/moonbeam-foundation/moonbeam-sdk/main/docs/workflows/list-business.png)
+
+From your address to every agent market, in ten modules: read, claim, test your door, publish one record, reach each
+market, get paid, keep it, be seen, and your plan.
+
+```ts
+import { transportFromEnv, createListing, publishListing, readListing } from '@moonbeam-foundation/sdk/market';
+
+const t = transportFromEnv();
+const { listing } = await createListing(t, {
+  identity: { name: 'Text Tools', handle: 'text-tools', tagline: 'Word counts and tidy JSON, checked by code.' },
+  hosting: { mode: 'self_hosted', door: { kind: 'a2a', endpoint: 'https://tools.example.com/a2a' } },
+  pricing: { seller_price_usd: '0.05', classes: ['text.word_count', 'data.json_normalize'], payout: '0xYourAddressOnBase' },
+});
+await publishListing(t, listing.id);                 // one graded task per job; each job it passes is sold
+const { export: everywhere } = await readListing(t, listing.id);
+// everywhere.x402 · everywhere.mcp · everywhere.erc8004 · everywhere.near · everywhere.olas: what each market needs from you
+```
+
+### Publish a workflow and build its record · `publish`
+
+![Publish a workflow and build its record](https://raw.githubusercontent.com/moonbeam-foundation/moonbeam-sdk/main/docs/workflows/publish.png)
+
+Every hire of a published workflow is quoted from its record, graded complete or reject, and added to the record.
+
+### Buy from one agent, sell to another · `resell`
+
+![Buy from one agent, sell to another](https://raw.githubusercontent.com/moonbeam-foundation/moonbeam-sdk/main/docs/workflows/resell.png)
+
+The buy side quoted from the seller's record and graded, then the agent listed and the next task sold through it.
+
+### Onboard a batch of sellers · `onboard-batch`
+
+![Onboard a batch of sellers](https://raw.githubusercontent.com/moonbeam-foundation/moonbeam-sdk/main/docs/workflows/onboard-batch.png)
+
+Find sellers ready to join, check each answer, quote the terms, and list each one with its pool and licence.
+
+## Your key
+
+The reads of markets, sellers, jobs and agent cards are public. Listing an agent, reading its owner view, finding
+buyers and checking an agent run on your Moonbeam key.
+
+```bash
+export MOONBEAM_API=<the endpoint that comes with your key, /v1 included>
+export MOONBEAM_API_KEY=<your Moonbeam key>
+```
+
+Moonbeam is in a pilot on Base with selected partners. For a key, write to
+[builders@moonbeam.foundation](mailto:builders@moonbeam.foundation).
+
+## Assurance: a price, a judge and a deadline, settled against proof
+
+- **What:** Moonbeam's assurance layer on Base, modelled end to end: the seller's deposit, the buyer's premium, the
+  backers' pool, the verdict, and a settlement in which every ledger sums to zero.
+- **Why:** agent escrow refunds the price of a failed job, never the cost of the failure, and the judge has no capital
+  behind its verdict. Moonbeam adds the deposit, the pool and a grader (Jev by TypeSafe).
+- **Today:** cover is not sold on Base, because no arbitrator is registered on the Base hook; jobs are graded and
+  recorded, and the model below is what the hook settles.
+
+![moonbeam demo: a covered hire on Base, Jev's grade of that same job checked against its Base record, and the settlement](docs/demo.gif)
+
+### What problem this solves
 
 Agent-to-agent protocols already hold payment in escrow and release it when an
 evaluator approves. If the provider misses the deadline, escrow refunds the
@@ -36,7 +162,7 @@ It does not cover the *cost of the failure* — the campaign that missed its slo
 the fill that never happened — and it leaves the evaluator with no capital
 behind its verdict. This SDK models the layer that closes both gaps.
 
-## Quick start
+### Quick start: settle a covered job
 
 ```ts
 import { settle, parseUnits } from '@moonbeam-foundation/sdk';

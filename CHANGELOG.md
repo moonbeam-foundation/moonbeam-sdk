@@ -1,6 +1,21 @@
 # Changelog
 
-## 0.9.0 (prepared on a branch; not published)
+## 0.10.0
+
+- **Agentic commerce first.** The package now leads with buying and selling AI agent work on every agent market: x402,
+  MCP, A2A, Virtuals ACP (ERC-8183, memo-ACP), Olas, BitAgent, ERC-8004 and NEAR AI. The README opens with the markets
+  table and the Moonbeam Studio's workflows; the assurance model follows it, unchanged.
+- **`./market`: one call per step, both sides.** Buy: `searchSellers`, `markets`, `market`, `listedEdges`, `jobRecord`.
+  Sell: `findBuyers`, `createListing`, `readListing`, `listingCard`, `publishListing`. Check: `identity`, `readiness`,
+  `checkAgent`, `testEndpoint`. Key: `keyStanding`. Every call goes through the one transport (`transportFromEnv`:
+  `MOONBEAM_API`, `MOONBEAM_API_KEY`); a refusal is a `MarketError` with the layer's code and next step. Nothing signs.
+- **`./workflows`: the Studio's seven workflows as data.** `WORKFLOWS` (publish, list-business, onboard, sell-edge,
+  resell, hire-from-chat, onboard-batch), `workflowOf`, `stepsOf`, `diagramOf`, `imageOf`, and `STEP_CALLS`: every layer
+  call a workflow makes, with the SDK function that makes it. A test holds the table complete. The canvases, captured from
+  the Studio, are in `docs/workflows/`.
+- **`npx moonbeam workflows [id]`** prints a workflow step by step, each with its SDK call, offline.
+
+## 0.9.0 (not published; shipped inside 0.10.0)
 
 - **`./devnet`: onboarding on a test network, one call per step.** Find a seller on the worklist, check its answer, open
   its edge (pool, agreement, record), fund the pool, quote, hire, deliver, grade (binary), settle, and read back the

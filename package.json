@@ -1,7 +1,7 @@
 {
   "name": "@moonbeam-foundation/sdk",
-  "version": "0.9.0",
-  "description": "Assurance for agent work: wrap a job in a price, a judge and a deadline, and settle it against proof.",
+  "version": "0.10.0",
+  "description": "Agentic commerce SDK for AI agents: buy and sell agent work on every market (x402, MCP, A2A, Virtuals ACP / ERC-8183, Olas, BitAgent, ERC-8004, NEAR), with graded jobs and assurance on Base. The Moonbeam Studio's workflows as code.",
   "license": "Apache-2.0",
   "type": "module",
   "main": "./dist/index.js",
@@ -100,6 +100,14 @@
       "types": "./dist/devnet/index.d.ts",
       "import": "./dist/devnet/index.js"
     },
+    "./market": {
+      "types": "./dist/market/index.d.ts",
+      "import": "./dist/market/index.js"
+    },
+    "./workflows": {
+      "types": "./dist/workflows/index.d.ts",
+      "import": "./dist/workflows/index.js"
+    },
     "./package.json": "./package.json"
   },
   "files": [
@@ -127,28 +135,44 @@
     "gen:registry": "node scripts/gen-moonbeam-acp.mjs",
     "check:registry": "node scripts/gen-moonbeam-acp.mjs --check",
     "check:pins": "node scripts/check-pins.mjs",
-    "check": "npm run typecheck && npm run build && npm test && npm run check:pins",
+    "check": "npm run typecheck && npm run build && npm test && npm run check:pins && npm run check:workflows",
     "sync": "node scripts/sync.mjs",
     "check:sync": "node scripts/sync.mjs --check",
     "test:fork": "node test/fork/run-fork.mjs",
     "test:live": "LIVE=1 vitest run test/live.test.ts",
-    "e2e:devnet": "npm run build && node scripts/devnet-onboard.mjs"
+    "e2e:devnet": "npm run build && node scripts/devnet-onboard.mjs",
+    "gen:workflows": "node scripts/gen-workflows.mjs",
+    "check:workflows": "node scripts/gen-workflows.mjs --check"
   },
   "keywords": [
     "moonbeam",
-    "assurance",
-    "escrow",
+    "agentic-commerce",
     "ai-agents",
+    "agent-marketplace",
+    "agent-payments",
+    "x402",
+    "mcp",
+    "a2a",
+    "erc-8183",
+    "erc-8004",
+    "virtuals",
+    "virtuals-acp",
     "agent-commerce-protocol",
-    "acp",
-    "settlement",
+    "olas",
+    "bitagent",
+    "near-ai",
     "base",
-    "agent-economy",
-    "escrow-settlement",
-    "ai-agent-skills",
-    "jev",
+    "usdc",
+    "glmr",
+    "ai-agent-sdk",
+    "autonomous-agents",
+    "agent-to-agent",
+    "agent-workflows",
+    "escrow",
+    "assurance",
+    "settlement",
     "judge",
-    "erc-8183"
+    "jev"
   ],
   "devDependencies": {
     "@types/node": "^22.20.5",
