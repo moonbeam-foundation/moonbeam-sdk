@@ -1,0 +1,10 @@
+{
+  "read_at": "2026-11-06",
+  "read": "GET /v1/pools?chain=8453 (every seller's one job record across every market the layer reads)",
+  "sellers_on_record": 102,
+  "sellers_on_more_than_one_market": 0,
+  "sellers": [
+    { "seller": "0xb10bab190f2a1488497731fd5c52a02a2f9787ae", "market": "bitagent-base", "job": "film commentary", "price_usdc": "4", "jobs": 79, "paid_usdc": 196, "buyers": 10, "jobs_30d": 8, "paid_30d_usdc": 32 },
+    { "seller": "0x0b4e9e5460d14ba7fc96691ded5463490d333624", "market": "erc8183-base", "job": "smart contract audit", "price_usdc": "1", "jobs": 13, "paid_usdc": 9, "buyers": 2, "jobs_30d": 13, "paid_30d_usdc": 10 }
+  ]
+}

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { checkAgent, createListing, findBuyers, identity, keyStanding, listedEdges, market, markets, MarketError, publishListing, readListing, readiness, searchSellers, testEndpoint } from '../src/market/index.js';
+import { checkAgent, classAgents, classes, composeGrade, createListing, handOver, hirePlan, jobCalls, layerListings, resellerChildren, resellerStanding, findBuyers, identity, keyStanding, listedEdges, market, markets, MarketError, publishListing, readListing, readiness, searchSellers, testEndpoint } from '../src/market/index.js';
 import type { OnboardTransport } from '../src/onboard/index.js';
 
 type Seen = { url: string; method: string; headers: Record<string, string>; body: unknown };
@@ -82,5 +82,32 @@ describe('market: check and key', () => {
   it('keyStanding reads the plan on your key', async () => {
     const { t } = transport(() => [200, { ok: true, plan: { name: 'Team', days_left: 20 } }]);
     expect((await keyStanding(t)).plan).toEqual({ name: 'Team', days_left: 20 });
+  });
+});
+
+describe('market: hire, cross-list and resell', () => {
+  it('handOver opens a handshake without dispatch unless asked, naming the seller by owner and id', async () => {
+    const { t, seen } = transport(() => [200, { ok: true, handshake_id: 'hs_1', delivery: null }]);
+    const r = await handOver(t, { candidate: { kind: 'mcp', address: '0x0000000000000000000000000000000000000001', agentId: '7', chainId: 8453 }, task: ' Answer ready. ' });
+    expect(r.handshakeId).toBe('hs_1');
+    expect(seen[0]!.body).toEqual({ candidate: { kind: 'mcp', address: '0x0000000000000000000000000000000000000001', agentId: '7', chainId: 8453 }, task: 'Answer ready.', required_skills: [], chain: '8453', dispatch: false });
+    await expect(handOver(t, { candidate: { kind: 'mcp', address: 'nope', agentId: '7', chainId: 8453 }, task: 'x' })).rejects.toThrow(RangeError);
+  });
+  it('composeGrade defaults to the free prepare mode; plans answer unsigned calls', async () => {
+    const { t, seen } = transport((u) => [200, u.endsWith('/compose') ? { ok: true, mode: 'prepare' } : { ok: true, calls: [{ action: 'fund-job', signer: 'buyer' }] }]);
+    await composeGrade(t, { handshake_id: 'hs_1' });
+    expect(seen[0]!.body).toEqual({ mode: 'prepare', handshake_id: 'hs_1' });
+    expect((await hirePlan(t, { chainId: 8453, buyer: '0x1', seller: '0x2', price: '1', deadline: 1 })).calls[0]).toEqual({ action: 'fund-job', signer: 'buyer' });
+    expect((await jobCalls(t, { chainId: 8453, action: { kind: 'register-8004', agentURI: 'https://a.example/card.json' } })).calls).toHaveLength(1);
+    await expect(jobCalls(t, { chainId: 8453, action: { kind: '' } })).rejects.toThrow(RangeError);
+  });
+  it('classes, class agents, the layer’s listings and the reseller reads', async () => {
+    const { t, seen } = transport((u) => [200, u.endsWith('/classes') ? { ok: true, classes: [{ id: 'chat.word_count' }] } : u.includes('/agents') ? { ok: true, agents: [{ name: 'a' }] } : u.endsWith('/listings') ? { ok: true, rows: [{ id: 'ls_1' }], counts: { rows: 1 } } : { ok: true, rungs: [] }]);
+    expect(await classes(t)).toEqual([{ id: 'chat.word_count' }]);
+    expect(await classAgents(t, 'chat.word_count')).toEqual([{ name: 'a' }]);
+    expect((await layerListings(t)).counts).toEqual({ rows: 1 });
+    await resellerStanding(t); await resellerChildren(t);
+    expect(seen.map((s) => s.url.replace('https://api.example/v1', ''))).toEqual(['/classes', '/classes/chat.word_count/agents', '/listings', '/reseller/loop', '/access/reseller']);
+    await expect(classAgents(t, '../x')).rejects.toThrow(RangeError);
   });
 });

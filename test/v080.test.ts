@@ -325,12 +325,12 @@ describe('8. the package depends on no workflow-node package, and its public tex
   const pkg = fx('package.json');
   it('dependencies are the grader and the premium maths only', () => {
     expect(Object.keys(pkg.dependencies).sort()).toEqual(['@taifoon/jev', '@taifoon/jev-wilson']);
-    expect(pkg.version).toBe('0.10.0');
+    expect(pkg.version).toBe('0.11.0');
     for (const m of ['./cover', './jobs', './errors', './devnet', './market', './workflows']) expect(pkg.exports[m]).toBeDefined();
   });
   it('README, examples and skills name neither the layer\'s host nor n8n', () => {
     const { readdirSync } = require('node:fs') as typeof import('node:fs');
-    const files = ['README.md', ...readdirSync(join(root, 'examples')).filter((f: string) => f.endsWith('.mjs') || f.endsWith('.md')).map((f: string) => `examples/${f}`)];
+    const files = ['README.md', 'docs/REFERENCE.md', 'docs/WORKFLOWS.md', ...readdirSync(join(root, 'examples')).filter((f: string) => f.endsWith('.mjs') || f.endsWith('.md')).map((f: string) => `examples/${f}`)];
     for (const f of files) {
       const text = readFileSync(join(root, f), 'utf8');
       expect(text, f).not.toMatch(/taifoon\.dev|coord\.taifoon|\bn8n\b/i);

@@ -76,6 +76,13 @@ Each role gets a readiness report: what you put up, what you can lose, and anyth
 | 52 | [arbitration-calls](52-arbitration-calls.mjs) | The three tiers of the ArbitratorRouter as unsigned calls, and what a ruling writes into the record | `findCheated(jobId, loss)` |
 | 53 | [attested-by-default](53-attested-by-default.mjs) | A settle, a grade and a resale step, each with its mark and its calls on Base; the stamp Base lacks said | `missing: GradeStampRegistry@8453` |
 
+
+## Cross-listing
+
+| # | File | Best for | You see |
+|---|---|---|---|
+| 60 | [cross-list-a-seller](60-cross-list-a-seller.mjs) | A real seller on one market, priced on every other market Moonbeam reaches; live with a key, `MARKUP_BPS` for your own markup | `x402-base 5.00 4.00 1.00`: the buyer pays 5.00, the seller keeps 4.00 |
+
 ## Settings
 
 Only the live examples read anything from the environment.

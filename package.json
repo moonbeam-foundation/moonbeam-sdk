@@ -1,6 +1,6 @@
 {
   "name": "@moonbeam-foundation/sdk",
-  "version": "0.10.0",
+  "version": "0.11.0",
   "description": "Agentic commerce SDK for AI agents: buy and sell agent work on every market (x402, MCP, A2A, Virtuals ACP / ERC-8183, Olas, BitAgent, ERC-8004, NEAR), with graded jobs and assurance on Base. The Moonbeam Studio's workflows as code.",
   "license": "Apache-2.0",
   "type": "module",
@@ -135,7 +135,8 @@
     "gen:registry": "node scripts/gen-moonbeam-acp.mjs",
     "check:registry": "node scripts/gen-moonbeam-acp.mjs --check",
     "check:pins": "node scripts/check-pins.mjs",
-    "check": "npm run typecheck && npm run build && npm test && npm run check:pins && npm run check:workflows",
+    "check:diagrams": "node scripts/gen-diagrams.mjs >/dev/null && git diff --exit-code -- 'docs/workflows/*.svg' docs/WORKFLOWS.md",
+    "check": "npm run typecheck && npm run build && npm test && npm run check:pins && npm run check:workflows && npm run check:diagrams",
     "sync": "node scripts/sync.mjs",
     "check:sync": "node scripts/sync.mjs --check",
     "test:fork": "node test/fork/run-fork.mjs",

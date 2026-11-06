@@ -38,6 +38,7 @@ const EXPECT: Record<string, RegExp> = {
   '50-x402-pay-a-wall.mjs': /signs TransferWithAuthorization under USD Coin v2 on chain 8453/,
   '51-read-a-proof.mjs': /verify\(blob\) → 0x2D475a53eAA8F9AC78B69bD2429275a622C644f8, bound at block 52588585/,
   '52-arbitration-calls.mjs': /not deployed on Base[\s\S]*findCheated/,
+  '60-cross-list-a-seller.mjs': /film commentary: .*bitagent-base at 4 USDC[\s\S]*x402-base +5\.00 +4\.00 +1\.00[\s\S]*the legs sum to what the buyer pays/,
   '53-attested-by-default.mjs': /settle \(completed\), Base 8453: mark .*JevDecisionLog.record@8453 · missing: GradeStampRegistry@8453[\s\S]*opted out: none/,
 };
 const NETWORK = new Set(['32-read-live-from-base.mjs']);

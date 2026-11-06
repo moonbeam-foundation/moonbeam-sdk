@@ -2,7 +2,8 @@
 // Onboard ONE seller end to end on a devnet, through the SDK's ./devnet calls, and print every step.
 //
 //   npm run e2e:devnet                     (builds, then runs this file)
-//   node scripts/devnet-onboard.mjs [--seller <chain>:<agent>] [--tries 6] [--backing 10] [--no-finalize] [--json out.json]
+//   node scripts/devnet-onboard.mjs [--seller <chain>:<agent>] [--tries 6] [--backing 10] [--no-finalize] [--again] [--json out.json]
+//   --again: run again for a seller that already has an edge (same edge, same seller-of-record key), to re-verify every step
 //
 // Not published (scripts/ is not in the package's files). It names no network, address or URL: every one comes from the
 // environment or from the coordination API's own registry (see the internal note DEVNET.md beside this repo's README).
@@ -21,7 +22,7 @@ import { writeFileSync } from 'node:fs';
 import { createPublicClient, createWalletClient, defineChain, hashTypedData, http, parseAbi } from 'viem';
 import { mnemonicToAccount } from 'viem/accounts';
 import {
-  devnetProfile, transportFromEnv, txLinkOf, withQuote, findSellers, mcpTools, checkSeller, quoteEdge, openPoolPlan, poolOpened,
+  devnetProfile, transportFromEnv, sellerOfRow, edgeIds, txLinkOf, withQuote, findSellers, mcpTools, checkSeller, quoteEdge, openPoolPlan, poolOpened,
   edgeAgreement, edgeBody, writeEdge, readEdge, faucetMintCalls, claimGas, fundPoolPlan, hire, deliver, grade, decisionDigest, settle,
   callEdge, meterLines, agreementState, DEVNET_JOB_PRICE, DEVNET_POOL_BACKING,
 } from '@moonbeam-foundation/sdk/devnet';
@@ -90,7 +91,13 @@ const listed = await (await t.fetch(`${t.base}/exchanges?tenant=moonbeam&chain_i
 const known = new Set((listed.rows ?? []).flatMap((r) => [r.edge_id, String(r.seller?.endpoint ?? '').replace(/^https?:\/\//, '').toLowerCase().replace(/\/+$/, '')]));
 const sorTaken = new Set((listed.rows ?? []).map((r) => String(r.seller_of_record).toLowerCase()));
 const want = opt('--seller');
-const found = await findSellers(t, P, { limit: Number(opt('--tries', '6')), skip: known });
+const again = argv.includes('--again');
+const normEp = (e) => String(e ?? '').replace(/^https?:\/\//, '').toLowerCase().replace(/\/+$/, '');
+const onRecord = new Map((listed.rows ?? []).map((r) => [normEp(r.seller?.endpoint), r]));
+// --again: the sellers come from the edges on record (onboarded sellers leave the worklist), each with its own edge ids
+const found = again
+  ? { read: 0, sellers: (await Promise.all((listed.rows ?? []).map(async (r) => { const x = sellerOfRow(r.seller ?? {}); return x.ok ? { ...x.seller, ids: await edgeIds({ chainId: P.chainId, seller: x.seller }) } : null; }))).filter(Boolean).slice(0, Number(opt('--tries', '6'))) }
+  : await findSellers(t, P, { limit: Number(opt('--tries', '6')), skip: known });
 let pool = found.sellers;
 if (want) pool = pool.filter((s) => `${s.chain_id}:${s.agent_id}` === want);
 say('find', `${found.read} worklist rows, ${found.sellers.length} candidates not yet onboarded (${(listed.rows ?? []).length} edges on record)`);
@@ -109,6 +116,8 @@ const ids = seller.ids;
 
 // ── 3. seller of record: one devnet key per edge ─────────────────────────────────────────────────────────────────────────
 let sorIndex = KEYS.sorBase + (parseInt(ids.edge16.slice(0, 8), 16) % KEYS.sorSpan);
+const prior = again ? String(onRecord.get(normEp(seller.endpoint))?.seller_of_record ?? '').toLowerCase() : '';
+if (prior) { for (let k = 0; k < KEYS.sorSpan; k++) if (acct(KEYS.sorBase + k).address.toLowerCase() === prior) { sorIndex = KEYS.sorBase + k; break; } sorTaken.delete(prior); }
 for (let k = 0; k < KEYS.sorSpan && sorTaken.has(acct(sorIndex).address.toLowerCase()); k++) sorIndex = KEYS.sorBase + ((sorIndex - KEYS.sorBase + 1) % KEYS.sorSpan);
 const sor = acct(sorIndex).address;
 await gas(sorIndex);

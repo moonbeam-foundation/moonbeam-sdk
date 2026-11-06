@@ -1,0 +1,102 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1096" height="544" viewBox="0 0 1096 544" font-family="Inter,system-ui,-apple-system,Segoe UI,Helvetica,Arial,sans-serif">
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#98A2B3"/></marker></defs>
+<rect width="100%" height="100%" rx="14" fill="#FCFCFD"/>
+<text x="28" y="30" font-size="17" font-weight="700" fill="#101828">Hire an assured seller from a chat</text>
+<text x="28" y="48" font-size="11.5" fill="#667085">Moonbeam Studio workflow · 10 nodes · verified 2026-11-06 · npx moonbeam workflows hire-from-chat</text>
+<path d="M212,105 L239,105" stroke="#98A2B3" stroke-width="1.6" fill="none" marker-end="url(#a)"/>
+<path d="M426,105 L453,105" stroke="#98A2B3" stroke-width="1.6" fill="none" marker-end="url(#a)"/>
+<rect x="16" y="180" width="1064" height="252" rx="12" fill="#F4F3FF" stroke="#C4B5FD" stroke-dasharray="5 4"/>
+<text x="30" y="198" font-size="11" font-weight="600" fill="#6D28D9">the agent’s model, memory and tools</text>
+<path d="M334,146 V177" stroke="#A78BFA" stroke-width="1.6" stroke-dasharray="4 3" fill="none" marker-end="url(#a)"/>
+<g transform="translate(28,64)">
+  <rect width="184" height="82" rx="10" fill="#FFFFFF" stroke="#D0D5DD"/>
+  <rect width="6" height="82" rx="3" fill="#5B6475"/>
+  <text x="16" y="21" font-size="10.5" font-weight="600" fill="#5B6475" letter-spacing=".4">TRIGGER</text>
+  <text x="16" y="40" font-size="14" font-weight="600" fill="#101828">Chat</text>
+  <text x="16" y="57" font-size="10.5" fill="#475467" font-family="ui-monospace,SFMono-Regular,Menlo,monospace">trigger</text>
+  
+  
+</g>
+<g transform="translate(242,64)">
+  <rect width="184" height="82" rx="10" fill="#FFFFFF" stroke="#D0D5DD"/>
+  <rect width="6" height="82" rx="3" fill="#6D28D9"/>
+  <text x="16" y="21" font-size="10.5" font-weight="600" fill="#6D28D9" letter-spacing=".4">AGENT</text>
+  <text x="16" y="40" font-size="14" font-weight="600" fill="#101828">Moonbeam agent</text>
+  <text x="16" y="57" font-size="10.5" fill="#475467" font-family="ui-monospace,SFMono-Regular,Menlo,monospace">agent</text>
+  
+  
+</g>
+<g transform="translate(28,210)">
+  <rect width="184" height="82" rx="10" fill="#FFFFFF" stroke="#D0D5DD"/>
+  <rect width="6" height="82" rx="3" fill="#8B5CF6"/>
+  <text x="16" y="21" font-size="10.5" font-weight="600" fill="#8B5CF6" letter-spacing=".4">MODEL</text>
+  <text x="16" y="40" font-size="14" font-weight="600" fill="#101828">Model</text>
+  <text x="16" y="57" font-size="10.5" fill="#475467" font-family="ui-monospace,SFMono-Regular,Menlo,monospace">model</text>
+  
+  
+</g>
+<g transform="translate(242,210)">
+  <rect width="184" height="82" rx="10" fill="#FFFFFF" stroke="#D0D5DD"/>
+  <rect width="6" height="82" rx="3" fill="#A78BFA"/>
+  <text x="16" y="21" font-size="10.5" font-weight="600" fill="#A78BFA" letter-spacing=".4">MEMORY</text>
+  <text x="16" y="40" font-size="14" font-weight="600" fill="#101828">Memory</text>
+  <text x="16" y="57" font-size="10.5" fill="#475467" font-family="ui-monospace,SFMono-Regular,Menlo,monospace">memory</text>
+  
+  
+</g>
+<g transform="translate(456,210)">
+  <rect width="184" height="82" rx="10" fill="#FFFFFF" stroke="#D0D5DD"/>
+  <rect width="6" height="82" rx="3" fill="#1F8F8B"/>
+  <text x="16" y="21" font-size="10.5" font-weight="600" fill="#1F8F8B" letter-spacing=".4">KNOWLEDGE</text>
+  <text x="16" y="40" font-size="14" font-weight="600" fill="#101828">find_seller</text>
+  <text x="16" y="57" font-size="10.5" fill="#475467" font-family="ui-monospace,SFMono-Regular,Menlo,monospace">GET /v1/match/search</text>
+  <text x="16" y="72" font-size="10.5" fill="#667085" font-family="ui-monospace,SFMono-Regular,Menlo,monospace">searchSellers()</text>
+  <circle cx="169" cy="15" r="9" fill="#12B76A"/><text x="169" y="19.5" font-size="12" font-weight="700" fill="#fff" text-anchor="middle">✓</text>
+</g>
+<g transform="translate(670,210)">
+  <rect width="184" height="82" rx="10" fill="#FFFFFF" stroke="#D0D5DD"/>
+  <rect width="6" height="82" rx="3" fill="#D9733F"/>
+  <text x="16" y="21" font-size="10.5" font-weight="600" fill="#D9733F" letter-spacing=".4">TRANSFORM</text>
+  <text x="16" y="40" font-size="14" font-weight="600" fill="#101828">quote_assurance</text>
+  <text x="16" y="57" font-size="10.5" fill="#475467" font-family="ui-monospace,SFMono-Regular,Menlo,monospace">POST /v1/pools/quote</text>
+  <text x="16" y="72" font-size="10.5" fill="#667085" font-family="ui-monospace,SFMono-Regular,Menlo,monospace">quoteEdge()</text>
+  <circle cx="169" cy="15" r="9" fill="#12B76A"/><text x="169" y="19.5" font-size="12" font-weight="700" fill="#fff" text-anchor="middle">✓</text>
+</g>
+<g transform="translate(884,210)">
+  <rect width="184" height="82" rx="10" fill="#FFFFFF" stroke="#D0D5DD"/>
+  <rect width="6" height="82" rx="3" fill="#B42318"/>
+  <text x="16" y="21" font-size="10.5" font-weight="600" fill="#B42318" letter-spacing=".4">MONEY</text>
+  <text x="16" y="40" font-size="14" font-weight="600" fill="#101828">hire_plan</text>
+  <text x="16" y="57" font-size="10.5" fill="#475467" font-family="ui-monospace,SFMono-Regular,Menlo,monospace">POST /v1/settle</text>
+  <text x="16" y="72" font-size="10.5" fill="#667085" font-family="ui-monospace,SFMono-Regular,Menlo,monospace">hirePlan()</text>
+  <circle cx="169" cy="15" r="9" fill="#12B76A"/><text x="169" y="19.5" font-size="12" font-weight="700" fill="#fff" text-anchor="middle">✓</text>
+</g>
+<g transform="translate(28,338)">
+  <rect width="184" height="82" rx="10" fill="#FFFFFF" stroke="#D0D5DD"/>
+  <rect width="6" height="82" rx="3" fill="#D9733F"/>
+  <text x="16" y="21" font-size="10.5" font-weight="600" fill="#D9733F" letter-spacing=".4">TRANSFORM</text>
+  <text x="16" y="40" font-size="14" font-weight="600" fill="#101828">grade_delivery</text>
+  <text x="16" y="57" font-size="10.5" fill="#475467" font-family="ui-monospace,SFMono-Regular,Menlo,monospace">POST /v1/judge/compose</text>
+  <text x="16" y="72" font-size="10.5" fill="#667085" font-family="ui-monospace,SFMono-Regular,Menlo,monospace">composeGrade()</text>
+  <circle cx="169" cy="15" r="9" fill="#12B76A"/><text x="169" y="19.5" font-size="12" font-weight="700" fill="#fff" text-anchor="middle">✓</text>
+</g>
+<g transform="translate(242,338)">
+  <rect width="184" height="82" rx="10" fill="#FFFFFF" stroke="#D0D5DD"/>
+  <rect width="6" height="82" rx="3" fill="#B42318"/>
+  <text x="16" y="21" font-size="10.5" font-weight="600" fill="#B42318" letter-spacing=".4">MONEY</text>
+  <text x="16" y="40" font-size="14" font-weight="600" fill="#101828">settle_plan</text>
+  <text x="16" y="57" font-size="10.5" fill="#475467" font-family="ui-monospace,SFMono-Regular,Menlo,monospace">POST /v1/assurance/call</text>
+  <text x="16" y="72" font-size="10.5" fill="#667085" font-family="ui-monospace,SFMono-Regular,Menlo,monospace">jobCalls()</text>
+  <circle cx="169" cy="15" r="9" fill="#12B76A"/><text x="169" y="19.5" font-size="12" font-weight="700" fill="#fff" text-anchor="middle">✓</text>
+</g>
+<g transform="translate(456,64)">
+  <rect width="184" height="82" rx="10" fill="#FFFFFF" stroke="#D0D5DD"/>
+  <rect width="6" height="82" rx="3" fill="#344054"/>
+  <text x="16" y="21" font-size="10.5" font-weight="600" fill="#344054" letter-spacing=".4">OUTPUT</text>
+  <text x="16" y="40" font-size="14" font-weight="600" fill="#101828">Answer</text>
+  <text x="16" y="57" font-size="10.5" fill="#475467" font-family="ui-monospace,SFMono-Regular,Menlo,monospace">output</text>
+  
+  
+</g>
+<g transform="translate(28,470)"><rect width="10" height="10" rx="2" fill="#5B6475"/><text x="16" y="9.5" font-size="11" fill="#475467">trigger</text></g><g transform="translate(178,470)"><rect width="10" height="10" rx="2" fill="#6D28D9"/><text x="16" y="9.5" font-size="11" fill="#475467">agent</text></g><g transform="translate(328,470)"><rect width="10" height="10" rx="2" fill="#8B5CF6"/><text x="16" y="9.5" font-size="11" fill="#475467">model</text></g><g transform="translate(478,470)"><rect width="10" height="10" rx="2" fill="#A78BFA"/><text x="16" y="9.5" font-size="11" fill="#475467">memory</text></g><g transform="translate(628,470)"><rect width="10" height="10" rx="2" fill="#1F8F8B"/><text x="16" y="9.5" font-size="11" fill="#475467">knowledge</text></g><g transform="translate(778,470)"><rect width="10" height="10" rx="2" fill="#D9733F"/><text x="16" y="9.5" font-size="11" fill="#475467">transform</text></g><g transform="translate(28,490)"><rect width="10" height="10" rx="2" fill="#B42318"/><text x="16" y="9.5" font-size="11" fill="#475467">money</text></g><g transform="translate(178,490)"><rect width="10" height="10" rx="2" fill="#344054"/><text x="16" y="9.5" font-size="11" fill="#475467">output</text></g><g transform="translate(28,516)"><circle cx="5" cy="5" r="6" fill="#12B76A"/><text x="5" y="8.5" font-size="8.5" font-weight="700" fill="#fff" text-anchor="middle">✓</text><text x="16" y="9.5" font-size="11" fill="#475467">ran live</text></g><g transform="translate(178,516)"><circle cx="5" cy="5" r="6" fill="#7A5AF8"/><text x="5" y="8.5" font-size="8.5" font-weight="700" fill="#fff" text-anchor="middle">◇</text><text x="16" y="9.5" font-size="11" fill="#475467">planned</text></g><g transform="translate(328,516)"><circle cx="5" cy="5" r="6" fill="#F79009"/><text x="5" y="8.5" font-size="8.5" font-weight="700" fill="#fff" text-anchor="middle">·</text><text x="16" y="9.5" font-size="11" fill="#475467">not run today</text></g><g transform="translate(478,516)"><circle cx="5" cy="5" r="6" fill="#98A2B3"/><text x="5" y="8.5" font-size="8.5" font-weight="700" fill="#fff" text-anchor="middle">▪</text><text x="16" y="9.5" font-size="11" fill="#475467">the Studio’s own</text></g>
+</svg>

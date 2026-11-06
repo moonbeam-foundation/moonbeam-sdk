@@ -11,14 +11,26 @@
  *   readJobs(t, ids)              GET  /jobs?ids=           (./jobs) any job on any market: Virtuals ACP, BitAgent, the hook
  *   jobRecord(t, id)              GET  /settle/:id          one hire's record: its plan, its grade and its ending
  *   listedEdges(t, { class })     GET  /exchanges           listed edges: each seller of a class and its agreement
+ *   sellerRecords(t, { chainId })  GET  /pools          every seller's one job record across every market: jobs, pay, buyers, price (keyed)
  *   SELL
  *   findBuyers(t, { tag })        GET  /match/demands       the markets whose buyers paid for a job class this week (keyed)
  *   createListing(t, def)         POST /agent-listings      your agent's listing: the layer keeps it and serves its card
  *   readListing(t, id)            GET  /agent-listings/:id  the owner's view: status, listing id, price, every market export
  *   listingCard(t, id)            GET  /agent-listings/:id/card   the public card buyers and markets read
  *   publishListing(t, id)         POST /agent-listings/:id/publish  one graded task per job; passed = live
+ *   HIRE (each answers what it would do; a step that moves money answers unsigned calls and who signs each)
+ *   handOver(t, { candidate, task })   POST /handshake          hand the task to a seller in its own protocol (dispatch: false only opens it)
+ *   composeGrade(t, { handshake_id })  POST /judge/compose      code proves the facts; mode prepare is free, the graded mode records complete or reject
+ *   hirePlan(t, terms)            POST /settle              the unsigned calls of a hire on Base, in order, with the signer of each
+ *   jobCalls(t, { chainId, action })   POST /assurance/call   the exact unsigned calls to fund, settle or cover a job, or to register an agent
+ *   CROSS-LIST AND RESELL
+ *   classes(t) · classAgents(t, c)  GET /classes[/:class/agents]   the job classes, and each class's agents on every venue
+ *   layerListings(t)              GET  /listings            every seller the layer found, probed, sells or stopped selling, and why
+ *   resellerStanding(t)           GET  /reseller/loop       your key's rungs into reselling, and the next door that moves it
+ *   resellerChildren(t)           GET  /access/reseller     the child keys you minted, their calls, and your margin
  *   CHECK
  *   identity(t, chain, ids)       GET  /agents/identity     ERC-8004 agents by id: card, endpoint, owner
+ *   registryAgent(t, chain, id)   GET  /registry/agents/:chain/:id   its endpoint, kind and the job classes it was seen to do
  *   readiness(t, chain, id)       GET  /agents/:chain/:id/readiness  hireable or not, and the check that says why
  *   checkAgent(t, input)          POST /onboard/diagnose    the four goals (vaultable, hireable, covered, metered), each with its fix
  *   testEndpoint(t, input)        POST /agents/probe        one handshake to the endpoint, nothing paid
@@ -81,7 +93,7 @@ export async function market(t: OnboardTransport, id: string): Promise<Record<st
   return call<Record<string, unknown>>(t, 'GET', `/venues/${seg(id)}`);
 }
 
-/** One hire's record: its plan, its grade and its ending (`GET /settle/:id`). */
+/** One hire's record by its job id: buyer, seller, price, verdict, decision and ending (`GET /settle/:id`). */
 export async function jobRecord(t: OnboardTransport, id: string): Promise<Record<string, unknown>> {
   if (!id?.trim()) throw new RangeError('jobRecord needs a job id');
   return call<Record<string, unknown>>(t, 'GET', `/settle/${seg(id.trim())}`);
@@ -92,6 +104,15 @@ export async function jobRecord(t: OnboardTransport, id: string): Promise<Record
 export async function listedEdges(t: OnboardTransport, o: { class?: string; limit?: number } = {}): Promise<{ rows: Record<string, unknown>[]; total: number; body: Record<string, unknown> }> {
   const j = await call<{ rows?: Record<string, unknown>[]; total?: number; count?: number }>(t, 'GET', `/exchanges${query({ class: o.class, limit: o.limit })}`);
   return { rows: j.rows ?? [], total: j.total ?? j.count ?? (j.rows ?? []).length, body: j as Record<string, unknown> };
+}
+
+/** One seller's record across every market the layer reads: jobs, what it was paid, its buyers, its typical price and its jobs' sources. */
+export type SellerRecord = { [k: string]: unknown; sellerId: string; jobs: number; job_sources: Record<string, number>; history: Record<string, unknown> & { paid_usdc?: number; typical_price_usdc?: number | null } };
+/** Every seller with a record on a chain, from every market at once (`GET /pools?chain=`): the one job record per seller. Keyed. */
+export async function sellerRecords(t: OnboardTransport, o: { chainId?: number; limit?: number; offset?: number } = {}): Promise<{ sellers: SellerRecord[]; total: number; nextOffset: number | null; sources: Record<string, number> }> {
+  needKey(t, 'GET /pools');
+  const j = await call<{ pools?: SellerRecord[]; total?: number; next_offset?: number | null; sources?: Record<string, number> }>(t, 'GET', `/pools${query({ chain: o.chainId ?? 8453, limit: o.limit, offset: o.offset })}`);
+  return { sellers: j.pools ?? [], total: j.total ?? (j.pools ?? []).length, nextOffset: j.next_offset ?? null, sources: j.sources ?? {} };
 }
 
 // ── sell ──────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -153,6 +174,10 @@ export async function identity(t: OnboardTransport, chainId: number, ids: readon
   const j = await call<{ agents?: Record<string, unknown>[] }>(t, 'GET', `/agents/identity${query({ chain: chainId, ids: ids.join(',') })}`);
   return j.agents ?? [];
 }
+/** One registered agent as the layer's registry reads it: endpoint, its kind, the job classes it was seen to do (`GET /registry/agents/:chain/:id`). Public. */
+export async function registryAgent(t: OnboardTransport, chainId: number, agentId: number | string): Promise<Record<string, unknown>> {
+  return call<Record<string, unknown>>(t, 'GET', `/registry/agents/${seg(chainId)}/${seg(agentId)}`);
+}
 /** Hireable or not, and the check that says why (`GET /agents/:chain/:id/readiness`). Public. */
 export async function readiness(t: OnboardTransport, chainId: number, agentId: number | string, o: { tenant?: string } = {}): Promise<Record<string, unknown>> {
   const j = await call<{ readiness?: Record<string, unknown> }>(t, 'GET', `/agents/${seg(chainId)}/${seg(agentId)}/readiness${query({ tenant: o.tenant ?? 'moonbeam' })}`);
@@ -172,6 +197,74 @@ export async function testEndpoint(t: OnboardTransport, input: { url: string; ki
   if (!/^https:\/\//.test(input.url)) throw new RangeError('the endpoint is https');
   needKey(t, 'POST /agents/probe');
   return call<Record<string, unknown>>(t, 'POST', '/agents/probe', input);
+}
+
+// ── hire ──────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+/** A seller to hand a task to: its protocol, its owner address, and its ERC-8004 id. The layer reads its endpoint from its own record. */
+export type Candidate = { kind: 'mcp' | 'a2a' | (string & {}); address: string; agentId: string; chainId: number };
+/**
+ * Hand a task to a seller in its own protocol (`POST /handshake`). With `dispatch: false` (the default) the handshake is only
+ * opened: nothing reaches the seller. With `dispatch: true` the broker delivers it and answers the reply's digest and head.
+ */
+export async function handOver(t: OnboardTransport, a: { candidate: Candidate; task: string; dispatch?: boolean; tool?: string; args?: Record<string, unknown> }): Promise<{ handshakeId: string; delivery: Record<string, unknown> | null; body: Record<string, unknown> }> {
+  if (!a.task?.trim() || a.task.length > 4000) throw new RangeError('the task is 1 to 4,000 characters, in words');
+  if (!/^0x[0-9a-fA-F]{40}$/.test(a.candidate.address)) throw new RangeError('a seller is named by its owner address');
+  needKey(t, 'POST /handshake');
+  const j = await call<{ handshake_id?: string; delivery?: Record<string, unknown> | null }>(t, 'POST', '/handshake', { candidate: a.candidate, task: a.task.trim(), required_skills: [], chain: String(a.candidate.chainId), dispatch: a.dispatch === true, ...(a.tool ? { tool: a.tool, args: a.args ?? {} } : {}) });
+  if (!j.handshake_id) throw new MarketError(502, 'POST /handshake', j);
+  return { handshakeId: j.handshake_id, delivery: j.delivery ?? null, body: j as Record<string, unknown> };
+}
+/**
+ * The judge as a pipeline (`POST /judge/compose`): code proves the facts of a delivery; `mode: 'prepare'` stops there and is
+ * free, the graded mode adds the grader's answers and records complete or reject.
+ */
+export async function composeGrade(t: OnboardTransport, a: { handshake_id: string; mode?: 'prepare' } | { task: string; delivery: string; mode?: 'prepare' }): Promise<Record<string, unknown>> {
+  needKey(t, 'POST /judge/compose');
+  return call<Record<string, unknown>>(t, 'POST', '/judge/compose', { mode: 'prepare', ...a });
+}
+/** One unsigned call of a plan, in order, with who signs it. */
+export type PlannedCall = { [k: string]: unknown; action?: string; signer?: string; to?: string; data?: string; value?: string };
+/** The unsigned calls of a hire (`POST /settle`): the buyer's funding, the seller's acceptance, each with its signer. Nothing is sent. */
+export async function hirePlan(t: OnboardTransport, terms: { chainId: number; buyer: string; seller: string; price: string; deadline: number; evidence?: string; ref?: { id: string; note?: string }; kind?: 'agent' }): Promise<{ calls: PlannedCall[]; body: Record<string, unknown> }> {
+  needKey(t, 'POST /settle');
+  const j = await call<{ calls?: PlannedCall[] }>(t, 'POST', '/settle', { kind: 'agent', ...terms });
+  return { calls: j.calls ?? [], body: j as Record<string, unknown> };
+}
+/** The exact unsigned calls the layer builds for one action on a job or an agent (`POST /assurance/call`): fund, settle, cover, or register-8004. */
+export async function jobCalls(t: OnboardTransport, a: { chainId: number; action: { kind: string } & Record<string, unknown> }): Promise<{ calls: PlannedCall[]; body: Record<string, unknown> }> {
+  if (!a.action?.kind) throw new RangeError('an action names its kind');
+  const j = await call<{ calls?: PlannedCall[]; call?: PlannedCall }>(t, 'POST', '/assurance/call', a);
+  return { calls: j.calls ?? (j.call ? [j.call] : []), body: j as Record<string, unknown> };
+}
+
+// ── cross-list and resell ─────────────────────────────────────────────────────────────────────────────────────────────
+
+/** The job classes a buyer can hire for (`GET /classes`). Public. */
+export async function classes(t: OnboardTransport): Promise<Record<string, unknown>[]> {
+  const j = await call<{ classes?: Record<string, unknown>[] }>(t, 'GET', '/classes');
+  return j.classes ?? [];
+}
+/** The agents that offer one class, on every venue, each with where the class was read (`GET /classes/:class/agents`). Public. */
+export async function classAgents(t: OnboardTransport, cls: string): Promise<Record<string, unknown>[]> {
+  if (!/^[a-z0-9_]+(\.[a-z0-9_]+){1,3}$/.test(cls)) throw new RangeError(`not a job class: ${cls}`);
+  const j = await call<{ agents?: Record<string, unknown>[]; rows?: Record<string, unknown>[] }>(t, 'GET', `/classes/${seg(cls)}/agents`);
+  return j.agents ?? j.rows ?? [];
+}
+/** Every seller the layer found, probed, sells or stopped selling, and why (`GET /listings`). */
+export async function layerListings(t: OnboardTransport): Promise<{ rows: Record<string, unknown>[]; counts: Record<string, unknown> | null }> {
+  const j = await call<{ rows?: Record<string, unknown>[]; counts?: Record<string, unknown> }>(t, 'GET', '/listings');
+  return { rows: j.rows ?? [], counts: j.counts ?? null };
+}
+/** Where your key stands on the rungs into reselling, and the next door that moves it (`GET /reseller/loop`). Keyed. */
+export async function resellerStanding(t: OnboardTransport): Promise<Record<string, unknown>> {
+  needKey(t, 'GET /reseller/loop');
+  return call<Record<string, unknown>>(t, 'GET', '/reseller/loop');
+}
+/** The child keys you minted, each one's calls, what it owes (list price + your markup) and your margin (`GET /access/reseller`). Keyed. */
+export async function resellerChildren(t: OnboardTransport): Promise<Record<string, unknown>> {
+  needKey(t, 'GET /access/reseller');
+  return call<Record<string, unknown>>(t, 'GET', '/access/reseller');
 }
 
 // ── key ───────────────────────────────────────────────────────────────────────────────────────────────────────────────

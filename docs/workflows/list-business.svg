@@ -1,0 +1,116 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1096" height="486" viewBox="0 0 1096 486" font-family="Inter,system-ui,-apple-system,Segoe UI,Helvetica,Arial,sans-serif">
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#98A2B3"/></marker></defs>
+<rect width="100%" height="100%" rx="14" fill="#FCFCFD"/>
+<text x="28" y="30" font-size="17" font-weight="700" fill="#101828">List my business</text>
+<text x="28" y="48" font-size="11.5" fill="#667085">Moonbeam Studio workflow · 11 nodes · verified 2026-11-06 · npx moonbeam workflows list-business</text>
+<path d="M212,105 L239,105" stroke="#98A2B3" stroke-width="1.6" fill="none" marker-end="url(#a)"/>
+<path d="M426,105 L453,105" stroke="#98A2B3" stroke-width="1.6" fill="none" marker-end="url(#a)"/>
+<path d="M640,105 L667,105" stroke="#98A2B3" stroke-width="1.6" fill="none" marker-end="url(#a)"/>
+<path d="M854,105 L881,105" stroke="#98A2B3" stroke-width="1.6" fill="none" marker-end="url(#a)"/>
+<path d="M976,146 V167.5 H120 V189" stroke="#98A2B3" stroke-width="1.6" fill="none" marker-end="url(#a)"/>
+<path d="M212,233 L239,233" stroke="#98A2B3" stroke-width="1.6" fill="none" marker-end="url(#a)"/>
+<path d="M426,233 L453,233" stroke="#98A2B3" stroke-width="1.6" fill="none" marker-end="url(#a)"/>
+<path d="M640,233 L667,233" stroke="#98A2B3" stroke-width="1.6" fill="none" marker-end="url(#a)"/>
+<path d="M854,233 L881,233" stroke="#98A2B3" stroke-width="1.6" fill="none" marker-end="url(#a)"/>
+<path d="M976,274 V295.5 H120 V317" stroke="#98A2B3" stroke-width="1.6" fill="none" marker-end="url(#a)"/>
+<g transform="translate(28,64)">
+  <rect width="184" height="82" rx="10" fill="#FFFFFF" stroke="#D0D5DD"/>
+  <rect width="6" height="82" rx="3" fill="#5B6475"/>
+  <text x="16" y="21" font-size="10.5" font-weight="600" fill="#5B6475" letter-spacing=".4">TRIGGER</text>
+  <text x="16" y="40" font-size="14" font-weight="600" fill="#101828">Start</text>
+  <text x="16" y="57" font-size="10.5" fill="#475467" font-family="ui-monospace,SFMono-Regular,Menlo,monospace">trigger</text>
+  
+  
+</g>
+<g transform="translate(242,64)">
+  <rect width="184" height="82" rx="10" fill="#FFFFFF" stroke="#D0D5DD"/>
+  <rect width="6" height="82" rx="3" fill="#98A2B3"/>
+  <text x="16" y="21" font-size="10.5" font-weight="600" fill="#98A2B3" letter-spacing=".4">STUDIO</text>
+  <text x="16" y="40" font-size="14" font-weight="600" fill="#101828">workflow</text>
+  <text x="16" y="57" font-size="10.5" fill="#475467" font-family="ui-monospace,SFMono-Regular,Menlo,monospace">module: workflow</text>
+  
+  <circle cx="169" cy="15" r="9" fill="#98A2B3"/><text x="169" y="19.5" font-size="12" font-weight="700" fill="#fff" text-anchor="middle">▪</text>
+</g>
+<g transform="translate(456,64)">
+  <rect width="184" height="82" rx="10" fill="#FFFFFF" stroke="#D0D5DD"/>
+  <rect width="6" height="82" rx="3" fill="#98A2B3"/>
+  <text x="16" y="21" font-size="10.5" font-weight="600" fill="#98A2B3" letter-spacing=".4">STUDIO</text>
+  <text x="16" y="40" font-size="14" font-weight="600" fill="#101828">read</text>
+  <text x="16" y="57" font-size="10.5" fill="#475467" font-family="ui-monospace,SFMono-Regular,Menlo,monospace">module: read</text>
+  
+  <circle cx="169" cy="15" r="9" fill="#98A2B3"/><text x="169" y="19.5" font-size="12" font-weight="700" fill="#fff" text-anchor="middle">▪</text>
+</g>
+<g transform="translate(670,64)">
+  <rect width="184" height="82" rx="10" fill="#FFFFFF" stroke="#D0D5DD"/>
+  <rect width="6" height="82" rx="3" fill="#98A2B3"/>
+  <text x="16" y="21" font-size="10.5" font-weight="600" fill="#98A2B3" letter-spacing=".4">STUDIO</text>
+  <text x="16" y="40" font-size="14" font-weight="600" fill="#101828">claim</text>
+  <text x="16" y="57" font-size="10.5" fill="#475467" font-family="ui-monospace,SFMono-Regular,Menlo,monospace">module: claim</text>
+  
+  <circle cx="169" cy="15" r="9" fill="#98A2B3"/><text x="169" y="19.5" font-size="12" font-weight="700" fill="#fff" text-anchor="middle">▪</text>
+</g>
+<g transform="translate(884,64)">
+  <rect width="184" height="82" rx="10" fill="#FFFFFF" stroke="#D0D5DD"/>
+  <rect width="6" height="82" rx="3" fill="#2F6FDB"/>
+  <text x="16" y="21" font-size="10.5" font-weight="600" fill="#2F6FDB" letter-spacing=".4">CHECK</text>
+  <text x="16" y="40" font-size="14" font-weight="600" fill="#101828">door</text>
+  <text x="16" y="57" font-size="10.5" fill="#475467" font-family="ui-monospace,SFMono-Regular,Menlo,monospace">module: door</text>
+  <text x="16" y="72" font-size="10.5" fill="#667085" font-family="ui-monospace,SFMono-Regular,Menlo,monospace">testEndpoint()</text>
+  <circle cx="169" cy="15" r="9" fill="#12B76A"/><text x="169" y="19.5" font-size="12" font-weight="700" fill="#fff" text-anchor="middle">✓</text>
+</g>
+<g transform="translate(28,192)">
+  <rect width="184" height="82" rx="10" fill="#FFFFFF" stroke="#D0D5DD"/>
+  <rect width="6" height="82" rx="3" fill="#D6156F"/>
+  <text x="16" y="21" font-size="10.5" font-weight="600" fill="#D6156F" letter-spacing=".4">CONNECTOR</text>
+  <text x="16" y="40" font-size="14" font-weight="600" fill="#101828">publish</text>
+  <text x="16" y="57" font-size="10.5" fill="#475467" font-family="ui-monospace,SFMono-Regular,Menlo,monospace">module: publish</text>
+  <text x="16" y="72" font-size="10.5" fill="#667085" font-family="ui-monospace,SFMono-Regular,Menlo,monospace">publishListing()</text>
+  <circle cx="169" cy="15" r="9" fill="#F79009"/><text x="169" y="19.5" font-size="12" font-weight="700" fill="#fff" text-anchor="middle">·</text>
+</g>
+<g transform="translate(242,192)">
+  <rect width="184" height="82" rx="10" fill="#FFFFFF" stroke="#D0D5DD"/>
+  <rect width="6" height="82" rx="3" fill="#D9733F"/>
+  <text x="16" y="21" font-size="10.5" font-weight="600" fill="#D9733F" letter-spacing=".4">TRANSFORM</text>
+  <text x="16" y="40" font-size="14" font-weight="600" fill="#101828">reach</text>
+  <text x="16" y="57" font-size="10.5" fill="#475467" font-family="ui-monospace,SFMono-Regular,Menlo,monospace">module: reach</text>
+  <text x="16" y="72" font-size="10.5" fill="#667085" font-family="ui-monospace,SFMono-Regular,Menlo,monospace">readListing()</text>
+  <circle cx="169" cy="15" r="9" fill="#F79009"/><text x="169" y="19.5" font-size="12" font-weight="700" fill="#fff" text-anchor="middle">·</text>
+</g>
+<g transform="translate(456,192)">
+  <rect width="184" height="82" rx="10" fill="#FFFFFF" stroke="#D0D5DD"/>
+  <rect width="6" height="82" rx="3" fill="#1F8F8B"/>
+  <text x="16" y="21" font-size="10.5" font-weight="600" fill="#1F8F8B" letter-spacing=".4">KNOWLEDGE</text>
+  <text x="16" y="40" font-size="14" font-weight="600" fill="#101828">pay</text>
+  <text x="16" y="57" font-size="10.5" fill="#475467" font-family="ui-monospace,SFMono-Regular,Menlo,monospace">module: pay</text>
+  <text x="16" y="72" font-size="10.5" fill="#667085" font-family="ui-monospace,SFMono-Regular,Menlo,monospace">readSale()</text>
+  <circle cx="169" cy="15" r="9" fill="#F79009"/><text x="169" y="19.5" font-size="12" font-weight="700" fill="#fff" text-anchor="middle">·</text>
+</g>
+<g transform="translate(670,192)">
+  <rect width="184" height="82" rx="10" fill="#FFFFFF" stroke="#D0D5DD"/>
+  <rect width="6" height="82" rx="3" fill="#1F8F8B"/>
+  <text x="16" y="21" font-size="10.5" font-weight="600" fill="#1F8F8B" letter-spacing=".4">KNOWLEDGE</text>
+  <text x="16" y="40" font-size="14" font-weight="600" fill="#101828">keep</text>
+  <text x="16" y="57" font-size="10.5" fill="#475467" font-family="ui-monospace,SFMono-Regular,Menlo,monospace">module: keep</text>
+  <text x="16" y="72" font-size="10.5" fill="#667085" font-family="ui-monospace,SFMono-Regular,Menlo,monospace">readListing()</text>
+  <circle cx="169" cy="15" r="9" fill="#F79009"/><text x="169" y="19.5" font-size="12" font-weight="700" fill="#fff" text-anchor="middle">·</text>
+</g>
+<g transform="translate(884,192)">
+  <rect width="184" height="82" rx="10" fill="#FFFFFF" stroke="#D0D5DD"/>
+  <rect width="6" height="82" rx="3" fill="#D9733F"/>
+  <text x="16" y="21" font-size="10.5" font-weight="600" fill="#D9733F" letter-spacing=".4">TRANSFORM</text>
+  <text x="16" y="40" font-size="14" font-weight="600" fill="#101828">seen</text>
+  <text x="16" y="57" font-size="10.5" fill="#475467" font-family="ui-monospace,SFMono-Regular,Menlo,monospace">module: seen</text>
+  <text x="16" y="72" font-size="10.5" fill="#667085" font-family="ui-monospace,SFMono-Regular,Menlo,monospace">listingCard()</text>
+  <circle cx="169" cy="15" r="9" fill="#F79009"/><text x="169" y="19.5" font-size="12" font-weight="700" fill="#fff" text-anchor="middle">·</text>
+</g>
+<g transform="translate(28,320)">
+  <rect width="184" height="82" rx="10" fill="#FFFFFF" stroke="#D0D5DD"/>
+  <rect width="6" height="82" rx="3" fill="#1F8F8B"/>
+  <text x="16" y="21" font-size="10.5" font-weight="600" fill="#1F8F8B" letter-spacing=".4">KNOWLEDGE</text>
+  <text x="16" y="40" font-size="14" font-weight="600" fill="#101828">plan</text>
+  <text x="16" y="57" font-size="10.5" fill="#475467" font-family="ui-monospace,SFMono-Regular,Menlo,monospace">module: plan</text>
+  <text x="16" y="72" font-size="10.5" fill="#667085" font-family="ui-monospace,SFMono-Regular,Menlo,monospace">keyStanding()</text>
+  <circle cx="169" cy="15" r="9" fill="#12B76A"/><text x="169" y="19.5" font-size="12" font-weight="700" fill="#fff" text-anchor="middle">✓</text>
+</g>
+<g transform="translate(28,432)"><rect width="10" height="10" rx="2" fill="#5B6475"/><text x="16" y="9.5" font-size="11" fill="#475467">trigger</text></g><g transform="translate(178,432)"><rect width="10" height="10" rx="2" fill="#98A2B3"/><text x="16" y="9.5" font-size="11" fill="#475467">studio</text></g><g transform="translate(328,432)"><rect width="10" height="10" rx="2" fill="#2F6FDB"/><text x="16" y="9.5" font-size="11" fill="#475467">check</text></g><g transform="translate(478,432)"><rect width="10" height="10" rx="2" fill="#D6156F"/><text x="16" y="9.5" font-size="11" fill="#475467">connector</text></g><g transform="translate(628,432)"><rect width="10" height="10" rx="2" fill="#D9733F"/><text x="16" y="9.5" font-size="11" fill="#475467">transform</text></g><g transform="translate(778,432)"><rect width="10" height="10" rx="2" fill="#1F8F8B"/><text x="16" y="9.5" font-size="11" fill="#475467">knowledge</text></g><g transform="translate(28,458)"><circle cx="5" cy="5" r="6" fill="#12B76A"/><text x="5" y="8.5" font-size="8.5" font-weight="700" fill="#fff" text-anchor="middle">✓</text><text x="16" y="9.5" font-size="11" fill="#475467">ran live</text></g><g transform="translate(178,458)"><circle cx="5" cy="5" r="6" fill="#7A5AF8"/><text x="5" y="8.5" font-size="8.5" font-weight="700" fill="#fff" text-anchor="middle">◇</text><text x="16" y="9.5" font-size="11" fill="#475467">planned</text></g><g transform="translate(328,458)"><circle cx="5" cy="5" r="6" fill="#F79009"/><text x="5" y="8.5" font-size="8.5" font-weight="700" fill="#fff" text-anchor="middle">·</text><text x="16" y="9.5" font-size="11" fill="#475467">not run today</text></g><g transform="translate(478,458)"><circle cx="5" cy="5" r="6" fill="#98A2B3"/><text x="5" y="8.5" font-size="8.5" font-weight="700" fill="#fff" text-anchor="middle">▪</text><text x="16" y="9.5" font-size="11" fill="#475467">the Studio’s own</text></g>
+</svg>
