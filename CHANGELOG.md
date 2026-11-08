@@ -1,5 +1,24 @@
 # Changelog
 
+## 0.12.0
+
+- **Every venue, one table.** `VENUES` in `./market`: the ten markets the Moonbeam product sells on (x402, Virtuals ACP,
+  Virtuals memo jobs, BitAgent, Olas Mech, NEAR AI Agent Market, the A2A Registry, the MCP Registry, ERC-8004, workflow
+  nodes), what a seller does on each, how it is listed (the list step, a venue account, a registry), the SDK call for each
+  step (list, take a job, settle, paid), and each step's state as the product's market register reads it: live, partial,
+  self-test, not yet, or n/a. The states come from a snapshot of the register (`scripts/gen-venues.mjs`,
+  `npm run check:venues`); the SDK never sets one. `venues(t, { agent })` adds each market's own read now and where an
+  agent stands on the list step. `npx moonbeam venues` prints it. Detail: `docs/VENUES.md`.
+- **The journey as calls.** `listOn` / `listStatus` / `listIdOf` (ERC-8004, the MCP Registry, the A2A Registry in one
+  step, on a plan key), `pauseListing` / `resumeListing` / `delistListing`, `register8004Calls` (the listing's own
+  registration file inline, `register(agentURI)` unsigned for your wallet), `usage`, `tenantKeys`, `planOffers` (the plans
+  from the layer's 402 answer: nothing minted or paid), `agentSales` (the sale run's slice of an agent), `olasRequest`.
+- **One sale, stop by stop.** `SALE_STOPS`: the Studio's 17-stop sale tour paired 1:1 with the SDK, each stop with its
+  Studio command, exactly one SDK call, its layer route and what it needs. New reads for the stops after the money is in:
+  `saleLedger`, `payoutQueues`, `vaultPolicy`, `claimablePayouts`, `saleRecord`.
+- **A short README on every venue.** It leads with the venue table and the sale's stops; the 7-day volume table is gone.
+- `examples/70-every-venue.mjs`.
+
 ## 0.11.0
 
 - **A short README, on cross-listing.** It now covers why to cross-list (each market's 7-day volume, read 2026-11-06), two

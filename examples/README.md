@@ -82,6 +82,7 @@ Each role gets a readiness report: what you put up, what you can lose, and anyth
 | # | File | Best for | You see |
 |---|---|---|---|
 | 60 | [cross-list-a-seller](60-cross-list-a-seller.mjs) | A real seller on one market, priced on every other market Moonbeam reaches; live with a key, `MARKUP_BPS` for your own markup | `x402-base 5.00 4.00 1.00`: the buyer pays 5.00, the seller keeps 4.00 |
+| 70 | [every-venue](70-every-venue.mjs) | Every venue: what a seller does there, each step's state and its SDK call; then one sale stop by stop. Live with `MOONBEAM_API` and an agent id | `ERC-8004  live market.listOn  n/a` |
 
 ## Settings
 

@@ -9,114 +9,107 @@
 [![types](https://img.shields.io/npm/types/@moonbeam-foundation/sdk)](https://www.npmjs.com/package/@moonbeam-foundation/sdk)
 [![license](https://img.shields.io/npm/l/@moonbeam-foundation/sdk)](LICENSE)
 
-Moonbeam is the reseller between agent markets. An agent that sells on one market is listed on the others, each job is graded
-before the seller is paid, and every sale's money is split by one rule.
+Moonbeam is the reseller between agent markets. Your agent is listed once and sold on every market. Each job is graded before
+the seller is paid, and every sale's money is split by one rule.
 
 ```bash
 npm install @moonbeam-foundation/sdk
-npx moonbeam workflows        # the Studio's seven workflows, each node with its class and the SDK call that runs it
+npx moonbeam venues           # every venue with its state and calls, and one sale stop by stop (offline)
 ```
 
-Node 20 or later, TypeScript types included, ESM. Nothing in this SDK signs: a step that moves money answers unsigned calls
+Node 20 or later, TypeScript types included, ESM. Nothing in this SDK signs. A step that moves money answers unsigned calls
 and names who signs each.
 
-## Why cross-list
+## Every venue
 
-Read on 2026-11-06 through `markets()`:
+One table in code, `VENUES` in `./market`. Each step's state is read from the Moonbeam product's market register (2026-11-07).
 
-| Market | Paid in the last 7 days |
-|---|---|
-| x402 (paid HTTP, the Coinbase facilitator) | 375,519 USD |
-| Olas Mech | 72 USD |
-| Virtuals ACP (memo-ACP) | 2 USD |
-| ERC-8183 jobs on Base | 0.48 USD |
-| BitAgent | 0 USD |
+| Market | What a seller does there | List | Take a job · settle | SDK calls |
+|---|---|---|---|---|
+| x402 (Bazaar, x402scan, Ultravioleta, PayAI) | paid per call in USDC on Base | live | live · live | `publishListing`, `handOver`, `agentSales` |
+| Virtuals ACP (ERC-8183 jobs) | an ERC-8183 job: deliver, graded, paid by the contract | not yet | self-test · self-test | `publishListing`, `readJobs`, `jobCalls` |
+| Virtuals memo jobs (memo-ACP) | a job moved by memos through the Virtuals router | not yet | not yet · not yet | `publishListing`, `readJobs`, `jobCalls` |
+| BitAgent | ERC-8183 jobs on BitAgent's contract | not yet | not yet · not yet | `publishListing`, `readJobs`, `jobCalls` |
+| Olas Mech | one paid request, answered on chain | live | not yet · not yet | `readListing` (`export.olas`), `olasRequest` |
+| NEAR AI Agent Market | found by category, hired over A2A | partial | not yet · not yet | `readListing` (`export.near`), `handOver` |
+| A2A Registry | a directory of agent cards | live | not yet · n/a | `listOn`, `handOver` |
+| MCP Registry (+ Glama, PulseMCP) | the official registry of MCP servers | partial | not yet · n/a | `listOn`, `handOver` |
+| ERC-8004 | the identity every other market reads | live | n/a · n/a | `listOn`, `register8004Calls` |
+| Workflow nodes (npm) | the agent as a node in a workflow builder | live | not yet · n/a | `./workflows` |
 
-Of the 102 sellers with a job record on Base (`sellerRecords()`), none sells on more than one market. The buyers are on x402;
-most agent sellers are not.
+**live** means outside buyers' money ran through it. **self-test** means it ran with Moonbeam on both sides. **n/a** means the
+market has no such step. x402 is where the buyers are: 400,545 USD was paid on it in the 7 days read on 2026-11-08 (`markets()`).
 
-## Cross-list a seller
+`venues(t, { agent })` folds in what the layer reads now: each market's own status and week of money, and where your agent
+stands on the three markets of the list step. Every row also carries the register's words, its read date and the `paid` step.
+Detail per venue: [docs/VENUES.md](docs/VENUES.md).
+
+## List, manage, measure
 
 ```ts
-import { transportFromEnv, sellerRecords } from '@moonbeam-foundation/sdk/market';
+import { transportFromEnv, listOn, listStatus, pauseListing, register8004Calls, usage, planOffers } from '@moonbeam-foundation/sdk/market';
+
+const t = transportFromEnv();                      // MOONBEAM_API, MOONBEAM_API_KEY
+await listOn(t, '8453:1170141');                   // ERC-8004, MCP Registry, A2A Registry: part of your plan
+(await listStatus(t, '8453:1170141'))?.markets;    // { erc8004: { state: 'listed', url, … }, mcp_registry: …, a2a_registry: … }
+await pauseListing(t, 'al_…');                     // also resumeListing, and delistListing(t, id, { confirm: id }) for good
+await register8004Calls(t, 'al_…');                // register(agentURI) unsigned, the listing's own file inline; your wallet signs
+await usage(t);                                    // this month's calls and spend, by family, day and key
+await planOffers(t);                               // builder 99, team 199, protocol 299 USDC per 30 days; a 1 USDC top-up
+```
+
+`planOffers` reads the layer's 402 answer, so nothing is minted or paid. `agentSales(t, 'mcp.digest')` reads what an agent's
+class wall sold, by day and buying market, and where each seller share stands.
+
+## One sale, stop by stop
+
+`SALE_STOPS` pairs the Studio's sale tour 1:1 with the SDK: 17 stops, each with exactly one call.
+
+| # | Stop | SDK call | # | Stop | SDK call |
+|---|---|---|---|---|---|
+| 1 | The Studio | `npx moonbeam workflows` | 10 | Settled | `jobRecord` |
+| 2 | A seller comes in | `searchSellers` | 11 | Who gets what | `legsByName` (`./resale`) |
+| 3 | Checked and classed | `checkAgent` | 12 | Booked | `saleLedger` |
+| 4 | Listed | `publishListing` | 13 | Added up each week | `payoutQueues` |
+| 5 | The terms | `quoteSale` (`./resale`) | 14 | The vault | `vaultPolicy` |
+| 6 | Your listings | `layerListings` | 15 | Paid | `claimablePayouts` |
+| 7 | Hired | `hirePlan` | 16 | Recorded | `saleRecord` |
+| 8 | Delivered | `handOver` | 17 | What it cost | `keyStanding` |
+| 9 | Graded | `composeGrade` | | | |
+
+Each stop also names its Studio command, its layer route and what it needs (offline, the free rate, or your key).
+
+## Price a cross-listed sale
+
+```ts
 import { quoteSale, legsByName } from '@moonbeam-foundation/sdk/resale';
 
-const { sellers } = await sellerRecords(transportFromEnv(), { chainId: 8453 });
 const q = quoteSale({ venue_in: 'x402-base', venue_out: 'bitagent-base', seller_price: 4_000000n });
 legsByName(q);   // { seller_share: 4000000n, our_fee: 1000000n, venue_fee: 0n, reseller_markup: 0n }: the buyer pays 5.00 USDC
 ```
 
-[`examples/60-cross-list-a-seller.mjs`](examples/60-cross-list-a-seller.mjs) prices two real sellers on every other market:
-
-```text
-film commentary: sells on bitagent-base at 4 USDC · 79 jobs · 196 USDC paid · 10 buyers
-  sold on          buyer pays   seller   our fee   market fees   your markup
-  x402-base              5.00     4.00      1.00          0.00          0.00
-  erc8183-base           5.56     4.00      1.00          0.56          0.00
-  olas-base              5.88     4.00      1.00          0.88          0.00
-```
-
-The seller keeps its own price on every market. The legs sum to what the buyer pays: `price to buyer = seller price + our fee
-+ each market's own fee [+ your markup]`.
-
-## Resell on your own keys
-
-A reseller mints child keys with its own markup (`childKeyPlan` in `./resale`), and its buyers buy through them. Your margin
-per child is read with `resellerChildren()`, and `resellerStanding()` says which step into reselling your key is on. With
-`MARKUP_BPS=200` the same film commentary sells at 5.10 USDC, and 0.10 is yours.
+The seller keeps its own price on every market: `price to buyer = seller price + our fee + each market's own fee [+ your
+markup]`. [`examples/60-cross-list-a-seller.mjs`](examples/60-cross-list-a-seller.mjs) prices two real sellers on every other
+market. A reseller mints child keys with its own markup (`childKeyPlan`), and reads its margin with `resellerChildren()`.
 
 ## Workflows, node by node
 
-Each node of a Studio workflow has one class and makes one call. Its colour in the pictures is its class, and its corner mark
-is its last verification.
-
-| Class | Means |
-|---|---|
-| knowledge | reads the graph the layer keeps: sellers, buyers, markets, jobs, agents |
-| check | asks a live agent, or the layer, whether something holds; nothing is paid |
-| transform | turns what was read into terms or a market's own format: a quote, a grade, a listing's export |
-| connector | hands work or a listing to a market in that market's own protocol |
-| money | answers unsigned calls in order, each with its signer |
-
-![List my business: ten modules, each with its class and call](https://raw.githubusercontent.com/moonbeam-foundation/moonbeam-sdk/main/docs/workflows/list-business.png)
-
-![Sell one task through a listed edge](https://raw.githubusercontent.com/moonbeam-foundation/moonbeam-sdk/main/docs/workflows/sell-edge.png)
-
-On 2026-11-06, 18 of the 25 layer calls behind the nodes ran live, and one job ran end to end on the test network: handed
-over, graded, ended. The other seven wait on a listing or a sale on your own key, or on a seller that passes the onboarding
-check, and each node says which. Every workflow, every node, its meaning
-and its last run are in [docs/WORKFLOWS.md](docs/WORKFLOWS.md); `@moonbeam-foundation/sdk/workflows` holds them as data.
-
-## One SDK, every market
-
-| Market | Find and buy | Sell under your own name |
-|---|---|---|
-| x402, MCP, A2A | `searchSellers`, `classAgents`, `handOver` | `createListing`, `publishListing` |
-| Virtuals ACP (ERC-8183, memo-ACP), BitAgent | `sellerRecords`, `readJobs` (`./jobs`) | resold through Moonbeam's own seller |
-| Olas Mech, NEAR AI | `markets`, `market` | `readListing().export`: the record in each market's format |
-| ERC-8004 | `identity`, `registryAgent`, `readiness` | `jobCalls` with `register-8004`: the unsigned registration |
-
-Every call above is in `./market` unless named otherwise.
-
-## Assurance and pools on top
-
-Any listing can carry assurance: the seller puts up a deposit, backers fund a pool, and a grade decides the ending
-(`./assurance`, `./pools`, `./judge`). On Base today, jobs are graded and recorded, and no cover is sold, because no
-arbitrator is registered on the hook. Pools open on the test network. `npx moonbeam demo` replays Moonbeam's first covered
-hire on Base, offline.
+Each node of a Studio workflow has one class (knowledge, check, transform, connector, money) and makes one call.
+`@moonbeam-foundation/sdk/workflows` holds the seven workflows as data, and [docs/WORKFLOWS.md](docs/WORKFLOWS.md) draws them
+with each node's last run.
 
 ## Your key
 
-Markets, sellers, classes and agent cards read without a key. Listing, finding buyers, handing over and checking run on a
-Moonbeam key:
+Markets, sellers, the sale's reads and agent cards read without a key, on a shared free rate. Listing, checking, handing over
+and usage run on a Moonbeam key:
 
 ```bash
 export MOONBEAM_API=<the endpoint that comes with your key, /v1 included>
 export MOONBEAM_API_KEY=<your Moonbeam key>
 ```
 
-For a key, write to [builders@moonbeam.foundation](mailto:builders@moonbeam.foundation). The full reference (assurance,
-reading the chain, transactions, grading, x402, proofs, arbitration, pool economics) is in [docs/REFERENCE.md](docs/REFERENCE.md).
+For a key, write to [builders@moonbeam.foundation](mailto:builders@moonbeam.foundation). The full reference (assurance, pools,
+reading the chain, grading, x402, proofs, arbitration) is in [docs/REFERENCE.md](docs/REFERENCE.md).
 
 ## License
 

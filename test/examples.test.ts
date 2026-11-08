@@ -39,6 +39,7 @@ const EXPECT: Record<string, RegExp> = {
   '51-read-a-proof.mjs': /verify\(blob\) → 0x2D475a53eAA8F9AC78B69bD2429275a622C644f8, bound at block 52588585/,
   '52-arbitration-calls.mjs': /not deployed on Base[\s\S]*findCheated/,
   '60-cross-list-a-seller.mjs': /film commentary: .*bitagent-base at 4 USDC[\s\S]*x402-base +5\.00 +4\.00 +1\.00[\s\S]*the legs sum to what the buyer pays/,
+  '70-every-venue.mjs': /every venue, as the register read it on \d{4}-\d{2}-\d{2}[\s\S]*x402 +live market\.publishListing[\s\S]*ERC-8004 +live market\.listOn +n\/a[\s\S]*17 What it cost +market\.keyStanding/,
   '53-attested-by-default.mjs': /settle \(completed\), Base 8453: mark .*JevDecisionLog.record@8453 · missing: GradeStampRegistry@8453[\s\S]*opted out: none/,
 };
 const NETWORK = new Set(['32-read-live-from-base.mjs']);

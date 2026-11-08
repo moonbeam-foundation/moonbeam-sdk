@@ -36,40 +36,27 @@
  *   testEndpoint(t, input)        POST /agents/probe        one handshake to the endpoint, nothing paid
  *   KEY
  *   keyStanding(t)                GET  /access/key          your key: its plan, its days left and its allowance
+ *   JOURNEY (./journey.ts: list, manage, register, measure, plans, sales)
+ *   listOn(t, ref, markets?)      POST /list                list an agent on ERC-8004, the MCP Registry and the A2A Registry (plan key)
+ *   listStatus(t, ref)            GET  /list/:id            where it stands on each of the three (null: never listed)
+ *   pauseListing · resumeListing · delistListing   POST /agent-listings/:id[/publish]   pause, go live again, delist for good
+ *   register8004Calls(t, id)      GET  /agent-listings/:id + POST /assurance/call   register(agentURI) unsigned, for your wallet
+ *   usage(t) · tenantKeys(t)      GET  /access/usage · /tenant/keys   what your key used; your tenant's keys (keyed)
+ *   planOffers(t)                 POST /access/subscribe    the plans and the top-up from the 402 answer: nothing paid or minted
+ *   agentSales(t, ref)            the sale run's slices     what an agent sold, by day and market, and where each share stands
+ *   olasRequest(t, id)            GET  /judge/evidence/olas/:id   one Olas Mech request: prompt, mech, fee, response
+ *   SALE (./sale.ts: the reads after the money is in)
+ *   saleLedger · payoutQueues · vaultPolicy · claimablePayouts · saleRecord   GET /resale · /pipe/queues · /vault/policy · /pipe/claimable · /root
+ *   VENUES (./venues.ts) and SALE_STOPS (./sale-stops.ts): every venue in one table, and one sale stop by stop, each with its call
  */
 import type { OnboardTransport } from '../onboard/index.js';
-import { CoordError, jsonOf, refusalOf } from '../errors/index.js';
+import { MarketError, call, needKey, query, seg } from './http.js';
 
 export type { OnboardTransport as MarketTransport } from '../onboard/index.js';
 /** The transport from the environment: MOONBEAM_API (the endpoint that comes with your key, `/v1` included) and MOONBEAM_API_KEY. */
 export { transportFromEnv } from '../devnet/profile.js';
 
-/** A refusal of a market call (a CoordError: status, code, message, nextStep, body). */
-export class MarketError extends CoordError {
-  constructor(status: number, what: string, body: unknown) { super(refusalOf(body, status, `${what} → ${status}`)); this.name = 'MarketError'; }
-}
-
-type Q = Record<string, string | number | boolean | undefined | null>;
-const query = (q: Q) => {
-  const p = new URLSearchParams();
-  for (const [k, v] of Object.entries(q)) if (v !== undefined && v !== null && v !== '') p.set(k, String(v));
-  const s = p.toString();
-  return s ? `?${s}` : '';
-};
-const headers = (t: OnboardTransport, json = false): Record<string, string> => ({ accept: 'application/json', ...(json ? { 'content-type': 'application/json' } : {}), ...(t.apiKey ? { 'x-api-key': t.apiKey } : {}) });
-const seg = (v: string | number) => encodeURIComponent(String(v));
-
-async function call<T>(t: OnboardTransport, method: 'GET' | 'POST', path: string, body?: unknown): Promise<T> {
-  const what = `${method} ${path.split('?')[0]}`;
-  const r = await t.fetch(`${t.base}${path}`, { method, headers: headers(t, body !== undefined), ...(body !== undefined ? { body: JSON.stringify(body) } : {}) });
-  const j = await jsonOf(r);
-  const refused = j && typeof j === 'object' && (j as { ok?: unknown }).ok === false;
-  if (!r.ok || refused || j === null) throw new MarketError(r.status, what, j);
-  return j as T;
-}
-const needKey = (t: OnboardTransport, what: string) => {
-  if (!t.apiKey) throw new MarketError(401, what, { ok: false, code: 'key_required', error: `${what} reads with your Moonbeam key: set MOONBEAM_API_KEY` });
-};
+export { MarketError } from './http.js';
 
 // ── buy ───────────────────────────────────────────────────────────────────────────────────────────────────────────────
 
@@ -275,3 +262,13 @@ export async function keyStanding(t: OnboardTransport): Promise<{ plan: Record<s
   const j = await call<{ plan?: Record<string, unknown> | null }>(t, 'GET', '/access/key');
   return { plan: j.plan ?? null, body: j as Record<string, unknown> };
 }
+
+// ── the journey, the sale's reads, every venue, and one sale stop by stop ───────────────────────────────────────────────
+export { LIST_MARKETS, listIdOf, listOn, listStatus, pauseListing, resumeListing, delistListing, MAX_INLINE_URI, inlineRegistration, register8004Calls, usage, tenantKeys, planOffers, agentSales, olasRequest } from './journey.js';
+export type { ListMarket, ListRow, ListView, PlanOffer, Share, SaleRow, SaleSlice } from './journey.js';
+export { saleLedger, payoutQueues, vaultPolicy, claimablePayouts, saleRecord } from './sale.js';
+export type { QueueDepth, VaultRule, ClaimablePayout } from './sale.js';
+export { VENUES, VENUE_IDS, VENUE_STEPS, VENUES_READ_ON, venueById, venues } from './venues.js';
+export type { Venue, VenueId, VenueLive, VenueState, VenueStep, VenueStepRow, ListedBy, SdkCall, RegisterWord, RegisterSnapshot } from './venues.js';
+export { SALE_STOPS, saleStop } from './sale-stops.js';
+export type { SaleStop, StopNeeds, StopHop } from './sale-stops.js';
