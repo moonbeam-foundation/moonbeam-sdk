@@ -3,7 +3,7 @@ import type { RegisterSnapshot } from './venues.js';
 
 export const VENUE_REGISTER: RegisterSnapshot = {
  "source": "_BUSINESS_AGENT_v1_",
- "read_on": "2026-11-07",
+ "read_on": "2026-11-11",
  "markets": [
   {
    "id": "x402-base",
@@ -46,8 +46,8 @@ export const VENUE_REGISTER: RegisterSnapshot = {
    "list": {
     "register": "claimed",
     "proof": "claimed",
-    "says": "the seller record exists; that buyers can find it was not shown",
-    "read_on": "2026-11-06"
+    "says": "the seller record exists with 15 offerings, mcp.digest among them; that buyers can find it was not shown",
+    "read_on": "2026-11-09"
    },
    "take": {
     "register": "self_test",
@@ -226,10 +226,10 @@ export const VENUE_REGISTER: RegisterSnapshot = {
     "what": "free to publish"
    },
    "list": {
-    "register": "partial",
+    "register": "live",
     "proof": "proven",
-    "says": "listed in the official MCP Registry and on Glama",
-    "read_on": "2026-11-06"
+    "says": "the official MCP Registry lists Moonbeam's network.moonbeam.next/paid-calls as active (published 2026-11-10; its remote answers tools/list with 3 tools), beside the operator's own two entries; Glama mirrors",
+    "read_on": "2026-11-11"
    },
    "take": {
     "register": "claimed",
@@ -286,8 +286,8 @@ export const VENUE_REGISTER: RegisterSnapshot = {
    "list": {
     "register": "live",
     "proof": "proven",
-    "says": "the package is on npm; the node directory does not list it",
-    "read_on": "2026-11-06"
+    "says": "the package is on npm and the community node directory lists it (2.0.1, since 2026-11-06)",
+    "read_on": "2026-11-09"
    },
    "take": {
     "register": "claimed",
