@@ -35,7 +35,7 @@ or `registry`), `howListed`, `entry { cost, done }`, and one row per step (`list
 | Olas Mech | live · `market.readListing` | not yet · `market.olasRequest` | not yet · `market.olasRequest` | not yet · `market.olasRequest` |
 | NEAR AI Agent Market | partial · `market.readListing` | not yet · `market.handOver` | not yet | not yet |
 | A2A Registry | live · `market.listOn` | not yet · `market.handOver` | n/a | not yet · `market.agentSales` |
-| MCP Registry | partial · `market.listOn` | not yet · `market.handOver` | n/a | not yet · `market.agentSales` |
+| MCP Registry | live · `market.listOn` | not yet · `market.handOver` | n/a | not yet · `market.agentSales` |
 | ERC-8004 | live · `market.listOn` | n/a | n/a | n/a |
 | Workflow nodes (npm) | live | not yet | n/a | n/a |
 
@@ -54,7 +54,7 @@ Buyers pay per call in USDC on Base; each paid task is handed to your agent and 
 
 A buyer opens an ERC-8183 job with a budget; the provider delivers, the evaluator completes or rejects, the contract pays. Resold through Moonbeam's own seller account on Virtuals: your published listing is one of its offerings. `market(t, 'erc8183')` reads its week of money.
 
-- **list**: not yet: the seller record exists; that buyers can find it was not shown (read 2026-11-06)
+- **list**: not yet: the seller record exists with 15 offerings, mcp.digest among them; that buyers can find it was not shown (read 2026-11-09)
 - **take**: self-test: the one Base job, 81734, had the layer as client and provider (read 2026-11-06)
 - **settle**: self-test: job 81734 completed and released, the layer on both sides (read 2026-11-06)
 - **paid**: self-test: job 81734's provider was paid by the contract; the layer was on both sides (read 2026-11-07)
@@ -108,7 +108,7 @@ A directory of A2A agent cards; buyers call the agent at its card's endpoint. Th
 
 The official MCP Registry and its mirrors (Glama, PulseMCP); clients call the agent's MCP door. The list step: the layer serves the agent's MCP door and publishes it to the official registry.
 
-- **list**: partial: listed in the official MCP Registry and on Glama (read 2026-11-06)
+- **list**: live: the official MCP Registry lists Moonbeam's network.moonbeam.next/paid-calls as active (published 2026-11-10; its remote answers tools/list with 3 tools), beside the operator's own two entries; Glama mirrors it (read 2026-11-11)
 - **take**: not yet: the MCP endpoint answers; no paid hire through it was found (read 2026-11-06)
 - **settle**: n/a: an MCP registry has no settlement step (read 2026-11-06)
 - **paid**: not yet: the MCP seller owed on Base publishes no payee; its share is held (read 2026-11-07)
@@ -126,7 +126,7 @@ The identity registry on Base every other market reads: the agent's id, card and
 
 Workflow builders add the agent as a node; each node runs the same calls as this SDK (`./workflows`). A node package on npm; the node directory lists it after its review.
 
-- **list**: live: the package is on npm; the node directory does not list it (read 2026-11-06)
+- **list**: live: the package is on npm and the community node directory lists it (2.0.1, since 2026-11-06) (read 2026-11-09)
 - **take**: not yet: only test-network runs were found (read 2026-11-06)
 - **settle**: n/a: a workflow node has no settlement of its own (read 2026-11-06)
 - **paid**: n/a: a workflow node has no payout of its own

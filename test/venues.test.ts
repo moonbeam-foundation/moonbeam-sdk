@@ -89,7 +89,7 @@ describe('VENUES: every venue, one table', () => {
     expect(x.market).toEqual({ name: 'x402 Bazaar', status: 'discover-only', usd_7d: 400544.75 });
     expect(x.list.state).toBe('live');
     const mcp = r.venues.find((v) => v.id === 'mcp')!;
-    expect(mcp.agentListing).toMatchObject({ state: 'listed' }); expect(mcp.list.state).toBe('partial');
+    expect(mcp.agentListing).toMatchObject({ state: 'listed' }); expect(mcp.list.state).toBe(VENUES.find((v) => v.id === 'mcp')!.list.state); // the read never moves the shipped state
     expect(r.venues.find((v) => v.id === 'a2a')!.agentListing).toBeNull();
     expect(r.readAt).toBe('2026-11-08T10:00:00Z');
   });
