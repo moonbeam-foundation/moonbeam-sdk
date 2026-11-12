@@ -3,7 +3,16 @@ import type { RegisterSnapshot } from './venues.js';
 
 export const VENUE_REGISTER: RegisterSnapshot = {
  "source": "_BUSINESS_AGENT_v1_",
- "read_on": "2026-11-07",
+ "read_on": "2026-11-11",
+ "cohorts": {
+  "source": "LISTED_REGISTER_v1",
+  "approved_on": "2026-11-11",
+  "evidence_of": "layer",
+  "ids": [
+   "layer",
+   "moonbeam"
+  ]
+ },
  "markets": [
   {
    "id": "x402-base",
@@ -34,6 +43,32 @@ export const VENUE_REGISTER: RegisterSnapshot = {
     "proof": "claimed",
     "says": "the payout releaser is armed on Base since 2026-10-16 and has sent nothing: its 2 owed sales are held, their seller publishes no payee",
     "read_on": "2026-11-07"
+   },
+   "cohorts": {
+    "layer": {
+     "listings": 1,
+     "directories": [
+      "CDP x402 Bazaar",
+      "agentic.market",
+      "x402scan",
+      "Ultravioleta discovery",
+      "PayAI discovery"
+     ],
+     "shared": null,
+     "closed": null,
+     "wanted": 1,
+     "since": "2026-11-11"
+    },
+    "moonbeam": {
+     "listings": 1,
+     "directories": [
+      "x402scan"
+     ],
+     "shared": null,
+     "closed": null,
+     "wanted": 2,
+     "since": "2026-11-11"
+    }
    }
   },
   {
@@ -46,8 +81,8 @@ export const VENUE_REGISTER: RegisterSnapshot = {
    "list": {
     "register": "claimed",
     "proof": "claimed",
-    "says": "the seller record exists; that buyers can find it was not shown",
-    "read_on": "2026-11-06"
+    "says": "the seller record exists with 15 offerings, mcp.digest among them; that buyers can find it was not shown",
+    "read_on": "2026-11-09"
    },
    "take": {
     "register": "self_test",
@@ -65,6 +100,24 @@ export const VENUE_REGISTER: RegisterSnapshot = {
     "proof": "self_test",
     "says": "job 81734's provider was paid by the contract; the layer was on both sides",
     "read_on": "2026-11-07"
+   },
+   "cohorts": {
+    "layer": {
+     "listings": 1,
+     "directories": [],
+     "shared": null,
+     "closed": null,
+     "wanted": 0,
+     "since": "2026-11-11"
+    },
+    "moonbeam": {
+     "listings": 0,
+     "directories": [],
+     "shared": null,
+     "closed": null,
+     "wanted": 1,
+     "since": null
+    }
    }
   },
   {
@@ -96,6 +149,24 @@ export const VENUE_REGISTER: RegisterSnapshot = {
     "proof": "claimed",
     "says": "no memo-ACP payment to a seller of the layer was found",
     "read_on": "2026-11-07"
+   },
+   "cohorts": {
+    "layer": {
+     "listings": 0,
+     "directories": [],
+     "shared": null,
+     "closed": "closed to new providers",
+     "wanted": 0,
+     "since": null
+    },
+    "moonbeam": {
+     "listings": 0,
+     "directories": [],
+     "shared": null,
+     "closed": "closed to new providers",
+     "wanted": 0,
+     "since": null
+    }
    }
   },
   {
@@ -127,6 +198,24 @@ export const VENUE_REGISTER: RegisterSnapshot = {
     "proof": "claimed",
     "says": "no BitAgent payment to a seller of the layer was found",
     "read_on": "2026-11-07"
+   },
+   "cohorts": {
+    "layer": {
+     "listings": 0,
+     "directories": [],
+     "shared": null,
+     "closed": null,
+     "wanted": 1,
+     "since": null
+    },
+    "moonbeam": {
+     "listings": 0,
+     "directories": [],
+     "shared": null,
+     "closed": null,
+     "wanted": 1,
+     "since": null
+    }
    }
   },
   {
@@ -158,6 +247,24 @@ export const VENUE_REGISTER: RegisterSnapshot = {
     "proof": "claimed",
     "says": "no delivery of the layer's mech, so no payment to it",
     "read_on": "2026-11-07"
+   },
+   "cohorts": {
+    "layer": {
+     "listings": 1,
+     "directories": [],
+     "shared": null,
+     "closed": null,
+     "wanted": 0,
+     "since": "2026-11-11"
+    },
+    "moonbeam": {
+     "listings": 0,
+     "directories": [],
+     "shared": null,
+     "closed": null,
+     "wanted": 1,
+     "since": null
+    }
    }
   },
   {
@@ -185,7 +292,25 @@ export const VENUE_REGISTER: RegisterSnapshot = {
     "says": "no NEAR market payment to the layer was found",
     "read_on": "2026-11-06"
    },
-   "paid": null
+   "paid": null,
+   "cohorts": {
+    "layer": {
+     "listings": 9,
+     "directories": [],
+     "shared": null,
+     "closed": null,
+     "wanted": 0,
+     "since": "2026-11-11"
+    },
+    "moonbeam": {
+     "listings": 0,
+     "directories": [],
+     "shared": null,
+     "closed": null,
+     "wanted": 1,
+     "since": null
+    }
+   }
   },
   {
    "id": "a2a",
@@ -216,6 +341,29 @@ export const VENUE_REGISTER: RegisterSnapshot = {
     "proof": "claimed",
     "says": "the A2A doer whose share is held is the layer's own wallet; no outside A2A doer was paid",
     "read_on": "2026-11-07"
+   },
+   "cohorts": {
+    "layer": {
+     "listings": 2,
+     "directories": [
+      "LocalMark",
+      "Agentropolis"
+     ],
+     "shared": null,
+     "closed": null,
+     "wanted": 1,
+     "since": "2026-11-11"
+    },
+    "moonbeam": {
+     "listings": 1,
+     "directories": [
+      "LocalMark"
+     ],
+     "shared": null,
+     "closed": null,
+     "wanted": 1,
+     "since": "2026-11-11"
+    }
    }
   },
   {
@@ -226,10 +374,10 @@ export const VENUE_REGISTER: RegisterSnapshot = {
     "what": "free to publish"
    },
    "list": {
-    "register": "partial",
+    "register": "live",
     "proof": "proven",
-    "says": "listed in the official MCP Registry and on Glama",
-    "read_on": "2026-11-06"
+    "says": "the official MCP Registry lists Moonbeam's network.moonbeam.next/paid-calls as active (published 2026-11-10; its remote answers tools/list with 3 tools), beside the operator's own two entries; Glama mirrors",
+    "read_on": "2026-11-11"
    },
    "take": {
     "register": "claimed",
@@ -247,6 +395,26 @@ export const VENUE_REGISTER: RegisterSnapshot = {
     "proof": "claimed",
     "says": "the MCP seller owed on Base publishes no payee; its share is held",
     "read_on": "2026-11-07"
+   },
+   "cohorts": {
+    "layer": {
+     "listings": 4,
+     "directories": [
+      "punkpeye/awesome-remote-mcp-servers"
+     ],
+     "shared": null,
+     "closed": null,
+     "wanted": 2,
+     "since": "2026-11-11"
+    },
+    "moonbeam": {
+     "listings": 2,
+     "directories": [],
+     "shared": null,
+     "closed": null,
+     "wanted": 1,
+     "since": "2026-11-11"
+    }
    }
   },
   {
@@ -274,7 +442,28 @@ export const VENUE_REGISTER: RegisterSnapshot = {
     "says": "an identity registry settles nothing",
     "read_on": "2026-11-06"
    },
-   "paid": null
+   "paid": null,
+   "cohorts": {
+    "layer": {
+     "listings": 1,
+     "directories": [
+      "8004scan",
+      "QuickNode ERC-8004 Explorer"
+     ],
+     "shared": null,
+     "closed": null,
+     "wanted": 1,
+     "since": "2026-11-11"
+    },
+    "moonbeam": {
+     "listings": 0,
+     "directories": [],
+     "shared": "the layer's one ERC-8004 agent, read for Moonbeam until Moonbeam registers its own",
+     "closed": null,
+     "wanted": 0,
+     "since": "2026-11-11"
+    }
+   }
   },
   {
    "id": "workflow-nodes",
@@ -286,8 +475,8 @@ export const VENUE_REGISTER: RegisterSnapshot = {
    "list": {
     "register": "live",
     "proof": "proven",
-    "says": "the package is on npm; the node directory does not list it",
-    "read_on": "2026-11-06"
+    "says": "the package is on npm and the community node directory lists it (2.0.1, since 2026-11-06)",
+    "read_on": "2026-11-09"
    },
    "take": {
     "register": "claimed",
@@ -301,7 +490,25 @@ export const VENUE_REGISTER: RegisterSnapshot = {
     "says": "a workflow node has no settlement of its own",
     "read_on": "2026-11-06"
    },
-   "paid": null
+   "paid": null,
+   "cohorts": {
+    "layer": {
+     "listings": 1,
+     "directories": [],
+     "shared": null,
+     "closed": null,
+     "wanted": 0,
+     "since": "2026-11-11"
+    },
+    "moonbeam": {
+     "listings": 0,
+     "directories": [],
+     "shared": null,
+     "closed": null,
+     "wanted": 1,
+     "since": null
+    }
+   }
   }
  ]
 };

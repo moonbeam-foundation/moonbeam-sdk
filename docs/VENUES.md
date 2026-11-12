@@ -5,7 +5,8 @@
 ## How a state is read
 
 Each step's state comes from the Moonbeam product's market register (`src/market/venues-register.json`, refreshed with
-`node scripts/gen-venues.mjs --from <register>`; `npm run check:venues` keeps the module in step). The SDK never sets a state.
+`node scripts/gen-venues.mjs --from <register>`; `npm run check:venues` keeps the module in step). Those states were read for
+the layer's own listings, one cohort; each cohort's own states are under [Per cohort](#per-cohort). The SDK never sets a state.
 It maps the register's word one way:
 
 | Register | State | Means |
@@ -23,6 +24,7 @@ named in `unread`, and the shipped table answers for it. A live read never upgra
 Fields of a venue: `id`, `name`, `marketId` (the id `market(t, id)` takes), `does`, `listedBy` (`list-step`, `venue-account`
 or `registry`), `howListed`, `entry { cost, done }`, and one row per step (`list`, `take`, `settle`, `paid`), each
 `{ state, register, says, read_on, call }`. `call` is `<module>.<export>`, or null where no SDK call does that step.
+`cohorts` holds each cohort's own `list`, `take` and `settle` (see [Per cohort](#per-cohort)).
 
 ## Every venue
 
@@ -35,9 +37,41 @@ or `registry`), `howListed`, `entry { cost, done }`, and one row per step (`list
 | Olas Mech | live · `market.readListing` | not yet · `market.olasRequest` | not yet · `market.olasRequest` | not yet · `market.olasRequest` |
 | NEAR AI Agent Market | partial · `market.readListing` | not yet · `market.handOver` | not yet | not yet |
 | A2A Registry | live · `market.listOn` | not yet · `market.handOver` | n/a | not yet · `market.agentSales` |
-| MCP Registry | partial · `market.listOn` | not yet · `market.handOver` | n/a | not yet · `market.agentSales` |
+| MCP Registry | live · `market.listOn` | not yet · `market.handOver` | n/a | not yet · `market.agentSales` |
 | ERC-8004 | live · `market.listOn` | n/a | n/a | n/a |
 | Workflow nodes (npm) | live | not yet | n/a | n/a |
+
+## Per cohort
+
+The listed register holds two cohorts: `layer` (the layer's own listings, the cohort the states above were read for) and
+`moonbeam` (Moonbeam's listings, resold under the layer's licence). `venue.cohorts[cohort]` gives each its own `list`, `take`
+and `settle`, each `{ state, says, read_on }`, with `listings` (listings read on the market), `directories` (outside
+directories that show one) and `wanted` (listings still to make). `cohortOf` in `./market` is the rule, and it never borrows
+the other cohort's proof:
+
+| Rule | State |
+|---|---|
+| the market takes no new agent | **closed** |
+| the market has no such step | **n/a** |
+| no listing; the other cohort's listing stands in | **shared** |
+| no listing | **not yet** |
+| listed, the cohort the evidence was read for | the venue's state |
+| listed, another cohort | list: the venue's state, at most **partial** while a listing is still wanted; take and settle: **not yet** until a read of its own shows them |
+
+The snapshot is refreshed with `node scripts/gen-venues.mjs --listed <listed register>`.
+
+| Venue | Layer: list · take · settle | Moonbeam: list · take · settle |
+|---|---|---|
+| x402 | live · live · live | partial · not yet · not yet |
+| Virtuals ACP (ERC-8183 jobs) | not yet · self-test · self-test | not yet · not yet · not yet |
+| Virtuals memo jobs (memo-ACP) | closed · closed · closed | closed · closed · closed |
+| BitAgent | not yet · not yet · not yet | not yet · not yet · not yet |
+| Olas Mech | live · not yet · not yet | not yet · not yet · not yet |
+| NEAR AI Agent Market | partial · not yet · not yet | not yet · not yet · not yet |
+| A2A Registry | live · not yet · n/a | partial · not yet · n/a |
+| MCP Registry | live · not yet · n/a | partial · not yet · n/a |
+| ERC-8004 | live · n/a · n/a | shared · n/a · n/a |
+| Workflow nodes (npm) | live · not yet · n/a | not yet · not yet · n/a |
 
 ## Each venue
 
@@ -54,7 +88,7 @@ Buyers pay per call in USDC on Base; each paid task is handed to your agent and 
 
 A buyer opens an ERC-8183 job with a budget; the provider delivers, the evaluator completes or rejects, the contract pays. Resold through Moonbeam's own seller account on Virtuals: your published listing is one of its offerings. `market(t, 'erc8183')` reads its week of money.
 
-- **list**: not yet: the seller record exists; that buyers can find it was not shown (read 2026-11-06)
+- **list**: not yet: the seller record exists with 15 offerings, mcp.digest among them; that buyers can find it was not shown (read 2026-11-09)
 - **take**: self-test: the one Base job, 81734, had the layer as client and provider (read 2026-11-06)
 - **settle**: self-test: job 81734 completed and released, the layer on both sides (read 2026-11-06)
 - **paid**: self-test: job 81734's provider was paid by the contract; the layer was on both sides (read 2026-11-07)
@@ -108,7 +142,7 @@ A directory of A2A agent cards; buyers call the agent at its card's endpoint. Th
 
 The official MCP Registry and its mirrors (Glama, PulseMCP); clients call the agent's MCP door. The list step: the layer serves the agent's MCP door and publishes it to the official registry.
 
-- **list**: partial: listed in the official MCP Registry and on Glama (read 2026-11-06)
+- **list**: live: the official MCP Registry lists Moonbeam's network.moonbeam.next/paid-calls as active (published 2026-11-10; its remote answers tools/list with 3 tools), beside the operator's own two entries; Glama mirrors (read 2026-11-11)
 - **take**: not yet: the MCP endpoint answers; no paid hire through it was found (read 2026-11-06)
 - **settle**: n/a: an MCP registry has no settlement step (read 2026-11-06)
 - **paid**: not yet: the MCP seller owed on Base publishes no payee; its share is held (read 2026-11-07)
@@ -126,7 +160,7 @@ The identity registry on Base every other market reads: the agent's id, card and
 
 Workflow builders add the agent as a node; each node runs the same calls as this SDK (`./workflows`). A node package on npm; the node directory lists it after its review.
 
-- **list**: live: the package is on npm; the node directory does not list it (read 2026-11-06)
+- **list**: live: the package is on npm and the community node directory lists it (2.0.1, since 2026-11-06) (read 2026-11-09)
 - **take**: not yet: only test-network runs were found (read 2026-11-06)
 - **settle**: n/a: a workflow node has no settlement of its own (read 2026-11-06)
 - **paid**: n/a: a workflow node has no payout of its own

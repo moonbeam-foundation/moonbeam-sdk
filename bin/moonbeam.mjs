@@ -22,6 +22,9 @@ if (cmd === 'venues') {
   console.log(`every venue, as the register read it on ${VENUES_READ_ON}`);
   console.log(`${'venue'.padEnd(30)}${'list'.padEnd(32)}${'take a job'.padEnd(32)}${'settle'.padEnd(32)}paid`);
   for (const v of VENUES) console.log(`${v.name.padEnd(30)}${cell(v.list)}${cell(v.take)}${cell(v.settle)}${v.paid.state}${v.paid.call ? ` ${v.paid.call}` : ''}`);
+  // _VENUE_TRUTH_v1_: each cohort's own list · take · settle
+  console.log('\neach cohort: list · take · settle');
+  for (const v of VENUES) console.log(`${v.name.padEnd(30)}${Object.entries(v.cohorts).map(([c, x]) => `${c}: ${x.list.state} · ${x.take.state} · ${x.settle.state}`.padEnd(44)).join('')}`);
   console.log('\none sale, stop by stop');
   for (const s of SALE_STOPS) console.log(`${String(s.order).padStart(2)} ${s.label.padEnd(20)} ${s.call.padEnd(26)} ${s.route ?? 'offline'}`);
   process.exit(0);
