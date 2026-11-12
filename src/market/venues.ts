@@ -6,6 +6,7 @@ import type { OnboardTransport } from '../onboard/index.js';
 import { VENUE_REGISTER } from './venues-data.js';
 import { listStatus, type ListMarket, type ListRow } from './journey.js';
 import { markets } from './index.js';
+import { cohortsOf, type CohortFacts, type CohortId, type VenueCohort } from './cohorts.js';
 
 /** A step's state, said plainly: it runs for outside money (live), in part, only with Moonbeam on both sides (self-test), not yet, or the market has no such step (n/a). */
 export type VenueState = 'live' | 'partial' | 'self-test' | 'not yet' | 'n/a';
@@ -18,8 +19,12 @@ export const VENUE_STEPS: readonly VenueStep[] = Object.freeze(['list', 'take', 
 export type SdkCall = `${'market' | 'jobs' | 'resale'}.${string}`;
 
 export type RegisterStep = { register: RegisterWord; proof: RegisterWord; says: string | null; read_on: string | null };
-export type RegisterMarket = { id: string; entry: { cost: string; done: boolean; what: string | null }; list: RegisterStep; take: RegisterStep; settle: RegisterStep; paid: { proof: RegisterWord; says: string; read_on: string } | null };
-export type RegisterSnapshot = { source: string | null; read_on: string | null; markets: RegisterMarket[] };
+export type RegisterMarket = { id: string; entry: { cost: string; done: boolean; what: string | null }; list: RegisterStep; take: RegisterStep; settle: RegisterStep; paid: { proof: RegisterWord; says: string; read_on: string } | null;
+  /** _VENUE_TRUTH_v1_: what the listed register holds for each cohort on this market */
+  cohorts?: Partial<Record<CohortId, CohortFacts>> };
+/** _VENUE_TRUTH_v1_: where the cohorts' facts come from, and which cohort the register's evidence was read for. */
+export type RegisterCohorts = { source: string | null; approved_on: string | null; evidence_of: CohortId; ids: CohortId[] };
+export type RegisterSnapshot = { source: string | null; read_on: string | null; cohorts?: RegisterCohorts; markets: RegisterMarket[] };
 
 export const VENUE_IDS = Object.freeze(['x402-base', 'erc8183-base', 'memoacp-base', 'bitagent-base', 'olas-base', 'near-agent-market', 'a2a', 'mcp', 'erc8004', 'workflow-nodes'] as const);
 export type VenueId = (typeof VENUE_IDS)[number];
@@ -41,9 +46,14 @@ export type Venue = {
   /** what entering it costs, as the register reads it */
   entry: { cost: string; done: boolean };
   list: VenueStepRow; take: VenueStepRow; settle: VenueStepRow; paid: VenueStepRow;
+  /**
+   * _VENUE_TRUTH_v1_: each cohort's own list / take / settle (./cohorts.ts). The rows above were read for one cohort
+   * (`VENUE_EVIDENCE_OF`); a cohort's own row says where it is listed, shared, closed or not yet.
+   */
+  cohorts: Record<CohortId, VenueCohort>;
 };
 
-type Static = Omit<Venue, 'entry' | VenueStep> & { calls: Record<VenueStep, SdkCall | null>; na?: Partial<Record<VenueStep, string>> };
+type Static = Omit<Venue, 'entry' | 'cohorts' | VenueStep> & { calls: Record<VenueStep, SdkCall | null>; na?: Partial<Record<VenueStep, string>> };
 const S: Record<VenueId, Static> = {
   'x402-base': { id: 'x402-base', name: 'x402', marketId: 'x402', listedBy: 'registry',
     does: 'Buyers pay per call in USDC on Base; each paid task is handed to your agent and settled through the facilitator.',
@@ -87,6 +97,9 @@ const S: Record<VenueId, Static> = {
     calls: { list: null, take: null, settle: null, paid: null }, na: { settle: 'a workflow node has no settlement of its own', paid: 'a workflow node has no payout of its own' } },
 };
 
+/** _VENUE_TRUTH_v1_: the cohort the register's evidence (each venue's list / take / settle / paid) was read for. */
+export const VENUE_EVIDENCE_OF: CohortId = VENUE_REGISTER.cohorts?.evidence_of ?? 'layer';
+
 const WORD: Record<string, VenueState> = { live: 'live', proven: 'live', partial: 'partial', self_test: 'self-test', claimed: 'not yet', contradicted: 'not yet', none: 'n/a' };
 const stateOf = (w: RegisterWord): VenueState => WORD[w] ?? 'not yet';
 
@@ -99,7 +112,8 @@ function venueOf(s: Static, r: RegisterMarket): Venue {
     return { state, register: reg.register, says: reg.says ?? na ?? null, read_on: reg.read_on, call: state === 'n/a' ? null : s.calls[k] };
   };
   const { calls: _c, na: _n, ...v } = s;
-  return { ...v, entry: { cost: r.entry.cost, done: r.entry.done }, list: row('list'), take: row('take'), settle: row('settle'), paid: row('paid') };
+  const steps = { list: row('list'), take: row('take'), settle: row('settle'), paid: row('paid') };
+  return { ...v, entry: { cost: r.entry.cost, done: r.entry.done }, ...steps, cohorts: cohortsOf(r.cohorts, steps, VENUE_EVIDENCE_OF) };
 }
 
 /** Every venue, as shipped: the register's states and the date it was read (`VENUES_READ_ON`). */

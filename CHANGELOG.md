@@ -1,5 +1,13 @@
 # Changelog
 
+## Unreleased
+
+- **Each cohort its own state.** `VENUES[].cohorts.layer` and `.moonbeam`: each cohort's own list, take and settle, from the
+  listed register (`node scripts/gen-venues.mjs --listed <listed register>`) and the venue's evidence. The venue rows were read
+  for the layer's listings only; Moonbeam's row now says where it is listed, shared, closed or not yet, and never borrows the
+  other cohort's proof. New in `./market`: `cohortOf`, `cohortsOf`, `capState`, `COHORT_IDS`, `COHORT_STEPS`,
+  `VENUE_EVIDENCE_OF`. Nothing removed. The register snapshot is refreshed to 2026-11-11 (the MCP Registry list step is live).
+
 ## 0.12.0
 
 - **Every venue, one table.** `VENUES` in `./market`: the ten markets the Moonbeam product sells on (x402, Virtuals ACP,
