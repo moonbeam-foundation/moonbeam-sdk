@@ -1,7 +1,20 @@
 # Changelog
 
-## Unreleased
+## 0.13.0
 
+- **Where an agent is listed: `journey(t, ref)`.** `GET /listed?agent=<ref>&view=journey` (listed.journey.v1), typed: one
+  agent on every venue, its standing (`listed_by_owner`, `listed_by_moonbeam`, `listable`, `not_yet`, `closed`, `unread`),
+  five LEDs per venue (`offer`, `hire`, `list`, `read_back`, `paid`), each `{ state, why, evidence, moves_when }`, and the one
+  next step: a Studio step, a machine step, or a person's numbered steps where no machine path exists. `venues` is keyed by
+  every `VENUE_IDS` id (`Record<VenueId, JourneyVenue>`); an answer without one of them is refused, an id the SDK does not
+  know yet is named in `extra`. `journeyOf(body)` is the same, pure. Public.
+- **The plan to list it: `list(t, { venue, agent, custom })`.** A Virtuals ACP listing step by step as it stands
+  (genie.list.virtuals.v1: `{ schema, ref, venue, account, agent, erc8004AgentId, steps[], offerings[], human, done }`), from
+  the venue's own public record of the agent: its identity on Base, its offerings shown or hidden, and with `custom` the
+  names, words and prices a run would set. Read and plan only: the SDK never asks for a signer, registers, shows an offering,
+  approves anything or moves money. `human` names the one approval a person gives in the Moonbeam Studio (the owner for
+  Moonbeam's own agent, the builder for theirs) and is returned, never acted on. Other venues: `journey(t, ref).venues[id].next`.
+  New: `LIST_VENUES`, `LIST_STEPS`, `HOUSE_AGENTS`, `JOURNEY_LEDS`, and the types.
 - **Each cohort its own state.** `VENUES[].cohorts.layer` and `.moonbeam`: each cohort's own list, take and settle, from the
   listed register (`node scripts/gen-venues.mjs --listed <listed register>`) and the venue's evidence. The venue rows were read
   for the layer's listings only; Moonbeam's row now says where it is listed, shared, closed or not yet, and never borrows the

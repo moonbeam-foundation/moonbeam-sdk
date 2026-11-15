@@ -62,6 +62,19 @@ await planOffers(t);                               // builder 99, team 199, prot
 `planOffers` reads the layer's 402 answer, so nothing is minted or paid. `agentSales(t, 'mcp.digest')` reads what an agent's
 class wall sold, by day and buying market, and where each seller share stands.
 
+### Where it is listed, and the plan to list it
+
+```ts
+import { transportFromEnv, journey, list } from '@moonbeam-foundation/sdk/market';
+
+const j = await journey(t, '8453:1170141');        // every venue: standing, five LEDs (offer, hire, list, read back, paid), next step
+j.venues['erc8183-base'].leds.list;                // { state: 'on', why, evidence: [{ kind, ref, read_at }], moves_when }
+await list(t, { venue: 'erc8183-base', agent: 'moonbeam' });   // the Virtuals ACP listing step by step, its offerings, done
+```
+
+Both only read. `list` plans: it never asks for a signer, registers or shows an offering, and its `human` item (the one
+approval a person gives in the Moonbeam Studio) is returned, never acted on.
+
 ## One sale, stop by stop
 
 `SALE_STOPS` pairs the Studio's sale tour 1:1 with the SDK: 17 stops, each with exactly one call.

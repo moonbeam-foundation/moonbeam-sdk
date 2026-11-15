@@ -48,6 +48,9 @@
  *   SALE (./sale.ts: the reads after the money is in)
  *   saleLedger · payoutQueues · vaultPolicy · claimablePayouts · saleRecord   GET /resale · /pipe/queues · /vault/policy · /pipe/claimable · /root
  *   VENUES (./venues.ts) and SALE_STOPS (./sale-stops.ts): every venue in one table, and one sale stop by stop, each with its call
+ *   WHERE IT IS LISTED (./listed.ts: reads and plans only)
+ *   journey(t, ref)               GET  /listed?view=journey  one agent on every venue: standing, five LEDs (why, evidence, moves_when), next step
+ *   list(t, { venue, agent })     the venue's own record     a listing's steps as they stand (genie.list.virtuals.v1), its one human item
  */
 import type { OnboardTransport } from '../onboard/index.js';
 import { MarketError, call, needKey, query, seg } from './http.js';
@@ -274,4 +277,7 @@ export type { Venue, VenueId, VenueLive, VenueState, VenueStep, VenueStepRow, Li
 export { COHORT_IDS, COHORT_STEPS, cohortOf, cohortsOf, capState, STEP_FEATURE, MARK_STATE, markOf } from './cohorts.js';
 export type { CohortId, CohortState, CohortStep, CohortFacts, CohortStepRow, CohortSource, VenueCohort, FeatureId, FeatureMark, FeatureRead, JourneyRead } from './cohorts.js';
 export { SALE_STOPS, saleStop } from './sale-stops.js';
+// 0.13.0: where an agent is listed (journey) and the plan to list it (list): reads only
+export { JOURNEY_SCHEMA, JOURNEY_LEDS, journey, journeyOf, LIST_SCHEMA, LIST_VENUES, LIST_STEPS, HOUSE_AGENTS, list } from './listed.js';
+export type { Journey, JourneyVenue, JourneyLed, JourneyLight, JourneyEvidence, JourneyStanding, JourneyAct, JourneyNext, JourneyHuman, JourneyPrefill, LedState, ListPlan, ListStep, ListStepId, ListStepState, ListWho, ListOffering, ListHuman, ListCustom, ListVenue } from './listed.js';
 export type { SaleStop, StopNeeds, StopHop } from './sale-stops.js';

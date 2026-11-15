@@ -1,0 +1,708 @@
+{
+ "schema": "listed.journey.v1",
+ "rule": "LISTED_JOURNEY_v1",
+ "agent": {
+  "ref": "8453:1170141",
+  "name": "text digest",
+  "kind": "house",
+  "class": "mcp.digest",
+  "page": {
+   "state": "live",
+   "read_at": "2026-11-14T23:56:38.945Z"
+  }
+ },
+ "read_at": "2026-11-14T23:56:42.689Z",
+ "headline": {
+  "text": "text digest",
+  "from": "class",
+  "resource": null,
+  "class": "mcp.digest",
+  "class_mismatch": []
+ },
+ "checks": {
+  "probe": {
+   "state": "unread",
+   "why": "a house agent is checked by its own door; no probe read is in these reads",
+   "evidence": [],
+   "moves_when": "its seller profile carries a probe read"
+  },
+  "grade": {
+   "state": "unread",
+   "why": "no grade read for a house agent in these reads",
+   "evidence": [],
+   "moves_when": "an outside buyer grades a delivered job"
+  }
+ },
+ "venues": [
+  {
+   "venue_id": "x402-base",
+   "venue": "x402",
+   "mark": "x402",
+   "leds": {
+    "offer": {
+     "state": "partial",
+     "why": "Moonbeam sells on x402; it does not carry this agent yet",
+     "evidence": [
+      {
+       "kind": "register_row",
+       "ref": "listed:x402-base/moonbeam",
+       "read_at": "2026-11-14T23:56:33.457Z"
+      }
+     ],
+     "moves_when": "Moonbeam lists it here"
+    },
+    "hire": {
+     "state": "off",
+     "why": "not listed on x402, so nobody can hire it there",
+     "evidence": [],
+     "moves_when": "it is listed here"
+    },
+    "list": {
+     "state": "off",
+     "why": "not listed here yet; Moonbeam can list it",
+     "evidence": [],
+     "moves_when": "the Studio step lists it and it reads back"
+    },
+    "read_back": {
+     "state": "off",
+     "why": "nothing to read back: not listed here",
+     "evidence": [],
+     "moves_when": "it is listed here and reads back"
+    },
+    "paid": {
+     "state": "off",
+     "why": "not listed on x402",
+     "evidence": [],
+     "moves_when": "it is listed here and a buyer pays"
+    }
+   },
+   "standing": "listable",
+   "market": {
+    "usd_7d": 426436.76327,
+    "payments_7d": 1130113,
+    "buyers_7d": 11520,
+    "sellers": 4590,
+    "from": "venue_sides",
+    "read_at": "2026-11-14T18:24:02.636Z"
+   },
+   "next": {
+    "by": "studio",
+    "act": "list",
+    "studio": {
+     "step": "listed.list",
+     "chat": "list",
+     "label": "List it behind Moonbeam's door on x402",
+     "prefill": {
+      "ref": "8453:1170141",
+      "class": "mcp.digest",
+      "resource": null,
+      "venue": "x402-base",
+      "step": "listed.list"
+     }
+    },
+    "why": "Moonbeam lists it here from the Studio: list it behind moonbeam's door on x402"
+   },
+   "why": "Moonbeam sells on x402 and can list it there"
+  },
+  {
+   "venue_id": "erc8183-base",
+   "venue": "Virtuals ACP",
+   "mark": "virtuals",
+   "leds": {
+    "offer": {
+     "state": "on",
+     "why": "Moonbeam's offer carries it on Virtuals ACP",
+     "evidence": [
+      {
+       "kind": "virtuals.agent",
+       "ref": "virtuals:Moonbeam text digest",
+       "read_at": "2026-11-14T23:56:42.870Z"
+      }
+     ],
+     "moves_when": "the market drops the offer on a later read"
+    },
+    "hire": {
+     "state": "off",
+     "why": "a buyer opens a job on an offering; the price is held in escrow",
+     "evidence": [
+      {
+       "kind": "feature_cell",
+       "ref": "erc8183-base/hire",
+       "read_at": "2026-11-14T20:18:28.182Z"
+      }
+     ],
+     "moves_when": "list first: owner: in one browser session approve the add-signer link, then say yes to its ERC-8004 registration on Base; the machine then shows the four offerings and runs the sandbox jobs"
+    },
+    "list": {
+     "state": "on",
+     "why": "Moonbeam's Virtuals agent shows it as the offering \"Moonbeam text digest\"",
+     "evidence": [
+      {
+       "kind": "virtuals.agent",
+       "ref": "virtuals:Moonbeam text digest",
+       "read_at": "2026-11-14T23:56:42.870Z"
+      }
+     ],
+     "moves_when": "the listing reads back absent"
+    },
+    "read_back": {
+     "state": "on",
+     "why": "the market and the read agree",
+     "evidence": [
+      {
+       "kind": "virtuals.agent",
+       "ref": "virtuals:Moonbeam text digest",
+       "read_at": "2026-11-14T23:56:42.870Z"
+      }
+     ],
+     "moves_when": "the listing reads back absent"
+    },
+    "paid": {
+     "state": "unread",
+     "why": "its seller profile counts outside jobs, not money per market",
+     "evidence": [],
+     "moves_when": "a per-market paid read exists for it"
+    }
+   },
+   "standing": "listed_by_moonbeam",
+   "proof": {
+    "kind": "virtuals.agent",
+    "url": "https://api.acp.virtuals.io/agents/01a1cc7f-97ae-74da-8f87-b25514174a22",
+    "ref": "virtuals:Moonbeam text digest",
+    "read_at": "2026-11-14T23:56:42.870Z"
+   },
+   "market": {
+    "usd_7d": 0.86,
+    "payments_7d": 182,
+    "buyers_7d": null,
+    "sellers": 9,
+    "from": "venue_sides",
+    "read_at": "2026-11-14T18:24:02.636Z"
+   },
+   "next": {
+    "by": "studio",
+    "act": "hire",
+    "studio": {
+     "step": "listed.hire",
+     "chat": "suite",
+     "label": "Walk a buy of it on Virtuals ACP",
+     "prefill": {
+      "ref": "8453:1170141",
+      "class": "mcp.digest",
+      "resource": null,
+      "venue": "erc8183-base",
+      "step": "listed.hire"
+     }
+    },
+    "why": "listed already; a walked buy lights hire"
+   },
+   "why": "Moonbeam's Virtuals agent shows it as the offering \"Moonbeam text digest\""
+  },
+  {
+   "venue_id": "memoacp-base",
+   "venue": "Virtuals memo jobs",
+   "mark": "memo",
+   "leds": {
+    "offer": {
+     "state": "off",
+     "why": "Virtuals memo jobs is closed to new sellers",
+     "evidence": [],
+     "moves_when": "the market opens to new sellers again"
+    },
+    "hire": {
+     "state": "off",
+     "why": "not listed on Virtuals memo jobs, so nobody can hire it there",
+     "evidence": [],
+     "moves_when": "it is listed here"
+    },
+    "list": {
+     "state": "off",
+     "why": "Virtuals memo jobs takes no new listing",
+     "evidence": [],
+     "moves_when": "never while the market is closed"
+    },
+    "read_back": {
+     "state": "on",
+     "why": "read: Virtuals memo jobs is closed to new sellers",
+     "evidence": [
+      {
+       "kind": "register_closed",
+       "ref": "listed:memoacp-base",
+       "read_at": null
+      },
+      {
+       "kind": "venue_sides",
+       "ref": "memoacp-base",
+       "read_at": "2026-11-14T18:24:02.636Z"
+      }
+     ],
+     "moves_when": "the market opens again"
+    },
+    "paid": {
+     "state": "off",
+     "why": "not listed on Virtuals memo jobs",
+     "evidence": [],
+     "moves_when": "it is listed here and a buyer pays"
+    }
+   },
+   "standing": "closed",
+   "market": {
+    "usd_7d": 0,
+    "payments_7d": 0,
+    "buyers_7d": 0,
+    "sellers": 0,
+    "from": "venue_sides",
+    "read_at": "2026-11-14T18:24:02.636Z"
+   },
+   "next": {
+    "by": "none",
+    "act": "none",
+    "why": "nothing to take here: the market is closed to new sellers"
+   },
+   "why": "closed to new sellers: Virtuals' own docs say memo-router clients cannot reach new providers (read 2026-11-11); its buyers hire on Virtuals ACP"
+  },
+  {
+   "venue_id": "bitagent-base",
+   "venue": "BitAgent",
+   "mark": "bitagent",
+   "leds": {
+    "offer": {
+     "state": "off",
+     "why": "Moonbeam has no seat on BitAgent yet",
+     "evidence": [],
+     "moves_when": "Moonbeam's own listing on BitAgent reads back live"
+    },
+    "hire": {
+     "state": "off",
+     "why": "not listed on BitAgent, so nobody can hire it there",
+     "evidence": [],
+     "moves_when": "it is listed here"
+    },
+    "list": {
+     "state": "off",
+     "why": "Moonbeam has no seat on BitAgent yet, so the builder lists it from its own sign-in",
+     "evidence": [],
+     "moves_when": "a machine path to list it here opens"
+    },
+    "read_back": {
+     "state": "off",
+     "why": "nothing to read back: not listed here",
+     "evidence": [],
+     "moves_when": "it is listed here and reads back"
+    },
+    "paid": {
+     "state": "off",
+     "why": "not listed on BitAgent",
+     "evidence": [],
+     "moves_when": "it is listed here and a buyer pays"
+    }
+   },
+   "standing": "not_yet",
+   "market": {
+    "usd_7d": 0,
+    "payments_7d": 0,
+    "buyers_7d": 0,
+    "sellers": 0,
+    "from": "venue_sides",
+    "read_at": "2026-11-14T18:24:02.636Z"
+   },
+   "next": {
+    "by": "human",
+    "act": "list",
+    "human": {
+     "where": "BitAgent",
+     "steps": [
+      "1. Sign in at BitAgent with the wallet that receives this agent's payouts",
+      "2. Create an agent on Base (chain 8453, not the default chain 56) in polling mode",
+      "3. Give it a handle, a name, a description and its skills, then add fixed-price USDC job offerings",
+      "4. Save it; listing on Base is free and needs no token",
+      "5. Open https://app.bitagent.io/"
+     ],
+     "url": "https://app.bitagent.io/",
+     "why": "Moonbeam has no seat on BitAgent yet, so the builder lists it from its own sign-in"
+    },
+    "why": "Moonbeam has no seat on BitAgent yet, so the builder lists it from its own sign-in"
+   },
+   "why": "Moonbeam has no seat on BitAgent yet, so the builder lists it from its own sign-in"
+  },
+  {
+   "venue_id": "olas-base",
+   "venue": "Olas Mech",
+   "mark": "olas",
+   "leds": {
+    "offer": {
+     "state": "off",
+     "why": "Moonbeam has no seat on Olas Mech yet",
+     "evidence": [],
+     "moves_when": "Moonbeam's own listing on Olas Mech reads back live"
+    },
+    "hire": {
+     "state": "off",
+     "why": "not listed on Olas Mech, so nobody can hire it there",
+     "evidence": [],
+     "moves_when": "it is listed here"
+    },
+    "list": {
+     "state": "off",
+     "why": "Moonbeam has no mech of its own yet, so the builder creates the mech from its own service owner wallet",
+     "evidence": [],
+     "moves_when": "a machine path to list it here opens"
+    },
+    "read_back": {
+     "state": "off",
+     "why": "nothing to read back: not listed here",
+     "evidence": [],
+     "moves_when": "it is listed here and reads back"
+    },
+    "paid": {
+     "state": "off",
+     "why": "not listed on Olas Mech",
+     "evidence": [],
+     "moves_when": "it is listed here and a buyer pays"
+    }
+   },
+   "standing": "not_yet",
+   "market": {
+    "usd_7d": 0,
+    "payments_7d": 0,
+    "buyers_7d": 0,
+    "sellers": 0,
+    "from": "venue_sides",
+    "read_at": "2026-11-14T18:24:02.636Z"
+   },
+   "next": {
+    "by": "human",
+    "act": "list",
+    "human": {
+     "where": "Olas Mech",
+     "steps": [
+      "1. From the service owner wallet on Base, create the service (ServiceManager create)",
+      "2. Activate its registration, register its agent and deploy it (three transactions)",
+      "3. Create the mech on the Mech Marketplace with the fixed-price USDC factory (bond and deposit can be 1 wei each)",
+      "4. Read it back on the marketplace once it answers its first request",
+      "5. Open https://stack.olas.network/mech-server"
+     ],
+     "url": "https://stack.olas.network/mech-server",
+     "why": "Moonbeam has no mech of its own yet, so the builder creates the mech from its own service owner wallet"
+    },
+    "why": "Moonbeam has no mech of its own yet, so the builder creates the mech from its own service owner wallet"
+   },
+   "why": "Moonbeam has no mech of its own yet, so the builder creates the mech from its own service owner wallet"
+  },
+  {
+   "venue_id": "near-agent-market",
+   "venue": "NEAR AI market",
+   "mark": "near",
+   "leds": {
+    "offer": {
+     "state": "off",
+     "why": "Moonbeam has no seat on NEAR AI market yet",
+     "evidence": [],
+     "moves_when": "Moonbeam's own listing on NEAR AI market reads back live"
+    },
+    "hire": {
+     "state": "off",
+     "why": "not listed on NEAR AI market, so nobody can hire it there",
+     "evidence": [],
+     "moves_when": "it is listed here"
+    },
+    "list": {
+     "state": "off",
+     "why": "Moonbeam's own NEAR seat is still a draft, so the builder lists it from its own builder account",
+     "evidence": [],
+     "moves_when": "a machine path to list it here opens"
+    },
+    "read_back": {
+     "state": "off",
+     "why": "nothing to read back: not listed here",
+     "evidence": [],
+     "moves_when": "it is listed here and reads back"
+    },
+    "paid": {
+     "state": "off",
+     "why": "not listed on NEAR AI market",
+     "evidence": [],
+     "moves_when": "it is listed here and a buyer pays"
+    }
+   },
+   "standing": "not_yet",
+   "next": {
+    "by": "human",
+    "act": "list",
+    "human": {
+     "where": "NEAR AI market",
+     "steps": [
+      "1. Sign in to the NEAR AI market with the builder account that owns this agent",
+      "2. Create the agent: name, handle, category, a per-call plan and its SLA",
+      "3. Set its webhook to the agent's own endpoint with the signing secret the market gives, then run the webhook test",
+      "4. Flip the agent from draft to live",
+      "5. Open https://market.near.ai/"
+     ],
+     "url": "https://market.near.ai/",
+     "why": "Moonbeam's own NEAR seat is still a draft, so the builder lists it from its own builder account"
+    },
+    "why": "Moonbeam's own NEAR seat is still a draft, so the builder lists it from its own builder account"
+   },
+   "why": "Moonbeam's own NEAR seat is still a draft, so the builder lists it from its own builder account"
+  },
+  {
+   "venue_id": "mcp",
+   "venue": "MCP Registry",
+   "mark": "mcp",
+   "leds": {
+    "offer": {
+     "state": "partial",
+     "why": "Moonbeam sells on MCP Registry; it does not carry this agent yet",
+     "evidence": [
+      {
+       "kind": "register_row",
+       "ref": "listed:mcp/moonbeam",
+       "read_at": "2026-11-14T23:56:34.339Z"
+      }
+     ],
+     "moves_when": "Moonbeam lists it here"
+    },
+    "hire": {
+     "state": "off",
+     "why": "not listed on MCP Registry, so nobody can hire it there",
+     "evidence": [],
+     "moves_when": "it is listed here"
+    },
+    "list": {
+     "state": "off",
+     "why": "drafted under Moonbeam, not published yet: it publishes when the owner releases the cohort",
+     "evidence": [],
+     "moves_when": "a machine path to list it here opens"
+    },
+    "read_back": {
+     "state": "off",
+     "why": "nothing to read back: not listed here",
+     "evidence": [],
+     "moves_when": "it is listed here and reads back"
+    },
+    "paid": {
+     "state": "off",
+     "why": "not listed on MCP Registry",
+     "evidence": [],
+     "moves_when": "it is listed here and a buyer pays"
+    }
+   },
+   "standing": "not_yet",
+   "next": {
+    "by": "none",
+    "act": "none",
+    "why": "drafted under Moonbeam, not published yet: it publishes when the owner releases the cohort"
+   },
+   "why": "drafted under Moonbeam, not published yet: it publishes when the owner releases the cohort"
+  },
+  {
+   "venue_id": "a2a",
+   "venue": "A2A Registry",
+   "mark": "a2a",
+   "leds": {
+    "offer": {
+     "state": "partial",
+     "why": "Moonbeam sells on A2A Registry; it does not carry this agent yet",
+     "evidence": [
+      {
+       "kind": "register_row",
+       "ref": "listed:a2a/moonbeam",
+       "read_at": "2026-11-14T23:56:34.370Z"
+      }
+     ],
+     "moves_when": "Moonbeam lists it here"
+    },
+    "hire": {
+     "state": "off",
+     "why": "not listed on A2A Registry, so nobody can hire it there",
+     "evidence": [],
+     "moves_when": "it is listed here"
+    },
+    "list": {
+     "state": "off",
+     "why": "drafted under Moonbeam, not published yet: it publishes when the owner releases the cohort",
+     "evidence": [],
+     "moves_when": "a machine path to list it here opens"
+    },
+    "read_back": {
+     "state": "off",
+     "why": "nothing to read back: not listed here",
+     "evidence": [],
+     "moves_when": "it is listed here and reads back"
+    },
+    "paid": {
+     "state": "off",
+     "why": "not listed on A2A Registry",
+     "evidence": [],
+     "moves_when": "it is listed here and a buyer pays"
+    }
+   },
+   "standing": "not_yet",
+   "next": {
+    "by": "none",
+    "act": "none",
+    "why": "drafted under Moonbeam, not published yet: it publishes when the owner releases the cohort"
+   },
+   "why": "drafted under Moonbeam, not published yet: it publishes when the owner releases the cohort"
+  },
+  {
+   "venue_id": "erc8004",
+   "venue": "ERC-8004",
+   "mark": "erc8004",
+   "leds": {
+    "offer": {
+     "state": "on",
+     "why": "Moonbeam's offer carries it on ERC-8004",
+     "evidence": [
+      {
+       "kind": "register_row",
+       "ref": "listed:erc8004/8453:1170141",
+       "read_at": "2026-11-14T23:56:31.848Z"
+      }
+     ],
+     "moves_when": "the market drops the offer on a later read"
+    },
+    "hire": {
+     "state": "on",
+     "why": "a buyer hires through the endpoint the identity declares (MCP here)",
+     "evidence": [
+      {
+       "kind": "feature_cell",
+       "ref": "erc8004/hire",
+       "read_at": "2026-11-14T20:18:18.874Z"
+      }
+     ],
+     "moves_when": "a buy fails on a later walk"
+    },
+    "list": {
+     "state": "on",
+     "why": "Moonbeam lists it on ERC-8004",
+     "evidence": [
+      {
+       "kind": "register_row",
+       "ref": "listed:erc8004/8453:1170141",
+       "read_at": "2026-11-14T23:56:31.848Z"
+      }
+     ],
+     "moves_when": "the listing reads back absent"
+    },
+    "read_back": {
+     "state": "on",
+     "why": "the market and the read agree",
+     "evidence": [
+      {
+       "kind": "register_row",
+       "ref": "listed:erc8004/8453:1170141",
+       "read_at": "2026-11-14T23:56:31.848Z"
+      }
+     ],
+     "moves_when": "the listing reads back absent"
+    },
+    "paid": {
+     "state": "unread",
+     "why": "its seller profile counts outside jobs, not money per market",
+     "evidence": [],
+     "moves_when": "a per-market paid read exists for it"
+    }
+   },
+   "standing": "listed_by_moonbeam",
+   "proof": {
+    "kind": "register_row",
+    "url": "https://api.8004scan.io/api/v1/agents/8453/1170141",
+    "ref": "listed:erc8004/8453:1170141",
+    "read_at": "2026-11-14T23:56:31.848Z"
+   },
+   "next": {
+    "by": "none",
+    "act": "none",
+    "why": "listed on the directory: buyers find it here and hire it on its markets"
+   },
+   "why": "Moonbeam lists it on ERC-8004"
+  },
+  {
+   "venue_id": "workflow-nodes",
+   "venue": "Workflow nodes",
+   "mark": "nodes",
+   "leds": {
+    "offer": {
+     "state": "off",
+     "why": "Moonbeam has no seat on Workflow nodes yet",
+     "evidence": [],
+     "moves_when": "Moonbeam's own listing on Workflow nodes reads back live"
+    },
+    "hire": {
+     "state": "off",
+     "why": "not listed on Workflow nodes, so nobody can hire it there",
+     "evidence": [],
+     "moves_when": "it is listed here"
+    },
+    "list": {
+     "state": "off",
+     "why": "Moonbeam does not list agents on Workflow nodes yet",
+     "evidence": [],
+     "moves_when": "a machine path to list it here opens"
+    },
+    "read_back": {
+     "state": "off",
+     "why": "nothing to read back: not listed here",
+     "evidence": [],
+     "moves_when": "it is listed here and reads back"
+    },
+    "paid": {
+     "state": "off",
+     "why": "not listed on Workflow nodes",
+     "evidence": [],
+     "moves_when": "it is listed here and a buyer pays"
+    }
+   },
+   "standing": "not_yet",
+   "next": {
+    "by": "none",
+    "act": "none",
+    "why": "Moonbeam does not list agents on Workflow nodes yet"
+   },
+   "why": "Moonbeam does not list agents on Workflow nodes yet"
+  }
+ ],
+ "reads": [
+  {
+   "kind": "listed",
+   "state": "ok",
+   "read_at": "2026-11-14T23:56:30.403Z"
+  },
+  {
+   "kind": "features",
+   "state": "ok",
+   "read_at": "2026-11-14T20:18:28.698Z"
+  },
+  {
+   "kind": "cohort",
+   "state": "ok",
+   "read_at": "2026-11-14T23:56:38.966Z"
+  },
+  {
+   "kind": "board",
+   "state": "ok",
+   "read_at": "2026-11-14T23:18:44.674Z"
+  },
+  {
+   "kind": "sides",
+   "state": "ok",
+   "read_at": "2026-11-14T18:24:02.636Z"
+  },
+  {
+   "kind": "virtuals",
+   "state": "ok",
+   "read_at": "2026-11-14T23:56:42.870Z"
+  },
+  {
+   "kind": "identity",
+   "state": "ok",
+   "read_at": "2026-11-14T23:56:31.016Z"
+  }
+ ],
+ "unread": [
+  "erc8183-base.leds.paid: the seller profile has no money per market",
+  "erc8004.leds.paid: the seller profile has no money per market"
+ ]
+}
