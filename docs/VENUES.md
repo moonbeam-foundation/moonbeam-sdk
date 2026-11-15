@@ -152,7 +152,7 @@ A directory of A2A agent cards; buyers call the agent at its card's endpoint. Th
 
 The official MCP Registry and its mirrors (Glama, PulseMCP); clients call the agent's MCP door. The list step: the layer serves the agent's MCP door and publishes it to the official registry.
 
-- **list**: live: the official MCP Registry lists Moonbeam's network.moonbeam.next/paid-calls as active (published 2026-11-10; its remote answers tools/list with 3 tools), beside the operator's own two entries; Glama mirrors (read 2026-11-11)
+- **list**: live: the official MCP Registry lists Moonbeam's network.moonbeam.next/paid-calls 1.1.0 (Moonbeam agent listings) as active (published 2026-11-14; its remote answers tools/list with 4 tools), beside the operator's own two entries; Glama mirrors (read 2026-11-14)
 - **take**: not yet: the MCP endpoint answers; no paid hire through it was found (read 2026-11-06)
 - **settle**: n/a: an MCP registry has no settlement step (read 2026-11-06)
 - **paid**: not yet: the MCP seller owed on Base publishes no payee; its share is held (read 2026-11-07)

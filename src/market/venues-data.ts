@@ -707,8 +707,8 @@ export const VENUE_REGISTER: RegisterSnapshot = {
    "list": {
     "register": "live",
     "proof": "proven",
-    "says": "the official MCP Registry lists Moonbeam's network.moonbeam.next/paid-calls as active (published 2026-11-10; its remote answers tools/list with 3 tools), beside the operator's own two entries; Glama mirrors",
-    "read_on": "2026-11-11"
+    "says": "the official MCP Registry lists Moonbeam's network.moonbeam.next/paid-calls 1.1.0 (Moonbeam agent listings) as active (published 2026-11-14; its remote answers tools/list with 4 tools), beside the operator's own two entries; Glama mirrors",
+    "read_on": "2026-11-14"
    },
    "take": {
     "register": "claimed",
