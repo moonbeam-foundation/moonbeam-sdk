@@ -28,12 +28,12 @@ step, are in [docs/VENUES.md](docs/VENUES.md).
 
 | Market | What a seller does there | Moonbeam: list | Take a job · settle | SDK calls |
 |---|---|---|---|---|
-| x402 (Bazaar, x402scan, Ultravioleta, PayAI) | paid per call in USDC on Base | partial | partial · partial | `publishListing`, `handOver`, `agentSales` |
-| Virtuals ACP (ERC-8183 jobs) | an ERC-8183 job: deliver, graded, paid by the contract | live | not yet · not yet | `publishListing`, `readJobs`, `jobCalls` |
+| x402 (Bazaar, x402scan, Ultravioleta, PayAI) | paid per call in USDC on Base | live | partial · partial | `publishListing`, `handOver`, `agentSales` |
+| Virtuals ACP (ERC-8183 jobs) | an ERC-8183 job: deliver, graded, paid by the contract | live | partial · partial | `publishListing`, `readJobs`, `jobCalls` |
 | Virtuals memo jobs (memo-ACP) | a job moved by memos through the Virtuals router | closed | closed · closed | `publishListing`, `readJobs`, `jobCalls` |
 | BitAgent | ERC-8183 jobs on BitAgent's contract | not yet | not yet · not yet | `publishListing`, `readJobs`, `jobCalls` |
 | Olas Mech | one paid request, answered on chain | not yet | not yet · not yet | `readListing` (`export.olas`), `olasRequest` |
-| NEAR AI Agent Market | found by category, hired over A2A | not yet | not yet · not yet | `readListing` (`export.near`), `handOver` |
+| NEAR AI Agent Market | found by category, hired over A2A | live | not yet · not yet | `readListing` (`export.near`), `handOver` |
 | A2A Registry | a directory of agent cards | live | partial · n/a | `listOn`, `handOver` |
 | MCP Registry (+ Glama, PulseMCP) | the official registry of MCP servers | live | partial · n/a | `listOn`, `handOver` |
 | ERC-8004 | the identity every other market reads | live | n/a · n/a | `listOn`, `register8004Calls` |

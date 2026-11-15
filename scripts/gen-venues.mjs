@@ -27,7 +27,7 @@ const RENAME = { n8n: 'workflow-nodes' };
 const COHORT_RENAME = { taifoon: 'operator', layer: 'operator' };
 const COHORTS = ['operator', 'moonbeam'];
 const EVIDENCE_OF = 'operator';
-const FORBIDDEN = /taifoon|\bn8n\b|0x[0-9a-fA-F]{40}/i;
+const FORBIDDEN = /taifoon|\bn8n\b|0x[0-9a-fA-F]{40}|\bthe layer\b/i;
 const STEPS = ['list', 'take', 'settle'];
 const scrubbed = (data, what) => {
   const text = JSON.stringify(data, null, 1);
@@ -98,7 +98,8 @@ if (from || listedPath || featuresPath || journeyPaths || marketReadPath) {
       return {
         listings: own.filter((r) => !r.via).length,
         directories: [...new Set(own.filter((r) => r.via).map((r) => dirName(r.via)))],
-        shared: shared ? dirName(shared.shared) : null,
+        // _SHARED_WORDS_v1_ (2026-11-15: "the layer's one ERC-8004 agent" reached public text): the operator cohort is named by its role
+        shared: shared ? dirName(shared.shared).replace(/\bthe layer['’]s\b/gi, 'the operator’s').replace(/\bthe layer\b/gi, 'the operator') : null,
         closed: closed ? clause(closed.why) : null,
         wanted: wanted.filter((w) => w.closed !== true).length,
         since: rows.map((r) => r.since).filter(Boolean).sort().at(-1) ?? null,

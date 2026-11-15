@@ -14,7 +14,7 @@ export const VENUE_REGISTER: RegisterSnapshot = {
   ],
   "features": {
    "source": "LISTED_FEATURES_v1",
-   "read_at": "2026-11-15T00:20:13.103Z"
+   "read_at": "2026-11-15T20:10:56.072Z"
   },
   "journey": {
    "source": "listed.journey.v1",
@@ -22,7 +22,7 @@ export const VENUE_REGISTER: RegisterSnapshot = {
     "8453:1170141",
     "8453:1176098"
    ],
-   "read_at": "2026-11-15T00:22:19.611Z"
+   "read_at": "2026-11-15T20:10:22.621Z"
   }
  },
  "markets": [
@@ -75,62 +75,70 @@ export const VENUE_REGISTER: RegisterSnapshot = {
        "mark": "ok",
        "who": "machine",
        "says": null,
-       "read_at": "2026-11-15T00:20:10.784Z"
+       "read_at": "2026-11-15T20:10:52.964Z"
       },
       "jobs_received": {
        "mark": "ok",
        "who": "seller",
        "says": null,
-       "read_at": "2026-11-14T20:18:14.611Z"
+       "read_at": "2026-11-15T03:49:52.157Z"
       },
       "pay": {
        "mark": "ok",
        "who": "buyer",
        "says": null,
-       "read_at": "2026-11-14T20:18:14.611Z"
+       "read_at": "2026-11-15T20:10:52.964Z"
       },
       "settle": {
        "mark": "partial",
        "who": "owner",
        "says": null,
-       "read_at": "2026-11-14T20:18:14.611Z"
+       "read_at": "2026-11-15T03:49:52.157Z"
       }
      }
     },
     "moonbeam": {
-     "listings": 1,
+     "listings": 3,
      "directories": [
-      "x402scan"
+      "x402scan",
+      "Ultravioleta discovery"
      ],
      "shared": null,
      "closed": null,
      "wanted": 2,
-     "since": "2026-11-11",
+     "since": "2026-11-15",
      "features": {
       "list": {
        "mark": "partial",
        "who": "owner",
-       "says": "Moonbeam's door answers 402 with its price; x402scan lists it; the CDP Bazaar and PayAI list a door only after a settled payment through them",
-       "read_at": "2026-11-15T00:20:08.814Z"
+       "says": "Moonbeam's door answers 402 with its price; x402scan and Ultravioleta list it from a free register; the CDP Bazaar and PayAI list a door only after a payment through them",
+       "read_at": "2026-11-15T20:10:52.506Z"
       },
       "jobs_received": {
        "mark": "partial",
        "who": "seller",
        "says": "each paid call is a job; the deliveries and sales reads list them",
-       "read_at": "2026-11-14T20:18:15.134Z"
+       "read_at": "2026-11-15T03:49:52.599Z"
       },
       "pay": {
        "mark": "partial",
        "who": "buyer",
        "says": "the buyer signs the x402 payment in the retry; settled calls land in the paid-in ledger",
-       "read_at": "2026-11-14T20:18:15.134Z"
+       "read_at": "2026-11-15T20:10:52.506Z"
       },
       "settle": {
        "mark": "partial",
        "who": "owner",
        "says": "the buyer's payment settles at the call; a resold seller's share is paid by the payout run to a registered payee once the owner arms the vault key",
-       "read_at": "2026-11-14T20:18:15.134Z"
+       "read_at": "2026-11-15T03:49:52.599Z"
       }
+     },
+     "journey": {
+      "standing": "listed_by_moonbeam",
+      "ref": "8453:1176098",
+      "proof": "x402_door",
+      "says": "Moonbeam's x402 door sells it as data.onchain_query",
+      "read_at": "2026-11-15T20:10:23.530Z"
      }
     }
    }
@@ -178,32 +186,25 @@ export const VENUE_REGISTER: RegisterSnapshot = {
        "mark": "ok",
        "who": "machine",
        "says": null,
-       "read_at": "2026-11-15T00:20:08.250Z"
+       "read_at": "2026-11-15T20:10:51.764Z"
       },
       "jobs_received": {
        "mark": "partial",
        "who": "seller",
        "says": null,
-       "read_at": "2026-11-14T20:18:28.181Z"
+       "read_at": "2026-11-15T03:50:05.726Z"
       },
       "pay": {
        "mark": "partial",
-       "who": "owner",
+       "who": "buyer",
        "says": null,
-       "read_at": "2026-11-15T00:21:58.000Z",
-       "proof": {
-        "kind": "virtuals.agent",
-        "url": "https://api.acp.virtuals.io/agents/01a0f293-05e0-7fcc-a480-baef668c0e36",
-        "ref": "13 shown, every one named",
-        "read_at": "2026-11-15T00:21:58.000Z",
-        "was": "broken"
-       }
+       "read_at": "2026-11-15T03:50:05.726Z"
       },
       "settle": {
        "mark": "partial",
        "who": "seller",
        "says": null,
-       "read_at": "2026-11-14T20:18:28.181Z"
+       "read_at": "2026-11-15T03:50:05.726Z"
       }
      }
     },
@@ -217,27 +218,27 @@ export const VENUE_REGISTER: RegisterSnapshot = {
      "features": {
       "list": {
        "mark": "ok",
-       "who": "owner",
-       "says": "the seller's offerings are synced to Virtuals ACP from the offerings file in an owner MFA session",
-       "read_at": "2026-11-15T00:20:08.305Z"
+       "who": "machine",
+       "says": "the seller's offerings are synced to Virtuals ACP from the offerings file by the hourly sync, from the sealed Virtuals session, which writes nothing unless the offerings file equals the published one",
+       "read_at": "2026-11-15T20:10:51.565Z"
       },
       "jobs_received": {
-       "mark": "owner step",
-       "who": "owner",
+       "mark": "partial",
+       "who": "seller",
        "says": "jobs arrive at the seller service on Base",
-       "read_at": "2026-11-14T20:18:28.182Z"
+       "read_at": "2026-11-15T03:50:06.211Z"
       },
       "pay": {
-       "mark": "owner step",
-       "who": "owner",
+       "mark": "partial",
+       "who": "buyer",
        "says": "the buyer funds the job's escrow on Base",
-       "read_at": "2026-11-14T20:18:28.182Z"
+       "read_at": "2026-11-15T03:50:06.211Z"
       },
       "settle": {
-       "mark": "owner step",
-       "who": "owner",
+       "mark": "partial",
+       "who": "seller",
        "says": "the venue pays the provider from escrow when the job completes",
-       "read_at": "2026-11-14T20:18:28.182Z"
+       "read_at": "2026-11-15T03:50:06.211Z"
       }
      },
      "journey": {
@@ -245,7 +246,7 @@ export const VENUE_REGISTER: RegisterSnapshot = {
       "ref": "8453:1176098",
       "proof": "virtuals.agent",
       "says": "Moonbeam's Virtuals agent shows it as the offering \"Moonbeam onchain query\"",
-      "read_at": "2026-11-15T00:22:19.803Z"
+      "read_at": "2026-11-15T20:10:23.120Z"
      }
     }
    }
@@ -342,25 +343,25 @@ export const VENUE_REGISTER: RegisterSnapshot = {
        "mark": "owner step",
        "who": "owner",
        "says": null,
-       "read_at": "2026-11-14T20:18:28.182Z"
+       "read_at": "2026-11-15T03:50:06.211Z"
       },
       "jobs_received": {
        "mark": "owner step",
        "who": "owner",
        "says": null,
-       "read_at": "2026-11-14T20:18:28.182Z"
+       "read_at": "2026-11-15T03:50:06.211Z"
       },
       "pay": {
        "mark": "owner step",
        "who": "owner",
        "says": null,
-       "read_at": "2026-11-14T20:18:28.182Z"
+       "read_at": "2026-11-15T03:50:06.211Z"
       },
       "settle": {
        "mark": "owner step",
        "who": "owner",
        "says": null,
-       "read_at": "2026-11-14T20:18:28.182Z"
+       "read_at": "2026-11-15T03:50:06.211Z"
       }
      }
     },
@@ -376,25 +377,25 @@ export const VENUE_REGISTER: RegisterSnapshot = {
        "mark": "owner step",
        "who": "owner",
        "says": "the listing body is prepared but never sent: an agent on BitAgent needs the owner's sign-in",
-       "read_at": "2026-11-14T20:18:28.182Z"
+       "read_at": "2026-11-15T03:50:06.211Z"
       },
       "jobs_received": {
        "mark": "owner step",
        "who": "owner",
        "says": "gateway polling is built and off until the agent id is set",
-       "read_at": "2026-11-14T20:18:28.182Z"
+       "read_at": "2026-11-15T03:50:06.211Z"
       },
       "pay": {
        "mark": "owner step",
        "who": "owner",
        "says": "the buyer funds the job's escrow on Base",
-       "read_at": "2026-11-14T20:18:28.182Z"
+       "read_at": "2026-11-15T03:50:06.211Z"
       },
       "settle": {
        "mark": "owner step",
        "who": "owner",
        "says": "the venue pays from escrow when the job completes",
-       "read_at": "2026-11-14T20:18:28.182Z"
+       "read_at": "2026-11-15T03:50:06.211Z"
       }
      }
     }
@@ -441,27 +442,27 @@ export const VENUE_REGISTER: RegisterSnapshot = {
      "features": {
       "list": {
        "mark": "partial",
-       "who": "machine",
+       "who": "owner",
        "says": null,
-       "read_at": "2026-11-15T00:20:13.103Z"
+       "read_at": "2026-11-15T20:10:56.072Z"
       },
       "jobs_received": {
        "mark": "partial",
        "who": "seller",
        "says": null,
-       "read_at": "2026-11-14T20:18:28.260Z"
+       "read_at": "2026-11-15T03:50:06.231Z"
       },
       "pay": {
        "mark": "broken",
-       "who": "buyer",
+       "who": "owner",
        "says": null,
-       "read_at": "2026-11-14T20:18:28.260Z"
+       "read_at": "2026-11-15T03:50:06.231Z"
       },
       "settle": {
        "mark": "partial",
        "who": "seller",
        "says": null,
-       "read_at": "2026-11-14T20:18:28.260Z"
+       "read_at": "2026-11-15T03:50:06.231Z"
       }
      }
     },
@@ -477,25 +478,25 @@ export const VENUE_REGISTER: RegisterSnapshot = {
        "mark": "owner step",
        "who": "owner",
        "says": "the mech is registered in the Olas marketplace on Base; a tool reads hireable only after one answered request",
-       "read_at": "2026-11-14T20:18:28.260Z"
+       "read_at": "2026-11-15T03:50:06.231Z"
       },
       "jobs_received": {
        "mark": "owner step",
        "who": "owner",
        "says": "requests that name the mech are served by the mech worker",
-       "read_at": "2026-11-14T20:18:28.260Z"
+       "read_at": "2026-11-15T03:50:06.231Z"
       },
       "pay": {
        "mark": "owner step",
        "who": "owner",
        "says": "the request is paid on chain when it is posted",
-       "read_at": "2026-11-14T20:18:28.260Z"
+       "read_at": "2026-11-15T03:50:06.231Z"
       },
       "settle": {
        "mark": "owner step",
        "who": "owner",
        "says": "payment is processed through the service's multisig after delivery",
-       "read_at": "2026-11-14T20:18:28.260Z"
+       "read_at": "2026-11-15T03:50:06.231Z"
       }
      }
     }
@@ -540,25 +541,25 @@ export const VENUE_REGISTER: RegisterSnapshot = {
        "mark": "ok",
        "who": "machine",
        "says": null,
-       "read_at": "2026-11-15T00:20:07.872Z"
+       "read_at": "2026-11-15T20:10:51.144Z"
       },
       "jobs_received": {
        "mark": "ok",
        "who": "seller",
        "says": null,
-       "read_at": "2026-11-14T20:18:27.400Z"
+       "read_at": "2026-11-15T03:50:05.324Z"
       },
       "pay": {
        "mark": "partial",
        "who": "buyer",
        "says": null,
-       "read_at": "2026-11-14T20:18:27.400Z"
+       "read_at": "2026-11-15T03:50:05.324Z"
       },
       "settle": {
        "mark": "partial",
        "who": "owner",
        "says": null,
-       "read_at": "2026-11-14T20:18:27.400Z"
+       "read_at": "2026-11-15T03:50:05.324Z"
       }
      }
     },
@@ -574,26 +575,33 @@ export const VENUE_REGISTER: RegisterSnapshot = {
        "mark": "owner step",
        "who": "owner",
        "says": "the fleet registers and onboards each agent on the NEAR market and flips it live",
-       "read_at": "2026-11-14T20:18:27.401Z"
+       "read_at": "2026-11-15T03:50:05.325Z"
       },
       "jobs_received": {
        "mark": "owner step",
        "who": "owner",
        "says": "hires arrive on the signed webhook and as open assignments",
-       "read_at": "2026-11-14T20:18:27.401Z"
+       "read_at": "2026-11-15T03:50:05.325Z"
       },
       "pay": {
        "mark": "owner step",
        "who": "owner",
        "says": "the buyer pays into the market's escrow; our ledger records it once the sale settles",
-       "read_at": "2026-11-14T20:18:27.401Z"
+       "read_at": "2026-11-15T03:50:05.325Z"
       },
       "settle": {
        "mark": "owner step",
        "who": "owner",
        "says": "the market releases escrow on the buyer's acceptance; withdrawing the balance goes through the owner's adoption link",
-       "read_at": "2026-11-14T20:18:27.401Z"
+       "read_at": "2026-11-15T03:50:05.325Z"
       }
+     },
+     "journey": {
+      "standing": "listed_by_moonbeam",
+      "ref": "8453:1176098",
+      "proof": "near_agent",
+      "says": "listed live on NEAR AI market and open to buyers now",
+      "read_at": "2026-11-15T20:10:23.362Z"
      }
     }
    }
@@ -644,25 +652,25 @@ export const VENUE_REGISTER: RegisterSnapshot = {
        "mark": "ok",
        "who": "machine",
        "says": null,
-       "read_at": "2026-11-15T00:20:09.046Z"
+       "read_at": "2026-11-15T20:10:52.520Z"
       },
       "jobs_received": {
        "mark": "partial",
        "who": "seller",
        "says": null,
-       "read_at": "2026-11-14T20:18:17.005Z"
+       "read_at": "2026-11-15T03:49:55.460Z"
       },
       "pay": {
        "mark": "partial",
        "who": "buyer",
        "says": null,
-       "read_at": "2026-11-14T20:18:17.005Z"
+       "read_at": "2026-11-15T03:49:55.460Z"
       },
       "settle": {
        "mark": "partial",
        "who": "seller",
        "says": null,
-       "read_at": "2026-11-14T20:18:17.005Z"
+       "read_at": "2026-11-15T03:49:55.460Z"
       }
      }
     },
@@ -680,26 +688,33 @@ export const VENUE_REGISTER: RegisterSnapshot = {
        "mark": "ok",
        "who": "machine",
        "says": "registered on the A2A Registry with its agent card; LocalMark and Agentropolis show it",
-       "read_at": "2026-11-15T00:20:09.525Z"
+       "read_at": "2026-11-15T20:10:52.519Z"
       },
       "jobs_received": {
        "mark": "partial",
        "who": "seller",
        "says": "A2A messages arrive at our A2A endpoint; a paid one is a sale row",
-       "read_at": "2026-11-14T20:18:17.496Z"
+       "read_at": "2026-11-15T03:49:56.047Z"
       },
       "pay": {
        "mark": "partial",
        "who": "buyer",
        "says": "a paid skill is paid through x402 in the retry",
-       "read_at": "2026-11-14T20:18:17.496Z"
+       "read_at": "2026-11-15T03:49:56.047Z"
       },
       "settle": {
        "mark": "partial",
        "who": "seller",
        "says": "a paid message settles through x402 at the call",
-       "read_at": "2026-11-14T20:18:17.496Z"
+       "read_at": "2026-11-15T03:49:56.047Z"
       }
+     },
+     "journey": {
+      "standing": "listed_by_moonbeam",
+      "ref": "8453:1176098",
+      "proof": "feature_cell",
+      "says": "Moonbeam lists it on A2A Registry",
+      "read_at": "2026-11-15T20:10:10.489Z"
      }
     }
    }
@@ -749,25 +764,25 @@ export const VENUE_REGISTER: RegisterSnapshot = {
        "mark": "ok",
        "who": "machine",
        "says": null,
-       "read_at": "2026-11-15T00:20:09.534Z"
+       "read_at": "2026-11-15T20:10:52.911Z"
       },
       "jobs_received": {
        "mark": "partial",
        "who": "seller",
        "says": null,
-       "read_at": "2026-11-14T20:18:16.072Z"
+       "read_at": "2026-11-15T03:49:54.196Z"
       },
       "pay": {
        "mark": "partial",
        "who": "buyer",
        "says": null,
-       "read_at": "2026-11-14T20:18:16.072Z"
+       "read_at": "2026-11-15T03:49:54.196Z"
       },
       "settle": {
        "mark": "partial",
        "who": "seller",
        "says": null,
-       "read_at": "2026-11-14T20:18:16.072Z"
+       "read_at": "2026-11-15T03:49:54.196Z"
       }
      }
     },
@@ -776,33 +791,40 @@ export const VENUE_REGISTER: RegisterSnapshot = {
      "directories": [],
      "shared": null,
      "closed": null,
-     "wanted": 1,
+     "wanted": 3,
      "since": "2026-11-11",
      "features": {
       "list": {
        "mark": "ok",
        "who": "machine",
        "says": "Moonbeam's server is published to the official MCP Registry as network.moonbeam.next/paid-calls; Glama mirrors it",
-       "read_at": "2026-11-15T00:20:09.079Z"
+       "read_at": "2026-11-15T20:10:52.487Z"
       },
       "jobs_received": {
        "mark": "partial",
        "who": "seller",
        "says": "tool calls arrive at our MCP door; a paid one is a sale row",
-       "read_at": "2026-11-14T20:18:16.198Z"
+       "read_at": "2026-11-15T03:49:54.372Z"
       },
       "pay": {
        "mark": "partial",
        "who": "buyer",
        "says": "a paid tool is paid through its x402 wall in the retry",
-       "read_at": "2026-11-14T20:18:16.198Z"
+       "read_at": "2026-11-15T03:49:54.372Z"
       },
       "settle": {
        "mark": "partial",
        "who": "seller",
        "says": "a paid tool settles through its x402 wall at the call",
-       "read_at": "2026-11-14T20:18:16.198Z"
+       "read_at": "2026-11-15T03:49:54.372Z"
       }
+     },
+     "journey": {
+      "standing": "listed_by_moonbeam",
+      "ref": "8453:1176098",
+      "proof": "feature_cell",
+      "says": "Moonbeam lists it on MCP Registry",
+      "read_at": "2026-11-15T20:10:10.522Z"
      }
     }
    }
@@ -849,32 +871,32 @@ export const VENUE_REGISTER: RegisterSnapshot = {
        "mark": "ok",
        "who": "machine",
        "says": null,
-       "read_at": "2026-11-15T00:20:08.218Z"
+       "read_at": "2026-11-15T20:10:51.538Z"
       },
       "jobs_received": {
        "mark": "partial",
        "who": "seller",
        "says": null,
-       "read_at": "2026-11-14T20:18:18.318Z"
+       "read_at": "2026-11-15T03:49:57.523Z"
       },
       "pay": {
        "mark": "partial",
        "who": "buyer",
        "says": null,
-       "read_at": "2026-11-14T20:18:18.318Z"
+       "read_at": "2026-11-15T03:49:57.523Z"
       },
       "settle": {
        "mark": "partial",
        "who": "seller",
        "says": null,
-       "read_at": "2026-11-14T20:18:18.318Z"
+       "read_at": "2026-11-15T03:49:57.523Z"
       }
      }
     },
     "moonbeam": {
      "listings": 0,
      "directories": [],
-     "shared": "the operator's one ERC-8004 agent, read for Moonbeam until Moonbeam registers its own",
+     "shared": "the operator’s one ERC-8004 agent, read for Moonbeam until Moonbeam registers its own",
      "closed": null,
      "wanted": 0,
      "since": "2026-11-11",
@@ -883,25 +905,25 @@ export const VENUE_REGISTER: RegisterSnapshot = {
        "mark": "partial",
        "who": "owner",
        "says": "Moonbeam reads the one shared identity on Base until it registers its own",
-       "read_at": "2026-11-15T00:20:08.689Z"
+       "read_at": "2026-11-15T20:10:51.752Z"
       },
       "jobs_received": {
        "mark": "partial",
        "who": "seller",
        "says": "an identity takes no job itself; jobs arrive at the endpoint it declares (see MCP Registry)",
-       "read_at": "2026-11-14T20:18:18.874Z"
+       "read_at": "2026-11-15T03:49:58.409Z"
       },
       "pay": {
        "mark": "partial",
        "who": "buyer",
        "says": "payment goes through the declared endpoint's x402 wall",
-       "read_at": "2026-11-14T20:18:18.874Z"
+       "read_at": "2026-11-15T03:49:58.409Z"
       },
       "settle": {
        "mark": "partial",
        "who": "seller",
        "says": "an identity settles nothing itself; the declared endpoint's wall settles the call",
-       "read_at": "2026-11-14T20:18:18.874Z"
+       "read_at": "2026-11-15T03:49:58.409Z"
       }
      },
      "journey": {
@@ -909,7 +931,7 @@ export const VENUE_REGISTER: RegisterSnapshot = {
       "ref": "8453:1176098",
       "proof": "erc8004",
       "says": "Moonbeam's agent 8453:1176098 is registered on ERC-8004",
-      "read_at": "2026-11-15T00:22:19.755Z"
+      "read_at": "2026-11-15T20:10:22.951Z"
      }
     }
    }
@@ -953,25 +975,25 @@ export const VENUE_REGISTER: RegisterSnapshot = {
        "mark": "ok",
        "who": "machine",
        "says": null,
-       "read_at": "2026-11-15T00:20:07.639Z"
+       "read_at": "2026-11-15T20:10:50.800Z"
       },
       "jobs_received": {
        "mark": "partial",
        "who": "seller",
        "says": null,
-       "read_at": "2026-11-14T20:18:28.695Z"
+       "read_at": "2026-11-15T03:50:06.332Z"
       },
       "pay": {
        "mark": "partial",
        "who": "buyer",
        "says": null,
-       "read_at": "2026-11-14T20:18:28.695Z"
+       "read_at": "2026-11-15T03:50:06.332Z"
       },
       "settle": {
        "mark": "partial",
        "who": "seller",
        "says": null,
-       "read_at": "2026-11-14T20:18:28.695Z"
+       "read_at": "2026-11-15T03:50:06.332Z"
       }
      }
     },
@@ -987,25 +1009,25 @@ export const VENUE_REGISTER: RegisterSnapshot = {
        "mark": "not built",
        "who": "machine",
        "says": "the workflow node package is published to npm with provenance from its release workflow",
-       "read_at": "2026-11-14T20:18:28.695Z"
+       "read_at": "2026-11-15T03:50:06.332Z"
       },
       "jobs_received": {
        "mark": "not built",
        "who": "machine",
        "says": "the node posts demands and hires; they arrive as listings and demands",
-       "read_at": "2026-11-14T20:18:28.695Z"
+       "read_at": "2026-11-15T03:50:06.332Z"
       },
       "pay": {
        "mark": "not built",
        "who": "machine",
        "says": "the node pays from the buyer's plan or a top-up",
-       "read_at": "2026-11-14T20:18:28.695Z"
+       "read_at": "2026-11-15T03:50:06.332Z"
       },
       "settle": {
        "mark": "not built",
        "who": "machine",
        "says": "a paid call settles on the buyer's plan or top-up",
-       "read_at": "2026-11-14T20:18:28.695Z"
+       "read_at": "2026-11-15T03:50:06.332Z"
       }
      }
     }

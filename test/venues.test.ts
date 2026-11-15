@@ -84,10 +84,10 @@ describe('VENUES: every venue, one table', () => {
       expect(readme, v.id).toMatch(new RegExp(`\\| ${m.list.state} \\| ${m.take.state} · ${m.settle.state} \\|`));
     }
     for (const s of SALE_STOPS) expect(doc, s.id).toContain(`| ${s.order} | \`${s.id}\` | ${s.label} |`);
-    // NEAR: the operator's listing is live there; Moonbeam's own agent is a private draft, so no Moonbeam line says live
+    // NEAR (journey read 2026-11-15: @moonbeam listed by Moonbeam and read back, hire not yet): Moonbeam's line says live, its jobs not yet
     const near = VENUES.find((v) => v.id === 'near-agent-market')!;
-    expect(near.list.state).toBe('live'); expect(near.cohorts.moonbeam.list.state).toBe('not yet');
-    expect(readme).toMatch(/\| NEAR AI Agent Market \| [^|\n]+ \| not yet \| not yet · not yet \|/);
+    expect(near.list.state).toBe('live'); expect(near.cohorts.moonbeam.list.state).toBe('live');
+    expect(readme).toMatch(/\| NEAR AI Agent Market \| [^|\n]+ \| live \| not yet · not yet \|/);
     expect(doc).toMatch(/## Every venue \(the operator's listings\)/);
     expect(`${doc}\n${readme}`).not.toMatch(/taifoon|\bn8n\b|0x[0-9a-f]{40}|36927/i);
   });

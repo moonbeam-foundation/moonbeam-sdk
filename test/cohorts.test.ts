@@ -98,13 +98,13 @@ describe('VENUES[].cohorts: the shipped table, per cohort', () => {
   });
   it('the states as read on the listed register, the feature matrix and the house agents\' journeys (2026-11-14)', () => {
     expect(states('x402-base', 'operator')).toEqual(['live', 'live', 'live']);
-    expect(states('x402-base', 'moonbeam')).toEqual(['partial', 'partial', 'partial']);
+    expect(states('x402-base', 'moonbeam')).toEqual(['live', 'partial', 'partial']);
     // settle: the feature matrix still read broken (2026-11-14T20:18Z), before the sync that withdrew two nameless offerings;
     // Virtuals' own read of the operator's agent at 00:21Z shows all 13 offerings named, so the cell reads partial, with that proof
     expect(states('erc8183-base', 'operator')).toEqual(['live', 'partial', 'partial']);
     expect(at('erc8183-base').cohorts.operator.settle).toMatchObject({ from: 'features', state: 'partial' });
     // Moonbeam's Virtuals agent shows its house offerings: listed, read on the market itself through a house agent's journey
-    expect(states('erc8183-base', 'moonbeam')).toEqual(['live', 'not yet', 'not yet']);
+    expect(states('erc8183-base', 'moonbeam')).toEqual(['live', 'partial', 'partial']);
     expect(at('erc8183-base').cohorts.moonbeam.list).toMatchObject({ from: 'journey', state: 'live' });
     expect(states('memoacp-base', 'operator')).toEqual(['closed', 'closed', 'closed']);
     expect(states('memoacp-base', 'moonbeam')).toEqual(['closed', 'closed', 'closed']);
@@ -112,7 +112,7 @@ describe('VENUES[].cohorts: the shipped table, per cohort', () => {
     expect(states('a2a', 'moonbeam')).toEqual(['live', 'partial', 'n/a']);
     expect(states('erc8004', 'moonbeam')).toEqual(['live', 'n/a', 'n/a']);
     expect(states('near-agent-market', 'operator')).toEqual(['live', 'live', 'partial']);
-    expect(states('near-agent-market', 'moonbeam')).toEqual(['not yet', 'not yet', 'not yet']);
+    expect(states('near-agent-market', 'moonbeam')).toEqual(['live', 'not yet', 'not yet']);
     expect(states('bitagent-base', 'moonbeam')).toEqual(['not yet', 'not yet', 'not yet']);
     expect(states('olas-base', 'moonbeam')).toEqual(['not yet', 'not yet', 'not yet']);
     expect(at('near-agent-market').cohorts.operator.listings).toBe(9);
