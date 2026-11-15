@@ -66,7 +66,7 @@ const opOf = (d, resource, operation) => {
 
 /**
  * The request the node sends: { method, url (absolute, with its query), headers, body }.
- * `given` holds the parameters a user sets (collections as objects); `credentials` is { endpoint, apiKey }.
+ * `given` holds the parameters a user sets (collections as objects); `credentials` is { endpoint, apiKey }, or null for none.
  */
 async function buildRequest(resource, operation, given = {}, credentials = { endpoint: 'https://endpoint.example/v1', apiKey: '' }) {
 	const { d, cred } = load();
@@ -100,13 +100,13 @@ async function buildRequest(resource, operation, given = {}, credentials = { end
 	const hookCtx = context(params, credentials);
 	let r = req;
 	for (const h of hooks) r = await h.call(hookCtx, r);
-	r = await cred.authenticate(credentials, r);
+	if (credentials) r = await cred.authenticate(credentials, r);
 	const u = new URL(`${r.baseURL}${r.url}`);
 	for (const [k, v] of Object.entries(r.qs ?? {})) if (v !== undefined && v !== null && v !== '') u.searchParams.set(k, String(v));
 	return { method: r.method, url: u.toString(), headers: r.headers ?? {}, body: r.body };
 }
 
-/** The items the node answers for one response: { statusCode, body }. */
+/** The items the node answers for one response: { statusCode, body }. `credentials` null: no credential (Moonbeam's relays). */
 async function respond(resource, operation, given, response, credentials = { endpoint: 'https://endpoint.example/v1', apiKey: 'k' }) {
 	const { d } = load();
 	const params = paramsFor(d, resource, operation, given);

@@ -5,12 +5,16 @@ import { hireOperations } from './descriptions/hire';
 import { keyOperations } from './descriptions/key';
 import { listingOperations } from './descriptions/listing';
 import { paidCallsOperations } from './descriptions/paidCalls';
+import { MOONBEAM_HOST } from './descriptions/shared';
 import { standingOperations } from './descriptions/standing';
 
 /**
  * Moonbeam lists agents on the markets where agents are found. This node reads where an agent is listed, lists Moonbeam's
  * paid-calls tools and, on a plan key, runs the list step and plans a hire: the same calls @moonbeam-foundation/sdk makes
  * (journey, listStatus, listOn, pauseListing, resumeListing, delistListing, searchSellers, hirePlan, keyStanding, usage).
+ *
+ * The free reads run on Moonbeam's own host (https://next.moonbeam.network) with no credential; a credential's Endpoint, the one
+ * that comes with a plan key, sends them to that endpoint as the SDK sends them, and the plan actions run there.
  *
  * Declarative: every operation is one request, so what the node does is what its description says. Nothing here signs or
  * sends a transaction; a hire answers unsigned calls, each with who signs it.
@@ -28,9 +32,10 @@ export class Moonbeam implements INodeType {
 		inputs: [NodeConnectionTypes.Main],
 		outputs: [NodeConnectionTypes.Main],
 		usableAsTool: true,
-		credentials: [{ name: 'moonbeamApi', required: true }],
+		// Optional: every free read runs on Moonbeam's own host without one; the plan actions ask for it
+		credentials: [{ name: 'moonbeamApi', required: false }],
 		requestDefaults: {
-			baseURL: '={{$credentials.endpoint.replace(/\\/+$/, "")}}',
+			baseURL: MOONBEAM_HOST,
 			headers: { Accept: 'application/json', 'Content-Type': 'application/json', 'X-Moonbeam-Client': 'workflow-nodes/0.1.0' },
 		},
 		properties: [

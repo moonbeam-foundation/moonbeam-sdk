@@ -66,7 +66,9 @@ test('field conventions: placeholders start with "e.g.", options sorted, the cre
 		const names = p.options.map((o) => o.name);
 		assert.deepStrictEqual(names, [...names].sort((a, b) => a.localeCompare(b)), `${p.name} options sorted`);
 	}
-	assert.deepStrictEqual(d.credentials, [{ name: 'moonbeamApi', required: true }]);
+	assert.deepStrictEqual(d.credentials, [{ name: 'moonbeamApi', required: false }], 'the free reads need no credential');
+	assert.strictEqual(d.requestDefaults.baseURL, 'https://next.moonbeam.network');
+	assert.notStrictEqual(cred.properties.find((p) => p.name === 'endpoint').required, true, 'the endpoint is an optional override');
 	assert.strictEqual(cred.name, 'moonbeamApi');
 	assert.deepStrictEqual(cred.properties.map((p) => p.name), ['endpoint', 'apiKey']);
 	assert.strictEqual(cred.properties.find((p) => p.name === 'apiKey').typeOptions.password, true);
@@ -84,7 +86,10 @@ test('the credential sends the key only when it is set, in x-api-key, and tests 
 	const { cred } = load();
 	assert.deepStrictEqual(await cred.authenticate({ endpoint: 'https://e/v1', apiKey: '' }, { url: '/x', headers: { a: '1' } }), { url: '/x', headers: { a: '1' } });
 	assert.deepStrictEqual((await cred.authenticate({ endpoint: 'https://e/v1', apiKey: ' k ' }, { url: '/x' })).headers, { 'x-api-key': 'k' });
-	assert.strictEqual(cred.test.request.url, '/classes');
+	const { evaluate } = require('./harness');
+	const t = (endpoint) => { const c = { $credentials: { endpoint } }; return evaluate(cred.test.request.baseURL, c) + evaluate(cred.test.request.url, c); };
+	assert.strictEqual(t(''), 'https://next.moonbeam.network/api/acp/plans', 'no endpoint: a free read on Moonbeam');
+	assert.strictEqual(t(' https://e.example/v1/ '), 'https://e.example/v1/classes', 'an endpoint: a free read there');
 });
 
 test('sdk.generated.ts is what the SDK says now (npm run gen:check)', () => {

@@ -1,17 +1,33 @@
 import type { IDataObject, IExecuteSingleFunctions, IHttpRequestOptions, IN8nHttpFullResponse, INodeExecutionData, INodeProperties } from 'n8n-workflow';
-import { asItems, failed, needKey, param, refuse, show } from './shared';
+import { asItems, failed, freeRead, needKey, onEndpoint, param, refuse, show } from './shared';
 
 const ADDRESS = /^0x[0-9a-fA-F]{40}$/;
 
+const filtersOf = (ctx: IExecuteSingleFunctions): IDataObject => (ctx.getNodeParameter('searchFilters', {}) as IDataObject) ?? {};
+const str = (v: unknown) => (v === undefined || v === null ? '' : String(v).trim());
+
+/** searchSellers(): on the endpoint, GET /match/search (the SDK's query); else Moonbeam's market relay GET /api/acp/jobs/market?q=. */
 async function searchQuery(this: IExecuteSingleFunctions, requestOptions: IHttpRequestOptions): Promise<IHttpRequestOptions> {
 	const tag = param(this, 'tag');
 	if (!tag) refuse(this, 'Search Sellers needs a job class, e.g. text.summarize');
-	return requestOptions;
+	const f = filtersOf(this);
+	const qs: IDataObject = { tag };
+	for (const [k, q] of [['venue', 'venue'], ['side', 'side'], ['priceCap', 'price_cap'], ['limit', 'limit']] as const) if (str(f[k])) qs[q] = f[k] as string | number;
+	return freeRead(this, requestOptions, { url: '/match/search', qs }, { url: '/api/acp/jobs/market', qs: { q: tag } });
 }
 async function searchOut(this: IExecuteSingleFunctions, _items: INodeExecutionData[], response: IN8nHttpFullResponse): Promise<INodeExecutionData[]> {
 	const j = (response.body ?? {}) as IDataObject;
-	if (response.statusCode >= 400 || j.ok === false) failed(this, response, 'GET /match/search');
-	return asItems(Array.isArray(j.hits) ? (j.hits as IDataObject[]) : []);
+	if (response.statusCode >= 400 || j.ok === false) failed(this, response, 'Moonbeam seller search');
+	if (await onEndpoint(this)) return asItems(Array.isArray(j.hits) ? (j.hits as IDataObject[]) : []);
+	// the relay: the class's sellers on Base, cheapest first; the venue, price cap and limit filters are applied here
+	const sellers = ((j.search as IDataObject | undefined)?.sellers ?? null) as IDataObject | null;
+	const f = filtersOf(this);
+	const cap = str(f.priceCap) ? Number(f.priceCap) : null;
+	const rows = (Array.isArray(sellers?.rows) ? (sellers!.rows as IDataObject[]) : [])
+		.filter((r) => !str(f.venue) || r.market === str(f.venue))
+		.filter((r) => cap === null || (typeof r.price_usd === 'number' && r.price_usd <= cap))
+		.map((r) => ({ class: sellers!.class, ...r }));
+	return asItems(str(f.limit) ? rows.slice(0, Number(f.limit)) : rows);
 }
 
 /** hirePlan(): the terms of one hire as POST /settle reads them; the answer is unsigned calls, each with its signer. */
@@ -67,7 +83,7 @@ export const hireOperations: INodeProperties[] = [
 				name: 'Search Sellers',
 				value: 'searchSellers',
 				action: 'Search sellers for a job class',
-				description: 'Sellers on Base for one job class, ranked, one item each. Free.',
+				description: 'Sellers on Base for one job class, one item each. Free.',
 				routing: {
 					request: { method: 'GET', url: '/match/search', ignoreHttpStatusErrors: true, returnFullResponse: true },
 					send: { preSend: [searchQuery] },
@@ -87,7 +103,6 @@ export const hireOperations: INodeProperties[] = [
 		placeholder: 'e.g. text.summarize',
 		description: 'The job class to hire for',
 		displayOptions: show('hire', ['searchSellers']),
-		routing: { send: { type: 'query', property: 'tag', value: '={{ $value.trim() }}' } },
 	},
 	{
 		displayName: 'Filters',
@@ -104,7 +119,6 @@ export const hireOperations: INodeProperties[] = [
 				typeOptions: { minValue: 1 },
 				default: 50,
 				description: 'Max number of results to return',
-				routing: { send: { type: 'query', property: 'limit' } },
 			},
 			{
 				displayName: 'Price Cap',
@@ -113,7 +127,6 @@ export const hireOperations: INodeProperties[] = [
 				default: '',
 				placeholder: 'e.g. 0.05',
 				description: 'The most a buyer pays per job, in USDC',
-				routing: { send: { type: 'query', property: 'price_cap', value: '={{ $value || undefined }}' } },
 			},
 			{
 				displayName: 'Side',
@@ -121,8 +134,7 @@ export const hireOperations: INodeProperties[] = [
 				type: 'string',
 				default: '',
 				placeholder: 'e.g. seller',
-				description: 'Which side of the market to read',
-				routing: { send: { type: 'query', property: 'side', value: '={{ $value || undefined }}' } },
+				description: 'Which side of the market to read (with your endpoint)',
 			},
 			{
 				displayName: 'Venue',
@@ -131,7 +143,6 @@ export const hireOperations: INodeProperties[] = [
 				default: '',
 				placeholder: 'e.g. x402-base',
 				description: 'Only sellers on this venue',
-				routing: { send: { type: 'query', property: 'venue', value: '={{ $value || undefined }}' } },
 			},
 		],
 	},

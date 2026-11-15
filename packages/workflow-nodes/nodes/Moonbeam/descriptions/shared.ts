@@ -27,18 +27,48 @@ export function refuse(ctx: IExecuteSingleFunctions, message: string): never {
 	throw new NodeOperationError(ctx.getNode(), message);
 }
 
-/** The plan actions need the plan key; without it nothing is sent (the SDK's needKey). */
+/** Moonbeam's own host: the free reads run here (its relays) unless the credential names an endpoint. */
+export const MOONBEAM_HOST = 'https://next.moonbeam.network';
+
+/** The credential's endpoint override (trailing slashes cut) and plan key; both empty without a credential. */
+export async function access(ctx: IExecuteSingleFunctions): Promise<{ endpoint: string; key: string }> {
+	const c = await ctx.getCredentials('moonbeamApi').catch(() => null);
+	const s = (v: unknown) => (typeof v === 'string' ? v.trim() : '');
+	return { endpoint: s(c?.endpoint).replace(/\/+$/, ''), key: s(c?.apiKey) };
+}
+
+/**
+ * A free read: on the endpoint the credential names, the SDK's own request; else Moonbeam's relay on its own host.
+ * `sdk` and `relay` are each a path and its query.
+ */
+export async function freeRead(
+	ctx: IExecuteSingleFunctions,
+	requestOptions: IHttpRequestOptions,
+	sdk: { url: string; qs?: IDataObject },
+	relay: { url: string; qs?: IDataObject },
+): Promise<IHttpRequestOptions> {
+	const { endpoint } = await access(ctx);
+	const to = endpoint ? { baseURL: endpoint, ...sdk } : { baseURL: MOONBEAM_HOST, ...relay };
+	return { ...requestOptions, baseURL: to.baseURL, url: to.url, qs: { ...(to.qs ?? {}) } };
+}
+/** Whether this run reads the credential's endpoint (true) or Moonbeam's relays (false). */
+export const onEndpoint = async (ctx: IExecuteSingleFunctions): Promise<boolean> => !!(await access(ctx)).endpoint;
+
+/**
+ * The plan actions run on the endpoint that comes with the plan key, with the key; without either nothing is sent (the SDK's
+ * needKey). The request goes to that endpoint.
+ */
 export async function needKey(this: IExecuteSingleFunctions, requestOptions: IHttpRequestOptions): Promise<IHttpRequestOptions> {
-	const c = await this.getCredentials('moonbeamApi').catch(() => null);
-	const key = c && typeof c.apiKey === 'string' ? c.apiKey.trim() : '';
+	const { endpoint, key } = await access(this);
 	if (!key) refuse(this, 'This action runs on your Moonbeam plan key: add it to the Moonbeam API credential (Plan Key)');
-	return requestOptions;
+	if (!endpoint) refuse(this, 'This action runs on the endpoint that comes with your plan key: add it to the Moonbeam API credential (Endpoint)');
+	return { ...requestOptions, baseURL: endpoint };
 }
 
 /** A refusal from Moonbeam (status 4xx/5xx, or ok: false) as a node error carrying Moonbeam's own words and next step. */
 export function failed(ctx: IExecuteSingleFunctions, response: IN8nHttpFullResponse, what: string): never {
 	const body = (response.body ?? {}) as IDataObject;
-	const said = typeof body.error === 'string' ? body.error : typeof body.message === 'string' ? body.message : `${what} answered ${response.statusCode}`;
+	const said = typeof body.error === 'string' ? body.error : typeof body.message === 'string' ? body.message : typeof body.why === 'string' ? body.why : `${what} answered ${response.statusCode}`;
 	throw new NodeApiError(ctx.getNode(), body as never, { message: said, httpCode: String(response.statusCode) });
 }
 

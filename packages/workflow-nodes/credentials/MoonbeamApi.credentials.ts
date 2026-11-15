@@ -8,9 +8,9 @@ import type {
 } from 'n8n-workflow';
 
 /**
- * Moonbeam's endpoint and, for the plan actions, a plan key. The free reads (where an agent is listed, the list step's
- * status, sellers by class) run on the endpoint alone; the list step, the hire plan, a listing's pause and go-live, and
- * the key's own reads need the key. The key goes only in the x-api-key header, the way @moonbeam-foundation/sdk sends it.
+ * Optional for the free reads, which run on Moonbeam's own host (https://next.moonbeam.network) without it. The plan actions (the
+ * list step, the hire plan, a listing's pause, go-live and delist, the key's own reads) need the plan key and the endpoint that
+ * comes with it; with that endpoint set, the free reads go there too, as the SDK sends them. The key goes only in the x-api-key header, the way @moonbeam-foundation/sdk sends it.
  */
 export class MoonbeamApi implements ICredentialType {
 	name = 'moonbeamApi';
@@ -27,9 +27,9 @@ export class MoonbeamApi implements ICredentialType {
 			name: 'endpoint',
 			type: 'string',
 			default: '',
-			required: true,
 			placeholder: 'e.g. https://your-endpoint.example/v1',
-			description: 'The Moonbeam endpoint that comes with your key, /v1 included (the SDK reads the same value from MOONBEAM_API)',
+			description:
+				'Optional. Empty: the free reads run on Moonbeam (https://next.moonbeam.network). Set it to the endpoint that comes with your plan key, /v1 included (the SDK\'s MOONBEAM_API), for the plan actions and the full journey.',
 		},
 		{
 			displayName: 'Plan Key',
@@ -49,8 +49,12 @@ export class MoonbeamApi implements ICredentialType {
 		return { ...requestOptions, headers: { ...(requestOptions.headers ?? {}), 'x-api-key': key } };
 	}
 
-	// A free read that answers with or without a key
+	// A free read that answers with or without a key: the endpoint's job classes, else Moonbeam's own plans
 	test: ICredentialTestRequest = {
-		request: { baseURL: '={{$credentials.endpoint.replace(/\\/+$/, "")}}', url: '/classes', method: 'GET' },
+		request: {
+			baseURL: '={{$credentials.endpoint ? $credentials.endpoint.trim().replace(/\\/+$/, "") : "https://next.moonbeam.network"}}',
+			url: '={{$credentials.endpoint ? "/classes" : "/api/acp/plans"}}',
+			method: 'GET',
+		},
 	};
 }

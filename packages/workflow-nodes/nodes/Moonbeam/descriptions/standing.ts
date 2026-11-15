@@ -1,43 +1,66 @@
 import type { IDataObject, IExecuteSingleFunctions, IHttpRequestOptions, IN8nHttpFullResponse, INodeExecutionData, INodeProperties } from 'n8n-workflow';
-import { JOURNEY_SCHEMA, VENUES } from '../sdk.generated';
-import { AGENT_REF, JOURNEY_REF, asItems, failed, listIdOf, param, refuse, show } from './shared';
+import { JOURNEY_LEDS, JOURNEY_SCHEMA, VENUES } from '../sdk.generated';
+import { AGENT_REF, JOURNEY_REF, asItems, failed, freeRead, listIdOf, onEndpoint, param, refuse, show } from './shared';
 
-/** journey(): the agent ref is checked before anything is sent. */
+/** journey(): the agent ref is checked before anything is sent. On the credential's endpoint, GET /listed?agent=&view=journey
+ *  (the SDK's request); else Moonbeam's batch relay with this one ref. */
 async function journeyRef(this: IExecuteSingleFunctions, requestOptions: IHttpRequestOptions): Promise<IHttpRequestOptions> {
 	const ref = param(this, 'agent');
 	if (!JOURNEY_REF.test(ref)) refuse(this, `Not an agent ref: "${ref}". Use 8453:<ERC-8004 id>, erc8004:<chain>:<id>, x402:host:<host>, or x402: / virtuals: / bitagent: / near: / olas: and 12 hex`);
-	return requestOptions;
+	return freeRead(this, requestOptions, { url: '/listed', qs: { agent: ref, view: 'journey' } }, { url: '/api/acp/agents/journeys', qs: { refs: ref } });
 }
+
+const pick = (ctx: IExecuteSingleFunctions, rows: IDataObject[], whole: IDataObject): INodeExecutionData[] => {
+	const output = param(ctx, 'output') || 'journey';
+	if (output === 'venues') return asItems(rows);
+	if (output === 'venue') return asItems(rows.filter((r) => r.venue_id === param(ctx, 'venue')));
+	return asItems([whole]);
+};
 
 /** journeyOf(): the answer is listed.journey.v1 with a row for every venue, or it is refused. Then the chosen output. */
 async function journeyOut(this: IExecuteSingleFunctions, _items: INodeExecutionData[], response: IN8nHttpFullResponse): Promise<INodeExecutionData[]> {
 	const j = (response.body ?? {}) as IDataObject;
+	if (!(await onEndpoint(this))) return relayJourneyOut(this, j, response);
 	if (response.statusCode >= 400 || j.ok === false) failed(this, response, 'GET /listed');
 	const rows = Array.isArray(j.venues) ? (j.venues as IDataObject[]) : null;
 	if (j.schema !== JOURNEY_SCHEMA || !rows || !j.agent || !j.checks) refuse(this, `Moonbeam did not answer ${JOURNEY_SCHEMA}`);
 	const by = new Map(rows.map((v) => [String(v.venue_id), v]));
 	const missing = VENUES.filter((v) => !by.get(v.id)?.leds).map((v) => v.id);
 	if (missing.length) refuse(this, `The journey has no row for ${missing.join(', ')}`);
-	const output = param(this, 'output') || 'journey';
 	const agent = (j.agent as IDataObject).ref as string;
-	const row = (id: string): IDataObject => ({ agent, read_at: j.read_at as string, ...by.get(id)! });
-	if (output === 'venues') return asItems(VENUES.map((v) => row(v.id)));
-	if (output === 'venue') return asItems([row(param(this, 'venue'))]);
-	return asItems([j]);
+	return pick(this, VENUES.map((v) => ({ agent, read_at: j.read_at as string, ...by.get(v.id)! })), j);
 }
 
-/** listStatus(): the list step's id is derived from the agent; never listed answers list: null. */
+/** Moonbeam's batch relay ({ ok, agents: { ref: { venue_id: { standing, leds: [5 states] } } }, missing }): every venue, each light
+ *  by name with its state; a venue (or an agent) the relay has not read yet is `unread`. Why, what would move a light and the next
+ *  step come with the full journey, on the endpoint that comes with your key. */
+function relayJourneyOut(ctx: IExecuteSingleFunctions, j: IDataObject, response: IN8nHttpFullResponse): INodeExecutionData[] {
+	if (response.statusCode >= 400 || j.ok === false || !j.agents || typeof j.agents !== 'object') failed(ctx, response, 'Moonbeam journeys');
+	const agent = param(ctx, 'agent');
+	const read = ((j.agents as IDataObject)[agent] ?? {}) as Record<string, { standing?: string; leds?: string[] }>;
+	const pending = Array.isArray(j.missing) && (j.missing as string[]).includes(agent);
+	const rows = VENUES.map((v): IDataObject => {
+		const r = read[v.id];
+		const leds = Object.fromEntries(JOURNEY_LEDS.map((k, i) => [k, { state: r?.leds?.[i] ?? 'unread' }]));
+		return { agent, venue_id: v.id, venue: v.name, standing: r?.standing ?? 'unread', leds };
+	});
+	return pick(ctx, rows, { agent, pending, venues: rows });
+}
+
+/** listStatus(): on the endpoint, GET /list/<the id derived from the agent>; else Moonbeam's relay GET /api/acp/list?ref=. Never
+ *  listed answers list: null. */
 async function listStatusUrl(this: IExecuteSingleFunctions, requestOptions: IHttpRequestOptions): Promise<IHttpRequestOptions> {
 	const ref = param(this, 'listAgent');
 	if (!AGENT_REF.test(ref)) refuse(this, `An agent here is 8453:<its ERC-8004 id>, not "${ref}"`);
-	return { ...requestOptions, url: `/list/${listIdOf(ref)}` };
+	return freeRead(this, requestOptions, { url: `/list/${listIdOf(ref)}` }, { url: '/api/acp/list', qs: { ref } });
 }
 async function listStatusOut(this: IExecuteSingleFunctions, _items: INodeExecutionData[], response: IN8nHttpFullResponse): Promise<INodeExecutionData[]> {
 	const ref = param(this, 'listAgent');
 	if (response.statusCode === 404) return asItems([{ agent: ref, list: null }]);
 	const j = (response.body ?? {}) as IDataObject;
-	if (response.statusCode >= 400 || j.ok === false) failed(this, response, 'GET /list/:id');
-	const list = j.list as IDataObject | undefined;
+	if (response.statusCode >= 400 || j.ok === false) failed(this, response, 'Moonbeam list step');
+	const list = j.list as IDataObject | null | undefined;
+	if (list === null) return asItems([{ agent: ref, list: null }]);
 	if (!list || typeof list.id !== 'string' || !list.markets) refuse(this, 'Moonbeam did not answer a list step');
 	return asItems([{ agent: ref, list }]);
 }
@@ -55,9 +78,9 @@ export const standingOperations: INodeProperties[] = [
 				value: 'journey',
 				action: 'Get where an agent is listed',
 				description:
-					'One agent on every venue Moonbeam lists on: its standing, five lights (offer, hire, list, read back, paid) with why and what would move each, and the one next step. Free.',
+					'One agent on every venue Moonbeam lists on: its standing and five lights (offer, hire, list, read back, paid). With your endpoint, also why each light is where it is, what would move it, and the one next step. Free.',
 				routing: {
-					request: { method: 'GET', url: '/listed', qs: { view: 'journey' }, ignoreHttpStatusErrors: true, returnFullResponse: true },
+					request: { method: 'GET', url: '/listed', ignoreHttpStatusErrors: true, returnFullResponse: true },
 					send: { preSend: [journeyRef] },
 					output: { postReceive: [journeyOut] },
 				},
@@ -85,7 +108,6 @@ export const standingOperations: INodeProperties[] = [
 		placeholder: 'e.g. 8453:1170141',
 		description: 'The agent: 8453:&lt;its ERC-8004 ID&gt;, erc8004:&lt;chain&gt;:&lt;ID&gt;, x402:host:&lt;host&gt;, or its row on a market board (x402:, virtuals:, bitagent:, near:, olas: and 12 hex)',
 		displayOptions: show('standing', ['journey']),
-		routing: { send: { type: 'query', property: 'agent', value: '={{ $value.trim() }}' } },
 	},
 	{
 		displayName: 'Output',

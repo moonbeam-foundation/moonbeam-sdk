@@ -18,20 +18,22 @@ Then add the **Moonbeam** node to a workflow.
 
 ## Credentials
 
-One credential, **Moonbeam API**:
+None for the free reads: with no credential they run on Moonbeam's own host, `https://next.moonbeam.network`.
+
+The plan actions need one credential, **Moonbeam API**:
 
 | Field    | What it is                                                                                     |
 | -------- | ---------------------------------------------------------------------------------------------- |
-| Endpoint | The Moonbeam endpoint that comes with your key, `/v1` included (the SDK's `MOONBEAM_API`).     |
-| Plan Key | Optional for the free reads. Needed for the plan actions. It comes with a [Moonbeam plan](https://next.moonbeam.network/acp/plans). |
+| Endpoint | Optional. The Moonbeam endpoint that comes with your key, `/v1` included (the SDK's `MOONBEAM_API`). Set, every read goes there as the SDK sends it, and the full journey (why each light is where it is, what would move it, the next step) comes with it. |
+| Plan Key | Needed for the plan actions, with the endpoint. It comes with a [Moonbeam plan](https://next.moonbeam.network/acp/plans). |
 
-The key is sent only when it is set, only in the `x-api-key` header. The credential test is a free read (`GET /classes`).
+The key is sent only when it is set, only in the `x-api-key` header. The credential test is a free read.
 
 ## Operations
 
 | Resource       | Operation         | What it does                                                                                     | SDK call                        | Needs     |
 | -------------- | ----------------- | ------------------------------------------------------------------------------------------------ | ------------------------------- | --------- |
-| Agent Standing | Get Journey       | One agent on every venue: its standing, five lights (offer, hire, list, read back, paid) with why and what would move each, and the one next step. Output: the whole journey, one item per venue, or one venue. | `journey(t, ref)`               | free      |
+| Agent Standing | Get Journey       | One agent on every venue: its standing and five lights (offer, hire, list, read back, paid); with your endpoint also why, what would move each light, and the one next step. Output: the whole journey, one item per venue, or one venue. | `journey(t, ref)`               | free      |
 | Agent Standing | Get List Status   | Where an agent stands on each market of the list step. Never listed answers `list: null`.        | `listStatus(t, ref)`            | free      |
 | Paid Call      | List Tools        | Every tool of Moonbeam's paid-calls MCP server, one item each, with its price and input schema.  | (MCP `tools/list`)              | free      |
 | Paid Call      | Where Listed      | The server's free tool: where an ERC-8004 agent on Base is listed.                               | (MCP `moonbeam_where_listed`)   | free      |
@@ -54,10 +56,20 @@ The plan actions refuse to run without the plan key, and send nothing.
 
 1. Add **Moonbeam** → **Agent Standing** → **Get Journey**.
 2. Agent: `8453:1170141`. Output: **One Item per Venue**.
-3. Run it. Each item is one venue: `standing`, `leds.list.state`, `leds.list.why`, `leds.list.moves_when`, and `next`, the one
-   step that would move it.
+3. Run it, with no credential. Each item is one venue: `venue`, `standing` and `leds.<light>.state` (`on`, `partial`, `off`,
+   or `unread` when it was not read yet).
 
-Filter on `leds.list.state` to see the venues where the agent is not listed yet, and follow each one's `next`.
+Filter on `leds.list.state` to see the venues where the agent is not listed yet. With your endpoint set, each item also carries
+`leds.list.why`, `leds.list.moves_when` and `next`, the one step that would move it.
+
+## Where each free read runs
+
+| Read            | No endpoint (Moonbeam's host)                 | With your endpoint                   |
+| --------------- | --------------------------------------------- | ------------------------------------ |
+| Get Journey     | `GET /api/acp/agents/journeys?refs=<ref>`     | `GET /listed?agent=<ref>&view=journey` |
+| Get List Status | `GET /api/acp/list?ref=<ref>`                 | `GET /list/<list step id>`           |
+| Search Sellers  | `GET /api/acp/jobs/market?q=<class>` (venue, price cap and limit filtered in the node) | `GET /match/search?tag=<class>&…` |
+| Paid Call       | `POST /api/acp/x402/mcp`                      | the same                             |
 
 ## Nothing here signs
 
