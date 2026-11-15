@@ -701,10 +701,12 @@ export function coverPremium(price: bigint, record: { k: number; n: number }): b
   return premiumAmount(price, wilsonUpperFailure(record.k, record.n));
 }
 
-/** The seller's call before funding: approve the hook for exactly its deposit (the hook pulls it at fundJob). */
+/** The seller's call before funding: approve the hook for exactly its deposit (the hook pulls it at fundJob). The live hook does
+ *  not bind the allowance to one buyer or one job: any funder may name this seller and spend it on terms of its own until it is
+ *  spent, so the seller approves only when its buyer is about to fund, and revokes (approve 0) if the funding does not come. */
 export function sellerDepositCalls(terms: Pick<HireTerms, 'token' | 'deposit' | 'price'>): UnsignedCall[] {
   const d = checkDeposit(terms.price, terms.deposit);
   if (!d.ok) throw new RangeError(d.reason);
   return [call(terms.token, selector(SIGNATURES.approve) + addrWord(BASE_ASSURANCE_HOOK) + word(terms.deposit), 'approve-deposit', 'seller',
-    `Lets the hook take exactly your ${terms.deposit} deposit when the job is funded; it comes back with the price when the job completes. Exact amount, never a standing allowance.`)];
+    `Lets the hook take exactly your ${terms.deposit} deposit at funding; it comes back with the price when the job completes. The hook does not tie this allowance to your buyer: until it is spent, anyone funding a job that names you can use it. Approve only when your buyer is about to fund, and set it back to 0 if the funding does not come.`)];
 }
