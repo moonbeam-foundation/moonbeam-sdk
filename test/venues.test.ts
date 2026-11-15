@@ -44,8 +44,12 @@ describe('VENUES: every venue, one table', () => {
         const s = v[k];
         expect(['live', 'partial', 'self-test', 'not yet', 'n/a'], `${v.id}.${k}`).toContain(s.state);
         const word = k === 'paid' ? r.paid?.proof : r[k].register;
-        if (s.state !== 'n/a') expect(s.state, `${v.id}.${k}`).toBe(word ? WORD[word] ?? 'not yet' : 'not yet');
+        const read = word ? WORD[word] ?? 'not yet' : 'not yet';
+        // _VENUE_TRUTH_v2_: the evidence cohort's mark may hold the state lower, never higher, and says so in `capped`
+        const m = market.markOf(r.cohorts?.[market.VENUE_EVIDENCE_OF], k);
+        if (s.state !== 'n/a') expect(s.state, `${v.id}.${k}`).toBe(m ? market.capState(read as market.VenueState, m.state) : read);
         else { expect(s.call, `${v.id}.${k} n/a has no call`).toBeNull(); expect(s.says, `${v.id}.${k} n/a says why`).toBeTruthy(); }
+        if (s.capped) { expect(s.capped.mark, `${v.id}.${k}`).toBe(m!.mark); expect(s.state).not.toBe(read); }
         if (s.state === 'live' || s.state === 'partial' || s.state === 'self-test') expect(s.read_on, `${v.id}.${k}`).toMatch(/^\d{4}-\d{2}-\d{2}$/);
       }
     }
@@ -53,7 +57,12 @@ describe('VENUES: every venue, one table', () => {
   it('the states as read on the register snapshot', () => {
     const at = (id: string) => VENUES.find((v) => v.id === id)!;
     expect(VENUE_STEPS.map((k) => at('x402-base')[k].state)).toEqual(['live', 'live', 'live', 'not yet']);
-    expect(VENUE_STEPS.map((k) => at('erc8183-base')[k].state)).toEqual(['not yet', 'self-test', 'self-test', 'self-test']);
+    // ERC-8183 settle: the register's self-test, held at not yet while the operator's offerings take no paid job (pay: broken)
+    expect(VENUE_STEPS.map((k) => at('erc8183-base')[k].state)).toEqual(['not yet', 'self-test', 'not yet', 'self-test']);
+    expect(at('erc8183-base').settle.capped).toMatchObject({ mark: 'broken' });
+    // Olas list: proven by the register, partial while the market does not show the mech live
+    expect(at('olas-base').list).toMatchObject({ state: 'partial', capped: { mark: 'partial' } });
+    expect(VENUE_STEPS.map((k) => at('near-agent-market')[k].state)).toEqual(['live', 'not yet', 'not yet', 'not yet']);
     expect(VENUE_STEPS.map((k) => at('erc8004')[k].state)).toEqual(['live', 'n/a', 'n/a', 'n/a']);
   });
   it('every call named is really exported, by its module', () => {

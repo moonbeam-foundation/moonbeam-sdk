@@ -6,7 +6,7 @@ import type { OnboardTransport } from '../onboard/index.js';
 import { VENUE_REGISTER } from './venues-data.js';
 import { listStatus, type ListMarket, type ListRow } from './journey.js';
 import { markets } from './index.js';
-import { cohortsOf, type CohortFacts, type CohortId, type VenueCohort } from './cohorts.js';
+import { capState, cohortsOf, markOf, type CohortFacts, type CohortId, type FeatureMark, type VenueCohort } from './cohorts.js';
 
 /** A step's state, said plainly: it runs for outside money (live), in part, only with Moonbeam on both sides (self-test), not yet, or the market has no such step (n/a). */
 export type VenueState = 'live' | 'partial' | 'self-test' | 'not yet' | 'n/a';
@@ -23,7 +23,11 @@ export type RegisterMarket = { id: string; entry: { cost: string; done: boolean;
   /** _VENUE_TRUTH_v1_: what the listed register holds for each cohort on this market */
   cohorts?: Partial<Record<CohortId, CohortFacts>> };
 /** _VENUE_TRUTH_v1_: where the cohorts' facts come from, and which cohort the register's evidence was read for. */
-export type RegisterCohorts = { source: string | null; approved_on: string | null; evidence_of: CohortId; ids: CohortId[] };
+export type RegisterCohorts = { source: string | null; approved_on: string | null; evidence_of: CohortId; ids: CohortId[];
+  /** _VENUE_TRUTH_v2_: the feature matrix the marks were read from, and when */
+  features?: { source: string; read_at: string | null };
+  /** _VENUE_TRUTH_v2_: the house agents whose journeys were read, and when */
+  journey?: { source: string; agents: string[]; read_at: string | null } };
 export type RegisterSnapshot = { source: string | null; read_on: string | null; cohorts?: RegisterCohorts; markets: RegisterMarket[] };
 
 export const VENUE_IDS = Object.freeze(['x402-base', 'erc8183-base', 'memoacp-base', 'bitagent-base', 'olas-base', 'near-agent-market', 'a2a', 'mcp', 'erc8004', 'workflow-nodes'] as const);
@@ -32,7 +36,9 @@ export type VenueId = (typeof VENUE_IDS)[number];
 export type ListedBy = 'list-step' | 'venue-account' | 'registry';
 
 /** One step of one venue: its state, the register's words and proof, the date it was read, and the one SDK call that does or reads it. */
-export type VenueStepRow = { state: VenueState; register: RegisterWord; says: string | null; read_on: string | null; call: SdkCall | null };
+export type VenueStepRow = { state: VenueState; register: RegisterWord; says: string | null; read_on: string | null; call: SdkCall | null;
+  /** _VENUE_TRUTH_v2_: the evidence cohort's feature mark held the register's state lower: the mark and when it was read */
+  capped?: { mark: FeatureMark; read_at: string | null } };
 export type Venue = {
   id: VenueId;
   name: string;
@@ -108,8 +114,12 @@ function venueOf(s: Static, r: RegisterMarket): Venue {
     const reg: RegisterStep = k === 'paid' ? (r.paid ? { register: r.paid.proof, proof: r.paid.proof, says: r.paid.says, read_on: r.paid.read_on } : { register: 'none', proof: 'none', says: null, read_on: null }) : r[k];
     const na = s.na?.[k];
     // n/a only where the market has no such step: the register says none, or the table names why
-    const state: VenueState = na ? 'n/a' : k === 'paid' && !r.paid ? 'not yet' : stateOf(reg.register);
-    return { state, register: reg.register, says: reg.says ?? na ?? null, read_on: reg.read_on, call: state === 'n/a' ? null : s.calls[k] };
+    const read: VenueState = na ? 'n/a' : k === 'paid' && !r.paid ? 'not yet' : stateOf(reg.register);
+    // the evidence cohort's live mark never lifts the register's state, and holds it lower when the market reads less now
+    const m = markOf(r.cohorts?.[VENUE_EVIDENCE_OF], k);
+    const state = m ? capState(read, m.state) : read;
+    return { state, register: reg.register, says: reg.says ?? na ?? null, read_on: reg.read_on, call: state === 'n/a' ? null : s.calls[k],
+      ...(m && state !== read ? { capped: { mark: m.mark, read_at: m.read_at } } : {}) };
   };
   const { calls: _c, na: _n, ...v } = s;
   const steps = { list: row('list'), take: row('take'), settle: row('settle'), paid: row('paid') };

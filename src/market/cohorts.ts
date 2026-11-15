@@ -11,7 +11,15 @@
 //   4. take / settle: not listed, or listed only through a share     → not yet, or shared
 //      take / settle: the cohort the evidence was read for            → the register's state
 //      take / settle: any other cohort                                → not yet: no read of its own shows the step
-import type { VenueState, VenueStepRow } from './venues.js';
+//
+// _VENUE_TRUTH_v2_ (2026-11-15): two live reads now come first, each kept in the snapshot with the date it was read.
+//   a. the feature matrix (GET /v1/listed?view=features): each cohort's own mark per market for list, jobs received, pay and settle;
+//      ok → live · partial → partial · owner step, not built, broken → not yet (STEP_FEATURE, MARK_STATE)
+//   b. a house agent's journey (GET /v1/listed?agent=<ref>&view=journey): a market whose own read shows the agent listed by Moonbeam
+//      lists the Moonbeam cohort there (live), whatever an older register row says
+// The order, for each step: closed → n/a → (list) the journey's own read → not listed and shared → shared → the feature mark →
+// the rules above. The venue's own rows are never lifted by a mark: venues.ts caps them by the evidence cohort's marks.
+import type { VenueState, VenueStep, VenueStepRow } from './venues.js';
 
 /** The cohorts the listed register holds: the layer's own listings, and Moonbeam's, resold under the layer's licence. */
 export const COHORT_IDS = Object.freeze(['layer', 'moonbeam'] as const);
@@ -35,8 +43,32 @@ export type CohortFacts = {
   wanted: number;
   /** the date the newest listing was read */
   since: string | null;
+  /** _VENUE_TRUTH_v2_: the feature matrix's marks for this cohort on this market, by feature id (STEP_FEATURE) */
+  features?: Partial<Record<FeatureId, FeatureRead>>;
+  /** _VENUE_TRUTH_v2_: a house agent's journey whose market read shows it listed by Moonbeam here (Moonbeam cohort only) */
+  journey?: JourneyRead | null;
 };
-export type CohortStepRow = { state: CohortState; says: string | null; read_on: string | null };
+
+/** The feature matrix's marks, as it writes them. */
+export type FeatureMark = 'ok' | 'partial' | 'not built' | 'owner step' | 'broken';
+/** One mark as the snapshot keeps it: who takes the next step, the cohort's own words (Moonbeam's only), the time it was read. */
+export type FeatureRead = { mark: FeatureMark; who: string | null; says: string | null; read_at: string | null };
+/** A house agent's journey that shows it listed by Moonbeam on a market's own read. */
+export type JourneyRead = { standing: 'listed_by_moonbeam'; ref: string; proof: string; says: string | null; read_at: string | null };
+/** Each SDK step and the feature of the matrix that reads it: listed, the jobs buyers sent, the buyer's payment, the seller's payout. */
+export const STEP_FEATURE = Object.freeze({ list: 'list', take: 'jobs_received', settle: 'pay', paid: 'settle' } as const satisfies Record<VenueStep, string>);
+export type FeatureId = (typeof STEP_FEATURE)[VenueStep];
+/** A mark said as a venue state. */
+export const MARK_STATE: Readonly<Record<FeatureMark, VenueState>> = Object.freeze({ ok: 'live', partial: 'partial', 'not built': 'not yet', 'owner step': 'not yet', broken: 'not yet' });
+/** The venue state a cohort's mark says for one step, or null when the matrix holds no mark for it. */
+export const markOf = (f: CohortFacts | undefined, k: VenueStep): (FeatureRead & { state: VenueState }) | null => {
+  const x = f?.features?.[STEP_FEATURE[k]];
+  return x ? { ...x, state: MARK_STATE[x.mark] ?? 'not yet' } : null;
+};
+
+/** Where a cohort's step was read: the feature matrix, a house agent's journey, or the listed register and the venue's rows. */
+export type CohortSource = 'features' | 'journey' | 'register';
+export type CohortStepRow = { state: CohortState; says: string | null; read_on: string | null; from?: CohortSource; who?: string | null };
 export type VenueCohort = { list: CohortStepRow; take: CohortStepRow; settle: CohortStepRow; listings: number; directories: string[]; wanted: number };
 
 const RANK: Record<string, number> = { 'n/a': -1, 'not yet': 0, 'self-test': 1, partial: 2, live: 3 };
@@ -52,13 +84,18 @@ const NO_FACTS: CohortFacts = { listings: 0, directories: [], shared: null, clos
 export function cohortOf(cohort: CohortId, facts: CohortFacts | undefined, steps: Record<CohortStep, VenueStepRow>, evidenceOf: CohortId): VenueCohort {
   const f = facts ?? NO_FACTS;
   const own = cohort === evidenceOf;
-  const onMarket = f.listings + f.directories.length > 0;
+  const journey = cohort === 'moonbeam' ? f.journey ?? null : null;
+  const onMarket = f.listings + f.directories.length > 0 || !!journey;
   const row = (state: CohortState, says: string | null, read_on: string | null): CohortStepRow => ({ state, says, read_on });
   const step = (k: CohortStep): CohortStepRow => {
     const v = steps[k];
     if (f.closed) return row('closed', f.closed, null);
     if (v.state === 'n/a') return row('n/a', v.says, v.read_on);
-    if (!onMarket) return f.shared ? row('shared', f.shared, f.since) : row('not yet', null, null);
+    if (k === 'list' && journey) return { state: 'live', says: journey.says, read_on: journey.read_at, from: 'journey', who: null };
+    if (!onMarket && f.shared) return row('shared', f.shared, f.since);
+    const m = markOf(f, k);
+    if (m) return { state: m.state, says: m.says, read_on: m.read_at, from: 'features', who: m.who };
+    if (!onMarket) return row('not yet', null, null);
     if (own) return row(v.state, v.says, v.read_on);
     if (k === 'list') return row(f.wanted === 0 ? v.state : capState(v.state, 'partial'), null, f.since);
     return row('not yet', null, null);

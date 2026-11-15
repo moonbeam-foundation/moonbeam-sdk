@@ -1,7 +1,7 @@
 // _VENUE_TRUTH_v1_: each cohort's own list / take / settle, from the listed register's facts and the venue's evidence-backed steps.
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { COHORT_IDS, COHORT_STEPS, VENUES, VENUE_EVIDENCE_OF, capState, cohortOf, cohortsOf, type CohortFacts, type VenueStepRow } from '../src/market/index.js';
+import { COHORT_IDS, COHORT_STEPS, MARK_STATE, STEP_FEATURE, VENUES, VENUE_EVIDENCE_OF, capState, cohortOf, cohortsOf, markOf, type CohortFacts, type FeatureMark, type VenueStepRow } from '../src/market/index.js';
 import { VENUE_REGISTER } from '../src/market/venues-data.js';
 
 const r = (state: VenueStepRow['state'], says: string | null = `${state} read`, read_on: string | null = '2026-11-06'): VenueStepRow => ({ state, register: 'x', says, read_on, call: null });
@@ -72,28 +72,77 @@ describe('VENUES[].cohorts: the shipped table, per cohort', () => {
     expect(VENUE_REGISTER.cohorts).toMatchObject({ source: 'LISTED_REGISTER_v1', evidence_of: 'layer', ids: ['layer', 'moonbeam'] });
     for (const m of VENUE_REGISTER.markets) expect(Object.keys(m.cohorts ?? {}), m.id).toEqual([...COHORT_IDS]);
   });
-  it('the evidence cohort agrees with the venue row wherever it is listed and the market is open', () => {
+  it('the venue row never reads higher than the evidence cohort\'s own mark, wherever the market is open', () => {
+    const RANK: Record<string, number> = { 'not yet': 0, 'self-test': 1, partial: 2, live: 3 };
     for (const v of VENUES) {
       const facts = VENUE_REGISTER.markets.find((m) => m.id === v.id)!.cohorts!.layer!;
-      if (facts.closed || facts.listings + facts.directories.length === 0) continue;
-      for (const k of COHORT_STEPS) expect(v.cohorts.layer[k].state, `${v.id}.${k}`).toBe(v[k].state);
+      if (facts.closed) continue;
+      for (const k of COHORT_STEPS) {
+        const c = v.cohorts.layer[k];
+        if (c.from === 'features' && v[k].state !== 'n/a') expect(RANK[v[k].state]!, `${v.id}.${k}`).toBeLessThanOrEqual(RANK[c.state as string]!);
+      }
     }
   });
-  it('the states as read on the listed register snapshot', () => {
+  it('the states as read on the listed register, the feature matrix and the house agents\' journeys (2026-11-14)', () => {
     expect(states('x402-base', 'layer')).toEqual(['live', 'live', 'live']);
-    expect(states('x402-base', 'moonbeam')).toEqual(['partial', 'not yet', 'not yet']);
+    expect(states('x402-base', 'moonbeam')).toEqual(['partial', 'partial', 'partial']);
+    expect(states('erc8183-base', 'layer')).toEqual(['live', 'partial', 'not yet']);
+    // Moonbeam's Virtuals agent shows its house offerings: listed, read on the market itself through a house agent's journey
+    expect(states('erc8183-base', 'moonbeam')).toEqual(['live', 'not yet', 'not yet']);
+    expect(at('erc8183-base').cohorts.moonbeam.list).toMatchObject({ from: 'journey', state: 'live' });
     expect(states('memoacp-base', 'layer')).toEqual(['closed', 'closed', 'closed']);
     expect(states('memoacp-base', 'moonbeam')).toEqual(['closed', 'closed', 'closed']);
-    expect(states('erc8004', 'moonbeam')).toEqual(['shared', 'n/a', 'n/a']);
+    expect(states('mcp', 'moonbeam')).toEqual(['live', 'partial', 'n/a']);
+    expect(states('a2a', 'moonbeam')).toEqual(['live', 'partial', 'n/a']);
+    expect(states('erc8004', 'moonbeam')).toEqual(['live', 'n/a', 'n/a']);
+    expect(states('near-agent-market', 'layer')).toEqual(['live', 'live', 'partial']);
     expect(states('near-agent-market', 'moonbeam')).toEqual(['not yet', 'not yet', 'not yet']);
+    expect(states('bitagent-base', 'moonbeam')).toEqual(['not yet', 'not yet', 'not yet']);
+    expect(states('olas-base', 'moonbeam')).toEqual(['not yet', 'not yet', 'not yet']);
     expect(at('near-agent-market').cohorts.layer.listings).toBe(9);
   });
-  it('a cohort with no listing on a market never shows the other cohort\'s live state', () => {
+  it('a cohort with no listing, no own mark and no journey on a market never shows the other cohort\'s live state', () => {
     for (const v of VENUES) for (const c of COHORT_IDS) {
       const facts = VENUE_REGISTER.markets.find((m) => m.id === v.id)!.cohorts![c]!;
-      if (facts.listings + facts.directories.length > 0) continue;
-      for (const k of COHORT_STEPS) expect(['not yet', 'shared', 'closed', 'n/a'], `${v.id}.${c}.${k}`).toContain(v.cohorts[c][k].state);
+      if (facts.listings + facts.directories.length > 0 || facts.journey) continue;
+      for (const k of COHORT_STEPS) {
+        const row = v.cohorts[c][k];
+        if (row.from === 'features') expect(row.state, `${v.id}.${c}.${k}`).toBe(markOf(facts, k)!.state);
+        else expect(['not yet', 'shared', 'closed', 'n/a'], `${v.id}.${c}.${k}`).toContain(row.state);
+      }
     }
+  });
+  it('_VENUE_TRUTH_v2_: the snapshot holds every feature an SDK step reads, on every open market, for both cohorts', () => {
+    expect(VENUE_REGISTER.cohorts?.features).toMatchObject({ source: 'LISTED_FEATURES_v1' });
+    for (const m of VENUE_REGISTER.markets) for (const c of COHORT_IDS) {
+      const f = m.cohorts![c]!;
+      if (f.closed) continue;
+      for (const id of Object.values(STEP_FEATURE)) expect(f.features?.[id], `${m.id}.${c}.${id}`).toBeTruthy();
+    }
+    expect(Object.keys(STEP_FEATURE)).toEqual(['list', 'take', 'settle', 'paid']);
+    expect(Object.keys(MARK_STATE).sort()).toEqual(['broken', 'not built', 'ok', 'owner step', 'partial']);
+  });
+  it('_VENUE_TRUTH_v2_: a journey moves only the Moonbeam cohort\'s list, and only from a market\'s own read', () => {
+    for (const m of VENUE_REGISTER.markets) {
+      expect(m.cohorts?.layer?.journey, m.id).toBeUndefined();
+      const j = m.cohorts?.moonbeam?.journey;
+      if (j) { expect(j.standing).toBe('listed_by_moonbeam'); expect(j.proof).not.toBe('register_row'); }
+    }
+    const steps = { list: r('not yet'), take: r('live'), settle: r('live') };
+    const j = { standing: 'listed_by_moonbeam' as const, ref: '8453:1', proof: 'virtuals.agent', says: 'shown', read_at: '2026-11-15T00:00:00Z' };
+    expect(cohortOf('moonbeam', f({ wanted: 1, journey: j }), steps, 'layer').list).toEqual({ state: 'live', says: 'shown', read_on: '2026-11-15T00:00:00Z', from: 'journey', who: null });
+    expect(cohortOf('layer', f({ journey: j }), steps, 'layer').list.state).toBe('not yet');
+    // a closed market stays closed, whatever a journey says
+    expect(cohortOf('moonbeam', f({ closed: 'closed to new providers', journey: j }), steps, 'layer').list.state).toBe('closed');
+  });
+  it('_VENUE_TRUTH_v2_: a mark says the state, its words and who moves it; owner steps and builds are not yet', () => {
+    const feat = (mark: FeatureMark) => f({ listings: 1, features: { list: { mark, who: 'owner', says: 'w', read_at: '2026-11-14T23:00:00Z' } } });
+    const steps = { list: r('live'), take: r('live'), settle: r('live') };
+    expect(cohortOf('moonbeam', feat('ok'), steps, 'layer').list).toEqual({ state: 'live', says: 'w', read_on: '2026-11-14T23:00:00Z', from: 'features', who: 'owner' });
+    for (const [mark, state] of [['partial', 'partial'], ['owner step', 'not yet'], ['not built', 'not yet'], ['broken', 'not yet']] as const)
+      expect(cohortOf('moonbeam', feat(mark), steps, 'layer').list.state, mark).toBe(state);
+    // a step with no mark falls back to the rules
+    expect(cohortOf('moonbeam', feat('ok'), steps, 'layer').take.state).toBe('not yet');
   });
   it('docs/VENUES.md says the same per-cohort states as the table', () => {
     const doc = readFileSync(new URL('../docs/VENUES.md', import.meta.url), 'utf8');

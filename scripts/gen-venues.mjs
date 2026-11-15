@@ -2,6 +2,10 @@
 // Every venue's state, as the Moonbeam product's market register reads it, as a typed module: src/market/venues-data.ts.
 //   node scripts/gen-venues.mjs --from <business-agent.json>   take a new snapshot of the register (src/market/venues-register.json)
 //   node scripts/gen-venues.mjs --listed <listed.json>         take a new snapshot of the listed register's per-cohort facts
+//   node scripts/gen-venues.mjs --features <features.json>     take a new snapshot of the feature matrix's marks, per market and cohort
+//                                                               (GET /v1/listed?view=features: list, jobs received, pay, settle)
+//   node scripts/gen-venues.mjs --journey <a.json,b.json>      take the house agents' journeys (GET /v1/listed?agent=<ref>&view=journey):
+//                                                               a market whose own read shows a house agent listed by Moonbeam
 //   node scripts/gen-venues.mjs                                  write src/market/venues-data.ts from the snapshot
 //   node scripts/gen-venues.mjs --check                          fail when the module is not the snapshot's
 // The snapshot keeps, per market, the register's list/take/settle state, the proof behind each with its words and read date, and the
@@ -32,7 +36,18 @@ let prior = null; try { prior = JSON.parse(readFileSync(snap, 'utf8')); } catch 
 
 const from = arg('--from');
 const listedPath = arg('--listed');
-if (from || listedPath) {
+const featuresPath = arg('--features');
+const journeyPaths = arg('--journey')?.split(',').filter(Boolean) ?? null;
+// _VENUE_TRUTH_v2_: the feature matrix's features each SDK step reads (src/market/cohorts.ts STEP_FEATURE holds the same mapping;
+// test/cohorts.test.ts fails when the snapshot lacks one), and its marks as they are written
+const FEATURES = ['list', 'jobs_received', 'pay', 'settle'];
+const MARKS = ['ok', 'partial', 'not built', 'owner step', 'broken'];
+// a market's own read, never the register's row, moves a cohort's list from a journey
+const OWN_READ = (kind) => typeof kind === 'string' && kind !== 'register_row';
+// the stricter words of public text written by this generator from the feature matrix and the journeys
+const PLAIN = /taifoon|\bn8n\b|0x[0-9a-fA-F]{40}|the layer|genie|\[internal\]|markup|checked before you pay/i;
+const plain = (t) => (typeof t === 'string' && !PLAIN.test(t) ? t : null);
+if (from || listedPath || featuresPath || journeyPaths) {
   let markets = prior?.markets ?? [];
   let source = prior?.source ?? null;
   if (from) {
@@ -43,7 +58,8 @@ if (from || listedPath) {
       const m = reg.markets[id]; if (!m) throw new Error(`market ${id} is in market_order but not in markets`);
       const ev = m.evidence ?? {};
       // an outside seller is not named in public text: a host in brackets is dropped
-      const words = (t) => (typeof t === 'string' ? t.replace(/\s*\((?:[a-z0-9-]+\.)+[a-z]{2,}\)/gi, '') : null);
+      // and so is a note in brackets that names an internal repo or tool
+      const words = (t) => (typeof t === 'string' ? t.replace(/\s*\((?:[a-z0-9-]+\.)+[a-z]{2,}\)/gi, '').replace(/\s*\([^()]*(?:taifoon|\bn8n\b)[^()]*\)/gi, '') : null);
       const step = (s) => ({ register: m.sell?.[s] ?? 'none', proof: ev[s]?.proof ?? 'none', says: words(ev[s]?.says), read_on: ev[s]?.read_on ?? null });
       const mid = RENAME[id] ?? id;
       const kept = prior?.markets?.find((x) => x.id === mid)?.cohorts;
@@ -84,8 +100,53 @@ if (from || listedPath) {
         since: rows.map((r) => r.since).filter(Boolean).sort().at(-1) ?? null,
       };
     };
-    markets = markets.map((m) => ({ ...m, cohorts: Object.fromEntries(COHORTS.map((c) => [c, factsOf(c, m.id)])) }));
-    cohorts = { source: listed.rule ?? null, approved_on: listed.approved?.on ?? null, evidence_of: EVIDENCE_OF, ids: COHORTS };
+    // the feature matrix and journey reads are their own parts: a --listed refresh keeps them
+    const keep = (m, c) => { const k = m.cohorts?.[c] ?? {}; return { ...(k.features ? { features: k.features } : {}), ...(k.journey ? { journey: k.journey } : {}) }; };
+    markets = markets.map((m) => ({ ...m, cohorts: Object.fromEntries(COHORTS.map((c) => [c, { ...factsOf(c, m.id), ...keep(m, c) }])) }));
+    cohorts = { ...(cohorts ?? {}), source: listed.rule ?? null, approved_on: listed.approved?.on ?? null, evidence_of: EVIDENCE_OF, ids: COHORTS };
+  }
+  if (featuresPath) {
+    const fm = JSON.parse(readFileSync(featuresPath, 'utf8'));
+    if (fm.rule !== 'LISTED_FEATURES_v1' || !Array.isArray(fm.cells)) throw new Error(`${featuresPath} is not the feature matrix (rule LISTED_FEATURES_v1, cells)`);
+    const ids = new Set(markets.map((m) => m.id));
+    const cohortOf = (c) => { const id = COHORT_RENAME[c] ?? c; if (!COHORTS.includes(id)) throw new Error(`unknown cohort ${c} in ${featuresPath}`); return id; };
+    const cells = fm.cells.filter((x) => FEATURES.includes(x.feature));
+    for (const x of cells) {
+      if (!ids.has(RENAME[x.venue_id] ?? x.venue_id)) throw new Error(`the feature matrix names market ${x.venue_id}, which the register snapshot does not hold`);
+      if (!MARKS.includes(x.mark)) throw new Error(`the feature matrix marks ${x.venue_id}.${x.feature} '${x.mark}', not one of ${MARKS.join(', ')}`);
+    }
+    // the operator cohort's own words name the operator, so only Moonbeam's are kept, and only when they are plain
+    const featuresOf = (c, id) => {
+      const mine = cells.filter((x) => cohortOf(x.cohort) === c && (RENAME[x.venue_id] ?? x.venue_id) === id);
+      if (!mine.length) return null;
+      return Object.fromEntries(FEATURES.filter((f) => mine.some((x) => x.feature === f)).map((f) => {
+        const x = mine.find((y) => y.feature === f);
+        return [f, { mark: x.mark, who: x.who ?? null, says: c === 'moonbeam' ? plain(x.how) : null, read_at: x.read_at ?? fm.read_at ?? null }];
+      }));
+    };
+    markets = markets.map((m) => ({ ...m, cohorts: Object.fromEntries(COHORTS.map((c) => {
+      const prev = m.cohorts?.[c] ?? { listings: 0, directories: [], shared: null, closed: null, wanted: 0, since: null };
+      const { features: _f, ...rest } = prev; const f = featuresOf(c, m.id);
+      return [c, { ...rest, ...(f ? { features: f } : {}) }];
+    })) }));
+    const at = cells.map((x) => x.read_at).filter(Boolean).sort().at(-1) ?? fm.read_at ?? null;
+    cohorts = { ...(cohorts ?? { source: null, approved_on: null, evidence_of: EVIDENCE_OF, ids: COHORTS }), features: { source: fm.rule, read_at: at } };
+  }
+  if (journeyPaths) {
+    const reads = journeyPaths.map((p) => { const j = JSON.parse(readFileSync(p, 'utf8')); if (j.schema !== 'listed.journey.v1') throw new Error(`${p} is not listed.journey.v1`); return j; });
+    for (const j of reads) if (j.agent?.kind !== 'house') throw new Error(`the journey of ${j.agent?.ref} is not a house agent's: only Moonbeam's own agents say where Moonbeam is listed`);
+    const listedOn = (id) => {
+      const hits = reads.flatMap((j) => j.venues.filter((v) => (RENAME[v.venue_id] ?? v.venue_id) === id && v.standing === 'listed_by_moonbeam' && OWN_READ(v.proof?.kind))
+        .map((v) => ({ standing: v.standing, ref: j.agent.ref, proof: v.proof.kind, says: plain(v.why), read_at: v.proof.read_at ?? j.read_at })));
+      return hits.sort((a, b) => String(b.read_at).localeCompare(String(a.read_at)))[0] ?? null;
+    };
+    markets = markets.map((m) => {
+      const prev = m.cohorts?.moonbeam ?? { listings: 0, directories: [], shared: null, closed: null, wanted: 0, since: null };
+      const { journey: _j, ...rest } = prev; const j = listedOn(m.id);
+      return { ...m, cohorts: { ...(m.cohorts ?? {}), moonbeam: { ...rest, ...(j ? { journey: j } : {}) } } };
+    });
+    const at = reads.map((j) => j.read_at).filter(Boolean).sort().at(-1) ?? null;
+    cohorts = { ...(cohorts ?? { source: null, approved_on: null, evidence_of: EVIDENCE_OF, ids: COHORTS }), journey: { source: 'listed.journey.v1', agents: reads.map((j) => j.agent.ref), read_at: at } };
   }
   const dates = markets.flatMap((m) => [...STEPS.map((s) => m[s].read_on), m.paid?.read_on]).filter(Boolean).sort();
   const data = { source, read_on: dates.at(-1) ?? null, ...(cohorts ? { cohorts } : {}), markets };

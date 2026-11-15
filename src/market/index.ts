@@ -271,7 +271,7 @@ export type { QueueDepth, VaultRule, ClaimablePayout } from './sale.js';
 export { VENUES, VENUE_IDS, VENUE_STEPS, VENUES_READ_ON, VENUE_EVIDENCE_OF, venueById, venues } from './venues.js';
 export type { Venue, VenueId, VenueLive, VenueState, VenueStep, VenueStepRow, ListedBy, SdkCall, RegisterWord, RegisterSnapshot, RegisterCohorts } from './venues.js';
 // _VENUE_TRUTH_v1_: each cohort's own list / take / settle on every venue
-export { COHORT_IDS, COHORT_STEPS, cohortOf, cohortsOf, capState } from './cohorts.js';
-export type { CohortId, CohortState, CohortStep, CohortFacts, CohortStepRow, VenueCohort } from './cohorts.js';
+export { COHORT_IDS, COHORT_STEPS, cohortOf, cohortsOf, capState, STEP_FEATURE, MARK_STATE, markOf } from './cohorts.js';
+export type { CohortId, CohortState, CohortStep, CohortFacts, CohortStepRow, CohortSource, VenueCohort, FeatureId, FeatureMark, FeatureRead, JourneyRead } from './cohorts.js';
 export { SALE_STOPS, saleStop } from './sale-stops.js';
 export type { SaleStop, StopNeeds, StopHop } from './sale-stops.js';

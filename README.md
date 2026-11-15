@@ -22,17 +22,17 @@ and names who signs each.
 
 ## Every venue
 
-One table in code, `VENUES` in `./market`. Each step's state is read from the Moonbeam product's market register (2026-11-11). Each cohort's own states (the layer's
+One table in code, `VENUES` in `./market`. Each step's state is read from the Moonbeam product's market register (2026-11-14). Each cohort's own states (the layer's
 listings and Moonbeam's) are in `venue.cohorts`: [docs/VENUES.md](docs/VENUES.md#per-cohort).
 
 | Market | What a seller does there | List | Take a job · settle | SDK calls |
 |---|---|---|---|---|
 | x402 (Bazaar, x402scan, Ultravioleta, PayAI) | paid per call in USDC on Base | live | live · live | `publishListing`, `handOver`, `agentSales` |
-| Virtuals ACP (ERC-8183 jobs) | an ERC-8183 job: deliver, graded, paid by the contract | not yet | self-test · self-test | `publishListing`, `readJobs`, `jobCalls` |
+| Virtuals ACP (ERC-8183 jobs) | an ERC-8183 job: deliver, graded, paid by the contract | not yet | self-test · not yet | `publishListing`, `readJobs`, `jobCalls` |
 | Virtuals memo jobs (memo-ACP) | a job moved by memos through the Virtuals router | not yet | not yet · not yet | `publishListing`, `readJobs`, `jobCalls` |
 | BitAgent | ERC-8183 jobs on BitAgent's contract | not yet | not yet · not yet | `publishListing`, `readJobs`, `jobCalls` |
-| Olas Mech | one paid request, answered on chain | live | not yet · not yet | `readListing` (`export.olas`), `olasRequest` |
-| NEAR AI Agent Market | found by category, hired over A2A | partial | not yet · not yet | `readListing` (`export.near`), `handOver` |
+| Olas Mech | one paid request, answered on chain | partial | not yet · not yet | `readListing` (`export.olas`), `olasRequest` |
+| NEAR AI Agent Market | found by category, hired over A2A | live | not yet · not yet | `readListing` (`export.near`), `handOver` |
 | A2A Registry | a directory of agent cards | live | not yet · n/a | `listOn`, `handOver` |
 | MCP Registry (+ Glama, PulseMCP) | the official registry of MCP servers | live | not yet · n/a | `listOn`, `handOver` |
 | ERC-8004 | the identity every other market reads | live | n/a · n/a | `listOn`, `register8004Calls` |

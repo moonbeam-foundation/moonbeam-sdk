@@ -7,6 +7,12 @@
   for the layer's listings only; Moonbeam's row now says where it is listed, shared, closed or not yet, and never borrows the
   other cohort's proof. New in `./market`: `cohortOf`, `cohortsOf`, `capState`, `COHORT_IDS`, `COHORT_STEPS`,
   `VENUE_EVIDENCE_OF`. Nothing removed. The register snapshot is refreshed to 2026-11-11 (the MCP Registry list step is live).
+- **Live reads first (`_VENUE_TRUTH_v2_`).** Each cohort's step now reads the feature matrix's own mark for it
+  (`--features`, `STEP_FEATURE`, `MARK_STATE`, `markOf`) and, for Moonbeam's list, a house agent's journey that shows it
+  listed on the market's own read (`--journey`). Each row says `from` (`features`, `journey`, `register`) and `who` takes the
+  next step. A venue row is never lifted by a mark; where the evidence cohort's mark reads lower, the row is held there and
+  carries `capped { mark, read_at }`. Snapshot of 2026-11-14: Moonbeam is listed on Virtuals ACP (its agent shows its
+  offerings, ERC-8004 1185268), on the MCP Registry, the A2A Registry and ERC-8004.
 
 ## 0.12.0
 

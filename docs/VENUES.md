@@ -31,11 +31,11 @@ or `registry`), `howListed`, `entry { cost, done }`, and one row per step (`list
 | Venue | List | Take a job | Settle | Paid |
 |---|---|---|---|---|
 | x402 | live · `market.publishListing` | live · `market.handOver` | live · `market.agentSales` | not yet · `market.agentSales` |
-| Virtuals ACP (ERC-8183 jobs) | not yet · `market.publishListing` | self-test · `jobs.readJobs` | self-test · `market.jobCalls` | self-test · `jobs.readJobs` |
+| Virtuals ACP (ERC-8183 jobs) | not yet · `market.publishListing` | self-test · `jobs.readJobs` | not yet · `market.jobCalls` | self-test · `jobs.readJobs` |
 | Virtuals memo jobs (memo-ACP) | not yet · `market.publishListing` | not yet · `jobs.readJobs` | not yet · `market.jobCalls` | not yet · `jobs.readJobs` |
 | BitAgent | not yet · `market.publishListing` | not yet · `jobs.readJobs` | not yet · `market.jobCalls` | not yet · `jobs.readJobs` |
-| Olas Mech | live · `market.readListing` | not yet · `market.olasRequest` | not yet · `market.olasRequest` | not yet · `market.olasRequest` |
-| NEAR AI Agent Market | partial · `market.readListing` | not yet · `market.handOver` | not yet | not yet |
+| Olas Mech | partial · `market.readListing` | not yet · `market.olasRequest` | not yet · `market.olasRequest` | not yet · `market.olasRequest` |
+| NEAR AI Agent Market | live · `market.readListing` | not yet · `market.handOver` | not yet | not yet |
 | A2A Registry | live · `market.listOn` | not yet · `market.handOver` | n/a | not yet · `market.agentSales` |
 | MCP Registry | live · `market.listOn` | not yet · `market.handOver` | n/a | not yet · `market.agentSales` |
 | ERC-8004 | live · `market.listOn` | n/a | n/a | n/a |
@@ -45,33 +45,43 @@ or `registry`), `howListed`, `entry { cost, done }`, and one row per step (`list
 
 The listed register holds two cohorts: `layer` (the layer's own listings, the cohort the states above were read for) and
 `moonbeam` (Moonbeam's listings, resold under the layer's licence). `venue.cohorts[cohort]` gives each its own `list`, `take`
-and `settle`, each `{ state, says, read_on }`, with `listings` (listings read on the market), `directories` (outside
-directories that show one) and `wanted` (listings still to make). `cohortOf` in `./market` is the rule, and it never borrows
-the other cohort's proof:
+and `settle`, each `{ state, says, read_on, from, who }`, with `listings` (listings read on the market), `directories` (outside
+directories that show one) and `wanted` (listings still to make). `from` names the read behind the state (`features`,
+`journey` or `register`) and `who` the party that takes the next step, as the feature matrix names it. `cohortOf` in
+`./market` is the rule, and it never borrows the other cohort's proof. For each step, the first rule that holds:
 
 | Rule | State |
 |---|---|
 | the market takes no new agent | **closed** |
 | the market has no such step | **n/a** |
+| list: one of Moonbeam's own agents reads back listed on the market's own read (its journey) | **live** (Moonbeam only) |
 | no listing; the other cohort's listing stands in | **shared** |
+| the feature matrix marks the step for this cohort | ok → **live**, partial → **partial**, owner step, not built, broken → **not yet** |
 | no listing | **not yet** |
 | listed, the cohort the evidence was read for | the venue's state |
-| listed, another cohort | list: the venue's state, at most **partial** while a listing is still wanted; take and settle: **not yet** until a read of its own shows them |
+| listed, another cohort | list: the venue's state, at most **partial** while a listing is still wanted; take and settle: **not yet** |
 
-The snapshot is refreshed with `node scripts/gen-venues.mjs --listed <listed register>`.
+The feature matrix's step for each SDK step is `STEP_FEATURE`: list → `list`, take → `jobs_received`, settle → `pay`,
+paid → `settle` (the seller's payout). The venue rows above are never lifted by a mark: where the evidence cohort's mark
+reads lower than the register, the row is held at the mark and says so in `capped { mark, read_at }`.
+
+The snapshot is refreshed from the live reads (2026-11-14):
+
+    node scripts/gen-venues.mjs --from <business register> --listed <GET /v1/listed> \
+      --features <GET /v1/listed?view=features> --journey <GET /v1/listed?agent=<house ref>&view=journey>,…
 
 | Venue | Layer: list · take · settle | Moonbeam: list · take · settle |
 |---|---|---|
-| x402 | live · live · live | partial · not yet · not yet |
-| Virtuals ACP (ERC-8183 jobs) | not yet · self-test · self-test | not yet · not yet · not yet |
+| x402 | live · live · live | partial · partial · partial |
+| Virtuals ACP (ERC-8183 jobs) | live · partial · not yet | live · not yet · not yet |
 | Virtuals memo jobs (memo-ACP) | closed · closed · closed | closed · closed · closed |
 | BitAgent | not yet · not yet · not yet | not yet · not yet · not yet |
-| Olas Mech | live · not yet · not yet | not yet · not yet · not yet |
-| NEAR AI Agent Market | partial · not yet · not yet | not yet · not yet · not yet |
-| A2A Registry | live · not yet · n/a | partial · not yet · n/a |
-| MCP Registry | live · not yet · n/a | partial · not yet · n/a |
-| ERC-8004 | live · n/a · n/a | shared · n/a · n/a |
-| Workflow nodes (npm) | live · not yet · n/a | not yet · not yet · n/a |
+| Olas Mech | partial · partial · not yet | not yet · not yet · not yet |
+| NEAR AI Agent Market | live · live · partial | not yet · not yet · not yet |
+| A2A Registry | live · partial · n/a | live · partial · n/a |
+| MCP Registry | live · partial · n/a | live · partial · n/a |
+| ERC-8004 | live · n/a · n/a | live · n/a · n/a |
+| Workflow nodes (npm) | live · partial · n/a | not yet · not yet · n/a |
 
 ## Each venue
 
@@ -90,7 +100,7 @@ A buyer opens an ERC-8183 job with a budget; the provider delivers, the evaluato
 
 - **list**: not yet: the seller record exists with 15 offerings, mcp.digest among them; that buyers can find it was not shown (read 2026-11-09)
 - **take**: self-test: the one Base job, 81734, had the layer as client and provider (read 2026-11-06)
-- **settle**: self-test: job 81734 completed and released, the layer on both sides (read 2026-11-06)
+- **settle**: not yet: job 81734 completed and released, the layer on both sides (held at not yet by the market's read of 2026-11-14, mark broken) (read 2026-11-06)
 - **paid**: self-test: job 81734's provider was paid by the contract; the layer was on both sides (read 2026-11-07)
 
 ### Virtuals memo jobs (memo-ACP) (`memoacp-base`)
@@ -115,8 +125,8 @@ ERC-8183 jobs on BitAgent's own contract on Base. An agent registered on BitAgen
 
 A requester pays a mech on Base for one request; the mech delivers its answer on chain. An Olas service registered from your own wallet (a bond and gas): `readListing().export.olas` holds its service, mech and worker. `market(t, 'olas')` reads its week of money.
 
-- **list**: live: the layer's mech service page answers on the Olas marketplace (read 2026-11-06)
-- **take**: not yet: 0 requests to the layer's mech, and the code to answer a hire is missing (read 2026-11-06)
+- **list**: partial: the layer's mech service page answers on the Olas marketplace (held at partial by the market's read of 2026-11-14, mark partial) (read 2026-11-06)
+- **take**: not yet: 0 requests to the layer's mech; the answer code exists but no outside hire has been answered (read 2026-11-14)
 - **settle**: not yet: no Olas delivery of the layer was found (read 2026-11-06)
 - **paid**: not yet: no delivery of the layer's mech, so no payment to it (read 2026-11-07)
 
@@ -124,7 +134,7 @@ A requester pays a mech on Base for one request; the mech delivers its answer on
 
 Buyers find an agent by category and its own words, and hire it over A2A. Your own account on market.near.ai: `readListing().export.near` is the registration to send.
 
-- **list**: partial: the layer's listing answers on the NEAR AI Agent Market (read 2026-11-06)
+- **list**: live: the layer's listing answers on the NEAR AI Agent Market (read 2026-11-06)
 - **take**: not yet: 0 delivered jobs of the layer on the NEAR market (read 2026-11-06)
 - **settle**: not yet: no NEAR market payment to the layer was found (read 2026-11-06)
 - **paid**: not yet
