@@ -265,7 +265,7 @@ describe('fundCalls', () => {
   });
   it('the cover POOL and the grade window land in the last two words (the hook keeps no per-job evaluator)', () => {
     const glmr = terms({ token: BASE_GLMR });
-    const d = fundCalls(glmr, { jobId: JOB, pool: POOL, premium: 5n, gradeWindow: 200 })[1]!.data;
+    const d = fundCalls(glmr, { jobId: JOB, pool: POOL, registeredPool: POOL, premium: 5n, gradeWindow: 200 })[1]!.data;
     expect(d.slice(-128, -64)).toBe(w('c8')); expect(d.slice(-64)).toBe(w(POOL.slice(2).toLowerCase()));
     expect(d.slice(10 + 64 * 4, 10 + 64 * 5)).toBe(w('5'));                      // the premium is an argument, the fifth word
     expect(() => fundCalls(t, { jobId: JOB, evaluator: BUYER } as never)).toThrow(/cover POOL/);
@@ -273,15 +273,15 @@ describe('fundCalls', () => {
   it('a covered job is a GLMR job: a USDC job with a pool is refused before any call; a premium without a pool too', () => {
     expect(() => fundCalls(t, { jobId: JOB, pool: POOL })).toThrow(/GLMR/);
     expect(() => fundCalls(t, { jobId: JOB, premium: 1n })).toThrow(/name the pool/);
-    const approve = fundCalls(terms({ token: BASE_GLMR }), { jobId: JOB, pool: POOL, premium: 7n })[0]!;
+    const approve = fundCalls(terms({ token: BASE_GLMR }), { jobId: JOB, pool: POOL, registeredPool: POOL, premium: 7n })[0]!;
     expect(approve.to).toBe(BASE_GLMR); expect(approve.data.slice(-64)).toBe(w((10_000n + 7n).toString(16)));   // price + premium, exact
   });
   it('fundJobWithCover carries the cover cap as the tenth word and is capped at the price', () => {
     const glmr = terms({ token: BASE_GLMR });
-    const c = fundCalls(glmr, { jobId: JOB, pool: POOL, premium: 5n, coverCap: 4_000n })[1]!;
+    const c = fundCalls(glmr, { jobId: JOB, pool: POOL, registeredPool: POOL, premium: 5n, coverCap: 4_000n })[1]!;
     expect(c.step).toBe('fundJobWithCover'); expect(c.data.slice(0, 10)).toBe(selector(SIGNATURES.fundJobWithCover));
     expect(c.data.length).toBe(10 + 64 * 10); expect(c.data.slice(-64)).toBe(w('fa0'));
-    expect(() => fundCalls(glmr, { jobId: JOB, pool: POOL, premium: 5n, coverCap: 10_001n })).toThrow(/at most the price/);
+    expect(() => fundCalls(glmr, { jobId: JOB, pool: POOL, registeredPool: POOL, premium: 5n, coverCap: 10_001n })).toThrow(/at most the price/);
   });
   it('quotaOf reads the layer’s quota and falls back to the typed values', async () => {
     const layer = { base: '/api/onboard', fetch: async () => ({ ok: true, status: 200, json: async () => ({ ok: true, grades: { free: { per_user: 3 }, per_block: 3, per_minute: 5 }, price: { grid_per_block: 15, usdc_per_block: 0.15 } }) }) };
@@ -307,8 +307,10 @@ describe('submitCalls and settleCalls', () => {
   });
   it('completed → complete(jobId): the layer’s bytes', () => { const c = settleCalls(JOB, 'completed'); expect(c[0]!.data).toBe('0x83ccfb84' + '11'.repeat(32)); expect(c[0]!.signer).toBe('buyer'); expect(c[0]!.effect).toMatch(/final/); });
   it('rejected → reject(jobId, verdictDigest): the layer’s bytes; the digest is required', () => {
-    expect(settleCalls(JOB, 'rejected', DIGEST)[0]!.data).toBe('0x04f999c7' + '11'.repeat(32) + '22'.repeat(32));
+    const v3Job = { jobId: JOB, rules: 'v3' as const, state: 'Submitted' as const, window: 0, submittedAt: 0, autoCompleteAt: null, deadline: 1 };
+    expect(settleCalls(JOB, 'rejected', DIGEST, { job: v3Job })[0]!.data).toBe('0x04f999c7' + '11'.repeat(32) + '22'.repeat(32));
     expect(() => settleCalls(JOB, 'rejected')).toThrow(/verdict digest/);
+    expect(() => settleCalls(JOB, 'rejected', DIGEST)).toThrow(/job’s rules/);
   });
   it('expired → expire(jobId), anyone: the layer’s bytes', () => { const c = settleCalls(JOB, 'expired'); expect(c[0]!.data).toBe('0xc6441798' + '11'.repeat(32)); expect(c[0]!.signer).toBe('anyone'); });
   it('cheat is refused here: no judge adapter on Base', () => { expect(() => settleCalls(JOB, 'cheat')).toThrow(/no adapter is deployed on Base/); });

@@ -300,23 +300,42 @@ const word = (n: bigint) => { if (n < 0n) throw new RangeError('negative word');
 const addrWord = (a: string) => { if (!isAddress(a)) throw new Error(`not an address: ${a}`); return a.slice(2).toLowerCase().padStart(64, '0'); };
 const call = (chainId: number, to: Address, data: string, step: string, effect: string): UnsignedCall => ({ chainId, to, data: data as Hex, value: '0x0', step, signer: 'anyone', effect });
 
-/** The two calls a deposit takes, in order: an exact-amount approve to the pool, then deposit(assets, receiver). Never a standing allowance. */
-export function depositCalls(a: { chainId?: number; network?: string; pool: Address; asset: Address; amount: bigint; receiver: Address; openOn?: readonly number[] }): UnsignedCall[] {
+/** How an amount of a pool's asset is named in a call's text: GLMR (18 decimals) for Base GLMR, else the `symbol` and `decimals`
+ *  the caller passes, else raw units of the asset's address. */
+function amountLabel(amount: bigint, asset: Address, unit?: { symbol?: string; decimals?: number }): string {
+  if (asset.toLowerCase() === BASE_GLMR.toLowerCase()) return `${formatU(amount, GLMR_DECIMALS, 4)} GLMR`;
+  if (unit?.symbol && unit.decimals !== undefined && Number.isInteger(unit.decimals) && unit.decimals >= 0) return `${formatU(amount, unit.decimals, Math.min(4, unit.decimals))} ${unit.symbol}`;
+  return `${amount} units of ${asset}`;
+}
+
+/**
+ * The two calls a deposit takes, in order: an exact-amount approve to the pool, then deposit(assets, receiver). Never a standing
+ * allowance. On Base the pool must be the factory's pool for its seller and asset: pass `registeredPool`, the answer of
+ * PoolFactory.poolOf(pool.seller(), pool.asset()) (onboard `readHook({ seller, asset })` reads it); a pool the factory did not
+ * create is refused.
+ */
+export function depositCalls(a: { chainId?: number; network?: string; pool: Address; asset: Address; amount: bigint; receiver: Address; openOn?: readonly number[]; registeredPool?: Address | null; symbol?: string; decimals?: number }): UnsignedCall[] {
   const chainId = poolChainOf(a);
   assertPoolsOpen(chainId, a.openOn);
   if (a.amount <= 0n) throw new RangeError('amount must be positive');
+  if (chainId === BASE_CHAIN_ID || a.registeredPool !== undefined) {
+    if (a.registeredPool === undefined) throw new TypeError('depositCalls: on Base the pool is checked against PoolFactory.poolOf(seller, asset); read it and pass { registeredPool }');
+    if (!a.registeredPool || a.registeredPool.toLowerCase() !== a.pool.toLowerCase()) throw new RangeError(`pool ${a.pool} is not the factory's pool for its seller and asset (the factory names ${a.registeredPool ?? 'none'})`);
+  }
+  const what = amountLabel(a.amount, a.asset, a);
   return [
-    call(chainId, a.asset, selector(POOL_SIGNATURES.approve) + addrWord(a.pool) + word(a.amount), 'approve', `Allow the pool to take exactly ${formatU(a.amount, 18, 4)} GLMR. Nothing moves yet.`),
-    call(chainId, a.pool, selector(POOL_SIGNATURES.deposit) + word(a.amount) + addrWord(a.receiver), 'deposit', `Deposit ${formatU(a.amount, 18, 4)} GLMR; the pool mints your shares at today’s price.`),
+    call(chainId, a.asset, selector(POOL_SIGNATURES.approve) + addrWord(a.pool) + word(a.amount), 'approve', `Allow the pool to take exactly ${what}. Nothing moves yet.`),
+    call(chainId, a.pool, selector(POOL_SIGNATURES.deposit) + word(a.amount) + addrWord(a.receiver), 'deposit', `Deposit ${what}; the pool mints your shares at today’s price.`),
   ];
 }
 
-/** The one call a withdrawal takes: redeem(shares, receiver, owner). The pool pays today’s value of the shares, up to what nothing holds. */
-export function redeemCalls(a: { chainId?: number; network?: string; pool: Address; shares: bigint; owner: Address; openOn?: readonly number[] }): UnsignedCall[] {
+/** The one call a withdrawal takes: redeem(shares, receiver, owner). The pool pays today’s value of the shares in its asset, up to
+ *  what nothing holds. An exit is never gated on the factory check. */
+export function redeemCalls(a: { chainId?: number; network?: string; pool: Address; shares: bigint; owner: Address; openOn?: readonly number[]; symbol?: string; decimals?: number }): UnsignedCall[] {
   const chainId = poolChainOf(a);
   assertPoolsOpen(chainId, a.openOn);
   if (a.shares <= 0n) throw new RangeError('shares must be positive');
-  return [call(chainId, a.pool, selector(POOL_SIGNATURES.redeem) + word(a.shares) + addrWord(a.owner) + addrWord(a.owner), 'redeem', `Redeem ${formatU(a.shares, 18, 4)} shares for GLMR at today’s value.`)];
+  return [call(chainId, a.pool, selector(POOL_SIGNATURES.redeem) + word(a.shares) + addrWord(a.owner) + addrWord(a.owner), 'redeem', `Redeem ${a.decimals !== undefined && Number.isInteger(a.decimals) && a.decimals >= 0 ? formatU(a.shares, a.decimals, Math.min(4, a.decimals)) : String(a.shares)} shares for ${a.symbol ?? 'the pool’s asset'} at today’s value.`)];
 }
 
 /** ABI-encode a string: its length word, then the bytes padded to 32. */

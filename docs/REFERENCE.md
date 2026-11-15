@@ -202,20 +202,53 @@ on Base (`@moonbeam-foundation/sdk/onboard`; the hook, the pool factory and the 
 address registry, never typed here):
 
 ```ts
-import { fundCalls, sellerDepositCalls, coverPremium, submitCalls, settleCalls, BASE_GLMR, BASE_USDC, MOONBEAM_HOOK } from '@moonbeam-foundation/sdk/onboard';
+import { planFunding, readHook, fundCalls, sellerDepositCalls, revokeFunderCalls, coverPremium, submitCalls, settleCalls, autoCompleteCalls, claimCalls, sendCalls, BASE_GLMR, BASE_USDC } from '@moonbeam-foundation/sdk/onboard';
+import { baseReader } from '@moonbeam-foundation/sdk/rpc';
 
 // a covered job is a GLMR job: the hook covers in GLMR only (the USDC route closed on 2026-09-29)
 const premium = coverPremium(terms.price, { k: 19, n: 20 });          // the seller's record → the premium (jev-wilson)
-sellerDepositCalls(terms);                                              // the seller approves exactly its deposit
-const [approve, fund] = fundCalls({ ...terms, token: BASE_GLMR }, { pool, premium, coverCap });   // approve price + premium, then fundJobWithCover
-const [approveU, fundU] = fundCalls({ ...terms, token: BASE_USDC });                               // an uncovered USDC job: no pool, premium 0
-submitCalls({ jobId, evidenceDigest, correlator });                     // the seller seals its delivery
-settleCalls(jobId, 'completed');                                         // complete(jobId) · reject(jobId, digest) · expire(jobId)
+const plan = await planFunding(baseReader(), { ...terms, token: BASE_GLMR }, { pool, premium, coverCap });
+// plan.rules: 'v3' | 'v3.1', read from the chain · plan.seller: what the seller signs first · plan.buyer: approve, then fund
+await sendCalls(sellerWallet, plan.seller);                             // the call's chain is enforced: a mismatch is refused
+await sendCalls(buyerWallet, plan.buyer);
+submitCalls({ jobId: plan.jobId, evidenceDigest, correlator });         // the seller seals its delivery
+const { job } = await readHook(baseReader(), { jobId: plan.jobId });    // the job's own rules, state and review window
+settleCalls(plan.jobId, 'completed', undefined, { job });               // complete(jobId)
+autoCompleteCalls(job!, now);                                           // V3.1: after the review window, anyone completes it
 ```
 
+**Which rules apply is read, never assumed.** `readHook(reader, …)` makes one `eth_call` (Multicall3 `aggregate3`) and reports
+`rules: 'v3'` (the live hook) or `'v3.1'` (its append-only upgrade: it answers `poolFactory()` and `MAX_DEADLINE()`, which revert
+on V3), with the factory's pool for the seller, whether the seller approved the buyer as a funder, the seller's allowance, the
+chain's time and, for a job, its state and review window. A job funded before the upgrade keeps the V3 rules on the upgraded
+hook (it has no review window). What changes with the rules:
+
+| | V3 (live) | V3.1 |
+|---|---|---|
+| Who may open a job that pulls the seller's deposit | anyone the seller's allowance reaches | the seller, or a funder it approved: the seller signs `approveFunder(buyer, true)` (`sellerDepositCalls(terms, { rules, funder })`), and may revoke it (`revokeFunderCalls`) |
+| Deadline | unbounded on chain; the SDK refuses more than 365 days | at most 365 days after funding (the hook and the SDK) |
+| After delivery | the buyer completes or rejects; past the deadline anyone expires it | the buyer completes; it has no reject. A hook evaluator may reject inside the review window (1 h to 30 days); after it anyone calls `claimAutoComplete` (`autoCompleteCalls`). A delivered job no longer expires |
+| A named pool | the SDK checks `PoolFactory.poolOf(seller, GLMR)` | the hook and the SDK check it |
+| A payout the recipient cannot receive | reverts the ending | credited; the recipient calls `claim(token)` (`claimCalls`) |
+
+`settleCalls(jobId, 'rejected', digest, { job })` needs the job's rules: on a V3.1 job it refuses the buyer and builds the
+evaluator's call only with `as: 'evaluator'`, inside the window. `fundCalls` with a pool needs `registeredPool` (the factory's
+answer), and refuses any other pool; `planFunding` reads it for you.
+
+**The job id.** `jobIdOf(terms)` without a salt is a public hash of the terms, so anyone who knows them can fund that id first
+and the intended funding reverts `JobExists`. `planFunding` salts every id with 32 fresh random bytes (`newJobSalt()`), so the
+id cannot be derived from the terms. Keep the salt (and the id) to the buyer and the seller until the funding has landed; if a
+funding is refused with `JobExists`, plan again (a new salt) rather than retrying the same id.
+
+**Sending.** Every `UnsignedCall` names its chain. `sendCalls(provider, calls)` (any EIP-1193 wallet) reads the wallet's chain
+before each call and refuses a mismatch (`ChainMismatchError`), or with `switchChain: true` asks the wallet to switch and reads
+it again; it sends the next call only after the previous receipt reads success. An integration that signs another way must make
+the same check (`assertCallChain(call, walletChainId)`).
+
 `fundJob`'s last address word is the **cover pool**, not an evaluator: the hook keeps no per-job evaluator (evaluators are the
-owner's allowlist). `premium` is an argument the hook checks against the pool. A USDC job with a pool is refused before any call
-(the hook would revert `PoolAssetMismatch`). `MOONBEAM_HOOK.status` carries the registry's word on the hook row (`live`, or
+owner's allowlist). `premium` is an argument: the hook refuses 0 when a pool is named (`CoverNotPaidFor`); it does not compare it
+with a rate of the pool. A USDC job with a pool is refused before any call (the hook would revert `PoolAssetMismatch`). Every
+approve the SDK builds is for an exact amount. `MOONBEAM_HOOK.status` carries the registry's word on the hook row (`live`, or
 `scheduled-change` while a route change is announced). `test/fork/run-fork.mjs` sends these calls on a local fork of Base:
 deposit approval, approve, `fundJob` against a live pool, `submit`, `complete`, then the settle's attestation.
 

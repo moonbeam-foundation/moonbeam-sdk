@@ -239,7 +239,7 @@ export async function fundPoolPlan(t: OnboardTransport, p: Pick<DevnetProfile, '
     const { body: j } = await post<{ txs?: { step?: string; to: string; data: string }[]; short?: { needs: string; has: string } | null }>(t, '/pools/vault', { chain_id: p.chainId, pool: a.pool, action: 'deposit', from: a.from, assets: String(a.assets) });
     if (Array.isArray(j.txs) && j.txs.length) return { calls: j.txs.map((x) => asCall(p.chainId, { ...x, effect: x.step === 'approve' ? 'allow the pool to take exactly the backing' : 'deposit the backing; the pool mints shares' }, 'anyone')), short: j.short ?? null, source: 'layer' };
   } catch (e) { if (!(e instanceof OnboardError) || (e.status !== 404 && e.status !== 501)) throw e; }
-  return { calls: depositCalls({ chainId: p.chainId, pool: a.pool, asset: p.token.address, amount: a.assets, receiver: a.from, openOn: [p.chainId] }), short: null, source: 'sdk' };
+  return { calls: depositCalls({ chainId: p.chainId, pool: a.pool, asset: p.token.address, amount: a.assets, receiver: a.from, openOn: [p.chainId], symbol: p.token.symbol, decimals: p.token.decimals }), short: null, source: 'sdk' };
 }
 
 // ── 6–9. hire, deliver, grade, settle ───────────────────────────────────────────────────────────────────────────────────

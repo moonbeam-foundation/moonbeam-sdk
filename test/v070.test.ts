@@ -192,7 +192,7 @@ describe('fixes P2 / P11 / P13 / P6, as 0.7.0 leaves them', () => {
     // the live hook does not bind the allowance to one buyer: the seller is told so, never "for this job only"
     expect(c[0]!.effect).toMatch(/anyone funding a job that names you can use it/); expect(c[0]!.effect).not.toMatch(/never a standing allowance/);
     expect(() => sellerDepositCalls({ token: REGISTRY.glmr, price: 10n, deposit: 10n })).toThrow();
-    expect(fundCalls({ chainId: 8453, jobContract: REGISTRY.hook as never, token: REGISTRY.glmr as never, buyer: seller as never, seller: seller as never, price: 10n, deadline: 2_000_000_000, deposit: 12n, premium: null, task: 't', skills: [] }, { pool: pool0(), premium: 1n })[1]!.data.slice(-40).toLowerCase()).toBe(pool0().slice(2).toLowerCase());
+    expect(fundCalls({ chainId: 8453, jobContract: REGISTRY.hook as never, token: REGISTRY.glmr as never, buyer: seller as never, seller: seller as never, price: 10n, deadline: 2_000_000_000, deposit: 12n, premium: null, task: 't', skills: [] }, { pool: pool0(), registeredPool: pool0(), premium: 1n })[1]!.data.slice(-40).toLowerCase()).toBe(pool0().slice(2).toLowerCase());
   });
   it('P11: pools-open comes from the layer\'s policy (supported + closed_by_policy); Moonbeam stays closed while it says so', async () => {
     const live = fx('layer/pools-networks-2026-10-14.json');

@@ -15,7 +15,7 @@ import { createPublicClient, createWalletClient, createTestClient, http, decodeE
 import { mnemonicToAccount, privateKeyToAccount, generatePrivateKey } from 'viem/accounts';
 import { base } from 'viem/chains';
 import { baseReader } from '@moonbeam-foundation/sdk/rpc';
-import { fundCalls, sellerDepositCalls, submitCalls, settleCalls, coverPremium, jobIdOf } from '@moonbeam-foundation/sdk/onboard';
+import { fundCalls, sellerDepositCalls, submitCalls, settleCalls, coverPremium, jobIdOf, readHook } from '@moonbeam-foundation/sdk/onboard';
 import { settleAttested, hookQuote, readJob } from '@moonbeam-foundation/sdk/assurance';
 import { gradeJob, recordGrade } from '@moonbeam-foundation/sdk/judge';
 import { quoteSale, attestSale } from '@moonbeam-foundation/sdk/resale';
@@ -97,7 +97,8 @@ try {
   await deal(REGISTRY.glmr, seller, 100n * 10n ** 18n, 0);
   const jobId = jobIdOf(terms);
   for (const c of sellerDepositCalls(terms)) log('covered job: seller approves its deposit', { tx: (await send(seller, c)).transactionHash });
-  const [approve, fund] = fundCalls(terms, { pool: pool.address, premium });
+  const { registeredPool } = await readHook(baseReader({ urls: [RPC], warmbed: false }), { seller });   // the factory's pool for this seller, read on the fork
+  const [approve, fund] = fundCalls(terms, { pool: pool.address, premium, registeredPool });
   log('covered job: buyer approves price + premium', { tx: (await send(buyer, approve)).transactionHash });
   const funded = await send(buyer, fund);
   log('covered job: fundJob against pool #1', { tx: funded.transactionHash, jobId, premium: premium.toString(), pool: pool.address });

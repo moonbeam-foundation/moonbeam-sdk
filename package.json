@@ -140,6 +140,7 @@
     "sync": "node scripts/sync.mjs",
     "check:sync": "node scripts/sync.mjs --check",
     "test:fork": "node test/fork/run-fork.mjs",
+    "test:fork:v31": "node test/fork/run-fork-v31.mjs",
     "test:live": "LIVE=1 vitest run test/live.test.ts",
     "e2e:devnet": "npm run build && node scripts/devnet-onboard.mjs",
     "gen:workflows": "node scripts/gen-workflows.mjs",

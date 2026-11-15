@@ -13,11 +13,23 @@
 import { encodeFunction, encodeParams, decodeStatic, topicOf } from '../abi/index.js';
 import { keccakHex, hexToBytes, utf8, isAddress } from '../onboard/index.js';
 
-export const ARBITRATION_ON_BASE = Object.freeze({
-  deployed: false as const,
+export const ARBITRATION_ON_BASE: Readonly<{ deployed: boolean; router: string | null; says: string }> = Object.freeze({
+  deployed: false,
+  /** the router this SDK pins on Base: set in the release that follows its deployment and appointment; until then null */
   router: null,
   says: 'The ArbitratorRouter is not deployed on Base and the hook names no arbitrator: no dispute can be ruled there yet.',
 });
+
+/**
+ * The router a call or a signature may name. Once a router is pinned (`pinned`, by default ARBITRATION_ON_BASE.router), any
+ * other address is refused, so a caller cannot be pointed at a contract that is not the appointed arbitrator. Until one is
+ * pinned (today) the caller's address is used as given, for a fork or a test network; nothing on Base can be ruled yet.
+ */
+export function checkRouter(router: string, pinned: string | null = ARBITRATION_ON_BASE.router): string {
+  if (!isAddress(router)) throw new Error(`router ${router} is not an address (${ARBITRATION_ON_BASE.says})`);
+  if (pinned !== null && router.toLowerCase() !== pinned.toLowerCase()) throw new Error(`router ${router} is not the pinned ArbitratorRouter on Base (${pinned})`);
+  return router;
+}
 
 /** Router.Verdict */
 export const VERDICT = Object.freeze({ None: 0, SellerWins: 1, BuyerWins: 2, Cheated: 3 } as const);
@@ -44,7 +56,7 @@ export const ROUTER_EVENTS = Object.freeze({
 
 export type RouterCall = { chainId: 8453; to: string; data: string; value: '0'; fn: string; who: string };
 const B32 = /^0x[0-9a-fA-F]{64}$/;
-const need = (router: string) => { if (!isAddress(router)) throw new Error(`router ${router} is not an address (${ARBITRATION_ON_BASE.says})`); return router; };
+const need = (router: string) => checkRouter(router);
 const jid = (j: string) => { if (!B32.test(j)) throw new RangeError('a job id is bytes32'); return j; };
 const call = (router: string, fn: keyof typeof ROUTER_SIGNATURES, args: unknown[], who: string): RouterCall =>
   ({ chainId: 8453, to: need(router), data: encodeFunction(ROUTER_SIGNATURES[fn], args as never), value: '0', fn: `ArbitratorRouter.${fn}`, who });

@@ -99,7 +99,8 @@ export type UnsignedCall = {
   data: Hex;
   value: '0x0';
   step: string;
-  signer: 'buyer' | 'seller' | 'anyone';
+  /** who signs it; `evaluator` is a hook evaluator the owner registered (V3.1: the only one who may reject a delivered job) */
+  signer: 'buyer' | 'seller' | 'anyone' | 'evaluator';
   effect: string;
 };
 
@@ -414,14 +415,32 @@ export const SIGNATURES = Object.freeze({
   complete: 'complete(bytes32)',
   reject: 'reject(bytes32,bytes32)',
   expire: 'expire(bytes32)',
+  // V3.1 (an append-only upgrade of the hook; until it executes, these revert on the live V3 hook)
+  approveFunder: 'approveFunder(address,bool)',
+  claimAutoComplete: 'claimAutoComplete(bytes32)',
+  claim: 'claim(address)',
 } as const);
 
 // ── Identifiers the calls need ────────────────────────────────────────────────
 
-/** The bytes32 job id for a set of terms: keccak over the canonical terms, so the same terms always name the same job and anyone can recompute it. */
-export function jobIdOf(t: Pick<HireTerms, 'chainId' | 'buyer' | 'seller' | 'token' | 'price' | 'deadline' | 'task'>): Hex {
-  const canonical = JSON.stringify({ chainId: t.chainId, buyer: t.buyer.toLowerCase(), seller: t.seller.toLowerCase(), token: t.token.toLowerCase(), price: t.price.toString(), deadline: t.deadline, task: t.task });
+/**
+ * The bytes32 job id for a set of terms: keccak over the canonical terms. Without a salt the same terms always name the same
+ * job and anyone who knows the terms can recompute it, which also lets anyone fund that id first: the hook refuses a second
+ * funding of an id (JobExists), so the intended funding fails. With a salt (32 random bytes, `newJobSalt()`, kept private
+ * until the funding lands) the id cannot be derived from the terms. `planFunding` salts every id it plans.
+ */
+export function jobIdOf(t: Pick<HireTerms, 'chainId' | 'buyer' | 'seller' | 'token' | 'price' | 'deadline' | 'task'>, salt?: Hex): Hex {
+  if (salt !== undefined && !isHex32(salt)) throw new Error('a job id salt is 32 bytes');
+  const terms = { chainId: t.chainId, buyer: t.buyer.toLowerCase(), seller: t.seller.toLowerCase(), token: t.token.toLowerCase(), price: t.price.toString(), deadline: t.deadline, task: t.task };
+  const canonical = JSON.stringify(salt === undefined ? terms : { ...terms, salt: salt.toLowerCase() });
   return keccakHex(utf8(canonical));
+}
+
+/** 32 random bytes from the platform's CSPRNG (Web Crypto), for `jobIdOf(terms, salt)`. Throws where none exists. */
+export function newJobSalt(): Hex {
+  const c = (globalThis as { crypto?: { getRandomValues?: (a: Uint8Array) => Uint8Array } }).crypto;
+  if (!c?.getRandomValues) throw new Error('no Web Crypto getRandomValues here: pass your own 32 random bytes as the salt');
+  return bytesToHex(c.getRandomValues(new Uint8Array(32)));
 }
 
 /** correlator = keccak(domain ‖ nonce ‖ payTo ‖ uint64 chainId): binds off-chain work to the job it is paid under. */
@@ -437,21 +456,56 @@ const ZERO: Address = '0x0000000000000000000000000000000000000000';
 
 const call = (to: Address, data: string, step: string, signer: UnsignedCall['signer'], effect: string, chainId = 8453): UnsignedCall => ({ chainId, to, data: data as Hex, value: '0x0', step, signer, effect });
 
+/** The furthest deadline a funding may carry, counted from the chain's time at funding: 365 days. The V3.1 hook refuses a
+ *  later one (DeadlineTooFar); the live V3 hook accepts any, and this SDK refuses it on both, since a pool's reservation and
+ *  the seller's deposit are held until the deadline. */
+export const MAX_DEADLINE_S = 365 * 86_400;
+/** The bounds V3.1 clamps a job's review window (its `challengeWindow`) to, in seconds: 1 hour to 30 days. */
+export const REVIEW_WINDOW_S = Object.freeze({ min: 3_600, max: 30 * 86_400 } as const);
+
+/** Which rules the hook runs, read from the chain (`readHook`): `v3` is the live hook, `v3.1` its upgrade. */
+export type HookRules = 'v3' | 'v3.1';
+
+export interface FundOptions {
+  /** fund this id (e.g. one a planner committed to); otherwise jobIdOf(terms, salt) */
+  jobId?: Hex;
+  /** 32 random bytes the id is derived with (newJobSalt()); keep it private until the funding lands */
+  salt?: Hex;
+  pool?: Address;
+  premium?: bigint;
+  coverCap?: bigint;
+  /** the review window after delivery, in seconds (V3.1 reads it; V3 records it unread) */
+  gradeWindow?: number;
+  evaluator?: never;
+  /** PoolFactory.poolOf(seller, GLMR) as read from the chain (`readHook`). Required when a pool is named: the pool must be the factory's. */
+  registeredPool?: Address | null;
+  /** the hook's rules as read (`readHook`). V3.1: the seller must have approved the buyer as a funder, and the window is bounded */
+  rules?: HookRules;
+  /** the chain's time (`readHook().blockTime`): with it, a deadline in the past or more than MAX_DEADLINE_S ahead is refused */
+  now?: number;
+}
+
 /**
  * The calls the buyer signs to fund a job on Base, in order: an exact-amount token approve to the hook (the price plus the
- * premium, when a pool covers the job), then fundJob — or fundJobWithCover when a cover cap is named. The seller must already
- * have approved the hook for exactly its deposit for this job (never a standing allowance: the live contract pulls the deposit
- * from whichever seller the funder names). Refuses terms whose deposit is below the rule.
+ * premium, when a pool covers the job), then fundJob — or fundJobWithCover when a cover cap is named. Refuses terms whose
+ * deposit is below the rule.
  *
- * The hook's signature (AssuranceHook.sol, fundJob and fundJobWithCover):
+ * The seller must already have approved the hook for exactly its deposit (`sellerDepositCalls`). On the live V3 hook that
+ * allowance is not bound to one buyer or one job: the contract pulls the deposit from whichever seller the funder names. On
+ * V3.1 the hook pulls it only when the caller is the seller or a funder the seller approved (`approveFunder`), so the seller
+ * signs both before the buyer funds; `planFunding` reads which rules apply and what is missing.
+ *
+ * The hook's signature (AssuranceHook.sol, fundJob and fundJobWithCover, the same on V3 and V3.1):
  *   fundJob(bytes32 jobId, address seller, address token, uint256 price, uint256 premium, uint256 deposit, uint64 deadline, uint64 challengeWindow, address pool)
  *   fundJobWithCover(…the same…, address pool, uint256 coverCap)
  * The LAST address word is the COVER POOL, not an evaluator: the hook keeps no per-job evaluator (evaluators are the owner's
- * allowlist, setEvaluator). `premium` is an ARGUMENT the hook checks against the pool (CoverNotPaidFor when a pool is set and the
- * premium is below what it asks); it is not read from the pool. A covered job (pool ≠ 0) is a GLMR job: the hook's USDC route closed
- * on 2026-09-29, and a USDC job with a GLMR pool reverts PoolAssetMismatch. Uncovered jobs (pool = 0, premium = 0) may be USDC.
+ * allowlist, setEvaluator). `premium` is an ARGUMENT: the hook refuses a premium of 0 when a pool is named (CoverNotPaidFor)
+ * and a cover cap above maxCoverFor(price) (CoverCapTooHigh); it does not compare the premium with any rate of the pool. A
+ * named pool must be the factory's pool for the seller (`registeredPool`, read from PoolFactory.poolOf): V3.1 refuses any
+ * other (PoolNotRegistered), and this SDK refuses it on both. A covered job (pool ≠ 0) is a GLMR job: the hook's USDC route
+ * closed on 2026-09-29, and a USDC job with a GLMR pool reverts PoolAssetMismatch. Uncovered jobs (pool = 0, premium = 0) may be USDC.
  */
-export function fundCalls(terms: HireTerms, opts: { jobId?: Hex; pool?: Address; premium?: bigint; coverCap?: bigint; gradeWindow?: number; evaluator?: never } = {}): UnsignedCall[] {
+export function fundCalls(terms: HireTerms, opts: FundOptions = {}): UnsignedCall[] {
   if ((opts as { evaluator?: unknown }).evaluator !== undefined) {
     throw new TypeError('fundCalls: the hook takes no per-job evaluator (evaluators are the owner’s allowlist, setEvaluator); the last word of fundJob is the cover POOL — pass { pool }');
   }
@@ -459,14 +513,31 @@ export function fundCalls(terms: HireTerms, opts: { jobId?: Hex; pool?: Address;
   if (!d.ok) throw new RangeError(d.reason);
   if (terms.price <= 0n) throw new RangeError('price must be positive');
   if (!Number.isInteger(terms.deadline) || terms.deadline <= 0) throw new RangeError('deadline must be unix seconds');
-  const jobId = opts.jobId ?? jobIdOf(terms);
+  if (opts.now !== undefined) {
+    if (terms.deadline <= opts.now) throw new RangeError(`the deadline ${terms.deadline} has passed (chain time ${opts.now})`);
+    if (terms.deadline > opts.now + MAX_DEADLINE_S) throw new RangeError(`the deadline is more than 365 days away (at most ${opts.now + MAX_DEADLINE_S})`);
+  }
+  if (opts.jobId !== undefined && opts.salt !== undefined) throw new TypeError('fundCalls: pass a jobId or a salt, not both');
+  const jobId = opts.jobId ?? jobIdOf(terms, opts.salt);
+  if (!isHex32(jobId)) throw new Error('jobId must be bytes32');
   const pool = opts.pool ?? ZERO;
   const premium = opts.premium ?? 0n;
   const gradeWindow = opts.gradeWindow ?? DEFAULT_GRADE_WINDOW;
+  const v31 = opts.rules === 'v3.1';
+  if (v31 && (!Number.isInteger(gradeWindow) || gradeWindow < REVIEW_WINDOW_S.min || gradeWindow > REVIEW_WINDOW_S.max)) {
+    throw new RangeError(`the review window is ${REVIEW_WINDOW_S.min} to ${REVIEW_WINDOW_S.max} seconds on this hook (the hook would clamp ${gradeWindow})`);
+  }
   if (premium < 0n || (opts.coverCap !== undefined && opts.coverCap < 0n)) throw new RangeError('premium and coverCap are non-negative');
   if (pool === ZERO && premium !== 0n) throw new RangeError('a premium is paid to a pool: name the pool, or fund the job uncovered with premium 0');
   if (pool !== ZERO && terms.token.toLowerCase() !== BASE_GLMR.toLowerCase()) {
     throw new RangeError(`a covered job is a GLMR job: the hook covers in GLMR only (${BASE_GLMR}); fund an uncovered job (no pool) in ${terms.token}, or price the job in GLMR`);
+  }
+  if (pool !== ZERO && premium === 0n) throw new RangeError('a covered job pays a premium: the hook refuses a pool with premium 0 (CoverNotPaidFor)');
+  if (pool !== ZERO) {
+    if (opts.registeredPool === undefined) throw new TypeError('fundCalls: a named pool is checked against PoolFactory.poolOf(seller, GLMR); read it (readHook / planFunding) and pass { registeredPool }');
+    if (!opts.registeredPool || opts.registeredPool.toLowerCase() !== pool.toLowerCase()) {
+      throw new RangeError(`pool ${pool} is not the factory's pool for seller ${terms.seller} (the factory names ${opts.registeredPool ?? 'none'})`);
+    }
   }
   if (pool !== ZERO && opts.coverCap !== undefined && opts.coverCap > terms.price) throw new RangeError('the cover cap is at most the price (the hook caps cover at the price)');
   const approved = terms.price + premium;
@@ -474,10 +545,13 @@ export function fundCalls(terms: HireTerms, opts: { jobId?: Hex; pool?: Address;
     `Lets the hook move exactly ${approved} of the token from you for this job${premium > 0n ? ` (${terms.price} price + ${premium} premium)` : ''}. Nothing moves until the job is funded. Exact amount, never a standing allowance.`);
   const common = b32Word(jobId) + addrWord(terms.seller) + addrWord(terms.token) + word(terms.price) + word(premium) + word(terms.deposit) + word(terms.deadline) + word(gradeWindow) + addrWord(pool);
   const withCover = pool !== ZERO && opts.coverCap !== undefined;
+  const ending = v31
+    ? `The seller must have approved you as a funder first, or the hook refuses the funding. Once the seller delivers you have ${gradeWindow} seconds to complete it; you have no reject, a hook evaluator may reject inside that window, and after it anyone may complete it (claimAutoComplete). Not delivered by the deadline, anyone may unwind it.`
+    : `${pool === ZERO ? 'No pool covers it; you complete or reject it yourself, or an evaluator the hook registered does.' : 'You complete or reject it yourself, or an evaluator the hook registered does.'} Past the deadline anyone may unwind it.`;
   const fund = call(BASE_ASSURANCE_HOOK,
     withCover ? selector(SIGNATURES.fundJobWithCover) + common + word(opts.coverCap as bigint) : selector(SIGNATURES.fundJob) + common,
     withCover ? 'fundJobWithCover' : 'fundJob', 'buyer',
-    `Locks ${terms.price} in escrow from you and ${terms.deposit} from the seller, creating ${pool === ZERO ? 'uncovered' : 'covered'} job ${jobId.slice(0, 10)}…; deadline ${terms.deadline}. ${pool === ZERO ? 'No pool covers it; you complete or reject it yourself, or an evaluator the hook registered does.' : `Pool ${pool.slice(0, 10)}… covers it${withCover ? ` up to ${opts.coverCap}` : ' up to the price'} for a premium of ${premium}.`}`);
+    `Locks ${terms.price} in escrow from you and ${terms.deposit} from the seller, creating ${pool === ZERO ? 'uncovered' : 'covered'} job ${jobId.slice(0, 10)}…; deadline ${terms.deadline}. ${pool === ZERO ? '' : `Pool ${pool.slice(0, 10)}… covers it${withCover ? ` up to ${opts.coverCap}` : ' up to the price'} for a premium of ${premium}. `}${ending}`);
   return [approve, fund];
 }
 
@@ -487,26 +561,81 @@ export function submitCalls(d: Delivery): UnsignedCall[] {
     `Records that you delivered job ${d.jobId.slice(0, 10)}…, sealing evidence ${d.evidenceDigest.slice(0, 10)}… bound by correlator ${d.correlator.slice(0, 10)}…. It does not release payment.`)];
 }
 
+/** What the chain says about one job's rules (`readHook({ jobId })`): V3.1 jobs carry a review window; jobs funded before the
+ *  upgrade, and every job on the V3 hook, do not, and keep the V3 rules. */
+export interface JobRules {
+  jobId: Hex;
+  rules: HookRules;
+  /** the job's state on the hook */
+  state: JobState;
+  /** the review window in seconds (0 for a V3-rules job) */
+  window: number;
+  /** when the seller submitted (0 until then, and on a V3-rules job) */
+  submittedAt: number;
+  /** when anyone may claimAutoComplete (null until submitted, and on a V3-rules job) */
+  autoCompleteAt: number | null;
+  /** the job's deadline, unix seconds (0 when the job does not exist) */
+  deadline: number;
+}
+export const JOB_STATES = ['None', 'Funded', 'Submitted', 'Completed', 'Expired', 'Rejected', 'Cheated'] as const;
+export type JobState = (typeof JOB_STATES)[number];
+
 /**
  * The call that settles a job under one of the four endings.
  *   completed → complete(jobId), the buyer or a registered evaluator
- *   rejected  → reject(jobId, verdictDigest), the buyer or a registered evaluator; the digest is required
- *   expired   → expire(jobId), anyone, once the deadline has passed
+ *   rejected  → reject(jobId, verdictDigest); the digest is required, and so are the job's rules (`job`, from readHook):
+ *               a job under V3 rules: the buyer or a registered evaluator, while it is Submitted;
+ *               a job under V3.1 rules: the buyer has no reject. Only a hook evaluator rejects, inside the review window
+ *               (`as: 'evaluator'`); otherwise the buyer completes, or the window passes and anyone calls claimAutoComplete
+ *   expired   → expire(jobId), anyone, once the deadline has passed; on a V3.1 job only while it is not yet delivered
  *   cheat     → refused here: an adjudicated cheat is posted through the judge adapter by a registered evaluator, and no adapter is deployed on Base
  */
-export function settleCalls(jobId: Hex, ending: Ending, verdictDigest?: Hex): UnsignedCall[] {
+export function settleCalls(jobId: Hex, ending: Ending, verdictDigest?: Hex, opts: { job?: JobRules; as?: 'buyer' | 'evaluator'; now?: number } = {}): UnsignedCall[] {
   if (!isHex32(jobId)) throw new Error('jobId must be bytes32');
+  const job = opts.job;
+  if (job && job.jobId.toLowerCase() !== jobId.toLowerCase()) throw new Error(`the rules read are for job ${job.jobId}, not ${jobId}`);
   switch (ending) {
     case 'completed':
-      return [call(BASE_ASSURANCE_HOOK, selector(SIGNATURES.complete) + b32Word(jobId), 'complete', 'buyer', ENDING_MONEY.completed + ' This is final.')];
-    case 'rejected':
+      if (job && job.state !== 'Submitted') throw new RangeError(`only a delivered (Submitted) job can be completed; this one is ${job.state}`);
+      return [call(BASE_ASSURANCE_HOOK, selector(SIGNATURES.complete) + b32Word(jobId), 'complete', opts.as ?? 'buyer', ENDING_MONEY.completed + ' This is final.')];
+    case 'rejected': {
       if (!verdictDigest || !isHex32(verdictDigest)) throw new Error('a rejection carries the verdict digest it rests on');
-      return [call(BASE_ASSURANCE_HOOK, selector(SIGNATURES.reject) + b32Word(jobId) + b32Word(verdictDigest), 'reject', 'buyer', ENDING_MONEY.rejected)];
+      if (!job) throw new TypeError('settleCalls: a rejection depends on the job’s rules (a job funded under V3.1 has no buyer reject); read them with readHook({ jobId }) and pass { job }');
+      if (job.state !== 'Submitted') throw new RangeError(`only a delivered (Submitted) job can be rejected; this one is ${job.state}`);
+      const data = selector(SIGNATURES.reject) + b32Word(jobId) + b32Word(verdictDigest);
+      if (job.rules === 'v3') return [call(BASE_ASSURANCE_HOOK, data, 'reject', opts.as ?? 'buyer', ENDING_MONEY.rejected)];
+      if (opts.as !== 'evaluator') {
+        throw new RangeError('this job runs the V3.1 rules: the buyer has no reject. Complete it, or let the review window pass and anyone completes it (claimAutoComplete); only a hook evaluator may reject, inside the window');
+      }
+      if (opts.now !== undefined && job.autoCompleteAt !== null && opts.now >= job.autoCompleteAt) throw new RangeError(`the review window closed at ${job.autoCompleteAt}: the job can only be completed now`);
+      return [call(BASE_ASSURANCE_HOOK, data, 'reject', 'evaluator', `${ENDING_MONEY.rejected} Only a hook evaluator can send it, and only before ${job.autoCompleteAt ?? 'the end of the review window'}.`)];
+    }
     case 'expired':
+      if (job && job.rules === 'v3.1' && job.state === 'Submitted') throw new RangeError('a delivered job under the V3.1 rules does not expire: after its review window anyone completes it (claimAutoComplete)');
+      if (job && job.state !== 'Funded' && job.state !== 'Submitted') throw new RangeError(`this job has ended (${job.state})`);
+      if (job && opts.now !== undefined && opts.now <= job.deadline) throw new RangeError(`the deadline ${job.deadline} has not passed`);
       return [call(BASE_ASSURANCE_HOOK, selector(SIGNATURES.expire) + b32Word(jobId), 'expire', 'anyone', ENDING_MONEY.expired)];
     case 'cheat':
       throw new Error('an adjudicated cheat is posted through the judge adapter by a registered evaluator; no adapter is deployed on Base, so this module cannot build it');
   }
+}
+
+/** V3.1: the review window of a delivered job has passed with no decision; anyone may send claimAutoComplete(jobId), which pays
+ *  exactly as a completion. Refused for a job under the V3 rules (it has no window), for a job that is not delivered, and, with
+ *  `now` (chain time), before the window ends. */
+export function autoCompleteCalls(job: JobRules, now?: number): UnsignedCall[] {
+  if (!isHex32(job.jobId)) throw new Error('jobId must be bytes32');
+  if (job.rules !== 'v3.1') throw new RangeError('this job runs the V3 rules: it has no review window, so there is no auto-completion (the buyer completes, or past the deadline anyone unwinds it)');
+  if (job.state !== 'Submitted' || job.autoCompleteAt === null) throw new RangeError(`only a delivered job completes on its own; this one is ${job.state}`);
+  if (now !== undefined && now < job.autoCompleteAt) throw new RangeError(`the review window is open until ${job.autoCompleteAt}`);
+  return [call(BASE_ASSURANCE_HOOK, selector(SIGNATURES.claimAutoComplete) + b32Word(job.jobId), 'claimAutoComplete', 'anyone',
+    `${ENDING_MONEY.completed} The review window has passed with no decision, so the delivery stands. Anyone may send it. This is final.`)];
+}
+
+/** V3.1: withdraw what an ending credited to you in `token` because its transfer to you failed (`claimable(token, you)`, from readHook). */
+export function claimCalls(token: Address): UnsignedCall[] {
+  return [call(BASE_ASSURANCE_HOOK, selector(SIGNATURES.claim) + addrWord(token), 'claim', 'anyone',
+    `Pays you what a job's ending credited to you in ${token} when the transfer to you failed. Only the credited account receives it.`)];
 }
 
 // ── Transport and the fetching functions ──────────────────────────────────────
@@ -701,12 +830,220 @@ export function coverPremium(price: bigint, record: { k: number; n: number }): b
   return premiumAmount(price, wilsonUpperFailure(record.k, record.n));
 }
 
-/** The seller's call before funding: approve the hook for exactly its deposit (the hook pulls it at fundJob). The live hook does
- *  not bind the allowance to one buyer or one job: any funder may name this seller and spend it on terms of its own until it is
- *  spent, so the seller approves only when its buyer is about to fund, and revokes (approve 0) if the funding does not come. */
-export function sellerDepositCalls(terms: Pick<HireTerms, 'token' | 'deposit' | 'price'>): UnsignedCall[] {
+/**
+ * The seller's calls before funding, in order. On both hooks: approve the hook for exactly its deposit (the hook pulls it at
+ * fundJob). The rules decide what that allowance means, so pass them as read (`readHook`, or let `planFunding` do it):
+ *   v3   (the live hook) the allowance is not bound to one buyer or one job: any funder may name this seller and spend it on
+ *        terms of its own until it is spent, so the seller approves only when its buyer is about to fund, and revokes
+ *        (approve 0) if the funding does not come.
+ *   v3.1 the hook pulls the deposit only for the seller itself or a funder the seller approved, so the seller also signs
+ *        approveFunder(funder, true) for its buyer (`funder`). The approval names the funder, not the terms, and stays until
+ *        the seller revokes it (`revokeFunderCalls`): revoke it after the funding unless the seller wants that buyer to open
+ *        more jobs. `funderApproved: true` (read) leaves the call out.
+ * Without `rules` the live hook's (v3) calls are built.
+ */
+export function sellerDepositCalls(terms: Pick<HireTerms, 'token' | 'deposit' | 'price'>, opts: { rules?: HookRules; funder?: Address; funderApproved?: boolean } = {}): UnsignedCall[] {
   const d = checkDeposit(terms.price, terms.deposit);
   if (!d.ok) throw new RangeError(d.reason);
-  return [call(terms.token, selector(SIGNATURES.approve) + addrWord(BASE_ASSURANCE_HOOK) + word(terms.deposit), 'approve-deposit', 'seller',
-    `Lets the hook take exactly your ${terms.deposit} deposit at funding; it comes back with the price when the job completes. The hook does not tie this allowance to your buyer: until it is spent, anyone funding a job that names you can use it. Approve only when your buyer is about to fund, and set it back to 0 if the funding does not come.`)];
+  const data = selector(SIGNATURES.approve) + addrWord(BASE_ASSURANCE_HOOK) + word(terms.deposit);
+  if (opts.rules !== 'v3.1') {
+    return [call(terms.token, data, 'approve-deposit', 'seller',
+      `Lets the hook take exactly your ${terms.deposit} deposit at funding; it comes back with the price when the job completes. The hook does not tie this allowance to your buyer: until it is spent, anyone funding a job that names you can use it. Approve only when your buyer is about to fund, and set it back to 0 if the funding does not come.`)];
+  }
+  if (!opts.funder || !isAddress(opts.funder)) throw new RangeError('on this hook the seller approves its buyer as a funder: pass { funder } (the address that sends the funding)');
+  const out = [call(terms.token, data, 'approve-deposit', 'seller',
+    `Lets the hook take exactly your ${terms.deposit} deposit at funding; it comes back with the price when the job completes. The hook takes it only for a job you or a funder you approved opens. Exact amount, never a standing allowance.`)];
+  if (opts.funderApproved !== true) out.push(...approveFunderCalls(opts.funder));
+  return out;
 }
+
+/** V3.1: approveFunder(funder, true). The funder may open jobs that pull your deposit (up to your allowance to the hook, each
+ *  with a deadline at most 365 days out) until you revoke it. */
+export function approveFunderCalls(funder: Address): UnsignedCall[] {
+  return [call(BASE_ASSURANCE_HOOK, selector(SIGNATURES.approveFunder) + addrWord(funder) + word(1n), 'approve-funder', 'seller',
+    `Lets ${funder} open jobs that pull your deposit, up to what you approved the hook for. It names the funder, not the terms, and stays until you revoke it (approveFunder(${funder.slice(0, 10)}…, false)).`)];
+}
+
+/** V3.1: approveFunder(funder, false). Stops the funder opening new jobs against your deposit; jobs it already funded are unchanged. */
+export function revokeFunderCalls(funder: Address): UnsignedCall[] {
+  return [call(BASE_ASSURANCE_HOOK, selector(SIGNATURES.approveFunder) + addrWord(funder) + word(0n), 'revoke-funder', 'seller',
+    `Stops ${funder} opening new jobs that pull your deposit. Jobs it already funded are not changed.`)];
+}
+
+// ── The hook's rules, by read (the live V3 hook and its V3.1 upgrade) ─────────────────────────────────────────────────────
+// Which rules apply is read from the chain, never assumed: V3.1 answers poolFactory() and MAX_DEADLINE(); V3 has neither (and
+// no fallback), so both calls revert there. Every fact below comes from ONE eth_call: Multicall3.aggregate3 with allowFailure.
+
+/** Multicall3, the same address on Base and most EVM chains. */
+export const MULTICALL3: Address = '0xcA11bde05977b3631167028862bE2a173976CA11';
+
+/** Anything that answers one JSON-RPC call: `baseReader()` from ./rpc, or a wallet's EIP-1193 `request` wrapped. */
+export interface ChainReader { call<T = unknown>(method: string, params: readonly unknown[]): Promise<T> }
+
+/** The views read, by signature. */
+export const HOOK_READS = Object.freeze({
+  poolFactory: 'poolFactory()',
+  maxDeadline: 'MAX_DEADLINE()',
+  reviewOf: 'reviewOf(bytes32)',
+  jobs: 'jobs(bytes32)',
+  funderApproved: 'funderApproved(address,address)',
+  claimable: 'claimable(address,address)',
+  poolOf: 'poolOf(address,address)',
+  allowance: 'allowance(address,address)',
+  blockTimestamp: 'getCurrentBlockTimestamp()',
+  aggregate3: 'aggregate3((address,bool,bytes)[])',
+} as const);
+
+export interface HookFacts {
+  hook: Address;
+  rules: HookRules;
+  /** the factory a named pool must come from: the hook's own poolFactory() on V3.1, the shipped factory on V3 */
+  poolFactory: Address;
+  /** the hook's furthest deadline in seconds (V3.1); null on V3, which has none (the SDK still applies MAX_DEADLINE_S) */
+  maxDeadline: number | null;
+  /** the chain's time at the read, unix seconds */
+  blockTime: number;
+  /** PoolFactory.poolOf(seller, asset), when a seller was named; null when the factory has no pool for it */
+  registeredPool?: Address | null;
+  /** funderApproved(seller, funder) on V3.1; null on V3 (it has no such approval) */
+  funderApproved?: boolean | null;
+  /** token.allowance(seller, hook), when a seller and a token were named */
+  depositAllowance?: bigint | null;
+  /** the rules and state of one job, when a jobId was named */
+  job?: JobRules;
+  /** claimable(token, account) on V3.1, when a token and an account were named; null on V3 */
+  claimable?: bigint | null;
+}
+
+const padHex = (h: string) => h.padEnd(Math.ceil(h.length / 64) * 64, '0');
+/** aggregate3 calldata for calls that may each fail (allowFailure = true) */
+export function encodeAggregate3(calls: readonly { target: Address; data: Hex }[]): Hex {
+  const elems = calls.map((c) => { const d = c.data.replace(/^0x/, ''); return addrWord(c.target) + word(1n) + word(96n) + word(BigInt(d.length / 2)) + padHex(d); });
+  let offsets = ''; let at = calls.length * 32;
+  for (const e of elems) { offsets += word(BigInt(at)); at += e.length / 2; }
+  return (selector(HOOK_READS.aggregate3) + word(32n) + word(BigInt(calls.length)) + offsets + elems.join('')) as Hex;
+}
+/** aggregate3's return: (bool success, bytes returnData)[] */
+export function decodeAggregate3(ret: string): { success: boolean; data: Hex }[] {
+  const h = ret.replace(/^0x/, '');
+  const num = (byte: number): number => { const w = h.slice(byte * 2, byte * 2 + 64); if (w.length < 64) throw new Error('aggregate3: the answer is too short'); const v = BigInt(`0x${w}`); if (v > BigInt(h.length)) throw new Error('aggregate3: an offset points outside the answer'); return Number(v); };
+  const arr = num(0); const n = num(arr); const base = arr + 32;
+  const out: { success: boolean; data: Hex }[] = [];
+  for (let i = 0; i < n; i++) {
+    const e = base + num(base + i * 32);
+    const success = BigInt(`0x${h.slice(e * 2, e * 2 + 64)}`) !== 0n;
+    const bo = e + num(e + 32); const len = num(bo);
+    if ((bo + 32 + len) * 2 > h.length) throw new Error('aggregate3: return data runs past the answer');
+    out.push({ success, data: `0x${h.slice((bo + 32) * 2, (bo + 32 + len) * 2)}` as Hex });
+  }
+  return out;
+}
+
+const wordAt = (data: Hex, i: number): bigint | null => { const w = data.slice(2 + i * 64, 2 + i * 64 + 64); return w.length === 64 ? BigInt(`0x${w}`) : null; };
+const addrOf = (v: bigint): Address => `0x${v.toString(16).padStart(40, '0')}` as Address;
+
+/**
+ * Read which rules the hook runs and the facts a call needs, in one eth_call (Multicall3.aggregate3):
+ *   always      poolFactory(), MAX_DEADLINE() (both revert on V3) and the chain's time
+ *   seller      PoolFactory.poolOf(seller, asset ?? GLMR); with `funder`, funderApproved(seller, funder); with `token`, the
+ *               seller's allowance of that token to the hook
+ *   jobId       jobs(jobId) and reviewOf(jobId): the job's state, deadline and (V3.1) review window
+ *   account     with `token`, claimable(token, account) (V3.1)
+ * Throws when the read fails (no answer is never read as V3), when the hook answers as neither V3 nor V3.1, and when a V3.1 hook
+ * names a pool factory other than the one this SDK ships (or `factory`).
+ */
+export async function readHook(r: ChainReader, q: { seller?: Address; asset?: Address; funder?: Address; jobId?: Hex; token?: Address; account?: Address; hook?: Address; factory?: Address; block?: string } = {}): Promise<HookFacts> {
+  const hook = q.hook ?? BASE_ASSURANCE_HOOK; const factory = q.factory ?? BASE_POOL_FACTORY;
+  for (const [k, v] of Object.entries({ hook, factory, seller: q.seller, asset: q.asset, funder: q.funder, token: q.token, account: q.account })) if (v !== undefined && !isAddress(v)) throw new Error(`readHook: ${k} is not an address: ${v}`);
+  if (q.jobId !== undefined && !isHex32(q.jobId)) throw new Error('readHook: jobId must be bytes32');
+  const calls: { key: string; target: Address; data: Hex }[] = [
+    { key: 'poolFactory', target: hook, data: selector(HOOK_READS.poolFactory) },
+    { key: 'maxDeadline', target: hook, data: selector(HOOK_READS.maxDeadline) },
+    { key: 'time', target: MULTICALL3, data: selector(HOOK_READS.blockTimestamp) },
+  ];
+  if (q.seller) {
+    calls.push({ key: 'poolOf', target: factory, data: (selector(HOOK_READS.poolOf) + addrWord(q.seller) + addrWord(q.asset ?? BASE_GLMR)) as Hex });
+    if (q.funder) calls.push({ key: 'funderApproved', target: hook, data: (selector(HOOK_READS.funderApproved) + addrWord(q.seller) + addrWord(q.funder)) as Hex });
+    if (q.token) calls.push({ key: 'allowance', target: q.token, data: (selector(HOOK_READS.allowance) + addrWord(q.seller) + addrWord(hook)) as Hex });
+  }
+  if (q.jobId) {
+    calls.push({ key: 'jobs', target: hook, data: (selector(HOOK_READS.jobs) + b32Word(q.jobId)) as Hex });
+    calls.push({ key: 'reviewOf', target: hook, data: (selector(HOOK_READS.reviewOf) + b32Word(q.jobId)) as Hex });
+  }
+  if (q.account && q.token) calls.push({ key: 'claimable', target: hook, data: (selector(HOOK_READS.claimable) + addrWord(q.token) + addrWord(q.account)) as Hex });
+  const ret = await r.call<string>('eth_call', [{ to: MULTICALL3, data: encodeAggregate3(calls) }, q.block ?? 'latest']);
+  if (typeof ret !== 'string' || !/^0x[0-9a-fA-F]*$/.test(ret) || ret.length < 130) throw new Error('readHook: the read returned no answer');
+  const res = decodeAggregate3(ret);
+  if (res.length !== calls.length) throw new Error(`readHook: ${calls.length} reads sent, ${res.length} answered`);
+  const got = (k: string) => { const i = calls.findIndex((c) => c.key === k); const x = i >= 0 ? res[i]! : null; return x && x.success && x.data.length >= 66 ? x.data : null; };
+  const pf = got('poolFactory'); const md = got('maxDeadline'); const t = got('time');
+  if (!t) throw new Error('readHook: the chain time did not read (is Multicall3 deployed here?)');
+  if ((pf === null) !== (md === null)) throw new Error('readHook: the hook answers neither as V3 (no poolFactory, no MAX_DEADLINE) nor as V3.1 (both)');
+  const rules: HookRules = pf ? 'v3.1' : 'v3';
+  let poolFactory = factory;
+  if (pf) {
+    const named = addrOf(wordAt(pf, 0)!);
+    if (named === ZERO) throw new Error('readHook: the hook runs V3.1 but names no pool factory (initializeV31 never ran): every covered funding would revert');
+    if (named.toLowerCase() !== factory.toLowerCase()) throw new Error(`readHook: the hook takes pools from factory ${named}, not ${factory}; pass { factory } once that factory is known`);
+    poolFactory = named;
+  }
+  const facts: HookFacts = { hook, rules, poolFactory, maxDeadline: md ? Number(wordAt(md, 0)) : null, blockTime: Number(wordAt(t, 0)) };
+  if (q.seller) {
+    const p = got('poolOf');
+    if (p === null) throw new Error(`readHook: PoolFactory.poolOf did not read on ${factory}`);
+    const pa = addrOf(wordAt(p, 0)!); facts.registeredPool = pa === ZERO ? null : pa;
+    if (q.funder) { const f = got('funderApproved'); facts.funderApproved = rules === 'v3.1' ? (f ? wordAt(f, 0) !== 0n : (() => { throw new Error('readHook: funderApproved did not read on a V3.1 hook'); })()) : null; }
+    if (q.token) { const a = got('allowance'); facts.depositAllowance = a ? wordAt(a, 0) : null; }
+  }
+  if (q.jobId) {
+    const j = got('jobs');
+    if (j === null || j.length < 2 + 10 * 64) throw new Error('readHook: jobs(jobId) did not read');
+    const stateN = Number(wordAt(j, 9)); const state = JOB_STATES[stateN];
+    if (!state) throw new Error(`readHook: unknown job state ${stateN}`);
+    const rv = rules === 'v3.1' ? got('reviewOf') : null;
+    if (rules === 'v3.1' && rv === null) throw new Error('readHook: reviewOf did not read on a V3.1 hook');
+    const window = rv ? Number(wordAt(rv, 0)) : 0; const submittedAt = rv ? Number(wordAt(rv, 1) ?? 0n) : 0;
+    const v31Job = rules === 'v3.1' && window !== 0;
+    facts.job = { jobId: q.jobId, rules: v31Job ? 'v3.1' : 'v3', state, window: v31Job ? window : 0, submittedAt: v31Job ? submittedAt : 0,
+      autoCompleteAt: v31Job && submittedAt > 0 ? submittedAt + window : null, deadline: Number(wordAt(j, 6)) };
+  }
+  if (q.account && q.token) { const c = got('claimable'); facts.claimable = rules === 'v3.1' ? (c ? wordAt(c, 0) : null) : null; }
+  return facts;
+}
+
+export interface FundingPlan {
+  rules: HookRules;
+  jobId: Hex;
+  /** the salt the id was derived with (null when a jobId was passed in): keep it private until the funding lands */
+  salt: Hex | null;
+  /** what the seller signs first, in order (approve-deposit; on V3.1 approve-funder unless already approved) */
+  seller: UnsignedCall[];
+  /** what the buyer signs after the seller: approve, then fundJob / fundJobWithCover */
+  buyer: UnsignedCall[];
+  facts: HookFacts;
+  notes: string[];
+}
+
+/**
+ * Plan one funding from the chain's own answer: read the rules, the factory's pool for the seller, whether the seller approved
+ * this buyer as a funder, the seller's outstanding allowance and the chain's time (one eth_call), then build the seller's and
+ * the buyer's calls for exactly those rules. The job id is salted with fresh random bytes unless a jobId is passed: an id
+ * nobody can derive from the terms cannot be funded first by someone else. On a JobExists refusal, plan again (a new salt).
+ */
+export async function planFunding(r: ChainReader, terms: HireTerms, opts: Omit<FundOptions, 'registeredPool' | 'rules' | 'now'> = {}): Promise<FundingPlan> {
+  if (!isAddress(terms.buyer) || terms.buyer.toLowerCase() === ZERO) throw new RangeError('planFunding: the terms name no buyer (the address that sends the funding)');
+  const facts = await readHook(r, { seller: terms.seller, asset: BASE_GLMR, funder: terms.buyer, token: terms.token });
+  const salt = opts.jobId !== undefined ? null : (opts.salt ?? newJobSalt());
+  const buyer = fundCalls(terms, { ...opts, ...(salt ? { salt } : {}), ...(opts.pool ? { registeredPool: facts.registeredPool ?? null } : {}), rules: facts.rules, now: facts.blockTime });
+  const jobId = opts.jobId ?? jobIdOf(terms, salt ?? undefined);
+  const self = terms.buyer.toLowerCase() === terms.seller.toLowerCase();
+  const seller = sellerDepositCalls(terms, { rules: facts.rules, funder: terms.buyer, funderApproved: self || facts.funderApproved === true });
+  const notes: string[] = [];
+  if (facts.rules === 'v3') notes.push('The hook runs the V3 rules: the seller’s allowance can be spent by any funder that names it, so the seller approves in the block before the funding, or revokes it.');
+  else notes.push(facts.funderApproved || self ? 'The seller has already approved this buyer as a funder.' : 'The seller approves this buyer as a funder (approveFunder) before the buyer funds; it may revoke it after.');
+  if (facts.depositAllowance && facts.depositAllowance > 0n) notes.push(`The seller already allows the hook ${facts.depositAllowance} of the token; its approve-deposit sets that to exactly ${terms.deposit}.`);
+  return { rules: facts.rules, jobId, salt, seller, buyer, facts, notes };
+}
+
+export { sendCalls, assertCallChain, ChainMismatchError } from './send.js';
+export type { Eip1193Provider, SendOptions } from './send.js';

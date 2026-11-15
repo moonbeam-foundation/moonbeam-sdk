@@ -2,6 +2,29 @@
 
 ## 0.13.0
 
+- **Ready for the hook's V3.1 upgrade, and still right on the live V3 hook.** Which rules apply is read from the chain, never
+  set by a flag: `readHook(reader, { seller, funder, jobId, token, account })` makes one `eth_call` (Multicall3 `aggregate3`)
+  and returns `rules: 'v3' | 'v3.1'`, the factory's pool for the seller, the funder approval, the seller's allowance, the chain's
+  time and a job's state and review window. `planFunding(reader, terms, opts)` reads them and returns the seller's calls
+  (approve the deposit; on V3.1 also `approveFunder(buyer, true)`) and the buyer's (approve, fund), for the rules it found.
+  New builders: `approveFunderCalls`, `revokeFunderCalls`, `autoCompleteCalls` (V3.1 `claimAutoComplete` after the review
+  window), `claimCalls` (V3.1 `claim(token)`). `SIGNATURES` gains `approveFunder`, `claimAutoComplete`, `claim`.
+- **No buyer reject on a V3.1 job.** `settleCalls(jobId, 'rejected', digest, { job })` now needs the job's rules (`readHook`):
+  a V3 job keeps the buyer's reject; on a V3.1 job the buyer is refused and only a hook evaluator's reject is built
+  (`as: 'evaluator'`), inside the window. `expired` is refused for a delivered V3.1 job. `UnsignedCall.signer` may be `evaluator`.
+- **A named pool must be the factory's.** `fundCalls` with a pool needs `registeredPool` (`PoolFactory.poolOf(seller, GLMR)`)
+  and refuses any other pool, and a pool with premium 0. `depositCalls` on Base needs it too; `redeemCalls` never does.
+- **Deadlines at most 365 days out** (`MAX_DEADLINE_S`) whenever the chain's time is known (`now`, which `planFunding` reads);
+  on V3.1 the review window must be 1 hour to 30 days (`REVIEW_WINDOW_S`).
+- **A salted job id.** `jobIdOf(terms, salt)` and `newJobSalt()`; `planFunding` salts every id so it cannot be derived from the
+  terms and funded first by someone else. `fundCalls({ salt })`. Without a salt the id is as before.
+- **The call's chain is enforced when the SDK sends.** `sendCalls(provider, calls, { switchChain })` reads the wallet's chain
+  before each call and refuses a mismatch (`ChainMismatchError`, `assertCallChain`), and waits for each receipt.
+- **The arbitration router is pinned once it is deployed.** `checkRouter(router, pinned)`: with a pinned router
+  (`ARBITRATION_ON_BASE.router`, null until deployment) every other address is refused.
+- **Labels.** `depositCalls` names the pool's asset (GLMR, or the `symbol`/`decimals` passed, or raw units of the asset), and
+  `redeemCalls` no longer says GLMR for every pool. The `fundCalls` docs say what the hook checks of the premium.
+
 - **Where an agent is listed: `journey(t, ref)`.** `GET /listed?agent=<ref>&view=journey` (listed.journey.v1), typed: one
   agent on every venue, its standing (`listed_by_owner`, `listed_by_moonbeam`, `listable`, `not_yet`, `closed`, `unread`),
   five LEDs per venue (`offer`, `hire`, `list`, `read_back`, `paid`), each `{ state, why, evidence, moves_when }`, and the one
