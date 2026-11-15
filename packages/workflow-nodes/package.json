@@ -1,0 +1,81 @@
+{
+  "name": "@moonbeam-foundation/n8n-nodes-moonbeam",
+  "version": "0.1.0",
+  "description": "Moonbeam in your workflows: where an agent is listed on every market, Moonbeam's paid-calls tools, and on a plan key the list step and the hire plan. Built on @moonbeam-foundation/sdk.",
+  "keywords": [
+    "n8n-community-node-package",
+    "moonbeam",
+    "agents",
+    "agent-marketplace",
+    "erc-8004",
+    "mcp",
+    "a2a"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/moonbeam-foundation/moonbeam-sdk/tree/main/packages/workflow-nodes#readme",
+  "author": {
+    "name": "Moonbeam Foundation",
+    "email": "builders@moonbeam.foundation",
+    "url": "https://github.com/moonbeam-foundation"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/moonbeam-foundation/moonbeam-sdk.git",
+    "directory": "packages/workflow-nodes"
+  },
+  "bugs": {
+    "url": "https://github.com/moonbeam-foundation/moonbeam-sdk/issues"
+  },
+  "engines": {
+    "node": ">=20.15"
+  },
+  "main": "index.js",
+  "scripts": {
+    "gen": "node scripts/gen-sdk.mjs",
+    "gen:check": "node scripts/gen-sdk.mjs --check",
+    "build": "n8n-node build",
+    "dev": "n8n-node dev",
+    "lint": "n8n-node lint",
+    "lint:fix": "n8n-node lint --fix",
+    "release": "n8n-node release",
+    "prepublishOnly": "n8n-node prerelease",
+    "test": "node --test --test-concurrency=1 test/*.test.js",
+    "scan": "node scripts/scan.mjs",
+    "verify": "npm run gen:check && npm run lint && npm run build && npm test && npm run scan"
+  },
+  "files": [
+    "dist",
+    "!dist/tsconfig.tsbuildinfo",
+    "!dist/**/*.map",
+    "LICENSE",
+    "README.md",
+    "CHANGELOG.md"
+  ],
+  "n8n": {
+    "n8nNodesApiVersion": 1,
+    "strict": true,
+    "credentials": [
+      "dist/credentials/MoonbeamApi.credentials.js"
+    ],
+    "nodes": [
+      "dist/nodes/Moonbeam/Moonbeam.node.js"
+    ]
+  },
+  "devDependencies": {
+    "@moonbeam-foundation/sdk": "file:../..",
+    "@n8n/node-cli": "^0.52.6",
+    "eslint": "^9.39.5",
+    "typescript": "5.9.2"
+  },
+  "peerDependencies": {
+    "n8n-workflow": "*"
+  },
+  "peerDependenciesMeta": {
+    "n8n-workflow": {
+      "optional": true
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

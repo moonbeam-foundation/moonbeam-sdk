@@ -9,6 +9,8 @@ permissions:
   id-token: write
 jobs:
   publish:
+    # the SDK's own tags only (vX.Y.Z); the workflow node's releases (workflow-nodes-vX.Y.Z) are publish-workflow-nodes.yml
+    if: startsWith(github.event.release.tag_name, 'v')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
