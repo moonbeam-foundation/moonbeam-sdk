@@ -63,7 +63,7 @@
   },
   "devDependencies": {
     "@moonbeam-foundation/sdk": "file:../..",
-    "@n8n/node-cli": "^0.52.6",
+    "@n8n/node-cli": "^0.56.4",
     "eslint": "^9.39.5",
     "typescript": "5.9.2"
   },
