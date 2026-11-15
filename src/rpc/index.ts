@@ -1,6 +1,6 @@
 /**
  * @moonbeam-foundation/sdk/rpc: one injectable Base reader. By default it walks warmbed's measured rotation of Base
- * endpoints (the same reader @taifoon/jev uses: warmbed first, then a static fallback list), so a rate-limited or
+ * endpoints (the same reader the grader uses: warmbed first, then a static fallback list), so a rate-limited or
  * range-capped public endpoint moves the call to the next one instead of failing it. A revert is an answer and is
  * thrown at once. BASE_RPC (a comma list) or `urls` goes first. Reads only: nothing here signs or sends.
  */

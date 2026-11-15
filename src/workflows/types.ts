@@ -1,4 +1,4 @@
-/** One node of a Studio workflow: its role on the canvas, the layer call it runs (null for the trigger, the model and the
+/** One node of a Studio workflow: its role on the canvas, the Moonbeam call it runs (null for the trigger, the model and the
  *  output), and what it does to the world. */
 export type WorkflowNode = {
   name: string;

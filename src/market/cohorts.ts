@@ -1,5 +1,5 @@
-// _VENUE_TRUTH_v1_ EACH COHORT ITS OWN STATE: the register's states (VENUES) were read for one cohort, the layer's own listings.
-// Moonbeam lists the same markets as a second cohort, and its listings are not the layer's. This module turns what the listed register
+// _VENUE_TRUTH_v1_ EACH COHORT ITS OWN STATE: the register's states (VENUES) were read for one cohort, the operator's own listings.
+// Moonbeam lists the same markets as a second cohort, and its listings are not the operator's. This module turns what the listed register
 // holds for a cohort on a market (its listings, the directories that show them, a listing shared from the other cohort, a market closed
 // to new agents, the listings still wanted) and the market's evidence-backed steps into that cohort's own list / take / settle.
 // Pure: no reads, no clock. The rules, in order, for each step:
@@ -21,9 +21,20 @@
 // the rules above. The venue's own rows are never lifted by a mark: venues.ts caps them by the evidence cohort's marks.
 import type { VenueState, VenueStep, VenueStepRow } from './venues.js';
 
-/** The cohorts the listed register holds: the layer's own listings, and Moonbeam's, resold under the layer's licence. */
-export const COHORT_IDS = Object.freeze(['layer', 'moonbeam'] as const);
+/** The cohorts the listed register holds: the operator's own listings, and Moonbeam's, resold under the operator's licence. */
+export const COHORT_IDS = Object.freeze(['operator', 'moonbeam'] as const);
 export type CohortId = (typeof COHORT_IDS)[number];
+/** @deprecated since 0.13.0, removed in 0.14.0: the operator cohort's old id. Read `operator`. */
+export type DeprecatedCohortId = 'layer';
+/** The old cohort ids and the id each now names (0.13.0 only). */
+export const COHORT_ALIASES: Readonly<Record<DeprecatedCohortId, CohortId>> = Object.freeze({ layer: 'operator' });
+/** A cohort id, the old `layer` read as `operator`. */
+export const cohortIdOf = (c: CohortId | DeprecatedCohortId): CohortId => (c in COHORT_ALIASES ? COHORT_ALIASES[c as DeprecatedCohortId] : (c as CohortId));
+/** Every cohort's row, keyed by id; `layer` is kept as a deprecated, non-enumerable alias of `operator` for 0.13.0. */
+export type CohortRows = Record<CohortId, VenueCohort> & {
+  /** @deprecated since 0.13.0, removed in 0.14.0: read `operator`. */
+  readonly layer: VenueCohort;
+};
 /** A cohort's step: a venue state, or `closed` (the market takes no new agent) or `shared` (the other cohort's listing stands in). */
 export type CohortState = VenueState | 'closed' | 'shared';
 export type CohortStep = 'list' | 'take' | 'settle';
@@ -52,7 +63,9 @@ export type CohortFacts = {
 /** The feature matrix's marks, as it writes them. */
 export type FeatureMark = 'ok' | 'partial' | 'not built' | 'owner step' | 'broken';
 /** One mark as the snapshot keeps it: who takes the next step, the cohort's own words (Moonbeam's only), the time it was read. */
-export type FeatureRead = { mark: FeatureMark; who: string | null; says: string | null; read_at: string | null };
+export type FeatureRead = { mark: FeatureMark; who: string | null; says: string | null; read_at: string | null;
+  /** set when a newer read of the market itself showed the matrix's broken mark stale: what it read, and the mark it replaced */
+  proof?: { kind: string; url: string; ref: string; read_at: string; was: FeatureMark } };
 /** A house agent's journey that shows it listed by Moonbeam on a market's own read. */
 export type JourneyRead = { standing: 'listed_by_moonbeam'; ref: string; proof: string; says: string | null; read_at: string | null };
 /** Each SDK step and the feature of the matrix that reads it: listed, the jobs buyers sent, the buyer's payment, the seller's payout. */
@@ -81,7 +94,8 @@ const NO_FACTS: CohortFacts = { listings: 0, directories: [], shared: null, clos
  * One cohort on one market: its list, take and settle, from the listed register's facts and the market's own steps (VENUES' rows,
  * read for `evidenceOf`). Missing facts read as a market the cohort is not on.
  */
-export function cohortOf(cohort: CohortId, facts: CohortFacts | undefined, steps: Record<CohortStep, VenueStepRow>, evidenceOf: CohortId): VenueCohort {
+export function cohortOf(cohortIn: CohortId | DeprecatedCohortId, facts: CohortFacts | undefined, steps: Record<CohortStep, VenueStepRow>, evidenceOfIn: CohortId | DeprecatedCohortId): VenueCohort {
+  const cohort = cohortIdOf(cohortIn); const evidenceOf = cohortIdOf(evidenceOfIn);
   const f = facts ?? NO_FACTS;
   const own = cohort === evidenceOf;
   const journey = cohort === 'moonbeam' ? f.journey ?? null : null;
@@ -104,6 +118,15 @@ export function cohortOf(cohort: CohortId, facts: CohortFacts | undefined, steps
 }
 
 /** Every cohort on one market. */
-export function cohortsOf(facts: Partial<Record<CohortId, CohortFacts>> | undefined, steps: Record<CohortStep, VenueStepRow>, evidenceOf: CohortId): Record<CohortId, VenueCohort> {
-  return Object.fromEntries(COHORT_IDS.map((c) => [c, cohortOf(c, facts?.[c], steps, evidenceOf)])) as Record<CohortId, VenueCohort>;
+export function cohortsOf(facts: Partial<Record<CohortId | DeprecatedCohortId, CohortFacts>> | undefined, steps: Record<CohortStep, VenueStepRow>, evidenceOf: CohortId | DeprecatedCohortId): CohortRows {
+  // facts keyed by an old id (a 0.12 snapshot) still answer for the cohort it now names
+  const old = (c: CohortId) => (Object.keys(COHORT_ALIASES) as DeprecatedCohortId[]).find((k) => COHORT_ALIASES[k] === c);
+  const factsOf = (c: CohortId) => facts?.[c] ?? (old(c) ? facts?.[old(c)!] : undefined);
+  const rows = Object.fromEntries(COHORT_IDS.map((c) => [c, cohortOf(c, factsOf(c), steps, evidenceOf)])) as Record<CohortId, VenueCohort>;
+  return withAliases(rows);
+}
+/** The rows with the deprecated ids as non-enumerable getters (not in keys or JSON), so code that read `cohorts.layer` keeps working. */
+export function withAliases(rows: Record<CohortId, VenueCohort>): CohortRows {
+  for (const [old, to] of Object.entries(COHORT_ALIASES)) Object.defineProperty(rows, old, { get: () => rows[to], enumerable: false, configurable: false });
+  return rows as CohortRows;
 }

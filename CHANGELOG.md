@@ -15,9 +15,9 @@
   approves anything or moves money. `human` names the one approval a person gives in the Moonbeam Studio (the owner for
   Moonbeam's own agent, the builder for theirs) and is returned, never acted on. Other venues: `journey(t, ref).venues[id].next`.
   New: `LIST_VENUES`, `LIST_STEPS`, `HOUSE_AGENTS`, `JOURNEY_LEDS`, and the types.
-- **Each cohort its own state.** `VENUES[].cohorts.layer` and `.moonbeam`: each cohort's own list, take and settle, from the
+- **Each cohort its own state.** `VENUES[].cohorts.operator` and `.moonbeam`: each cohort's own list, take and settle, from the
   listed register (`node scripts/gen-venues.mjs --listed <listed register>`) and the venue's evidence. The venue rows were read
-  for the layer's listings only; Moonbeam's row now says where it is listed, shared, closed or not yet, and never borrows the
+  for the operator's listings only; Moonbeam's row now says where it is listed, shared, closed or not yet, and never borrows the
   other cohort's proof. New in `./market`: `cohortOf`, `cohortsOf`, `capState`, `COHORT_IDS`, `COHORT_STEPS`,
   `VENUE_EVIDENCE_OF`. Nothing removed. The register snapshot is refreshed to 2026-11-11 (the MCP Registry list step is live).
 - **Live reads first (`_VENUE_TRUTH_v2_`).** Each cohort's step now reads the feature matrix's own mark for it
@@ -26,6 +26,24 @@
   next step. A venue row is never lifted by a mark; where the evidence cohort's mark reads lower, the row is held there and
   carries `capped { mark, read_at }`. Snapshot of 2026-11-14: Moonbeam is listed on Virtuals ACP (its agent shows its
   offerings, ERC-8004 1185268), on the MCP Registry, the A2A Registry and ERC-8004.
+- **Renamed: the cohort `layer` is now `operator`.** `COHORT_IDS` is `['operator', 'moonbeam']`, and the register snapshot,
+  `VENUE_EVIDENCE_OF` and `venue.cohorts` use `operator`. Deprecated for 0.13.0 and removed in 0.14.0: `cohorts.layer` still
+  reads `cohorts.operator` (a getter left out of keys and JSON), `cohortOf('layer', …)` and `cohortsOf({ layer })` still read,
+  and the type `DeprecatedCohortId` names it (`COHORT_ALIASES`, `cohortIdOf`).
+- **Moonbeam's own states, where Moonbeam is named.** The README's venue table is Moonbeam's own listing on each market
+  (`venue.cohorts.moonbeam`): on the NEAR AI Agent Market Moonbeam is not yet listed (its agent there is a private draft). The
+  register's main table is the operator's listings, and `docs/VENUES.md` and `npx moonbeam venues` say so.
+- **Virtuals ACP settle, the operator's cohort: partial.** The feature matrix still read it broken at 2026-11-14T20:18Z, before
+  the sync that withdrew two nameless offerings. Virtuals' own read of the operator's agent (2026-11-15T00:21Z) shows its 13
+  offerings, every one named, so the cell reads partial with that read as its `proof` (`gen-venues --market-read`; a market
+  read only clears a mark read before it, never lifts a step past partial). The venue row's settle is back to self-test.
+- **Prices are undercut only.** `./resale` takes no reseller leg on top of the list price: `quoteBase`, `quoteSale` and
+  `legsOfPayment` refuse one, `FORMULA` and `LEGS` are stated without it, and a quote carries no zero reseller leg. Removed:
+  the reseller-leg reader and its policy type. `childKeyTerms()` takes no policy; `childKeyPlan(label?)` mints at the list
+  price (a 0.12 call with an all-zero policy still reads; any other is refused). Examples 24 and 60 quote at the list price.
+- **Copy.** The package speaks in Moonbeam's words: `test/copy.test.ts` reads every file `npm pack` ships. The two vendored
+  modules are published without their comments (their sources stay byte-identical to their pins); their remaining data
+  strings are counted there until they are re-synced from an updated source.
 
 ## 0.12.0
 
@@ -39,7 +57,7 @@
 - **The journey as calls.** `listOn` / `listStatus` / `listIdOf` (ERC-8004, the MCP Registry, the A2A Registry in one
   step, on a plan key), `pauseListing` / `resumeListing` / `delistListing`, `register8004Calls` (the listing's own
   registration file inline, `register(agentURI)` unsigned for your wallet), `usage`, `tenantKeys`, `planOffers` (the plans
-  from the layer's 402 answer: nothing minted or paid), `agentSales` (the sale run's slice of an agent), `olasRequest`.
+  from Moonbeam's 402 answer: nothing minted or paid), `agentSales` (the sale run's slice of an agent), `olasRequest`.
 - **One sale, stop by stop.** `SALE_STOPS`: the Studio's 17-stop sale tour paired 1:1 with the SDK, each stop with its
   Studio command, exactly one SDK call, its layer route and what it needs. New reads for the stops after the money is in:
   `saleLedger`, `payoutQueues`, `vaultPolicy`, `claimablePayouts`, `saleRecord`.
@@ -62,7 +80,7 @@
 - **`./market` gains hire, cross-list and resell calls.** `handOver`, `composeGrade`, `hirePlan`, `jobCalls`, `classes`,
   `classAgents`, `layerListings`, `sellerRecords`, `resellerStanding`, `resellerChildren`, `registryAgent`. Nothing signs.
 - **`examples/60-cross-list-a-seller.mjs`.** A real seller on one market, priced on every other market by the one payment
-  scheme; offline from recorded numbers, or live with a key; `MARKUP_BPS` adds your own markup.
+  scheme; offline from recorded numbers, or live with a key.
 
 ## 0.10.0
 
@@ -72,7 +90,7 @@
 - **`./market`: one call per step, both sides.** Buy: `searchSellers`, `markets`, `market`, `listedEdges`, `jobRecord`.
   Sell: `findBuyers`, `createListing`, `readListing`, `listingCard`, `publishListing`. Check: `identity`, `readiness`,
   `checkAgent`, `testEndpoint`. Key: `keyStanding`. Every call goes through the one transport (`transportFromEnv`:
-  `MOONBEAM_API`, `MOONBEAM_API_KEY`); a refusal is a `MarketError` with the layer's code and next step. Nothing signs.
+  `MOONBEAM_API`, `MOONBEAM_API_KEY`); a refusal is a `MarketError` with Moonbeam's code and next step. Nothing signs.
 - **`./workflows`: the Studio's seven workflows as data.** `WORKFLOWS` (publish, list-business, onboard, sell-edge,
   resell, hire-from-chat, onboard-batch), `workflowOf`, `stepsOf`, `diagramOf`, `imageOf`, and `STEP_CALLS`: every layer
   call a workflow makes, with the SDK function that makes it. A test holds the table complete. The canvases, captured from
@@ -111,7 +129,7 @@ from live read-only calls; the recorded answers are the test fixtures.
   (`400 bad_param: venue is required`). `coverQuotePlan` and `quoteCover` always send it: `erc8183` by default, `venue` to
   choose, or the venue a keyed job id names (`bitagent:8453:8566`). A job that cannot be covered now comes back as
   `{ insurable: false, why[] }`, not as a throw.
-- **Refusals in both shapes (`./errors`).** `refusalOf` reads the layer's `{ ok: false, code, error: "<words>" }` and the
+- **Refusals in both shapes (`./errors`).** `refusalOf` reads Moonbeam's `{ ok: false, code, error: "<words>" }` and the
   OpenAI error object `{ error: { message, type, param, code } }` (the chat and System One doors). Every read throws one
   `CoordError` (status, code, type, param, nextStep, body). This covers proof, resale, onboard, cover, jobs, x402 and the
   judge's System One call. `OnboardError` is a `CoordError`. An object `error` never crashes a read or shows as
@@ -130,7 +148,7 @@ from live read-only calls; the recorded answers are the test fixtures.
 - **The seller is paid on its own venue (SETTLE_ON_SELLER_VENUE_v1).** `sellerRailOf(offer)` resolves the network, token
   and payTo of a seller's leg: its own x402 entry first, then its venue's rail. A seller with no paid rail of its own is
   paid in USDC on Base. Otherwise the leg is held (`network_not_served`, `token_not_served`, `no_payee`), never moved. It
-  passes every vector the layer publishes for the rule. `quoteSale` takes the seller's own venue (any venue the scheme
+  passes every vector Moonbeam publishes for the rule. `quoteSale` takes the seller's own venue (any venue the scheme
   prices); the buyer still pays on Base, and `quoteBase` keeps both sides on Base. The network is a field in `attestSale`
   (`chainId`), `subscribePlan` (`chainId`), `readProof` (`chain`) and the pool builders (`chainId` or `network`).
   Moonbeam's pool line stays GLMR on Base (`POOL_LINE`).
@@ -171,18 +189,18 @@ Every write path now runs on a local fork of Base (`test/fork/run-fork.mjs`), an
 - **Depends on `@taifoon/jev` ^0.3.0**, the grader release that records and stamps by default (its calls stay unsigned).
 - **The Base reader (`./rpc`).** `baseReader()` walks a measured rotation of Base endpoints. Example 32 reads through it
   (**P8**: in 0.6.0 it still called `mainnet.base.org` directly).
-- **Resale.** `quoteSale` (Base venues only) prices a wall the way the layer does: a seller's 9,207 becomes the
+- **Resale.** `quoteSale` (Base venues only) prices a wall the way Moonbeam does: a seller's 9,207 becomes the
   buyer's 11,509, the live `mcp.digest` price. `attestSale` attests each step.
-- **Covered jobs.** `coverPremium(price, { k, n })` is the layer's premium (jev-wilson). `sellerDepositCalls` is the
+- **Covered jobs.** `coverPremium(price, { k, n })` is Moonbeam's premium (jev-wilson). `sellerDepositCalls` is the
   seller's exact deposit approval (missing until now: `fundJob` pulls the deposit). `hookQuote` gives the legs of a V3 hook
   job from its own GLMR amounts.
-- **P11.** `poolsOpenOn` now reads the layer's `supported` lines and `closed_by_policy`. 0.6.0 read a `networks` field
-  the layer does not send, so it always fell back to the typed list. Moonbeam's pools stay closed while the policy says
+- **P11.** `poolsOpenOn` now reads Moonbeam's `supported` lines and `closed_by_policy`. 0.6.0 read a `networks` field
+  Moonbeam does not send, so it always fell back to the typed list. Moonbeam's pools stay closed while the policy says
   so. The pool builders take `openOn`.
 - **P13.** `./onboard` is the one onboarding module: the readiness checks of every role are exported there too.
 - **P4.** The old escrow client says plainly that it is not deployed (`CLIENT_STATUS`) and points to `./onboard`.
-- **Dependencies.** `@taifoon/jev-wilson` ^0.3.1, `@taifoon/n8n-nodes-typesafe` ^2.0.5, TypeScript 7, vitest 5, viem
-  2.57. The pins are re-synced with `scripts/sync.mjs` (`--check`) from the layer's sources.
+- **Dependencies.** `@taifoon/jev-wilson` ^0.3.1, the grader's workflow-node package ^2.0.5, TypeScript 7, vitest 5, viem
+  2.57. The pins are re-synced with `scripts/sync.mjs` (`--check`) from Moonbeam's sources.
 - Copy: no "real" in the examples, the skills or the README. The judge sample takes your own TypeSafe key.
 
 ## 0.6.0
@@ -203,13 +221,13 @@ fixes answer the Moonbeam SDK gap analysis of 2026-10-14, by its numbers:
   check:registry`); no address is typed by hand any more, and the registry's status rides along (`MOONBEAM_HOOK.status`).
 - **P6, the judge's anchor.** `DEFAULT_GUARD.anchor` is the Base decision log, from the registry.
 - **P7, dependencies.** `@taifoon/jev` ^0.2.18 (warmbed-first reads), `@taifoon/jev-wilson` `>=0.2.0 <0.4.0`.
-- **P8.** The live example already takes `BASE_RPC`; its header names the layer's rotation as the endpoint to use.
-- **P9, the machine.** `./assurance` lands here from the Moonbeam monorepo with its pin refreshed to today's `@taifoon/assurance`
+- **P8.** The live example already takes `BASE_RPC`; its header names Moonbeam's rotation as the endpoint to use.
+- **P9, the machine.** `./assurance` lands here from the Moonbeam monorepo with its pin refreshed to today's assurance package
   (`456db7d1…`, commit f43acf0); `npm run check:pins` fails on an edited copy.
 - **P11, pools open.** `poolsOpenOn(transport)` reads `GET /v1/pools/networks`; `POOLS_OPEN_ON` is the fallback, not the policy.
 - **P12, the quota.** `quotaOf(transport)` reads `GET /v1/judge/credits`; the typed values are the fallback.
 - **P13.** The two "onboard" modules are named for what they are in `src/index.ts`; no export is renamed.
-- **New: `./resale`.** The vendored one payment scheme (pinned), `quoteBase` on the Base venues, `legsByName`, `markupLeg`,
+- **New: `./resale`.** The vendored one payment scheme (pinned), `quoteBase` on the Base venues, `legsByName`, the reseller-leg reader (gone in 0.13.0),
   `childKeyTerms`, `childKeyPlan`, `subscribePlan`, `readSale`, `readResellerView`. Example 24.
 - The GLMR pools are not open. Moonbeam ACP is in a pilot with selected partners: builders@moonbeam.foundation.
 

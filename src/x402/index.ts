@@ -26,7 +26,7 @@ import { CoordError, jsonOf, refusalOf, type Refusal } from '../errors/index.js'
 
 export const X402_BASE_NETWORK = 'eip155:8453' as const;
 export const X402_SOLANA_NETWORK = 'solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp' as const;
-/** x402 v1 network names → CAIP-2 (the layer's settle rule spells them the same way) */
+/** x402 v1 network names → CAIP-2 (Moonbeam's settle rule spells them the same way) */
 export const NETWORK_ALIASES: Readonly<Record<string, string>> = Object.freeze({
   base: 'eip155:8453', 'base-sepolia': 'eip155:84532', arbitrum: 'eip155:42161', polygon: 'eip155:137', avalanche: 'eip155:43114',
   monad: 'eip155:143', robinhood: 'eip155:4663', arc: 'eip155:5042', solana: X402_SOLANA_NETWORK,
@@ -158,7 +158,7 @@ export async function quoteWall(t: OnboardTransport, path: string, o: { network?
   return { status: r.status, accept: pickAccept(body, o), body };
 }
 
-/** POST /v1/access/subscribe with a subscribePlan(): the layer answers with the top-up's x402 quote (a 402) */
+/** POST /v1/access/subscribe with a subscribePlan(): Moonbeam answers with the top-up's x402 quote (a 402) */
 export async function subscribe(t: OnboardTransport, plan: ReturnType<typeof subscribePlan> = subscribePlan(), o: { network?: string | readonly string[] } = {}): Promise<{ status: number; accept: X402Accept | null; body: unknown; refusal: Refusal | null }> {
   const r = (await t.fetch(`${t.base}${plan.path}`, { method: plan.method, headers: { 'content-type': 'application/json', accept: 'application/json', ...(t.apiKey ? { 'x-api-key': t.apiKey } : {}) }, body: JSON.stringify(plan.body) })) as Answer;
   const body = await jsonOf(r);

@@ -8,8 +8,8 @@ Each workflow is drawn from its data (`@moonbeam-foundation/sdk/workflows`); a n
 | **agent** | the chat agent that decides which tool to call next |
 | **model** | the language model the agent reasons with |
 | **memory** | what the agent keeps between turns |
-| **knowledge** | reads the graph the layer keeps (sellers, buyers, markets, jobs, agents); nothing is written |
-| **check** | asks a live agent, or the layer, whether something holds; nothing is paid |
+| **knowledge** | reads the graph Moonbeam keeps (sellers, buyers, markets, jobs, agents); nothing is written |
+| **check** | asks a live agent, or Moonbeam, whether something holds; nothing is paid |
 | **transform** | turns what was read into terms or a market's own format: a quote, a grade, a listing's export, a card |
 | **connector** | hands work or a listing to a market in that market's own protocol |
 | **money** | moves money: answers unsigned calls in order and names who signs each; nothing here signs |
@@ -48,7 +48,7 @@ From your address to every agent market: your pages read, your name proved, your
 | 3 | read | studio | – | – | your own pages, read and confirmed in your words | ▪ the Studio 2026-11-06: the Studio runs this step itself |
 | 4 | claim | studio | – | – | one line on your own host that proves the name is yours, read back | ▪ the Studio 2026-11-06: the Studio runs this step itself |
 | 5 | door | check | – | `testEndpoint()` ./market | your door answers a real call of its class, on your own key | ✓ ran live 2026-11-06: probe true |
-| 6 | publish | connector | – | `publishListing()` ./market | one record on the layer, then one graded task per job: each job it passes is sold | · not run 2026-11-06: no agent listing on this key yet: createListing makes one (the Studio's My agents) |
+| 6 | publish | connector | – | `publishListing()` ./market | one record on Moonbeam, then one graded task per job: each job it passes is sold | · not run 2026-11-06: no agent listing on this key yet: createListing makes one (the Studio's My agents) |
 | 7 | reach | transform | – | `readListing()` ./market | the record in each market's own format: what x402, MCP, ERC-8004, NEAR and Olas each need | · not run 2026-11-06: no agent listing on this key yet: createListing makes one (the Studio's My agents) |
 | 8 | pay | knowledge | – | `readSale()` ./resale | a sale and the seller's payout, read from the sale record | · not run 2026-11-06: no sale of a listing on this key yet |
 | 9 | keep | knowledge | – | `readListing()` ./market | rank, price and differences per market, until you publish again | · not run 2026-11-06: no agent listing on this key yet: createListing makes one (the Studio's My agents) |

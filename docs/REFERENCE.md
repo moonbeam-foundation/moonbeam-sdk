@@ -23,7 +23,7 @@ buyer. That covers the *price of the job*.
 
 It does not cover the *cost of the failure* — the campaign that missed its slot,
 the fill that never happened — and it leaves the evaluator with no capital
-behind its verdict. This SDK models the layer that closes both gaps.
+behind its verdict. This SDK models the protocol that closes both gaps.
 
 ### Quick start: settle a covered job
 
@@ -198,7 +198,7 @@ providers that reject them leave holes in history that later reads never revisit
 ## Building transactions
 
 The SDK builds calls; it never signs or sends them, and never holds a key. The calls target the assurance hook Moonbeam runs
-on Base (`@moonbeam-foundation/sdk/onboard`; the hook, the pool factory and the pools are read from the coordination layer's
+on Base (`@moonbeam-foundation/sdk/onboard`; the hook, the pool factory and the pools are read from Moonbeam's
 address registry, never typed here):
 
 ```ts
@@ -266,27 +266,26 @@ byte for byte.
 
 ## Reselling on Base
 
-`@moonbeam-foundation/sdk/resale` is the Moonbeam profile of the coordination layer's one payment scheme, a byte-identical
-vendored copy pinned by its sha256 (`src/resale/payment-scheme.pin.json`): what a reseller's visitor pays, where every unit of it
-goes, and the reseller's own leg — the same numbers the layer itself charges.
+`@moonbeam-foundation/sdk/resale` is the Moonbeam profile of the one payment scheme Moonbeam prices with, a vendored
+copy whose source is pinned by its sha256 (`dist/resale/payment-scheme.pin.json`; published without its comments): what a reseller's visitor pays and where every unit of
+it goes — the same numbers Moonbeam itself charges. Moonbeam prices are undercut only: nothing is added on top of the list price.
 
 ```
-price_to_buyer = seller_price + our_fee + venue_fee(in) + venue_fee(out) [+ reseller_markup]
+price_to_buyer = seller_price + our_fee + venue_fee(in) + venue_fee(out)
 ```
 
 ```ts
-import { quoteBase, legsByName, markupLeg, childKeyTerms, childKeyPlan, subscribePlan, readSale } from '@moonbeam-foundation/sdk/resale';
+import { quoteBase, legsByName, childKeyTerms, childKeyPlan, subscribePlan, readSale } from '@moonbeam-foundation/sdk/resale';
 
-const q = quoteBase({ venue_in: 'reseller', venue_out: 'erc8183-base', seller_price: 8_000n, reseller: { tenant, markup_bps: 1000 } });
-if (q.ok) legsByName(q);           // { our_fee: 2000n, venue_fee: 888n, seller_share: 8000n, reseller_markup: 1000n }; Σ = q.price_to_buyer
-childKeyTerms({ '*': 1000 });      // what a child key is, in the layer's words
-childKeyPlan({ '*': 1000 });       // POST /tenant/keys { action: 'child', markup_bps } — the reseller sends it with its own key
+const q = quoteBase({ venue_in: 'reseller', venue_out: 'erc8183-base', seller_price: 8_000n });
+if (q.ok) legsByName(q);           // { our_fee: 2000n, venue_fee: 888n, seller_share: 8000n }; Σ = q.price_to_buyer
+childKeyTerms();                   // what a child key is, in Moonbeam's words
+childKeyPlan('mb:wallet');        // POST /tenant/keys { action: 'child', label } — the reseller sends it with its own key
 subscribePlan({ usdc: 1 });        // POST /access/subscribe — the child's top-up door (the x402 quote comes back as a 402)
 await readSale(transport, 'rs_…'); // GET /resale/sales/{id} through the site's proxy
 ```
 
-A reseller is a tenant of the layer; its visitors buy on child keys from the reseller's balance; the markup is the reseller's
-own leg, never part of the layer's fee. The buyer pays on one of the five Base venues (`x402-base`, `erc8183-base`,
+A reseller is a tenant of Moonbeam; its visitors buy on child keys from the reseller's balance, at the list price. The buyer pays on one of the five Base venues (`x402-base`, `erc8183-base`,
 `memoacp-base`, `bitagent-base`, `olas-base`), and the assurance economy stays in GLMR. The seller is paid where it was hired:
 `quoteSale` takes the seller's own venue (x402 on Solana or Arbitrum, ACP v3 on Arc, and the others the scheme prices), and
 `sellerRailOf(offer)` says which network, token and payTo its leg settles on. A seller's own x402 entry comes first, then its
@@ -359,7 +358,7 @@ reads up to 50 of them in one call. A job whose grade came back `needs_review` h
 ## Refusals
 
 Every read throws a `CoordError` on a refusal (`./errors`): `status`, `code`, `type`, `param`, `nextStep` and the words as
-its message. The layer refuses in two shapes, `{ ok: false, code, error: "<words>" }` and the OpenAI error object
+its message. Moonbeam refuses in two shapes, `{ ok: false, code, error: "<words>" }` and the OpenAI error object
 `{ error: { message, type, param, code } }`, and `refusalOf` reads both. An `error` that is an object never surfaces as
 `[object Object]`.
 
@@ -369,12 +368,12 @@ its message. The layer refuses in two shapes, `{ ok: false, code, error: "<words
 import { readProof, verifyOnBase } from '@moonbeam-foundation/sdk/proof';
 import { baseReader } from '@moonbeam-foundation/sdk/rpc';
 const p = await readProof(transport, txHash);       // block, superroot, checks, proven, ref v5:8453:<tx>@<superroot>
-                                                    // { chain: 42161 } reads a transaction on another chain the layer proves
+                                                    // { chain: 42161 } reads a transaction on another chain Moonbeam proves
 const c = await verifyOnBase(baseReader(), p.blob!); // verify(blob) by eth_call on the V5 verifier 0x2D475a53eAA8F9AC78B69bD2429275a622C644f8
 ```
 
 `c.verified` is what the verifier returns. `c.anchored` is false while the verifier has no superroot anchor set. The
-block is bound to the snapshot the verifier folds by the inclusion path the layer serves (`c.inclusion`).
+block is bound to the snapshot the verifier folds by the inclusion path Moonbeam serves (`c.inclusion`).
 
 ## Arbitration
 

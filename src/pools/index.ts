@@ -19,7 +19,7 @@ export const POOL_CAP = 50_000n * D18;
 /** The smallest deposit the card accepts. */
 export const MIN_DEPOSIT = 10n * D18;
 /** The dispute window a withdrawal waits out when the pool holds the exit, in seconds. */
-/** The layer's default challenge window in seconds: the hook (V3 since 2026-09-28) holds cover through the job's challenge window. */
+/** Moonbeam's default challenge window in seconds: the hook (V3 since 2026-09-28) holds cover through the job's challenge window. */
 export const DISPUTE_WINDOW_S = 3600;
 /** The premium is a share of each job's price; 100 % of it goes to shares. */
 export const PREMIUM_TO_SHARES_BPS = 10_000;
@@ -260,13 +260,13 @@ export const POOL_FACTORY: Readonly<Record<number, Address>> = Object.freeze({ 8
  */
 export const POOLS_OPEN_ON: readonly number[] = Object.freeze([DEVNET_CHAIN_ID]);
 
-/** One network of GET /v1/pools/networks: where a pool can be opened today, as the layer states it (status `open`, or why not). */
+/** One network of GET /v1/pools/networks: where a pool can be opened today, as Moonbeam states it (status `open`, or why not). */
 export type PoolNetwork = { chain_id: number; chain?: string; network?: string; line?: string; factory?: string; hook?: string; assets?: string[]; status: string; why?: string; pool_count?: number | null };
 
 /**
- * Where Moonbeam's pools are open TODAY, read from the layer's policy (GET /v1/pools/networks) — so opening them is the
- * council's yes, not an npm release. A chain is open for Moonbeam when the layer lists Moonbeam's factory there with status
- * `open` and does not name it under `closed_by_policy`. Today the layer names Moonbeam's factories (Base and the devnet)
+ * Where Moonbeam's pools are open TODAY, read from the API's policy (GET /v1/pools/networks) — so opening them is the
+ * council's yes, not an npm release. A chain is open for Moonbeam when the API lists Moonbeam's factory there with status
+ * `open` and does not name it under `closed_by_policy`. Today the API names Moonbeam's factories (Base and the devnet)
  * under closed_by_policy ("The GLMR pools are not open."), so the answer is no chain. The typed POOLS_OPEN_ON is the
  * fallback when the read fails. Pass `chains` to the pool builders as `openOn`. A test network's factory is not shipped: pass
  * it in `factories` (a devnet profile's `contracts.factory`) to count that network.

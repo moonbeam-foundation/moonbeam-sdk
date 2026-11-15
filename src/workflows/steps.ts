@@ -1,6 +1,6 @@
 /**
  * What each node of a Moonbeam workflow is: its class, what it means, who may run it, the markets it applies to, and the SDK
- * calls that run it on Base and on the test network. One table, keyed by the layer call the node makes; a test holds it complete
+ * calls that run it on Base and on the test network. One table, keyed by the Moonbeam call the node makes; a test holds it complete
  * against the Studio's workflows.
  */
 
@@ -10,8 +10,8 @@ export const NODE_CLASSES = Object.freeze({
   agent: 'the chat agent that decides which tool to call next',
   model: 'the language model the agent reasons with',
   memory: 'what the agent keeps between turns',
-  knowledge: 'reads the graph the layer keeps (sellers, buyers, markets, jobs, agents); nothing is written',
-  check: 'asks a live agent, or the layer, whether something holds; nothing is paid',
+  knowledge: 'reads the graph Moonbeam keeps (sellers, buyers, markets, jobs, agents); nothing is written',
+  check: 'asks a live agent, or Moonbeam, whether something holds; nothing is paid',
   transform: 'turns what was read into terms or a market\'s own format: a quote, a grade, a listing\'s export, a card',
   connector: 'hands work or a listing to a market in that market\'s own protocol',
   money: 'moves money: answers unsigned calls in order and names who signs each; nothing here signs',
@@ -20,7 +20,7 @@ export const NODE_CLASSES = Object.freeze({
 } as const);
 export type NodeClass = keyof typeof NODE_CLASSES;
 
-/** The markets a node can touch. `all` = every market the layer reads. */
+/** The markets a node can touch. `all` = every market Moonbeam reads. */
 export type Market = 'all' | 'x402' | 'mcp' | 'a2a' | 'virtuals' | 'bitagent' | 'olas' | 'erc8004' | 'near' | 'moonbeam';
 /** Who may run a node: anyone, a Moonbeam key, a key on a plan, or only on the test network. */
 export type Access = 'public' | 'key' | 'plan' | 'testnet';
@@ -66,7 +66,7 @@ export const STEPS: Readonly<Record<string, StepInfo>> = Object.freeze({
   'pure:business.read': { class: 'studio', means: 'your own pages, read and confirmed in your words', access: 'public', markets: [], base: null },
   'pure:business.claim': { class: 'studio', means: 'one line on your own host that proves the name is yours, read back', access: 'public', markets: [], base: null },
   'pure:business.door': { class: 'check', means: 'your door answers a real call of its class, on your own key', access: 'key', markets: ['mcp', 'a2a'], base: m('testEndpoint') },
-  'pure:business.publish': { class: 'connector', means: 'one record on the layer, then one graded task per job: each job it passes is sold', access: 'key', markets: ['all'], base: m('publishListing') },
+  'pure:business.publish': { class: 'connector', means: 'one record on Moonbeam, then one graded task per job: each job it passes is sold', access: 'key', markets: ['all'], base: m('publishListing') },
   'pure:business.reach': { class: 'transform', means: 'the record in each market\'s own format: what x402, MCP, ERC-8004, NEAR and Olas each need', access: 'key', markets: ['x402', 'mcp', 'a2a', 'erc8004', 'near', 'olas'], base: m('readListing') },
   'pure:business.pay': { class: 'knowledge', means: 'a sale and the seller\'s payout, read from the sale record', access: 'key', markets: ['all'], base: { module: 'resale', fn: 'readSale' } },
   'pure:business.keep': { class: 'knowledge', means: 'rank, price and differences per market, until you publish again', access: 'key', markets: ['all'], base: m('readListing') },

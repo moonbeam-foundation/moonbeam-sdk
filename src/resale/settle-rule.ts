@@ -1,12 +1,12 @@
 /**
- * Where a seller's leg settles: the layer's rule SETTLE_ON_SELLER_VENUE_v1, and its resolver, held to the rule's own vectors
+ * Where a seller's leg settles: Moonbeam's rule SETTLE_ON_SELLER_VENUE_v1, and its resolver, held to the rule's own vectors
  * (test/fixtures/settle-rule.vectors.json).
  *
  * The buyer's payment is confirmed wherever it was made. A seller's leg is paid on the network, token and payTo of the offer
  * it delivered on, in this order: (1) its x402 `accepts` entry for the class it delivered; (2) its venue's rail, the one chain
  * of the venue it was hired on, to the payTo it registered; (3) a seller with no paid rail of its own (a free tool or agent
  * admitted as a paid seller): Base USDC to the payTo it registered. A network the seller did not publish is never chosen for
- * it: a rail the layer holds no pay token on is Held (network_not_served), another asset is Held (token_not_served), and no
+ * it: a rail Moonbeam holds no pay token on is Held (network_not_served), another asset is Held (token_not_served), and no
  * payTo is Held (no_payee). Nothing is bridged or swapped. Pure.
  */
 export const SETTLE_RULE = 'SETTLE_ON_SELLER_VENUE_v1' as const;
@@ -15,7 +15,7 @@ export type SettleToken = { readonly symbol: string; readonly address: string; r
 const BASE = 'eip155:8453';
 const SOLANA = 'solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp';
 
-/** The dollar token the layer pays a seller's leg in, per network (CAIP-2). A network missing here is not served. */
+/** The dollar token Moonbeam pays a seller's leg in, per network (CAIP-2). A network missing here is not served. */
 export const PAY_TOKENS: Readonly<Record<string, SettleToken>> = Object.freeze({
   'eip155:8453': Object.freeze({ symbol: 'USDC', address: '0x833589fcd6edb6e08f4c7c32d4f71b54bda02913', decimals: 6 }),
   'eip155:42161': Object.freeze({ symbol: 'USDC', address: '0xaf88d065e77c8cc2239327c5edb3a432268e5831', decimals: 6 }),

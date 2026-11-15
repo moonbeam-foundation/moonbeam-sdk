@@ -1,4 +1,4 @@
-// A proof that a Base transaction is inside the layer's superroot, and the V5 proof verifier on Base checking it.
+// A proof that a Base transaction is inside Moonbeam's superroot, and the V5 proof verifier on Base checking it.
 //   MOONBEAM_API=<your coordination endpoint>/v1 node examples/51-read-a-proof.mjs [txHash]
 //                                                  read the proof live, then verify(blob) by eth_call on Base
 //   node examples/51-read-a-proof.mjs              the recorded proof, and the call that Base answered true for
@@ -15,7 +15,7 @@ if (process.env.OFFLINE || !process.env.MOONBEAM_API) {
   process.exit(0);
 }
 const p = await readProof({ base: process.env.MOONBEAM_API, fetch: (u, i) => fetch(u, i) }, tx);
-console.log(`proof of ${p.tx}: block ${p.block_number} · proven by the layer: ${p.proven} · ${p.ref}`);
+console.log(`proof of ${p.tx}: block ${p.block_number} · proven by Moonbeam: ${p.proven} · ${p.ref}`);
 if (p.blob) {
   const c = await verifyOnBase(baseReader(), p.blob);
   console.log(`verify(blob) on Base: ${c.verified}${c.error ? ` (${c.error})` : ''} · superroot anchored on chain: ${c.anchored} · block bound by: ${c.inclusion === 'served' ? 'the served inclusion path' : 'the header itself'}`);

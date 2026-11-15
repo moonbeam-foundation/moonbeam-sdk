@@ -3,7 +3,7 @@
  *
  *   parseJobRef(id)        a bare number is a Virtuals ACP v3 (ERC-8183) job on Base; `<label>:<chainId>:<jobId>` names the
  *                          contract the job lives in (`bitagent:8453:8566`); a 32-byte hex id is an assurance-hook job
- *   jobRefKey(ref)         the id back, as the layer spells it
+ *   jobRefKey(ref)         the id back, as Moonbeam spells it
  *   holdOf(step)           why a delivered job is not settled yet: `awaiting_grade` (nobody has graded it) and
  *                          `needs_review` (it was graded, not finally: a person reviews the decision) are different holds
  *   readJobs(t, ids)       GET /v1/jobs?ids=… (≤ 50, any id space), each row with its parsed id and its hold
@@ -38,7 +38,7 @@ export function parseJobRef(id: string | number | bigint): JobRef {
   throw new RangeError(`a job id is a number (ACP v3 on Base), <label>:<chainId>:<jobId> (e.g. bitagent:8453:8566) or a 32-byte hook id, not ${s.slice(0, 40)}`);
 }
 
-/** The id as the layer spells it: a bare number for ACP v3, `<label>:<chainId>:<jobId>` for a keyed one, the 32-byte id for a hook job. Pure. */
+/** The id as Moonbeam spells it: a bare number for ACP v3, `<label>:<chainId>:<jobId>` for a keyed one, the 32-byte id for a hook job. Pure. */
 export function jobRefKey(r: JobRef): string {
   if (r.kind === 'acp-v3') return r.jobId;
   if (r.kind === 'hook') return r.jobId;
@@ -58,9 +58,9 @@ export type JobRow = {
   id: string; found: boolean; source: string | null;
   job: (Record<string, unknown> & { ending?: string | null; verdict?: string | null }) | null;
   chain_read?: Record<string, unknown> | null;
-  /** the id, parsed (null when the layer echoed an id this SDK does not parse) */
+  /** the id, parsed (null when Moonbeam echoed an id this SDK does not parse) */
   ref: JobRef | null;
-  /** set when the layer's verdict is needs_review: the job is held for a person's review, not waiting for a grade */
+  /** set when Moonbeam's verdict is needs_review: the job is held for a person's review, not waiting for a grade */
   hold: ReturnType<typeof holdOf> | null;
 };
 

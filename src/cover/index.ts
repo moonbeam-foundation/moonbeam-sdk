@@ -1,10 +1,10 @@
 /**
- * @moonbeam-foundation/sdk/cover: a quote for cover on a job bought elsewhere (GET /v1/cover/quote). The layer requires the
+ * @moonbeam-foundation/sdk/cover: a quote for cover on a job bought elsewhere (GET /v1/cover/quote). Moonbeam requires the
  * venue the job is on; these helpers always send it (default `erc8183`, the Virtuals ACP v3 contract) and refuse an input
  * the venue cannot be quoted from before any call.
  *
  *   coverQuotePlan(i)    the GET this quote is: path and query, venue included. Pure
- *   quoteCover(t, i)     the read: a quote (insurable) or the layer's reasons it is not insurable now (insurable: false)
+ *   quoteCover(t, i)     the read: a quote (insurable) or Moonbeam's reasons it is not insurable now (insurable: false)
  *
  * A job id may name its venue itself: `bitagent:8453:8566` quotes venue bitagent on chain 8453, job 8566; a bare number is
  * an ACP v3 job (venue erc8183). Nothing here buys cover: buyCover is the buyer's own signed call.
@@ -21,7 +21,7 @@ export const DEFAULT_COVER_VENUE: CoverVenue = 'erc8183';
 export type CoverQuoteInput = {
   /** the market the job is on (default erc8183; a keyed job id names its own) */
   venue?: CoverVenue;
-  /** the cover line: devnet today; base once the owner approves the mainnet plan. Omitted: the layer's default line */
+  /** the cover line: devnet today; base once the owner approves the mainnet plan. Omitted: Moonbeam's default line */
   network?: string;
   /** the chain the job is on (default: the line's chain; a keyed job id names its own) */
   chain?: number;

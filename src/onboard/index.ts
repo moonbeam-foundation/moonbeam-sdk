@@ -8,7 +8,7 @@
  * nothing fetches unless it is handed a transport.
  *
  * The transport is a fetch and a base URL. On a Moonbeam surface the base is
- * the site's own same-origin proxy, which scrubs the coordination layer's
+ * the site's own same-origin proxy, which scrubs the API's
  * name and hosts before anything reaches the page; the module never renders
  * an upstream URL and never needs to know one.
  *
@@ -192,12 +192,12 @@ export const QUOTA_MAX_BLOCKS = 20;
 /** the seller's record is calibrated at n ≥ 5 and a Wilson width ≤ 0.35 */
 export const RECORD_MIN_N = 5;
 export const RECORD_MAX_WIDTH = 0.35;
-/** the hook's grading window after submission, in seconds (what the layer's calls carry) */
+/** the hook's grading window after submission, in seconds (what Moonbeam's calls carry) */
 export const DEFAULT_GRADE_WINDOW = 604_800;
 
 export const DEFAULT_QUESTION = 'Was the work delivered as specified?';
 
-/** The guard as this surface applies it. `anchor` names the decision log the layer writes to today. */
+/** The guard as this surface applies it. `anchor` names the decision log Moonbeam writes to today. */
 export const DEFAULT_GUARD: JevGuard = Object.freeze({
   bar: 0.8,
   mode: 'calibrated',
@@ -208,8 +208,8 @@ export const DEFAULT_GUARD: JevGuard = Object.freeze({
 }) as JevGuard;
 
 /**
- * The judge's quota as the layer states it today (GET /v1/judge/credits, keyless: the free grades per address, the grades a
- * block buys, the burst cap, the price of a block), with the typed values as the fallback when the read fails. The layer's
+ * The judge's quota as Moonbeam states it today (GET /v1/judge/credits, keyless: the free grades per address, the grades a
+ * block buys, the burst cap, the price of a block), with the typed values as the fallback when the read fails. Moonbeam's
  * numbers win: the constants above are what they were on 2026-09-24 and may drift from what it charges.
  */
 export async function quotaOf(t: OnboardTransport): Promise<{ free: number; blockCalls: number; blockGrid: number; burstPerMinute: number; usdcPerBlock: number | null; source: 'layer' | 'typed' }> {
@@ -514,13 +514,13 @@ export function settleCalls(jobId: Hex, ending: Ending, verdictDigest?: Hex): Un
 /** The one thing this module needs from the outside: a fetch and the base of the scrubbing proxy. */
 export interface OnboardTransport {
   fetch: (url: string, init?: { method?: string; headers?: Record<string, string>; body?: string; signal?: AbortSignal }) => Promise<{ readonly ok: boolean; readonly status: number; json(): Promise<unknown> }>;
-  /** the scrubbing proxy, e.g. "/api/onboard"; paths below mirror the layer's own */
+  /** the scrubbing proxy, e.g. "/api/onboard"; paths below mirror Moonbeam's own */
   base: string;
   /** forwarded as X-API-Key; without it the judge counts the free calls per address */
   apiKey?: string;
 }
 
-/** A refusal from the layer (either shape: see ./errors). An OnboardError is a CoordError: status, code, type, param, nextStep, body. */
+/** A refusal from Moonbeam (either shape: see ./errors). An OnboardError is a CoordError: status, code, type, param, nextStep, body. */
 export class OnboardError extends CoordError {
   constructor(status: number, message: string, body?: unknown) { super(refusalOf(body ?? null, status, message)); this.name = 'OnboardError'; }
 }
@@ -549,7 +549,7 @@ const protocolOf = (kind?: string | null, wireProtocol?: string | null): BaseAge
 };
 const wireOf = (w?: string | null): BaseAgentCandidate['wire'] => (w === 'ready' || w === 'x402' || w === 'silent' || w === 'unreachable' ? w : 'unprobed');
 
-/** A registry row as the layer returns it, folded into a candidate. Exported so the fold is testable without a transport. */
+/** A registry row as Moonbeam returns it, folded into a candidate. Exported so the fold is testable without a transport. */
 export function candidateFromRegistry(r: RegistryRow, seenAt: number): BaseAgentCandidate | null {
   if (Number(r.chainId) !== 8453 || !isAddress(r.owner)) return null;
   return {
@@ -616,7 +616,7 @@ export async function quote(t: OnboardTransport, c: BaseAgentCandidate, ask: { t
   return termsFromQuote(c, ask, q);
 }
 
-/** The fold behind `quote`, exported for tests. The deposit is the larger of the rule and what the layer requires. */
+/** The fold behind `quote`, exported for tests. The deposit is the larger of the rule and what Moonbeam requires. */
 export function termsFromQuote(c: BaseAgentCandidate, ask: { task: string; price: bigint; deadline: number; buyer?: Address; skills?: string[] }, q: QuoteReply): HireTerms {
   const required = q.terms?.depositRequired && /^\d+$/.test(q.terms.depositRequired) ? BigInt(q.terms.depositRequired) : 0n;
   const rule = depositFor(ask.price);
@@ -634,7 +634,7 @@ export async function judge(t: OnboardTransport, jobId: Hex, evidence: { state: 
   return decisionFromRef(r, g.bar);
 }
 
-/** The fold behind `judge`, exported for tests: the layer's reply to a JevDecision, ending decided against the bar. */
+/** The fold behind `judge`, exported for tests: Moonbeam's reply to a JevDecision, ending decided against the bar. */
 export function decisionFromRef(r: RefReply, bar: number = JEV_BAR): JevDecision {
   const a = r.answer ?? r;
   const value = isJevOption(a.value) ? a.value : 'cannot_determine';
@@ -695,7 +695,7 @@ export * as readiness from '../onboarding/index.js';
 import { premiumAmount, wilsonUpperFailure } from '@taifoon/jev-wilson';
 
 /** The premium of a covered job, in the job's token units: price × the upper Wilson bound on the seller's failure rate
- *  (k correct of n), floored exactly as the layer's pool quote computes it (jev-wilson). Pass it to fundCalls({ premium }). */
+ *  (k correct of n), floored exactly as Moonbeam's pool quote computes it (jev-wilson). Pass it to fundCalls({ premium }). */
 export function coverPremium(price: bigint, record: { k: number; n: number }): bigint {
   if (!(Number.isInteger(record.k) && Number.isInteger(record.n) && record.n >= 0 && record.k >= 0 && record.k <= record.n)) throw new RangeError('a record is k correct of n settled, 0 ≤ k ≤ n');
   return premiumAmount(price, wilsonUpperFailure(record.k, record.n));

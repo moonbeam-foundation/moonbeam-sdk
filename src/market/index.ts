@@ -14,7 +14,7 @@
  *   sellerRecords(t, { chainId })  GET  /pools          every seller's one job record across every market: jobs, pay, buyers, price (keyed)
  *   SELL
  *   findBuyers(t, { tag })        GET  /match/demands       the markets whose buyers paid for a job class this week (keyed)
- *   createListing(t, def)         POST /agent-listings      your agent's listing: the layer keeps it and serves its card
+ *   createListing(t, def)         POST /agent-listings      your agent's listing: Moonbeam keeps it and serves its card
  *   readListing(t, id)            GET  /agent-listings/:id  the owner's view: status, listing id, price, every market export
  *   listingCard(t, id)            GET  /agent-listings/:id/card   the public card buyers and markets read
  *   publishListing(t, id)         POST /agent-listings/:id/publish  one graded task per job; passed = live
@@ -25,7 +25,7 @@
  *   jobCalls(t, { chainId, action })   POST /assurance/call   the exact unsigned calls to fund, settle or cover a job, or to register an agent
  *   CROSS-LIST AND RESELL
  *   classes(t) · classAgents(t, c)  GET /classes[/:class/agents]   the job classes, and each class's agents on every venue
- *   layerListings(t)              GET  /listings            every seller the layer found, probed, sells or stopped selling, and why
+ *   layerListings(t)              GET  /listings            every seller Moonbeam found, probed, sells or stopped selling, and why
  *   resellerStanding(t)           GET  /reseller/loop       your key's rungs into reselling, and the next door that moves it
  *   resellerChildren(t)           GET  /access/reseller     the child keys you minted, their calls, and your margin
  *   CHECK
@@ -63,7 +63,7 @@ export { MarketError } from './http.js';
 
 // ── buy ───────────────────────────────────────────────────────────────────────────────────────────────────────────────
 
-/** One seller the matcher found for a job class. The layer's own fields ride along. */
+/** One seller the matcher found for a job class. Moonbeam's own fields ride along. */
 export type SellerHit = { [k: string]: unknown; candidate?: Record<string, unknown>; venue?: string; side?: string; deliverable?: unknown; legs?: unknown };
 /** Sellers on Base for a job class (`text.summarize`, `data.onchain_query`, …), ranked. Public. */
 export async function searchSellers(t: OnboardTransport, o: { tag: string; venue?: string; side?: string; priceCap?: string | number; limit?: number }): Promise<{ hits: SellerHit[]; n: number; body: Record<string, unknown> }> {
@@ -72,7 +72,7 @@ export async function searchSellers(t: OnboardTransport, o: { tag: string; venue
   return { hits: j.hits ?? [], n: j.n ?? (j.hits ?? []).length, body: j as Record<string, unknown> };
 }
 
-/** Every agent market the layer reads (x402, Virtuals ACP, memo-ACP, BitAgent, Olas, NEAR, …): its week of money and top jobs. Public. */
+/** Every agent market Moonbeam reads (x402, Virtuals ACP, memo-ACP, BitAgent, Olas, NEAR, …): its week of money and top jobs. Public. */
 export async function markets(t: OnboardTransport): Promise<{ markets: Record<string, unknown>[]; readAt: string | null; body: Record<string, unknown> }> {
   const j = await call<{ markets?: Record<string, unknown>[]; read_at?: string }>(t, 'GET', '/venues');
   return { markets: j.markets ?? [], readAt: j.read_at ?? null, body: j as Record<string, unknown> };
@@ -96,7 +96,7 @@ export async function listedEdges(t: OnboardTransport, o: { class?: string; limi
   return { rows: j.rows ?? [], total: j.total ?? j.count ?? (j.rows ?? []).length, body: j as Record<string, unknown> };
 }
 
-/** One seller's record across every market the layer reads: jobs, what it was paid, its buyers, its typical price and its jobs' sources. */
+/** One seller's record across every market Moonbeam reads: jobs, what it was paid, its buyers, its typical price and its jobs' sources. */
 export type SellerRecord = { [k: string]: unknown; sellerId: string; jobs: number; job_sources: Record<string, number>; history: Record<string, unknown> & { paid_usdc?: number; typical_price_usdc?: number | null } };
 /** Every seller with a record on a chain, from every market at once (`GET /pools?chain=`): the one job record per seller. Keyed. */
 export async function sellerRecords(t: OnboardTransport, o: { chainId?: number; limit?: number; offset?: number } = {}): Promise<{ sellers: SellerRecord[]; total: number; nextOffset: number | null; sources: Record<string, number> }> {
@@ -115,7 +115,7 @@ export async function findBuyers(t: OnboardTransport, o: { tag: string; venue?: 
   return { demands: j.demands ?? j.rows ?? [], body: j as Record<string, unknown> };
 }
 
-/** An agent listing as its owner reads it. The layer's own fields ride along. */
+/** An agent listing as its owner reads it. Moonbeam's own fields ride along. */
 export type Listing = { [k: string]: unknown; id: string; status?: string; listing_id?: string | null; buyer_price_usd?: string | null; card_url?: string };
 export type ListingView = { listing: Listing; export: Record<string, unknown> | null; body: Record<string, unknown> };
 const AL = /^al_[0-9a-f]{16}$/;
@@ -125,7 +125,7 @@ const viewOf = (j: { listing?: Listing; export?: Record<string, unknown> }, what
 };
 const alId = (id: string) => { if (!AL.test(id)) throw new RangeError(`not an agent listing id (al_ and 16 hex): ${id}`); return id; };
 
-/** An agent's definition, as the layer keeps it: who it is, the door it answers at, and its jobs with their price and payee. */
+/** An agent's definition, as Moonbeam keeps it: who it is, the door it answers at, and its jobs with their price and payee. */
 export type ListingDefinition = {
   identity: { name: string; handle: string; tagline: string; category?: string };
   hosting: { mode: 'self_hosted'; door: { kind: 'a2a' | (string & {}); endpoint: string } };
@@ -133,8 +133,8 @@ export type ListingDefinition = {
   pricing: { seller_price_usd: string; classes: string[]; payout: string };
 };
 /**
- * Create your agent's listing (`POST /agent-listings`). The layer keeps the definition, serves its card and claims it for
- * your key; the buyer's price is yours plus the layer's fee (`buyer_price_usd`).
+ * Create your agent's listing (`POST /agent-listings`). Moonbeam keeps the definition, serves its card and claims it for
+ * your key; the buyer's price is yours plus Moonbeam's fee (`buyer_price_usd`).
  */
 export async function createListing(t: OnboardTransport, definition: ListingDefinition): Promise<ListingView> {
   needKey(t, 'POST /agent-listings');
@@ -149,7 +149,7 @@ export async function readListing(t: OnboardTransport, id: string): Promise<List
 export async function listingCard(t: OnboardTransport, id: string): Promise<Record<string, unknown>> {
   return call<Record<string, unknown>>(t, 'GET', `/agent-listings/${alId(id)}/card`);
 }
-/** Go live: the layer sends one graded task per job to your door; each job it passes is sold. */
+/** Go live: Moonbeam sends one graded task per job to your door; each job it passes is sold. */
 export async function publishListing(t: OnboardTransport, id: string): Promise<ListingView & { probes: Record<string, unknown>[] }> {
   needKey(t, 'POST /agent-listings/:id/publish');
   const j = await call<{ listing?: Listing; export?: Record<string, unknown>; probe?: Record<string, unknown>[] }>(t, 'POST', `/agent-listings/${alId(id)}/publish`, {});
@@ -164,7 +164,7 @@ export async function identity(t: OnboardTransport, chainId: number, ids: readon
   const j = await call<{ agents?: Record<string, unknown>[] }>(t, 'GET', `/agents/identity${query({ chain: chainId, ids: ids.join(',') })}`);
   return j.agents ?? [];
 }
-/** One registered agent as the layer's registry reads it: endpoint, its kind, the job classes it was seen to do (`GET /registry/agents/:chain/:id`). Public. */
+/** One registered agent as Moonbeam's registry reads it: endpoint, its kind, the job classes it was seen to do (`GET /registry/agents/:chain/:id`). Public. */
 export async function registryAgent(t: OnboardTransport, chainId: number, agentId: number | string): Promise<Record<string, unknown>> {
   return call<Record<string, unknown>>(t, 'GET', `/registry/agents/${seg(chainId)}/${seg(agentId)}`);
 }
@@ -175,7 +175,7 @@ export async function readiness(t: OnboardTransport, chainId: number, agentId: n
 }
 /** What `checkAgent` takes: an agent by its ERC-8004 id (`8453:1234`), or its card's https URL. */
 export type CheckInput = { agent: string } | { card_url: string };
-/** The layer's check on one agent: the four goals, each met or with its fix. Nothing is registered or paid. Keyed. */
+/** Moonbeam's check on one agent: the four goals, each met or with its fix. Nothing is registered or paid. Keyed. */
 export async function checkAgent(t: OnboardTransport, input: CheckInput): Promise<Record<string, unknown>> {
   if ('agent' in input && !/^\d{1,10}:\d{1,12}$/.test(input.agent)) throw new RangeError('an agent is <chain>:<id>, e.g. 8453:1234');
   if ('card_url' in input && !/^https:\/\//.test(input.card_url)) throw new RangeError('a card URL is https');
@@ -191,7 +191,7 @@ export async function testEndpoint(t: OnboardTransport, input: { url: string; ki
 
 // ── hire ──────────────────────────────────────────────────────────────────────────────────────────────────────────────
 
-/** A seller to hand a task to: its protocol, its owner address, and its ERC-8004 id. The layer reads its endpoint from its own record. */
+/** A seller to hand a task to: its protocol, its owner address, and its ERC-8004 id. Moonbeam reads its endpoint from its own record. */
 export type Candidate = { kind: 'mcp' | 'a2a' | (string & {}); address: string; agentId: string; chainId: number };
 /**
  * Hand a task to a seller in its own protocol (`POST /handshake`). With `dispatch: false` (the default) the handshake is only
@@ -221,7 +221,7 @@ export async function hirePlan(t: OnboardTransport, terms: { chainId: number; bu
   const j = await call<{ calls?: PlannedCall[] }>(t, 'POST', '/settle', { kind: 'agent', ...terms });
   return { calls: j.calls ?? [], body: j as Record<string, unknown> };
 }
-/** The exact unsigned calls the layer builds for one action on a job or an agent (`POST /assurance/call`): fund, settle, cover, or register-8004. */
+/** The exact unsigned calls Moonbeam builds for one action on a job or an agent (`POST /assurance/call`): fund, settle, cover, or register-8004. */
 export async function jobCalls(t: OnboardTransport, a: { chainId: number; action: { kind: string } & Record<string, unknown> }): Promise<{ calls: PlannedCall[]; body: Record<string, unknown> }> {
   if (!a.action?.kind) throw new RangeError('an action names its kind');
   const j = await call<{ calls?: PlannedCall[]; call?: PlannedCall }>(t, 'POST', '/assurance/call', a);
@@ -241,7 +241,7 @@ export async function classAgents(t: OnboardTransport, cls: string): Promise<Rec
   const j = await call<{ agents?: Record<string, unknown>[]; rows?: Record<string, unknown>[] }>(t, 'GET', `/classes/${seg(cls)}/agents`);
   return j.agents ?? j.rows ?? [];
 }
-/** Every seller the layer found, probed, sells or stopped selling, and why (`GET /listings`). */
+/** Every seller Moonbeam found, probed, sells or stopped selling, and why (`GET /listings`). */
 export async function layerListings(t: OnboardTransport): Promise<{ rows: Record<string, unknown>[]; counts: Record<string, unknown> | null }> {
   const j = await call<{ rows?: Record<string, unknown>[]; counts?: Record<string, unknown> }>(t, 'GET', '/listings');
   return { rows: j.rows ?? [], counts: j.counts ?? null };
@@ -251,7 +251,7 @@ export async function resellerStanding(t: OnboardTransport): Promise<Record<stri
   needKey(t, 'GET /reseller/loop');
   return call<Record<string, unknown>>(t, 'GET', '/reseller/loop');
 }
-/** The child keys you minted, each one's calls, what it owes (list price + your markup) and your margin (`GET /access/reseller`). Keyed. */
+/** The child keys you minted, each one's calls and what each owes at the list price (`GET /access/reseller`). Keyed. */
 export async function resellerChildren(t: OnboardTransport): Promise<Record<string, unknown>> {
   needKey(t, 'GET /access/reseller');
   return call<Record<string, unknown>>(t, 'GET', '/access/reseller');
@@ -274,8 +274,8 @@ export type { QueueDepth, VaultRule, ClaimablePayout } from './sale.js';
 export { VENUES, VENUE_IDS, VENUE_STEPS, VENUES_READ_ON, VENUE_EVIDENCE_OF, venueById, venues } from './venues.js';
 export type { Venue, VenueId, VenueLive, VenueState, VenueStep, VenueStepRow, ListedBy, SdkCall, RegisterWord, RegisterSnapshot, RegisterCohorts } from './venues.js';
 // _VENUE_TRUTH_v1_: each cohort's own list / take / settle on every venue
-export { COHORT_IDS, COHORT_STEPS, cohortOf, cohortsOf, capState, STEP_FEATURE, MARK_STATE, markOf } from './cohorts.js';
-export type { CohortId, CohortState, CohortStep, CohortFacts, CohortStepRow, CohortSource, VenueCohort, FeatureId, FeatureMark, FeatureRead, JourneyRead } from './cohorts.js';
+export { COHORT_IDS, COHORT_ALIASES, COHORT_STEPS, cohortIdOf, cohortOf, cohortsOf, withAliases, capState, STEP_FEATURE, MARK_STATE, markOf } from './cohorts.js';
+export type { CohortId, DeprecatedCohortId, CohortRows, CohortState, CohortStep, CohortFacts, CohortStepRow, CohortSource, VenueCohort, FeatureId, FeatureMark, FeatureRead, JourneyRead } from './cohorts.js';
 export { SALE_STOPS, saleStop } from './sale-stops.js';
 // 0.13.0: where an agent is listed (journey) and the plan to list it (list): reads only
 export { JOURNEY_SCHEMA, JOURNEY_LEDS, journey, journeyOf, LIST_SCHEMA, LIST_VENUES, LIST_STEPS, HOUSE_AGENTS, list } from './listed.js';

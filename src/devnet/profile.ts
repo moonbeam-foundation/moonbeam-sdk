@@ -56,7 +56,7 @@ export interface DevnetProfile {
   faucet: string | null;
   /** the transaction link template, `{hash}` and `{chain}` replaced; options or env only; null when none */
   txLink: string | null;
-  /** the line key the layer names (e.g. a GLMR line) */
+  /** the line key Moonbeam names (e.g. a GLMR line) */
   line: string;
   token: { address: Address; symbol: string; decimals: number };
   contracts: DevnetContracts;

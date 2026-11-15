@@ -6,6 +6,9 @@
 //                                                               (GET /v1/listed?view=features: list, jobs received, pay, settle)
 //   node scripts/gen-venues.mjs --journey <a.json,b.json>      take the house agents' journeys (GET /v1/listed?agent=<ref>&view=journey):
 //                                                               a market whose own read shows a house agent listed by Moonbeam
+//   node scripts/gen-venues.mjs --market-read <read.json>      a market's own read that is newer than a broken mark of the matrix and
+//                                                               shows its fault gone (Virtuals ACP: every shown offering carries a name
+//                                                               the cohort's seller answers to): the mark becomes partial, with its proof
 //   node scripts/gen-venues.mjs                                  write src/market/venues-data.ts from the snapshot
 //   node scripts/gen-venues.mjs --check                          fail when the module is not the snapshot's
 // The snapshot keeps, per market, the register's list/take/settle state, the proof behind each with its words and read date, and the
@@ -20,10 +23,10 @@ const arg = (k) => { const i = process.argv.indexOf(k); return i > 0 ? process.a
 
 // the register's id of the workflow-node market is renamed; every other id is kept
 const RENAME = { n8n: 'workflow-nodes' };
-// _VENUE_TRUTH_v1_: the operator's cohort is named by its role; the register's evidence was read for it
-const COHORT_RENAME = { taifoon: 'layer' };
-const COHORTS = ['layer', 'moonbeam'];
-const EVIDENCE_OF = 'layer';
+// _VENUE_TRUTH_v1_: the operator's cohort is named by its role (`operator`; 0.12 snapshots said `layer`); the register's evidence was read for it
+const COHORT_RENAME = { taifoon: 'operator', layer: 'operator' };
+const COHORTS = ['operator', 'moonbeam'];
+const EVIDENCE_OF = 'operator';
 const FORBIDDEN = /taifoon|\bn8n\b|0x[0-9a-fA-F]{40}/i;
 const STEPS = ['list', 'take', 'settle'];
 const scrubbed = (data, what) => {
@@ -38,6 +41,7 @@ const from = arg('--from');
 const listedPath = arg('--listed');
 const featuresPath = arg('--features');
 const journeyPaths = arg('--journey')?.split(',').filter(Boolean) ?? null;
+const marketReadPath = arg('--market-read');
 // _VENUE_TRUTH_v2_: the feature matrix's features each SDK step reads (src/market/cohorts.ts STEP_FEATURE holds the same mapping;
 // test/cohorts.test.ts fails when the snapshot lacks one), and its marks as they are written
 const FEATURES = ['list', 'jobs_received', 'pay', 'settle'];
@@ -47,7 +51,7 @@ const OWN_READ = (kind) => typeof kind === 'string' && kind !== 'register_row';
 // the stricter words of public text written by this generator from the feature matrix and the journeys
 const PLAIN = /taifoon|\bn8n\b|0x[0-9a-fA-F]{40}|the layer|genie|\[internal\]|markup|checked before you pay/i;
 const plain = (t) => (typeof t === 'string' && !PLAIN.test(t) ? t : null);
-if (from || listedPath || featuresPath || journeyPaths) {
+if (from || listedPath || featuresPath || journeyPaths || marketReadPath) {
   let markets = prior?.markets ?? [];
   let source = prior?.source ?? null;
   if (from) {
@@ -147,6 +151,26 @@ if (from || listedPath || featuresPath || journeyPaths) {
     });
     const at = reads.map((j) => j.read_at).filter(Boolean).sort().at(-1) ?? null;
     cohorts = { ...(cohorts ?? { source: null, approved_on: null, evidence_of: EVIDENCE_OF, ids: COHORTS }), journey: { source: 'listed.journey.v1', agents: reads.map((j) => j.agent.ref), read_at: at } };
+  }
+  if (marketReadPath) {
+    // { kind: 'virtuals.agent', cohort, venue: 'erc8183-base', url, read_at, body: <GET api.acp.virtuals.io/agents/:id>, seller_names: [...] }
+    const mr = JSON.parse(readFileSync(marketReadPath, 'utf8'));
+    if (mr.kind !== 'virtuals.agent' || mr.venue !== 'erc8183-base' || !mr.read_at || !Array.isArray(mr.seller_names)) throw new Error(`${marketReadPath} is not a Virtuals ACP agent read (kind, venue, read_at, body, seller_names)`);
+    const cohort = COHORT_RENAME[mr.cohort] ?? mr.cohort; if (!COHORTS.includes(cohort)) throw new Error(`unknown cohort ${mr.cohort} in ${marketReadPath}`);
+    const rec = mr.body?.data ?? mr.body;
+    const shown = (rec?.offerings ?? []).filter((o) => !o.isHidden);
+    const known = new Set(mr.seller_names);
+    const onBase = (rec?.chains ?? []).some((c) => Number(c.chainId) === 8453 && c.erc8004AgentId);
+    const healed = onBase && shown.length > 0 && shown.every((o) => typeof o.name === 'string' && o.name.trim() && known.has(o.name));
+    markets = markets.map((m) => {
+      if (m.id !== mr.venue) return m;
+      const f = m.cohorts?.[cohort]?.features ?? {};
+      const fixed = Object.fromEntries(Object.entries(f).map(([id, x]) => [id, healed && x.mark === 'broken' && String(x.read_at ?? '') < mr.read_at
+        ? { mark: 'partial', who: x.who, says: x.says, read_at: mr.read_at, proof: { kind: 'virtuals.agent', url: mr.url, ref: `${shown.length} shown, every one named`, read_at: mr.read_at, was: 'broken' } }
+        : x]));
+      return { ...m, cohorts: { ...m.cohorts, [cohort]: { ...m.cohorts[cohort], features: fixed } } };
+    });
+    console.log(`market read ${mr.venue}/${cohort}: ${healed ? `${shown.length} shown, every one named: a broken mark read before ${mr.read_at} is partial` : 'the fault still shows: the marks stand'}`);
   }
   const dates = markets.flatMap((m) => [...STEPS.map((s) => m[s].read_on), m.paid?.read_on]).filter(Boolean).sort();
   const data = { source, read_on: dates.at(-1) ?? null, ...(cohorts ? { cohorts } : {}), markets };

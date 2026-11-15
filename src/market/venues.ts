@@ -6,7 +6,7 @@ import type { OnboardTransport } from '../onboard/index.js';
 import { VENUE_REGISTER } from './venues-data.js';
 import { listStatus, type ListMarket, type ListRow } from './journey.js';
 import { markets } from './index.js';
-import { capState, cohortsOf, markOf, type CohortFacts, type CohortId, type FeatureMark, type VenueCohort } from './cohorts.js';
+import { capState, cohortIdOf, cohortsOf, markOf, type CohortFacts, type CohortId, type CohortRows, type DeprecatedCohortId, type FeatureMark } from './cohorts.js';
 
 /** A step's state, said plainly: it runs for outside money (live), in part, only with Moonbeam on both sides (self-test), not yet, or the market has no such step (n/a). */
 export type VenueState = 'live' | 'partial' | 'self-test' | 'not yet' | 'n/a';
@@ -21,9 +21,9 @@ export type SdkCall = `${'market' | 'jobs' | 'resale'}.${string}`;
 export type RegisterStep = { register: RegisterWord; proof: RegisterWord; says: string | null; read_on: string | null };
 export type RegisterMarket = { id: string; entry: { cost: string; done: boolean; what: string | null }; list: RegisterStep; take: RegisterStep; settle: RegisterStep; paid: { proof: RegisterWord; says: string; read_on: string } | null;
   /** _VENUE_TRUTH_v1_: what the listed register holds for each cohort on this market */
-  cohorts?: Partial<Record<CohortId, CohortFacts>> };
+  cohorts?: Partial<Record<CohortId | DeprecatedCohortId, CohortFacts>> };
 /** _VENUE_TRUTH_v1_: where the cohorts' facts come from, and which cohort the register's evidence was read for. */
-export type RegisterCohorts = { source: string | null; approved_on: string | null; evidence_of: CohortId; ids: CohortId[];
+export type RegisterCohorts = { source: string | null; approved_on: string | null; evidence_of: CohortId | DeprecatedCohortId; ids: (CohortId | DeprecatedCohortId)[];
   /** _VENUE_TRUTH_v2_: the feature matrix the marks were read from, and when */
   features?: { source: string; read_at: string | null };
   /** _VENUE_TRUTH_v2_: the house agents whose journeys were read, and when */
@@ -42,7 +42,7 @@ export type VenueStepRow = { state: VenueState; register: RegisterWord; says: st
 export type Venue = {
   id: VenueId;
   name: string;
-  /** the id `markets()` / `market(t, id)` name it by (GET /venues), when the layer reads its money */
+  /** the id `markets()` / `market(t, id)` name it by (GET /venues), when Moonbeam reads its money */
   marketId: string | null;
   /** what a seller does there, in one line */
   does: string;
@@ -56,7 +56,7 @@ export type Venue = {
    * _VENUE_TRUTH_v1_: each cohort's own list / take / settle (./cohorts.ts). The rows above were read for one cohort
    * (`VENUE_EVIDENCE_OF`); a cohort's own row says where it is listed, shared, closed or not yet.
    */
-  cohorts: Record<CohortId, VenueCohort>;
+  cohorts: CohortRows;
 };
 
 type Static = Omit<Venue, 'entry' | 'cohorts' | VenueStep> & { calls: Record<VenueStep, SdkCall | null>; na?: Partial<Record<VenueStep, string>> };
@@ -87,11 +87,11 @@ const S: Record<VenueId, Static> = {
     calls: { list: 'market.readListing', take: 'market.handOver', settle: null, paid: null } },
   a2a: { id: 'a2a', name: 'A2A Registry', marketId: null, listedBy: 'list-step',
     does: 'A directory of A2A agent cards; buyers call the agent at its card\'s endpoint.',
-    howListed: 'The list step: the layer serves the agent\'s A2A card and publishes it to the registry.',
+    howListed: 'The list step: Moonbeam serves the agent\'s A2A card and publishes it to the registry.',
     calls: { list: 'market.listOn', take: 'market.handOver', settle: null, paid: 'market.agentSales' }, na: { settle: 'a directory has no settlement step' } },
   mcp: { id: 'mcp', name: 'MCP Registry', marketId: null, listedBy: 'list-step',
     does: 'The official MCP Registry and its mirrors (Glama, PulseMCP); clients call the agent\'s MCP door.',
-    howListed: 'The list step: the layer serves the agent\'s MCP door and publishes it to the official registry.',
+    howListed: 'The list step: Moonbeam serves the agent\'s MCP door and publishes it to the official registry.',
     calls: { list: 'market.listOn', take: 'market.handOver', settle: null, paid: 'market.agentSales' }, na: { settle: 'a registry has no settlement step' } },
   erc8004: { id: 'erc8004', name: 'ERC-8004', marketId: null, listedBy: 'list-step',
     does: 'The identity registry on Base every other market reads: the agent\'s id, card and endpoint.',
@@ -104,7 +104,7 @@ const S: Record<VenueId, Static> = {
 };
 
 /** _VENUE_TRUTH_v1_: the cohort the register's evidence (each venue's list / take / settle / paid) was read for. */
-export const VENUE_EVIDENCE_OF: CohortId = VENUE_REGISTER.cohorts?.evidence_of ?? 'layer';
+export const VENUE_EVIDENCE_OF: CohortId = cohortIdOf(VENUE_REGISTER.cohorts?.evidence_of ?? 'operator');
 
 const WORD: Record<string, VenueState> = { live: 'live', proven: 'live', partial: 'partial', self_test: 'self-test', claimed: 'not yet', contradicted: 'not yet', none: 'n/a' };
 const stateOf = (w: RegisterWord): VenueState => WORD[w] ?? 'not yet';
@@ -116,7 +116,7 @@ function venueOf(s: Static, r: RegisterMarket): Venue {
     // n/a only where the market has no such step: the register says none, or the table names why
     const read: VenueState = na ? 'n/a' : k === 'paid' && !r.paid ? 'not yet' : stateOf(reg.register);
     // the evidence cohort's live mark never lifts the register's state, and holds it lower when the market reads less now
-    const m = markOf(r.cohorts?.[VENUE_EVIDENCE_OF], k);
+    const m = markOf(r.cohorts?.[VENUE_EVIDENCE_OF] ?? r.cohorts?.layer, k);
     const state = m ? capState(read, m.state) : read;
     return { state, register: reg.register, says: reg.says ?? na ?? null, read_on: reg.read_on, call: state === 'n/a' ? null : s.calls[k],
       ...(m && state !== read ? { capped: { mark: m.mark, read_at: m.read_at } } : {}) };
@@ -138,11 +138,11 @@ export const VENUES_READ_ON: string | null = VENUE_REGISTER.read_on;
 export const venueById = (id: string): Venue | null => VENUES.find((v) => v.id === id) ?? null;
 
 const LIST_MARKET_OF: Partial<Record<VenueId, ListMarket>> = { erc8004: 'erc8004', mcp: 'mcp_registry', a2a: 'a2a_registry' };
-/** A venue with what the layer answers now: the market's own read (its status and its week of money), and one agent's list step. */
+/** A venue with what Moonbeam answers now: the market's own read (its status and its week of money), and one agent's list step. */
 export type VenueLive = Venue & { market?: { name: string | null; status: string | null; usd_7d: number | null }; agentListing?: ListRow | null };
 
 /**
- * Every venue. Without a transport, the shipped table and the date its register was read. With one, the layer's reads are folded
+ * Every venue. Without a transport, the shipped table and the date its register was read. With one, Moonbeam's reads are folded
  * in where a route exists: each market's own status and its week of money (`GET /venues`), and with `agent` (`8453:<id>`) where
  * that agent stands on the three markets of the list step (`GET /list/:id`). A read that fails is named in `unread`, and the
  * shipped table answers for it. The states themselves are the register's: a live read never upgrades one.

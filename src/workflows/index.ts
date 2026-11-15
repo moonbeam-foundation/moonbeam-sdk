@@ -2,7 +2,7 @@
  * @moonbeam-foundation/sdk/workflows: the Moonbeam Studio's agentic commerce workflows, as data.
  *
  * Each workflow is the canvas the Studio draws (nodes and edges, exported from the Studio's own templates), and every node
- * that calls the layer names the SDK function that runs the same step (`STEP_CALLS`). The pictures in docs/workflows are
+ * that calls Moonbeam names the SDK function that runs the same step (`STEP_CALLS`). The pictures in docs/workflows are
  * those canvases, captured from the Studio.
  *
  *   WORKFLOWS                 the seven workflows: publish · list-business · onboard · sell-edge · resell · hire-from-chat · onboard-batch

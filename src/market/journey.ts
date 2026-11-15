@@ -13,7 +13,7 @@ export const LIST_MARKETS = Object.freeze(['erc8004', 'mcp_registry', 'a2a_regis
 export type ListMarket = (typeof LIST_MARKETS)[number];
 /** One market of a list step: queued (publishing, within about ten minutes), listed (with the market's own url), held or failed (with why). */
 export type ListRow = { state: 'queued' | 'listed' | 'held' | 'failed'; why: string | null; url: string | null; tx: string | null; at?: string; read_at?: string };
-/** A list step as the layer keeps it. The layer's own fields ride along. */
+/** A list step as Moonbeam keeps it. Moonbeam's own fields ride along. */
 export type ListView = { [k: string]: unknown; id: string; agent: { ref: string; name: string; class: string; offer_usdc: string | null }; markets: Partial<Record<ListMarket, ListRow>>; fee?: { usdc: string } };
 const AGENT_REF = /^8453:\d{1,12}$/;
 const agentRef = (ref: string) => { const r = String(ref ?? '').trim(); if (!AGENT_REF.test(r)) throw new RangeError(`an agent is 8453:<its ERC-8004 id>: ${ref}`); return r; };
@@ -22,7 +22,7 @@ const listOf = (j: { list?: ListView }, what: string): ListView => {
   return j.list;
 };
 
-/** The list step's id of an agent, derived the way the layer derives it: `lst_` + the first 16 hex of sha256("list:<ref>"). */
+/** The list step's id of an agent, derived the way Moonbeam derives it: `lst_` + the first 16 hex of sha256("list:<ref>"). */
 export async function listIdOf(ref: string): Promise<string> {
   const d = await globalThis.crypto.subtle.digest('SHA-256', new TextEncoder().encode(`list:${agentRef(ref)}`));
   return `lst_${[...new Uint8Array(d)].map((b) => b.toString(16).padStart(2, '0')).join('').slice(0, 16)}`;
@@ -30,7 +30,7 @@ export async function listIdOf(ref: string): Promise<string> {
 
 /**
  * List an agent on the markets where agents are found (`POST /list`): its ERC-8004 record on Base, the MCP Registry and the
- * A2A Registry, all three unless named. Runs on a plan key and is part of the plan (no per-listing price is set). The layer serves the agent's MCP door and A2A
+ * A2A Registry, all three unless named. Runs on a plan key and is part of the plan (no per-listing price is set). Moonbeam serves the agent's MCP door and A2A
  * card and publishes each market; asking again returns the same record, read anew. `ref` is the agent's ERC-8004 id on Base,
  * whose card names the class it sells.
  */
@@ -72,7 +72,7 @@ export async function delistListing(t: OnboardTransport, id: string, o: { confir
 
 // ── register on ERC-8004 ──────────────────────────────────────────────────────────────────────────────────────────────
 
-/** The layer's register-8004 builder takes an agentURI of at most this many characters. */
+/** Moonbeam's register-8004 builder takes an agentURI of at most this many characters. */
 export const MAX_INLINE_URI = 2048;
 const base64 = (s: string) => { let b = ''; for (const c of new TextEncoder().encode(s)) b += String.fromCharCode(c); return btoa(b); };
 /** A listing's registration file as an inline `data:` URI (nothing is hosted), or why it cannot be. Pure. */
@@ -85,7 +85,7 @@ export function inlineRegistration(x: { exportable?: boolean; why?: string[]; re
 }
 /**
  * Your agent's own ERC-8004 id on Base, as unsigned calls: the listing's registration file (`export.erc8004` of
- * `GET /agent-listings/:id`) inlined as a data: URI, and `register(agentURI)` built by the layer (`POST /assurance/call`).
+ * `GET /agent-listings/:id`) inlined as a data: URI, and `register(agentURI)` built by Moonbeam (`POST /assurance/call`).
  * Your wallet signs and owns the id; the receipt's `Registered` event names it. Nothing is signed or sent here.
  */
 export async function register8004Calls(t: OnboardTransport, listingId: string): Promise<{ uri: string; file: Record<string, unknown>; calls: PlannedCall[]; signer: string; sent: false }> {
@@ -119,12 +119,12 @@ export async function tenantKeys(t: OnboardTransport): Promise<{ keys: Record<st
 
 export type PlanOffer = { plan: string; usdc: number; includes_usdc: number | null; per_minute: number | null; days: number };
 /**
- * The plans and the top-up, as the layer's own 402 answer names them (`POST /access/subscribe` with no key and no payment):
+ * The plans and the top-up, as Moonbeam's own 402 answer names them (`POST /access/subscribe` with no key and no payment):
  * nothing is minted and nothing is paid. Buying one is the same POST with a payment, from your wallet.
  */
 export async function planOffers(t: OnboardTransport): Promise<{ topup: { usdc: number; units: string; what: string | null } | null; plans: PlanOffer[]; networks: string[] }> {
   const what = 'POST /access/subscribe';
-  // no key and no create_key: the layer answers its terms with 402 and mints nothing
+  // no key and no create_key: Moonbeam answers its terms with 402 and mints nothing
   const r = await t.fetch(`${t.base}/access/subscribe`, { method: 'POST', headers: { accept: 'application/json', 'content-type': 'application/json' }, body: '{}' });
   const j = (await jsonOf(r)) as { code?: string; offer?: { usdc?: number; units?: string; what?: string }; monthly?: { plans?: Partial<PlanOffer>[] }; accepts?: { network?: string }[] } | null;
   if (r.status !== 402 || !j || j.code !== 'payment_required') throw new MarketError(r.status === 402 ? 502 : r.status, what, j);
@@ -154,7 +154,7 @@ const keyOfRef = (ref: string): string => {
 /**
  * What an agent sold, as the sale run counts it: the slice of its class wall or of its seller host, every sale by day and buying
  * market, and where each seller share stands (paid, kept, held, owed, refunded). The sale run is a published file: pass its URL
- * as `salesUrl` or set MOONBEAM_SALES_URL (it comes with your key). The layer's own seller hosts are said as `ours`.
+ * as `salesUrl` or set MOONBEAM_SALES_URL (it comes with your key). The operator's own seller hosts are said as `ours`.
  * null when the agent has no sale.
  */
 export async function agentSales(t: OnboardTransport, ref: string, o: { salesUrl?: string } = {}): Promise<{ slice: SaleSlice; days: string[]; readAt: string } | null> {

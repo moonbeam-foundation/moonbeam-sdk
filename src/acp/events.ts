@@ -52,7 +52,7 @@ export type AcpEvent =
   | { kind: 'adjudicated'; taskId: Hex32; winner: Address; amount: bigint }
   // ── Ambiguous: identical signature in two contracts (see below) ──
   | { kind: 'disputed'; taskId: Hex32; by: Address; source: 'taskSpace' | 'escrow' | 'ambiguous' }
-  // ── Taifoon evaluator ──
+  // ── the evaluator ──
   | { kind: 'evaluated'; jobId: bigint; approved: boolean; proofChainId: number; proofBlockNumber: number; eventHash: Hex32 };
 
 /**

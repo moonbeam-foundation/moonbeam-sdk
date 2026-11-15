@@ -139,7 +139,7 @@ export interface QuoteReply {
 }
 export interface EdgeTerms { quote: EdgeQuote; pool: { vault: Address | null; total: bigint; free: bigint } | null; why: string[]; raw: QuoteReply }
 
-/** The edge's terms: `POST /pools/quote` (tenant moonbeam, settled through the layer). Nothing is reserved. */
+/** The edge's terms: `POST /pools/quote` (tenant moonbeam, settled through Moonbeam). Nothing is reserved. */
 export async function quoteEdge(t: OnboardTransport, p: Pick<DevnetProfile, 'chainId'>, a: { sellerOfRecord: Address; price?: bigint }): Promise<EdgeTerms> {
   const { body: q } = await post<QuoteReply>(t, '/pools/quote', { seller: a.sellerOfRecord, price: String(a.price ?? DEVNET_JOB_PRICE), chainId: p.chainId, tenant: TENANT, via: 'us' });
   return termsOf(q);
@@ -279,7 +279,7 @@ export function phasesOf(plan: Pick<SettlePlan, 'calls'>, chainId: number): { hi
 }
 
 /**
- * Hire: the plan of one job on the profile's GLMR line, settled through the layer, with no verdict yet. Its calls are
+ * Hire: the plan of one job on the profile's GLMR line, settled through Moonbeam, with no verdict yet. Its calls are
  * the buyer's approve and open (`hire`), the seller's deposit approve and accept (`accept`), and the delivery (`deliver`).
  * The same ask later gives the same job id (the salt is the kind, the reference and the evidence).
  */
@@ -386,7 +386,7 @@ export interface AgreementState { edge_id: string; id?: string; enforced: boolea
 const notRouted = (e: unknown) => e instanceof OnboardError && e.status === 404 && /no operation/i.test(e.message + JSON.stringify((e as { body?: unknown }).body ?? ''));
 
 /**
- * One call through the edge: `POST /exchanges/:edge_id/call { class, task }`. The layer enforces the edge's agreement (a call
+ * One call through the edge: `POST /exchanges/:edge_id/call { class, task }`. Moonbeam enforces the edge's agreement (a call
  * outside it is refused, `refused` names why) and writes one meter line per call it takes.
  */
 export async function callEdge(t: OnboardTransport, edgeId: string, a: { task: string; class?: string; tool?: string | null; args?: Record<string, string> | null }): Promise<{ ok: true; line: MeterLine; reply_digest: string | null } | { ok: false; status: number; code: string; why: string; pending?: true }> {

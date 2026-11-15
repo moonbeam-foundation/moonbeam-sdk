@@ -122,7 +122,7 @@ export function standardStateFor(ending: Ending): Erc8183State {
  *
  * - ATTESTED: the vanilla ERC-8183 path. The evaluator (who may be the
  *   client itself) marks Completed or Rejected. No premium, no deposit
- *   requirement, no cover. This is how the coordination layer settles today,
+ *   requirement, no cover. This is how Moonbeam settles today,
  *   and jobs settled this way remain fully readable, decodable, and valid
  *   here forever.
  * - ASSURED: the same lifecycle with the assurance hook attached: deposit

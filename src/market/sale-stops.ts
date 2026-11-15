@@ -12,7 +12,7 @@ export type SaleStop = {
   order: number;
   /** the Studio's own label */
   label: string;
-  /** the Studio command or the layer op the tour runs at this stop */
+  /** the Studio command or Moonbeam op the tour runs at this stop */
   studio: string;
   /** the one SDK call: `market.<fn>`, `resale.<fn>`, or the CLI line for the first stop */
   call: string;
@@ -20,7 +20,7 @@ export type SaleStop = {
   module: 'market' | 'resale' | 'cli';
   /** the export (or the CLI subcommand) */
   fn: string;
-  /** the layer route the call uses, or null when it runs offline */
+  /** the Moonbeam route the call uses, or null when it runs offline */
   route: string | null;
   needs: StopNeeds;
   hop: StopHop;

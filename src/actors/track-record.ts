@@ -53,7 +53,7 @@ export const MIN_JOBS_FOR_A_RECORD = 20;
  */
 export const WILSON_Z = Z;
 /**
- * The 95 % Wilson score interval on k events in n trials: @taifoon/jev-wilson's `wilson`, the same arithmetic as
+ * The 95 % Wilson score interval on k events in n trials: the grading package's `wilson`, the same arithmetic as
  * /v1/pools/quote. [0, 1] when n is 0. Kept as a name for the studio's folds and the onboard module.
  */
 export function wilsonScore(k: number, n: number, z: number = WILSON_Z): [number, number] {

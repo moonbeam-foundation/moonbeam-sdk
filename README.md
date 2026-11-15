@@ -22,26 +22,28 @@ and names who signs each.
 
 ## Every venue
 
-One table in code, `VENUES` in `./market`. Each step's state is read from the Moonbeam product's market register (2026-11-14). Each cohort's own states (the layer's
-listings and Moonbeam's) are in `venue.cohorts`: [docs/VENUES.md](docs/VENUES.md#per-cohort).
+One table in code, `VENUES` in `./market`. The columns below are Moonbeam's own listing on each market, `venue.cohorts.moonbeam`,
+read on 2026-11-14 from the markets' own pages and the listing reads. The operator's listings, and the register's proof for each
+step, are in [docs/VENUES.md](docs/VENUES.md).
 
-| Market | What a seller does there | List | Take a job · settle | SDK calls |
+| Market | What a seller does there | Moonbeam: list | Take a job · settle | SDK calls |
 |---|---|---|---|---|
-| x402 (Bazaar, x402scan, Ultravioleta, PayAI) | paid per call in USDC on Base | live | live · live | `publishListing`, `handOver`, `agentSales` |
-| Virtuals ACP (ERC-8183 jobs) | an ERC-8183 job: deliver, graded, paid by the contract | not yet | self-test · not yet | `publishListing`, `readJobs`, `jobCalls` |
-| Virtuals memo jobs (memo-ACP) | a job moved by memos through the Virtuals router | not yet | not yet · not yet | `publishListing`, `readJobs`, `jobCalls` |
+| x402 (Bazaar, x402scan, Ultravioleta, PayAI) | paid per call in USDC on Base | partial | partial · partial | `publishListing`, `handOver`, `agentSales` |
+| Virtuals ACP (ERC-8183 jobs) | an ERC-8183 job: deliver, graded, paid by the contract | live | not yet · not yet | `publishListing`, `readJobs`, `jobCalls` |
+| Virtuals memo jobs (memo-ACP) | a job moved by memos through the Virtuals router | closed | closed · closed | `publishListing`, `readJobs`, `jobCalls` |
 | BitAgent | ERC-8183 jobs on BitAgent's contract | not yet | not yet · not yet | `publishListing`, `readJobs`, `jobCalls` |
-| Olas Mech | one paid request, answered on chain | partial | not yet · not yet | `readListing` (`export.olas`), `olasRequest` |
-| NEAR AI Agent Market | found by category, hired over A2A | live | not yet · not yet | `readListing` (`export.near`), `handOver` |
-| A2A Registry | a directory of agent cards | live | not yet · n/a | `listOn`, `handOver` |
-| MCP Registry (+ Glama, PulseMCP) | the official registry of MCP servers | live | not yet · n/a | `listOn`, `handOver` |
+| Olas Mech | one paid request, answered on chain | not yet | not yet · not yet | `readListing` (`export.olas`), `olasRequest` |
+| NEAR AI Agent Market | found by category, hired over A2A | not yet | not yet · not yet | `readListing` (`export.near`), `handOver` |
+| A2A Registry | a directory of agent cards | live | partial · n/a | `listOn`, `handOver` |
+| MCP Registry (+ Glama, PulseMCP) | the official registry of MCP servers | live | partial · n/a | `listOn`, `handOver` |
 | ERC-8004 | the identity every other market reads | live | n/a · n/a | `listOn`, `register8004Calls` |
-| Workflow nodes (npm) | the agent as a node in a workflow builder | live | not yet · n/a | `./workflows` |
+| Workflow nodes (npm) | the agent as a node in a workflow builder | not yet | not yet · n/a | `./workflows` |
 
-**live** means outside buyers' money ran through it. **self-test** means it ran with Moonbeam on both sides. **n/a** means the
-market has no such step. x402 is where the buyers are: 400,545 USD was paid on it in the 7 days read on 2026-11-08 (`markets()`).
+**live**: listed and read back on the market (list), or running there (take, settle). **partial**: part of the step runs.
+**shared**: another cohort's listing stands in. **closed**: the market takes no new agent. **n/a**: the market has no such step.
+x402 is where the buyers are: 400,545 USD was paid on it in the 7 days read on 2026-11-08 (`markets()`).
 
-`venues(t, { agent })` folds in what the layer reads now: each market's own status and week of money, and where your agent
+`venues(t, { agent })` folds in what Moonbeam reads now: each market's own status and week of money, and where your agent
 stands on the three markets of the list step. Every row also carries the register's words, its read date and the `paid` step.
 Detail per venue: [docs/VENUES.md](docs/VENUES.md).
 
@@ -59,7 +61,7 @@ await usage(t);                                    // this month's calls and spe
 await planOffers(t);                               // builder 99, team 199, protocol 299 USDC per 30 days; a 1 USDC top-up
 ```
 
-`planOffers` reads the layer's 402 answer, so nothing is minted or paid. `agentSales(t, 'mcp.digest')` reads what an agent's
+`planOffers` reads Moonbeam's 402 answer, so nothing is minted or paid. `agentSales(t, 'mcp.digest')` reads what an agent's
 class wall sold, by day and buying market, and where each seller share stands.
 
 ### Where it is listed, and the plan to list it
@@ -99,12 +101,11 @@ Each stop also names its Studio command, its layer route and what it needs (offl
 import { quoteSale, legsByName } from '@moonbeam-foundation/sdk/resale';
 
 const q = quoteSale({ venue_in: 'x402-base', venue_out: 'bitagent-base', seller_price: 4_000000n });
-legsByName(q);   // { seller_share: 4000000n, our_fee: 1000000n, venue_fee: 0n, reseller_markup: 0n }: the buyer pays 5.00 USDC
+legsByName(q);   // { seller_share: 4000000n, our_fee: 1000000n, venue_fee: 0n }: the buyer pays 5.00 USDC
 ```
 
-The seller keeps its own price on every market: `price to buyer = seller price + our fee + each market's own fee [+ your
-markup]`. [`examples/60-cross-list-a-seller.mjs`](examples/60-cross-list-a-seller.mjs) prices two real sellers on every other
-market. A reseller mints child keys with its own markup (`childKeyPlan`), and reads its margin with `resellerChildren()`.
+The seller keeps its own price on every market: `price to buyer = seller price + our fee + each market's own fee`. [`examples/60-cross-list-a-seller.mjs`](examples/60-cross-list-a-seller.mjs) prices two real sellers on every other
+market. A reseller mints child keys that sell at the list price (`childKeyPlan`), and reads each one's calls with `resellerChildren()`.
 
 ## Workflows, node by node
 

@@ -1,16 +1,16 @@
 /**
- * @moonbeam-foundation/sdk/errors: one reader for every refusal the coordination layer answers with.
+ * @moonbeam-foundation/sdk/errors: one reader for every refusal Moonbeam's API answers with.
  *
- * The layer refuses in two shapes, and every read in this SDK goes through `refusalOf`, so neither can crash a caller:
+ * Moonbeam refuses in two shapes, and every read in this SDK goes through `refusalOf`, so neither can crash a caller:
  *
- *   the layer's own        { ok: false, code, error: "<words>", message?, next_step? }
+ *   Moonbeam's own        { ok: false, code, error: "<words>", message?, next_step? }
  *   the OpenAI error       { error: { message, type, param, code }, next_step? }   (the chat door; the System One door)
  *
  * `refusalOf` never throws: an `error` that is an object, a string, missing, or a body that is not JSON at all all fold
  * into one `Refusal`. `CoordError` is the error every reader throws with it.
  */
 
-/** One refusal, whatever shape the layer sent it in. */
+/** One refusal, whatever shape Moonbeam sent it in. */
 export type Refusal = {
   /** the HTTP status (0 when there was no answer) */
   status: number;
@@ -22,7 +22,7 @@ export type Refusal = {
   type: string | null;
   /** the OpenAI shape's error.param: the request field the refusal is about */
   param: string | null;
-  /** what to do instead, when the layer says (next_step) */
+  /** what to do instead, when Moonbeam says (next_step) */
   nextStep: unknown;
   /** the body as it came */
   body: unknown;

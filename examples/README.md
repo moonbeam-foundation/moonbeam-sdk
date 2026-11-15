@@ -55,7 +55,7 @@ Each role gets a readiness report: what you put up, what you can lose, and anyth
 | 21 | [onboard-provider](21-onboard-provider.mjs) | Doing the work | `[block] this job needs a 40 deposit and you have 30 free` |
 | 22 | [onboard-evaluator](22-onboard-evaluator.mjs) | Judging the work | `[caution] without a verifiable proof you can reject but never approve` |
 | 23 | [onboard-backer](23-onboard-backer.mjs) | Standing behind workers (pools are not open yet; this is the arithmetic) | `breaks even at 3.23%` |
-| 24 | [resell-on-base](24-resell-on-base.mjs) | A Moonbeam reseller's quote on every Base venue: the one scheme, the doer keeps its price, the reseller's leg | `the doer keeps 8000 on every venue` |
+| 24 | [resell-on-base](24-resell-on-base.mjs) | A Moonbeam reseller's quote on every Base venue: the one scheme, the doer keeps its price | `the doer keeps 8000 on every venue` |
 
 ## Reading jobs that already ran
 
@@ -72,7 +72,7 @@ Each role gets a readiness report: what you put up, what you can lose, and anyth
 |---|---|---|---|
 | 40 | [the-article](40-the-article.mjs) | Every claim the launch article makes about the SDK, checked. Live, it also finds the equation job's grade on Base (`OFFLINE=1` skips that) | `every claim holds` |
 | 50 | [x402-pay-a-wall](50-x402-pay-a-wall.mjs) | A wall's 402 (six networks), the entry of your network, `quoteSale`'s price, where a seller on Solana is paid, the EIP-3009 typed data your wallet signs and the PAYMENT-SIGNATURE header | `signs TransferWithAuthorization under USD Coin v2 on chain 8453` |
-| 51 | [read-a-proof](51-read-a-proof.mjs) | A Base transaction's proof from the layer, then `verify(blob)` on the V5 verifier on Base | `verify(blob) on Base: true` |
+| 51 | [read-a-proof](51-read-a-proof.mjs) | A Base transaction's proof from Moonbeam, then `verify(blob)` on the V5 verifier on Base | `verify(blob) on Base: true` |
 | 52 | [arbitration-calls](52-arbitration-calls.mjs) | The three tiers of the ArbitratorRouter as unsigned calls, and what a ruling writes into the record | `findCheated(jobId, loss)` |
 | 53 | [attested-by-default](53-attested-by-default.mjs) | A settle, a grade and a resale step, each with its mark and its calls on Base; the stamp Base lacks said | `missing: GradeStampRegistry@8453` |
 
@@ -81,7 +81,7 @@ Each role gets a readiness report: what you put up, what you can lose, and anyth
 
 | # | File | Best for | You see |
 |---|---|---|---|
-| 60 | [cross-list-a-seller](60-cross-list-a-seller.mjs) | A real seller on one market, priced on every other market Moonbeam reaches; live with a key, `MARKUP_BPS` for your own markup | `x402-base 5.00 4.00 1.00`: the buyer pays 5.00, the seller keeps 4.00 |
+| 60 | [cross-list-a-seller](60-cross-list-a-seller.mjs) | A real seller on one market, priced on every other market Moonbeam reaches; live with a key | `x402-base 5.00 4.00 1.00`: the buyer pays 5.00, the seller keeps 4.00 |
 | 70 | [every-venue](70-every-venue.mjs) | Every venue: what a seller does there, each step's state and its SDK call; then one sale stop by stop. Live with `MOONBEAM_API` and an agent id | `ERC-8004  live market.listOn  n/a` |
 
 ## Settings

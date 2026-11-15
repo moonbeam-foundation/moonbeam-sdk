@@ -57,9 +57,9 @@ describe('VENUES: every venue, one table', () => {
   it('the states as read on the register snapshot', () => {
     const at = (id: string) => VENUES.find((v) => v.id === id)!;
     expect(VENUE_STEPS.map((k) => at('x402-base')[k].state)).toEqual(['live', 'live', 'live', 'not yet']);
-    // ERC-8183 settle: the register's self-test, held at not yet while the operator's offerings take no paid job (pay: broken)
-    expect(VENUE_STEPS.map((k) => at('erc8183-base')[k].state)).toEqual(['not yet', 'self-test', 'not yet', 'self-test']);
-    expect(at('erc8183-base').settle.capped).toMatchObject({ mark: 'broken' });
+    // ERC-8183 settle: the register's self-test; the operator's mark reads partial on Virtuals' own read, so it is not capped
+    expect(VENUE_STEPS.map((k) => at('erc8183-base')[k].state)).toEqual(['not yet', 'self-test', 'self-test', 'self-test']);
+    expect(at('erc8183-base').settle.capped).toBeUndefined();
     // Olas list: proven by the register, partial while the market does not show the mech live
     expect(at('olas-base').list).toMatchObject({ state: 'partial', capped: { mark: 'partial' } });
     expect(VENUE_STEPS.map((k) => at('near-agent-market')[k].state)).toEqual(['live', 'not yet', 'not yet', 'not yet']);
@@ -79,9 +79,16 @@ describe('VENUES: every venue, one table', () => {
     const c = (s: market.VenueStepRow) => s.state + (s.call ? ` · \`${s.call}\`` : '');
     for (const v of VENUES) {
       expect(doc, v.id).toContain(`| ${v.name} | ${c(v.list)} | ${c(v.take)} | ${c(v.settle)} | ${c(v.paid)} |`);
-      expect(readme, v.id).toMatch(new RegExp(`\\| ${v.list.state} \\| ${v.take.state} · ${v.settle.state} \\|`));
+      // the README speaks for Moonbeam's own listings: its cohort, never the operator's states
+      const m = v.cohorts.moonbeam;
+      expect(readme, v.id).toMatch(new RegExp(`\\| ${m.list.state} \\| ${m.take.state} · ${m.settle.state} \\|`));
     }
     for (const s of SALE_STOPS) expect(doc, s.id).toContain(`| ${s.order} | \`${s.id}\` | ${s.label} |`);
+    // NEAR: the operator's listing is live there; Moonbeam's own agent is a private draft, so no Moonbeam line says live
+    const near = VENUES.find((v) => v.id === 'near-agent-market')!;
+    expect(near.list.state).toBe('live'); expect(near.cohorts.moonbeam.list.state).toBe('not yet');
+    expect(readme).toMatch(/\| NEAR AI Agent Market \| [^|\n]+ \| not yet \| not yet · not yet \|/);
+    expect(doc).toMatch(/## Every venue \(the operator's listings\)/);
     expect(`${doc}\n${readme}`).not.toMatch(/taifoon|\bn8n\b|0x[0-9a-f]{40}|36927/i);
   });
   it('venues() answers the shipped table without a transport', async () => {

@@ -178,6 +178,7 @@
     "jev"
   ],
   "devDependencies": {
+    "@babel/parser": "7.29.9",
     "@types/node": "^22.20.5",
     "@vitest/coverage-v8": "^5.0.4",
     "typescript": "^7.0.2",

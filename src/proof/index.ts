@@ -1,8 +1,8 @@
 /**
- * @moonbeam-foundation/sdk/proof: read the proof that a Base transaction is inside the layer's superroot, name it with a
+ * @moonbeam-foundation/sdk/proof: read the proof that a Base transaction is inside Moonbeam's superroot, name it with a
  * ref (`v5:<chain>:<tx>@<superroot>`), and check the served blob with the V5 proof verifier on Base itself.
  *
- *   readProof(t, tx, o?)      GET /v1/proof/tx/<chain>/<tx> (Base by default; `chain` names another EVM chain the layer
+ *   readProof(t, tx, o?)      GET /v1/proof/tx/<chain>/<tx> (Base by default; `chain` names another EVM chain Moonbeam
  *                             proves, e.g. where a seller was paid): the block, the superroot, `checks`, `proven`, the blob
  *   proofRef / parseProofRef  the one-line name of a proof, and back
  *   verifyCall(blob)          the unsigned eth_call the verifier answers (`verify(blob)`)
@@ -34,14 +34,14 @@ export type ProofBlob = {
 export type TxProof = {
   ok: true; chain_id: number; tx: string; block_number: number; block_hash: string; is_finalized: boolean; super_root_hash: string | null;
   checks: Record<string, boolean>; blob: ProofBlob | null;
-  /** every check the layer names is true */
+  /** every check Moonbeam names is true */
   proven: boolean;
   ref: string | null;
 };
 
 const TX_RE = /^0x[0-9a-fA-F]{64}$/;
 
-/** Read the proof of one transaction from the layer (keyless): Base unless `chain` names another chain id. Throws a
+/** Read the proof of one transaction from Moonbeam (keyless): Base unless `chain` names another chain id. Throws a
  *  RangeError on a malformed hash or chain, and a CoordError (either refusal shape, ./errors) on a refused read. */
 export async function readProof(t: OnboardTransport, tx: string, o: { chain?: number } = {}): Promise<TxProof> {
   if (!TX_RE.test(tx)) throw new RangeError('a transaction hash is 0x + 64 hex');
@@ -97,7 +97,7 @@ export type OnChainCheck = {
   /** the verifier checked the superroot against an on-chain anchor (false while superrootAnchor is unset) */
   anchored: boolean;
   boundAt: { blockNumber: number; blockHash: string };
-  /** the block → tip binding the layer served (not re-folded here) */
+  /** the block → tip binding Moonbeam served (not re-folded here) */
   inclusion: 'served' | 'none';
 };
 

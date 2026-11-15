@@ -19,12 +19,12 @@ if (cmd === 'workflows') {
 if (cmd === 'venues') {
   const { VENUES, VENUES_READ_ON, SALE_STOPS } = await import('../dist/market/index.js');
   const cell = (s) => `${s.state}${s.call ? ` ${s.call}` : ''}`.padEnd(32);
-  console.log(`every venue, as the register read it on ${VENUES_READ_ON}`);
+  console.log(`every venue: the register's proof for the operator's own listings, read on ${VENUES_READ_ON} (Moonbeam's own: below)`);
   console.log(`${'venue'.padEnd(30)}${'list'.padEnd(32)}${'take a job'.padEnd(32)}${'settle'.padEnd(32)}paid`);
   for (const v of VENUES) console.log(`${v.name.padEnd(30)}${cell(v.list)}${cell(v.take)}${cell(v.settle)}${v.paid.state}${v.paid.call ? ` ${v.paid.call}` : ''}`);
   // _VENUE_TRUTH_v1_: each cohort's own list · take · settle
-  console.log('\neach cohort: list · take · settle');
-  for (const v of VENUES) console.log(`${v.name.padEnd(30)}${Object.entries(v.cohorts).map(([c, x]) => `${c}: ${x.list.state} · ${x.take.state} · ${x.settle.state}`.padEnd(44)).join('')}`);
+  console.log('\neach cohort its own listing: list · take · settle');
+  for (const v of VENUES) console.log(`${v.name.padEnd(30)}${['moonbeam', 'operator'].map((c) => { const x = v.cohorts[c]; return `${c}: ${x.list.state} · ${x.take.state} · ${x.settle.state}`.padEnd(44); }).join('')}`);
   console.log('\none sale, stop by stop');
   for (const s of SALE_STOPS) console.log(`${String(s.order).padStart(2)} ${s.label.padEnd(20)} ${s.call.padEnd(26)} ${s.route ?? 'offline'}`);
   process.exit(0);

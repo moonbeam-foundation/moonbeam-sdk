@@ -1,6 +1,6 @@
 {
   "read_at": "2026-11-06",
-  "read": "GET /v1/pools?chain=8453 (every seller's one job record across every market the layer reads)",
+  "read": "GET /v1/pools?chain=8453 (every seller's one job record across every market Moonbeam reads)",
   "sellers_on_record": 102,
   "sellers_on_more_than_one_market": 0,
   "sellers": [
