@@ -1,0 +1,38 @@
+# The Moonbeam workflow node (packages/workflow-nodes): the gates the community-node directory applies, on every push and
+# pull request that touches it or the SDK it is built on.
+name: workflow-nodes
+on:
+  push:
+    branches: [main]
+    paths: ['packages/workflow-nodes/**', 'src/**', 'package.json', 'package-lock.json', '.github/workflows/workflow-nodes.yml']
+  pull_request:
+    paths: ['packages/workflow-nodes/**', 'src/**', 'package.json', 'package-lock.json', '.github/workflows/workflow-nodes.yml']
+permissions: { contents: read }
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - name: The SDK the node is built on (linked as file:../..)
+        run: npm ci && npm run build
+      - run: npm ci
+        working-directory: packages/workflow-nodes
+      - name: sdk.generated.ts matches the SDK
+        run: npm run gen:check
+        working-directory: packages/workflow-nodes
+      - name: Lint with the directory's community-node ruleset (strict)
+        run: npm run lint
+        working-directory: packages/workflow-nodes
+      - run: npm run build
+        working-directory: packages/workflow-nodes
+      - name: Offline tests (every request against the SDK's own, the words, the directory's rules)
+        run: npm test
+        working-directory: packages/workflow-nodes
+      - name: No run-time dependencies, strict mode on
+        working-directory: packages/workflow-nodes
+        run: node -e "const p=require('./package.json'); if(Object.keys(p.dependencies||{}).length||p.n8n.strict!==true){console.error('dependencies or strict'); process.exit(1)}"
+      - name: The directory's submission scanner, on the source and the packed tarball
+        run: npm run scan
+        working-directory: packages/workflow-nodes

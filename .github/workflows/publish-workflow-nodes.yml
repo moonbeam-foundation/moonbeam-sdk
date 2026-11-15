@@ -1,0 +1,54 @@
+# Publishes the Moonbeam workflow node (packages/workflow-nodes) to npm WITH a provenance statement, from GitHub Actions, as the
+# community-node directory requires for a package it verifies. Triggered by publishing a GitHub release whose tag is
+# workflow-nodes-vX.Y.Z and matches packages/workflow-nodes/package.json. Uses the repository secret NPM_TOKEN (the one the SDK
+# release uses; the package is under @moonbeam-foundation). The SDK's own release (tag vX.Y.Z) is publish.yml.
+name: publish-workflow-nodes
+on:
+  release:
+    types: [published]
+permissions:
+  contents: read
+  id-token: write          # lets npm sign the provenance statement through GitHub's OIDC
+jobs:
+  publish:
+    if: startsWith(github.event.release.tag_name, 'workflow-nodes-v')
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: packages/workflow-nodes
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: https://registry.npmjs.org
+      - name: NPM_TOKEN must be set (its value is never printed)
+        run: test -n "$NODE_AUTH_TOKEN" || { echo "Set the repository secret NPM_TOKEN (an npm token that may publish under @moonbeam-foundation)."; exit 1; }
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: The SDK the node is built on (linked as file:../..)
+        working-directory: .
+        run: npm ci && npm run build
+      - run: npm ci
+      - run: npm run gen:check
+      - run: npm run lint
+      - run: npm run build
+      - run: npm test
+      - name: The tag must match package.json
+        run: test "workflow-nodes-v$(node -p "require('./package.json').version")" = "${{ github.event.release.tag_name }}"
+      - name: No run-time dependencies, strict mode on
+        run: node -e "const p=require('./package.json'); if(Object.keys(p.dependencies||{}).length||p.n8n.strict!==true){console.error('dependencies or strict'); process.exit(1)}"
+      - name: The directory's submission scanner before publishing (source and packed tarball)
+        run: npm run scan
+      - run: npm publish --provenance --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          RELEASE_MODE: "true"   # the node CLI's prepublishOnly guard refuses a publish without it
+      - name: The directory's scanner on the published package (blocking)
+        run: |
+          name="$(node -p "require('./package.json').name")"; version="$(node -p "require('./package.json').version")"
+          # npm shows a new version (and its provenance) minutes after the publish; the scanner checks provenance, so wait for it
+          for i in $(seq 1 40); do [ -n "$(npm view "$name@$version" dist.attestations.provenance.predicateType 2>/dev/null)" ] && break; sleep 30; done
+          npm view "$name@$version" version
+          npx --yes @n8n/scan-community-package@0.43.0 "$name@$version" | tee scan.out
+          grep -q "has passed all security checks" scan.out   # the CLI exits 0 on a failed scan
