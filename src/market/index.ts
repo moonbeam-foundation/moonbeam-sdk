@@ -251,7 +251,7 @@ export async function resellerStanding(t: OnboardTransport): Promise<Record<stri
   needKey(t, 'GET /reseller/loop');
   return call<Record<string, unknown>>(t, 'GET', '/reseller/loop');
 }
-/** The child keys you minted, each one's calls and what each owes at the list price (`GET /access/reseller`). Keyed. */
+/** The child keys you minted, each one's calls, what it owes (list price + your markup) and your margin (`GET /access/reseller`). Keyed. */
 export async function resellerChildren(t: OnboardTransport): Promise<Record<string, unknown>> {
   needKey(t, 'GET /access/reseller');
   return call<Record<string, unknown>>(t, 'GET', '/access/reseller');

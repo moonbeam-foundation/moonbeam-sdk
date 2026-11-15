@@ -101,11 +101,12 @@ Each stop also names its Studio command, its layer route and what it needs (offl
 import { quoteSale, legsByName } from '@moonbeam-foundation/sdk/resale';
 
 const q = quoteSale({ venue_in: 'x402-base', venue_out: 'bitagent-base', seller_price: 4_000000n });
-legsByName(q);   // { seller_share: 4000000n, our_fee: 1000000n, venue_fee: 0n }: the buyer pays 5.00 USDC
+legsByName(q);   // { seller_share: 4000000n, our_fee: 1000000n, venue_fee: 0n, reseller_markup: 0n }: the buyer pays 5.00 USDC
 ```
 
-The seller keeps its own price on every market: `price to buyer = seller price + our fee + each market's own fee`. [`examples/60-cross-list-a-seller.mjs`](examples/60-cross-list-a-seller.mjs) prices two real sellers on every other
-market. A reseller mints child keys that sell at the list price (`childKeyPlan`), and reads each one's calls with `resellerChildren()`.
+The seller keeps its own price on every market: `price to buyer = seller price + our fee + each market's own fee [+ your
+markup]`. [`examples/60-cross-list-a-seller.mjs`](examples/60-cross-list-a-seller.mjs) prices two real sellers on every other
+market. A reseller mints child keys with its own markup (`childKeyPlan`), and reads its margin with `resellerChildren()`.
 
 ## Workflows, node by node
 

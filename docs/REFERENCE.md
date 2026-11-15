@@ -267,25 +267,26 @@ byte for byte.
 ## Reselling on Base
 
 `@moonbeam-foundation/sdk/resale` is the Moonbeam profile of the one payment scheme Moonbeam prices with, a vendored
-copy whose source is pinned by its sha256 (`dist/resale/payment-scheme.pin.json`; published without its comments): what a reseller's visitor pays and where every unit of
-it goes — the same numbers Moonbeam itself charges. Moonbeam prices are undercut only: nothing is added on top of the list price.
+copy whose source is pinned by its sha256 (`dist/resale/payment-scheme.pin.json`; published without its comments): what a
+reseller's visitor pays, where every unit of it goes, and the reseller's own leg — the same numbers Moonbeam itself charges.
 
 ```
-price_to_buyer = seller_price + our_fee + venue_fee(in) + venue_fee(out)
+price_to_buyer = seller_price + our_fee + venue_fee(in) + venue_fee(out) [+ reseller_markup]
 ```
 
 ```ts
-import { quoteBase, legsByName, childKeyTerms, childKeyPlan, subscribePlan, readSale } from '@moonbeam-foundation/sdk/resale';
+import { quoteBase, legsByName, markupLeg, childKeyTerms, childKeyPlan, subscribePlan, readSale } from '@moonbeam-foundation/sdk/resale';
 
-const q = quoteBase({ venue_in: 'reseller', venue_out: 'erc8183-base', seller_price: 8_000n });
-if (q.ok) legsByName(q);           // { our_fee: 2000n, venue_fee: 888n, seller_share: 8000n }; Σ = q.price_to_buyer
-childKeyTerms();                   // what a child key is, in Moonbeam's words
-childKeyPlan('mb:wallet');        // POST /tenant/keys { action: 'child', label } — the reseller sends it with its own key
+const q = quoteBase({ venue_in: 'reseller', venue_out: 'erc8183-base', seller_price: 8_000n, reseller: { tenant, markup_bps: 1000 } });
+if (q.ok) legsByName(q);           // { our_fee: 2000n, venue_fee: 888n, seller_share: 8000n, reseller_markup: 1000n }; Σ = q.price_to_buyer
+childKeyTerms({ '*': 1000 });      // what a child key is, in Moonbeam's words
+childKeyPlan({ '*': 1000 });       // POST /tenant/keys { action: 'child', markup_bps } — the reseller sends it with its own key
 subscribePlan({ usdc: 1 });        // POST /access/subscribe — the child's top-up door (the x402 quote comes back as a 402)
 await readSale(transport, 'rs_…'); // GET /resale/sales/{id} through the site's proxy
 ```
 
-A reseller is a tenant of Moonbeam; its visitors buy on child keys from the reseller's balance, at the list price. The buyer pays on one of the five Base venues (`x402-base`, `erc8183-base`,
+A reseller is a tenant of Moonbeam; its visitors buy on child keys from the reseller's balance; the markup is the reseller's
+own leg, never part of Moonbeam's fee. The buyer pays on one of the five Base venues (`x402-base`, `erc8183-base`,
 `memoacp-base`, `bitagent-base`, `olas-base`), and the assurance economy stays in GLMR. The seller is paid where it was hired:
 `quoteSale` takes the seller's own venue (x402 on Solana or Arbitrum, ACP v3 on Arc, and the others the scheme prices), and
 `sellerRailOf(offer)` says which network, token and payTo its leg settles on. A seller's own x402 entry comes first, then its

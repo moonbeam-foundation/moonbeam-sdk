@@ -37,13 +37,11 @@
   the sync that withdrew two nameless offerings. Virtuals' own read of the operator's agent (2026-11-15T00:21Z) shows its 13
   offerings, every one named, so the cell reads partial with that read as its `proof` (`gen-venues --market-read`; a market
   read only clears a mark read before it, never lifts a step past partial). The venue row's settle is back to self-test.
-- **Prices are undercut only.** `./resale` takes no reseller leg on top of the list price: `quoteBase`, `quoteSale` and
-  `legsOfPayment` refuse one, `FORMULA` and `LEGS` are stated without it, and a quote carries no zero reseller leg. Removed:
-  the reseller-leg reader and its policy type. `childKeyTerms()` takes no policy; `childKeyPlan(label?)` mints at the list
-  price (a 0.12 call with an all-zero policy still reads; any other is refused). Examples 24 and 60 quote at the list price.
-- **Copy.** The package speaks in Moonbeam's words: `test/copy.test.ts` reads every file `npm pack` ships. The two vendored
-  modules are published without their comments (their sources stay byte-identical to their pins); their remaining data
-  strings are counted there until they are re-synced from an updated source.
+- **Copy.** The package speaks in Moonbeam's words: `test/copy.test.ts` reads every file `npm pack` ships. It fails on a
+  listing price that adds a markup to a seller's price ("price + N%", "resold at", "×1.2"); the reseller API (a tenant's own
+  chosen markup on its child keys) is named and allowed. The two vendored modules are published without their comments (their
+  sources stay byte-identical to their pins); their remaining data strings are counted there until they are re-synced.
+- `./resale` is unchanged from 0.12.0: every reseller export, signature and default stays.
 
 ## 0.12.0
 
@@ -80,7 +78,7 @@
 - **`./market` gains hire, cross-list and resell calls.** `handOver`, `composeGrade`, `hirePlan`, `jobCalls`, `classes`,
   `classAgents`, `layerListings`, `sellerRecords`, `resellerStanding`, `resellerChildren`, `registryAgent`. Nothing signs.
 - **`examples/60-cross-list-a-seller.mjs`.** A real seller on one market, priced on every other market by the one payment
-  scheme; offline from recorded numbers, or live with a key.
+  scheme; offline from recorded numbers, or live with a key; `MARKUP_BPS` adds your own markup.
 
 ## 0.10.0
 
@@ -227,7 +225,7 @@ fixes answer the Moonbeam SDK gap analysis of 2026-10-14, by its numbers:
 - **P11, pools open.** `poolsOpenOn(transport)` reads `GET /v1/pools/networks`; `POOLS_OPEN_ON` is the fallback, not the policy.
 - **P12, the quota.** `quotaOf(transport)` reads `GET /v1/judge/credits`; the typed values are the fallback.
 - **P13.** The two "onboard" modules are named for what they are in `src/index.ts`; no export is renamed.
-- **New: `./resale`.** The vendored one payment scheme (pinned), `quoteBase` on the Base venues, `legsByName`, the reseller-leg reader (gone in 0.13.0),
+- **New: `./resale`.** The vendored one payment scheme (pinned), `quoteBase` on the Base venues, `legsByName`, `markupLeg`,
   `childKeyTerms`, `childKeyPlan`, `subscribePlan`, `readSale`, `readResellerView`. Example 24.
 - The GLMR pools are not open. Moonbeam ACP is in a pilot with selected partners: builders@moonbeam.foundation.
 
