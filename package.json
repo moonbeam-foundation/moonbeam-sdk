@@ -104,6 +104,10 @@
       "types": "./dist/economy/index.d.ts",
       "import": "./dist/economy/index.js"
     },
+    "./playground": {
+      "types": "./dist/playground/index.d.ts",
+      "import": "./dist/playground/index.js"
+    },
     "./market": {
       "types": "./dist/market/index.d.ts",
       "import": "./dist/market/index.js"
@@ -140,7 +144,7 @@
     "check:registry": "node scripts/gen-moonbeam-acp.mjs --check",
     "check:pins": "node scripts/check-pins.mjs",
     "check:diagrams": "node scripts/gen-diagrams.mjs >/dev/null && git diff --exit-code -- 'docs/workflows/*.svg' docs/WORKFLOWS.md",
-    "check": "npm run typecheck && npm run build && npm test && npm run check:pins && npm run check:workflows && npm run check:venues && npm run check:diagrams",
+    "check": "npm run typecheck && npm run build && npm test && npm run check:pins && npm run check:workflows && npm run check:venues && npm run check:diagrams && npm run check:playground",
     "sync": "node scripts/sync.mjs",
     "check:sync": "node scripts/sync.mjs --check",
     "test:fork": "node test/fork/run-fork.mjs",
@@ -150,7 +154,9 @@
     "gen:workflows": "node scripts/gen-workflows.mjs",
     "check:workflows": "node scripts/gen-workflows.mjs --check",
     "gen:venues": "node scripts/gen-venues.mjs",
-    "check:venues": "node scripts/gen-venues.mjs --check"
+    "check:venues": "node scripts/gen-venues.mjs --check",
+    "gen:playground": "node scripts/gen-playground.mjs",
+    "check:playground": "node scripts/gen-playground.mjs --check"
   },
   "keywords": [
     "moonbeam",
