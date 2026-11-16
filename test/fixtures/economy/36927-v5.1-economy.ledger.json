@@ -1,0 +1,411 @@
+{
+ "about": "The devnet run of the assurance hook V5.1 on chain 36927 with one job for every ending, trimmed to its money: the quote every job was opened with and, per job, the ending and the events with their amounts. Account addresses are left out. Source: protocols/ours/assurance-v4/devnet/deployments/36927-v5.1-economy.json (sha256 below).",
+ "source": {
+  "commit": "e2ba9f18b1ea6195f93ffff3874426375907fd9c",
+  "sha256": "728024561374f42c239eee42d2f4768a2d3a2013d68c600926fd0c5f46d33b14"
+ },
+ "chainId": 36927,
+ "quote": {
+  "price": 1000000,
+  "record": {
+   "correct": 95,
+   "incorrect": 5
+  },
+  "premium": 111750,
+  "toBackers": 94803,
+  "toLayer": 16947,
+  "deposit": 1111750,
+  "compensation": 111750,
+  "evaluatorFee": 10000
+ },
+ "ledger": [
+  {
+   "job": 1,
+   "ending": "completed (complete by our evaluator, through the adapter)",
+   "jobId": "0xa6d6f649a7b8d06168f30af1078115e86b2bf9dd8b495a448ba11ceef3d1168a",
+   "state": "Completed",
+   "events": [
+    {
+     "event": "EconomyCommitted",
+     "tx": "0xd2ee48b70a006828063144be635327d24df14231d70df1ca54e264d70af01bfd",
+     "block": 1482252,
+     "toBackers": 94803,
+     "toLayer": 16947,
+     "compensation": 111750
+    },
+    {
+     "event": "PremiumSplit",
+     "tx": "0x79d3221cbd512ab749867800e339415f12991642a895212d0e3989d852d7517e",
+     "block": 1482310,
+     "toBackers": 94803,
+     "toLayer": 16947
+    },
+    {
+     "event": "EvaluatorFeePaid",
+     "tx": "0x79d3221cbd512ab749867800e339415f12991642a895212d0e3989d852d7517e",
+     "block": 1482310,
+     "amount": 10000
+    },
+    {
+     "event": "Settled",
+     "tx": "0x79d3221cbd512ab749867800e339415f12991642a895212d0e3989d852d7517e",
+     "block": 1482310,
+     "ending": 1,
+     "toSeller": 2111750,
+     "toBuyer": 0,
+     "toPool": 94803,
+     "toEvaluator": 10000
+    }
+   ]
+  },
+  {
+   "job": 2,
+   "ending": "cheated",
+   "jobId": "0x48696a57b49d24208b9aaf70180a489894df73d6c170b7366c7c3f4ae52e2616",
+   "state": "Cheated",
+   "events": [
+    {
+     "event": "EconomyCommitted",
+     "tx": "0x73023cc96a1eb0babe2ecee1dc6ce6bb7dd6e18c9bdddaa9deab85992508d2be",
+     "block": 1482254,
+     "toBackers": 94803,
+     "toLayer": 16947,
+     "compensation": 111750
+    },
+    {
+     "event": "EvaluatorFeeRefunded",
+     "tx": "0x46140987b0a7c12df12cc2317c690df4d8185a19ad9ef5843791bc83b7221c9b",
+     "block": 1482321,
+     "amount": 10000
+    },
+    {
+     "event": "Cheated",
+     "tx": "0x46140987b0a7c12df12cc2317c690df4d8185a19ad9ef5843791bc83b7221c9b",
+     "block": 1482321,
+     "loss": 3500000,
+     "fromDeposit": 1111750,
+     "fromPool": 1000000
+    },
+    {
+     "event": "Settled",
+     "tx": "0x46140987b0a7c12df12cc2317c690df4d8185a19ad9ef5843791bc83b7221c9b",
+     "block": 1482321,
+     "ending": 4,
+     "toSeller": 0,
+     "toBuyer": 2233500,
+     "toPool": 0,
+     "toEvaluator": 0
+    }
+   ]
+  },
+  {
+   "job": 3,
+   "ending": "rejected_delivered (the rejection stood: finalizeReject)",
+   "jobId": "0xd2be46a9f079db38c44413518a8ff506ccb3618c3fa9b2e7ce5e794adec4d702",
+   "state": "Rejected",
+   "events": [
+    {
+     "event": "EconomyCommitted",
+     "tx": "0x9d832b1f8c064f47fee113db649dac677f5aab699505477156d515892df8e594",
+     "block": 1482256,
+     "toBackers": 94803,
+     "toLayer": 16947,
+     "compensation": 111750
+    },
+    {
+     "event": "RejectionCompensated",
+     "tx": "0x7256c0be758c557cd5a4cda200045cac43636a8a8e19849ecd05bdff9a2de274",
+     "block": 1482544,
+     "amount": 111750
+    },
+    {
+     "event": "EvaluatorFeePaid",
+     "tx": "0x7256c0be758c557cd5a4cda200045cac43636a8a8e19849ecd05bdff9a2de274",
+     "block": 1482544,
+     "amount": 10000
+    },
+    {
+     "event": "Settled",
+     "tx": "0x7256c0be758c557cd5a4cda200045cac43636a8a8e19849ecd05bdff9a2de274",
+     "block": 1482544,
+     "ending": 3,
+     "toSeller": 1000000,
+     "toBuyer": 1223500,
+     "toPool": 0,
+     "toEvaluator": 10000
+    }
+   ]
+  },
+  {
+   "job": 4,
+   "ending": "expired_undelivered (no-show)",
+   "jobId": "0xb0808c6472436c807ef5a34c97d3ff05a49180801145a5c7f2d415eb09d1b9ab",
+   "state": "Expired",
+   "events": [
+    {
+     "event": "EconomyCommitted",
+     "tx": "0xd8d9cf9ee57a8c1e25f273520d5585fff45603320984124a701cea05bd7ca8b1",
+     "block": 1482258,
+     "toBackers": 94803,
+     "toLayer": 16947,
+     "compensation": 111750
+    },
+    {
+     "event": "NoShowCompensated",
+     "tx": "0x07725c5ff8fbf46d932b378b95faff74f7cc0fbe4e5690a138ad02fd88d77e4f",
+     "block": 1482546,
+     "amount": 111750
+    },
+    {
+     "event": "EvaluatorFeeRefunded",
+     "tx": "0x07725c5ff8fbf46d932b378b95faff74f7cc0fbe4e5690a138ad02fd88d77e4f",
+     "block": 1482546,
+     "amount": 10000
+    },
+    {
+     "event": "Settled",
+     "tx": "0x07725c5ff8fbf46d932b378b95faff74f7cc0fbe4e5690a138ad02fd88d77e4f",
+     "block": 1482546,
+     "ending": 2,
+     "toSeller": 1000000,
+     "toBuyer": 1233500,
+     "toPool": 0,
+     "toEvaluator": 0
+    }
+   ]
+  },
+  {
+   "job": 5,
+   "ending": "completed (dispute won by the seller)",
+   "jobId": "0x0cac8fff8feb26c3fd618e1014745f8aeac64d7f2cd7f6051b03b8025563af57",
+   "state": "Completed",
+   "events": [
+    {
+     "event": "EconomyCommitted",
+     "tx": "0xacdc2ba4fe108a8b58e474bb0d9854382dd995b1852f237e4e802b66f7f682ed",
+     "block": 1482260,
+     "toBackers": 94803,
+     "toLayer": 16947,
+     "compensation": 111750
+    },
+    {
+     "event": "PremiumSplit",
+     "tx": "0x042924580a42535af5275d02c60d3569883806c0768cb328355d9a3c9dcbd15e",
+     "block": 1482329,
+     "toBackers": 94803,
+     "toLayer": 16947
+    },
+    {
+     "event": "EvaluatorFeeRefunded",
+     "tx": "0x042924580a42535af5275d02c60d3569883806c0768cb328355d9a3c9dcbd15e",
+     "block": 1482329,
+     "amount": 10000
+    },
+    {
+     "event": "Settled",
+     "tx": "0x042924580a42535af5275d02c60d3569883806c0768cb328355d9a3c9dcbd15e",
+     "block": 1482329,
+     "ending": 6,
+     "toSeller": 2111750,
+     "toBuyer": 10000,
+     "toPool": 94803,
+     "toEvaluator": 0
+    }
+   ]
+  },
+  {
+   "job": 6,
+   "ending": "rejected (the arbitrator for the buyer)",
+   "jobId": "0x2dcbd4e1474617ae008ea0809879ee5ac2ac2759abb097ffc434243b50793833",
+   "state": "Rejected",
+   "events": [
+    {
+     "event": "EconomyCommitted",
+     "tx": "0x3aff79d0d4423fafc86605c2096d61aa281da7dc2ed8785b9d48a0f775b68624",
+     "block": 1482262,
+     "toBackers": 94803,
+     "toLayer": 16947,
+     "compensation": 111750
+    },
+    {
+     "event": "RejectionCompensated",
+     "tx": "0x59edcae58597930384084f6d06ca43836d61df8f49662d090cd7133e8f499539",
+     "block": 1482332,
+     "amount": 111750
+    },
+    {
+     "event": "EvaluatorFeePaid",
+     "tx": "0x59edcae58597930384084f6d06ca43836d61df8f49662d090cd7133e8f499539",
+     "block": 1482332,
+     "amount": 10000
+    },
+    {
+     "event": "Settled",
+     "tx": "0x59edcae58597930384084f6d06ca43836d61df8f49662d090cd7133e8f499539",
+     "block": 1482332,
+     "ending": 3,
+     "toSeller": 1000000,
+     "toBuyer": 1223500,
+     "toPool": 0,
+     "toEvaluator": 10000
+    }
+   ]
+  },
+  {
+   "job": 7,
+   "ending": "rejected (stale dispute: settleStaleDispute)",
+   "jobId": "0xcc8cab6c2206b6d34d837d403e2053bcda47b0018af86ea484b347cd3ab7e091",
+   "state": "Rejected",
+   "events": [
+    {
+     "event": "EconomyCommitted",
+     "tx": "0x7772f8cfbea1fdaf03ed7427703e9ff8917c7d00b10a3e1c6d96a3d16054b77a",
+     "block": 1482264,
+     "toBackers": 94803,
+     "toLayer": 16947,
+     "compensation": 111750
+    },
+    {
+     "event": "RejectionCompensated",
+     "tx": "0xeb169e3406afa6c2c32399609eb954789715eeb58e0f3c1a4ec366291da436de",
+     "block": 1482548,
+     "amount": 111750
+    },
+    {
+     "event": "EvaluatorFeePaid",
+     "tx": "0xeb169e3406afa6c2c32399609eb954789715eeb58e0f3c1a4ec366291da436de",
+     "block": 1482548,
+     "amount": 10000
+    },
+    {
+     "event": "Settled",
+     "tx": "0xeb169e3406afa6c2c32399609eb954789715eeb58e0f3c1a4ec366291da436de",
+     "block": 1482548,
+     "ending": 3,
+     "toSeller": 1000000,
+     "toBuyer": 1223500,
+     "toPool": 0,
+     "toEvaluator": 10000
+    }
+   ]
+  },
+  {
+   "job": 8,
+   "ending": "cancelled offer",
+   "jobId": "0x0a111b78e11d742f134d7de0998f830e33f4fe5948d81ad1dfb9751ca109be0d",
+   "state": "Expired",
+   "events": [
+    {
+     "event": "EconomyCommitted",
+     "tx": "0x6750fb50a85361d9c71fa9a628034cc32278ed22281131ea007c59383f8e086c",
+     "block": 1482266,
+     "toBackers": 94803,
+     "toLayer": 16947,
+     "compensation": 111750
+    },
+    {
+     "event": "EvaluatorFeeRefunded",
+     "tx": "0x0495102762f7ef5962b5772f5965f977d759a452391da65fd9e77f4378d7574e",
+     "block": 1482334,
+     "amount": 10000
+    },
+    {
+     "event": "Settled",
+     "tx": "0x0495102762f7ef5962b5772f5965f977d759a452391da65fd9e77f4378d7574e",
+     "block": 1482334,
+     "ending": 7,
+     "toSeller": 0,
+     "toBuyer": 1121750,
+     "toPool": 0,
+     "toEvaluator": 0
+    }
+   ]
+  },
+  {
+   "job": 9,
+   "ending": "lapsed offer (expire Open)",
+   "jobId": "0x5537045cf3f3467b108f1a81fbb739b82f99530d4c8b01f4dd815963db8ea0dc",
+   "state": "Expired",
+   "events": [
+    {
+     "event": "EconomyCommitted",
+     "tx": "0xb8cb5c6cf1d6fbb6a6c6d6da043065f65525c6d58b4ea553843036b7be53157e",
+     "block": 1482269,
+     "toBackers": 94803,
+     "toLayer": 16947,
+     "compensation": 111750
+    },
+    {
+     "event": "EvaluatorFeeRefunded",
+     "tx": "0xad47c1a482428b10e2b2664da84c012dc7c9f0dc0e8822566235776f2826e7ee",
+     "block": 1482551,
+     "amount": 10000
+    },
+    {
+     "event": "Settled",
+     "tx": "0xad47c1a482428b10e2b2664da84c012dc7c9f0dc0e8822566235776f2826e7ee",
+     "block": 1482551,
+     "ending": 2,
+     "toSeller": 0,
+     "toBuyer": 1121750,
+     "toPool": 0,
+     "toEvaluator": 0
+    }
+   ]
+  },
+  {
+   "job": 10,
+   "ending": "auto-completed",
+   "jobId": "0x2b783df1ea6dadb6fd55579dd84e97febe96db1483aad024d9a546aa3787851b",
+   "state": "Completed",
+   "events": [
+    {
+     "event": "EconomyCommitted",
+     "tx": "0x30500267decd51ca8731baad04b49efcf7446c793bf8a7e699fe01b613c4ffa6",
+     "block": 1482272,
+     "toBackers": 94803,
+     "toLayer": 16947,
+     "compensation": 111750
+    },
+    {
+     "event": "PremiumSplit",
+     "tx": "0xdcc6851186046d4ffb1248d051566e8ee72aff82af999c7e50011294bc0cafe4",
+     "block": 1482554,
+     "toBackers": 94803,
+     "toLayer": 16947
+    },
+    {
+     "event": "EvaluatorFeeRefunded",
+     "tx": "0xdcc6851186046d4ffb1248d051566e8ee72aff82af999c7e50011294bc0cafe4",
+     "block": 1482554,
+     "amount": 10000
+    },
+    {
+     "event": "Settled",
+     "tx": "0xdcc6851186046d4ffb1248d051566e8ee72aff82af999c7e50011294bc0cafe4",
+     "block": 1482554,
+     "ending": 5,
+     "toSeller": 2111750,
+     "toBuyer": 10000,
+     "toPool": 94803,
+     "toEvaluator": 0
+    }
+   ]
+  }
+ ],
+ "hookEvents": [
+  {
+   "event": "EconomyBoundsSet",
+   "tx": "0xecd9ecb4e9b841e9126dfcf0dd69af720bb717079aaeb27c8a6ec094013846c6",
+   "block": 1482218,
+   "maxPremiumBps": 3000,
+   "minBackersAprBps": 1000
+  },
+  {
+   "event": "LayerFeesSwept",
+   "tx": "0xa08db27d5cbcc8ff8c7e1d376d882d4fc98021838fd5a46797d34bc396dde690",
+   "block": 1482556,
+   "amount": 50841
+  }
+ ]
+}

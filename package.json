@@ -100,6 +100,10 @@
       "types": "./dist/devnet/index.d.ts",
       "import": "./dist/devnet/index.js"
     },
+    "./economy": {
+      "types": "./dist/economy/index.d.ts",
+      "import": "./dist/economy/index.js"
+    },
     "./market": {
       "types": "./dist/market/index.d.ts",
       "import": "./dist/market/index.js"

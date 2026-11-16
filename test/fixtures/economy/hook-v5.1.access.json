@@ -1,0 +1,293 @@
+{
+ "about": "Who may call each function, read from the hook source: the reverts each external function and the private helpers it calls can raise, and its msg.sender lines. Extracted once (a regex over the source); the commit and sha256 name the source.",
+ "source": {
+  "commit": "2da9474be1cf15f1114663a0bf3b24b25431c973",
+  "files": {
+   "AssuranceHook.sol": "2f89cccfb0b21ad5535f6851c3913647ba7e3eb8781264f82c46cc37897aab97",
+   "JudgeAdapter.sol": "a1b88d1b4fb13c2193e33d4373c37c89ff970bac749d69b98094d468509c83f9"
+  }
+ },
+ "hook": {
+  "openJobWithEconomy": {
+   "reverts": [
+    "BadWindow",
+    "BuyerIsSeller",
+    "CoverCapTooHigh",
+    "CoverNotPaidFor",
+    "CoverWithoutPool",
+    "DeadlinePassed",
+    "DeadlineTooFar",
+    "DepositNotAbovePrice",
+    "EconomyOff",
+    "EconomyTerms",
+    "EvaluatorIsBuyer",
+    "EvaluatorIsSeller",
+    "FeeToSelf",
+    "FeeTooHigh",
+    "JobExists",
+    "PaymentRefUsed",
+    "PoolAssetMismatch",
+    "PoolSellerMismatch",
+    "PoolWithoutCover",
+    "SpecDigestZero",
+    "TokenNotAllowed",
+    "TransferShort",
+    "URITooLong",
+    "ZeroAddress"
+   ],
+   "senderChecks": [
+    "jobId = jobIdFor(msg.sender, salt);",
+    "if (t.seller == msg.sender) revert BuyerIsSeller(); // a buyer hiring itself holds a pool's capital for nothing",
+    "if (t.evaluator == msg.sender) revert EvaluatorIsBuyer();",
+    "if (t.evaluator == address(0) || t.evaluator == msg.sender) revert FeeToSelf();"
+   ],
+   "onlyOwner": false,
+   "via": [
+    "_checkCover",
+    "_checkEconomy",
+    "_commitSpec",
+    "_openJob",
+    "_pullExact"
+   ]
+  },
+  "accept": {
+   "reverts": [
+    "BadState",
+    "BondAssetMismatch",
+    "BuyerIsPartner",
+    "CoverCapTooHigh",
+    "CoverNotPaidFor",
+    "CoverWithoutPool",
+    "DeadlinePassed",
+    "NotSeller",
+    "PartnerBondOff",
+    "PoolAssetMismatch",
+    "PoolSellerMismatch",
+    "PoolWithoutCover",
+    "TransferShort"
+   ],
+   "senderChecks": [
+    "if (msg.sender != j.seller) revert NotSeller();"
+   ],
+   "onlyOwner": false,
+   "via": [
+    "_checkBond",
+    "_checkCover",
+    "_cover",
+    "_pullExact"
+   ]
+  },
+  "submit": {
+   "reverts": [
+    "BadState",
+    "DeadlinePassed",
+    "NotSeller"
+   ],
+   "senderChecks": [
+    "if (msg.sender != j.seller) revert NotSeller();"
+   ],
+   "onlyOwner": false,
+   "via": [
+    "_submit"
+   ]
+  },
+  "submitWithDelivery": {
+   "reverts": [
+    "BadState",
+    "DeadlinePassed",
+    "DeliveryURIEmpty",
+    "NotSeller",
+    "URITooLong"
+   ],
+   "senderChecks": [
+    "if (msg.sender != j.seller) revert NotSeller();"
+   ],
+   "onlyOwner": false,
+   "via": [
+    "_submit"
+   ]
+  },
+  "complete": {
+   "reverts": [
+    "BadState",
+    "NotEvaluator",
+    "NotJobEvaluator"
+   ],
+   "senderChecks": [
+    "if (msg.sender != named) revert NotJobEvaluator();"
+   ],
+   "onlyOwner": false,
+   "via": [
+    "_payCompletion",
+    "_rawCall",
+    "_releaseBond",
+    "_releaseCover",
+    "_requireDecider",
+    "_settleFee"
+   ]
+  },
+  "reject": {
+   "reverts": [
+    "BadState",
+    "BuyerCannotReject",
+    "NotEvaluator",
+    "NotJobEvaluator"
+   ],
+   "senderChecks": [
+    "if (msg.sender == j.buyer) revert BuyerCannotReject();",
+    "if (v.evaluator != address(0)) { if (msg.sender != v.evaluator) revert NotJobEvaluator(); }",
+    "else if (!isEvaluator[msg.sender]) revert NotEvaluator();",
+    "if (msg.sender != named) revert NotJobEvaluator();"
+   ],
+   "onlyOwner": false,
+   "via": [
+    "_rawCall",
+    "_releaseBond",
+    "_releaseCover",
+    "_requireDecider",
+    "_unwind"
+   ]
+  },
+  "finalizeReject": {
+   "reverts": [
+    "BadState",
+    "WindowOpen"
+   ],
+   "senderChecks": [],
+   "onlyOwner": false,
+   "via": [
+    "_endRejected",
+    "_settleFee"
+   ]
+  },
+  "dispute": {
+   "reverts": [
+    "BadState",
+    "NotSeller",
+    "WindowClosed"
+   ],
+   "senderChecks": [
+    "if (msg.sender != j.seller) revert NotSeller();"
+   ],
+   "onlyOwner": false,
+   "via": []
+  },
+  "resolveDispute": {
+   "reverts": [
+    "BadState",
+    "NotArbitrator",
+    "WindowClosed"
+   ],
+   "senderChecks": [
+    "if (!isArbitrator[msg.sender]) revert NotArbitrator();"
+   ],
+   "onlyOwner": false,
+   "via": [
+    "_endRejected",
+    "_payCompletion",
+    "_rawCall",
+    "_releaseBond",
+    "_releaseCover",
+    "_settleFee"
+   ]
+  },
+  "settleStaleDispute": {
+   "reverts": [
+    "BadState",
+    "WindowOpen"
+   ],
+   "senderChecks": [],
+   "onlyOwner": false,
+   "via": [
+    "_endRejected",
+    "_settleFee"
+   ]
+  },
+  "findCheated": {
+   "reverts": [
+    "BadState",
+    "NotArbitrator"
+   ],
+   "senderChecks": [
+    "if (!isArbitrator[msg.sender]) revert NotArbitrator();"
+   ],
+   "onlyOwner": false,
+   "via": [
+    "_legacyCrossPayout",
+    "_poolPays",
+    "_rawCall",
+    "_releaseBond",
+    "_releaseCover",
+    "_settleFee",
+    "_slashBond"
+   ]
+  },
+  "expire": {
+   "reverts": [
+    "BadState",
+    "DeadlineNotPassed",
+    "UseAutoComplete"
+   ],
+   "senderChecks": [],
+   "onlyOwner": false,
+   "via": [
+    "_rawCall",
+    "_refundOpen",
+    "_releaseBond",
+    "_releaseCover",
+    "_settleFee"
+   ]
+  },
+  "claimAutoComplete": {
+   "reverts": [
+    "BadState",
+    "NotV4Job",
+    "WindowOpen"
+   ],
+   "senderChecks": [],
+   "onlyOwner": false,
+   "via": [
+    "_payCompletion",
+    "_rawCall",
+    "_releaseBond",
+    "_releaseCover",
+    "_settleFee"
+   ]
+  },
+  "cancelOpen": {
+   "reverts": [
+    "BadState",
+    "NotBuyer"
+   ],
+   "senderChecks": [
+    "if (msg.sender != j.buyer) revert NotBuyer();"
+   ],
+   "onlyOwner": false,
+   "via": [
+    "_refundOpen",
+    "_settleFee"
+   ]
+  },
+  "sweepLayerFees": {
+   "reverts": [],
+   "senderChecks": [],
+   "onlyOwner": false,
+   "via": []
+  }
+ },
+ "adapter": {
+  "postVerdict": {
+   "reverts": [
+    "AlreadyPosted",
+    "BadMode",
+    "BadVerdict",
+    "NotEvaluator"
+   ],
+   "senderChecks": [
+    "if (!isEvaluator[msg.sender]) revert NotEvaluator();"
+   ],
+   "onlyOwner": false,
+   "via": []
+  }
+ }
+}

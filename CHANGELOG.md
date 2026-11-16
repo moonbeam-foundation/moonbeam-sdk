@@ -1,5 +1,21 @@
 # Changelog
 
+## Unreleased
+
+- **The assured-job economy as unsigned calls: `@moonbeam-foundation/sdk/economy`.** Builders for every call of the assurance
+  hook V5.1 a job's parties sign, each naming its signer role (`buyer`, `seller`, `evaluator`, `arbitrator`, `keeper`, `backer`)
+  and its chain, with the hook, adapter and pool addresses taken from the caller: `openJobWithEconomy` (approve + open with the
+  quote's premium legs and compensation; `jobIdFor`), `accept` (approve + accept), `submit`, `submitWithDelivery`, `complete`
+  and `reject` (to the hook, or through the judge adapter's `postVerdict`; the buyer never rejects), `dispute`,
+  `resolveDispute`, `findCheated`, `finalizeReject`, `settleStaleDispute`, `expire`, `claimAutoComplete`, `cancelOpen`,
+  `sweepLayerFees` (the protocol fees to the hook's fee payee), and the coverage pool's `poolDeposit` / `poolRedeem` (ERC-4626).
+  The hook's pure checks of a job's terms run before anything is signed, naming the revert they save.
+- **`legsOf(ending, quote, { loss })`:** who receives what at each ending (completed, auto-completed, a rejection overturned or
+  standing, a no-show, a cancelled or lapsed offer, a cheat on an adjudicated loss), checked to the unit against the devnet
+  run that ended one job in every way.
+- **Devnet only by default.** The builders build for chain 36927; any other chain is refused (`EconomyChainError`) unless the
+  caller passes `{ allowMainnet: true }`.
+
 ## 0.13.0
 
 - **Ready for the hook's V3.1 upgrade, and still right on the live V3 hook.** Which rules apply is read from the chain, never
