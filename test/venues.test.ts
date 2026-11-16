@@ -247,3 +247,15 @@ describe('the sale\'s reads', () => {
     expect(JSON.stringify(r)).not.toMatch(/0x[0-9a-f]{40}/i);
   });
 });
+
+describe('_MARKETS_CUT_v1_: the seven markets Moonbeam lists on', () => {
+  it('names x402, Virtuals ACP, Olas Mech, NEAR, A2A, MCP and ERC-8004, and keeps the three cut markets as read-only rows', () => {
+    expect([...market.MOONBEAM_LISTS_ON].sort()).toEqual(['a2a', 'erc8004', 'erc8183-base', 'mcp', 'near-agent-market', 'olas-base', 'x402-base']);
+    for (const id of ['bitagent-base', 'memoacp-base', 'workflow-nodes']) {
+      expect(market.listsOn(id), id).toBe(false);
+      expect(market.venueById(id)?.moonbeamLists, id).toBe(false);
+    }
+    for (const v of market.VENUES) expect(v.moonbeamLists, v.id).toBe(market.listsOn(v.id));
+    expect(market.VENUES.filter((v) => v.moonbeamLists)).toHaveLength(7);
+  });
+});

@@ -32,6 +32,13 @@ export type RegisterSnapshot = { source: string | null; read_on: string | null; 
 
 export const VENUE_IDS = Object.freeze(['x402-base', 'erc8183-base', 'memoacp-base', 'bitagent-base', 'olas-base', 'near-agent-market', 'a2a', 'mcp', 'erc8004', 'workflow-nodes'] as const);
 export type VenueId = (typeof VENUE_IDS)[number];
+/**
+ * _MARKETS_CUT_v1_ (2026-11-16): the seven markets Moonbeam lists agents on. BitAgent, Virtuals memo jobs (part of Virtuals ACP now) and
+ * workflow nodes stay in `VENUES` as read-only rows, for the sales already seen there, but Moonbeam does not list agents on them.
+ */
+export const MOONBEAM_LISTS_ON = Object.freeze(['x402-base', 'erc8183-base', 'olas-base', 'near-agent-market', 'a2a', 'mcp', 'erc8004'] as const satisfies readonly VenueId[]);
+/** Whether Moonbeam lists agents on this market (`MOONBEAM_LISTS_ON`). */
+export const listsOn = (id: string): boolean => (MOONBEAM_LISTS_ON as readonly string[]).includes(id);
 /** How a seller's agent gets onto the market: the one list step (`listOn`), an account on the venue, or a registry the market reads. */
 export type ListedBy = 'list-step' | 'venue-account' | 'registry';
 
@@ -42,6 +49,8 @@ export type VenueStepRow = { state: VenueState; register: RegisterWord; says: st
 export type Venue = {
   id: VenueId;
   name: string;
+  /** _MARKETS_CUT_v1_: whether Moonbeam lists agents here; false on a market kept only as a read-only row */
+  moonbeamLists: boolean;
   /** the id `markets()` / `market(t, id)` name it by (GET /venues), when Moonbeam reads its money */
   marketId: string | null;
   /** what a seller does there, in one line */
@@ -59,7 +68,7 @@ export type Venue = {
   cohorts: CohortRows;
 };
 
-type Static = Omit<Venue, 'entry' | 'cohorts' | VenueStep> & { calls: Record<VenueStep, SdkCall | null>; na?: Partial<Record<VenueStep, string>> };
+type Static = Omit<Venue, 'entry' | 'cohorts' | 'moonbeamLists' | VenueStep> & { calls: Record<VenueStep, SdkCall | null>; na?: Partial<Record<VenueStep, string>> };
 const S: Record<VenueId, Static> = {
   'x402-base': { id: 'x402-base', name: 'x402', marketId: 'x402', listedBy: 'registry',
     does: 'Buyers pay per call in USDC on Base; each paid task is handed to your agent and settled through the facilitator.',
@@ -123,7 +132,7 @@ function venueOf(s: Static, r: RegisterMarket): Venue {
   };
   const { calls: _c, na: _n, ...v } = s;
   const steps = { list: row('list'), take: row('take'), settle: row('settle'), paid: row('paid') };
-  return { ...v, entry: { cost: r.entry.cost, done: r.entry.done }, ...steps, cohorts: cohortsOf(r.cohorts, steps, VENUE_EVIDENCE_OF) };
+  return { ...v, moonbeamLists: listsOn(v.id), entry: { cost: r.entry.cost, done: r.entry.done }, ...steps, cohorts: cohortsOf(r.cohorts, steps, VENUE_EVIDENCE_OF) };
 }
 
 /** Every venue, as shipped: the register's states and the date it was read (`VENUES_READ_ON`). */
