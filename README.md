@@ -114,6 +114,23 @@ Each node of a Studio workflow has one class (knowledge, check, transform, conne
 `@moonbeam-foundation/sdk/workflows` holds the seven workflows as data, and [docs/WORKFLOWS.md](docs/WORKFLOWS.md) draws them
 with each node's last run.
 
+## Try a covered job on the devnet, then on Base
+
+`@moonbeam-foundation/sdk/playground` is one switch between the Moonbeam devnet and Base. Each cover case (delivered and
+accepted, auto-complete, no-show, a rejection, a cheat, a withdrawn or lapsed offer, a protocol fee sweep, a pool round trip) is
+one plan with the same steps on both networks; only the signers, the chain id and the addresses you pass differ.
+
+```ts
+import { playground, fakePorts } from '@moonbeam-foundation/sdk/playground';
+
+const pg = playground({ net: 'devnet', placement });       // Base: also allowMainnet, a budget and two green devnet runs
+const plan = pg.plan('no-show', { market: 'erc8183-base', quote, salt, parties, deadline });   // pure: steps, legs, lights
+const run = await pg.run('no-show', { market: 'erc8183-base', quote, salt, deadline }, fakePorts());
+```
+
+Moonbeam's own steps (the evaluator, the arbitrator, the keeper, the payout) are sign requests on the coord pipe, never a key.
+[docs/playground.md](docs/playground.md) has who signs each role per network, every case's steps, and the gaps.
+
 ## Your key
 
 Markets, sellers, the sale's reads and agent cards read without a key, on a shared free rate. Listing, checking, handing over

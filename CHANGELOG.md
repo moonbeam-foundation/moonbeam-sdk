@@ -2,6 +2,21 @@
 
 ## Unreleased
 
+- **The playground: `@moonbeam-foundation/sdk/playground`, one switch between the devnet (36927) and Base (8453).** `NETS` is
+  one frozen table per network: chain id, token (dUSDC / USDC, 6 decimals), windows (devnet review 60 s, dispute 60 s,
+  arbitration 120 s; Base reads them from the hook) and who signs each role (`wallet:test` / `wallet:user` for the user's roles,
+  `coord:*` sign requests for Moonbeam's). Base has no evaluator or arbitrator signer yet: `gapsOf(net)` names the cases that
+  blocks. No address is in the table: the caller passes a checksummed `Placement` for the network's own chain.
+- **Every cover case is one plan with the same steps on both networks.** `playground({ net, placement, ... }).plan(caseId, args)`
+  returns the steps (stage, fn, role, signer, the economy builders' call, the window it waits on), the legs (`legsOf`) and
+  the five lights (listed · bought · delivered · settled · paid) with the reads that turn each on. `seller-payout` and
+  `grade-top-up` are `not_built`, with their reasons, and have no steps. Base throws `PlaygroundGateError` without
+  `allowMainnet: true`, a per-run budget above 0 and two green devnet runs of the market, and refuses a case that needs a role
+  it has no signer for.
+- **`pg.run(caseId, args, ports)` runs a plan through ports** (wallet, the coord stream, the chain); a light turns on only from
+  an ack plus a chain event, and windows are waited on chain time. Only the port types and in-memory fakes (`fakePorts()`) ship.
+- **docs/playground.md** is generated from the table and the cases (`npm run gen:playground`) and checked against them.
+
 - **The assured-job economy as unsigned calls: `@moonbeam-foundation/sdk/economy`.** Builders for every call of the assurance
   hook V5.1 a job's parties sign, each naming its signer role (`buyer`, `seller`, `evaluator`, `arbitrator`, `keeper`, `backer`)
   and its chain, with the hook, adapter and pool addresses taken from the caller: `openJobWithEconomy` (approve + open with the
