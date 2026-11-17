@@ -25,8 +25,19 @@ export interface WalletPort {
   parties?(): Promise<Parties>;
   sign(step: PlanStep): Promise<{ tx: Hex | null }>;
 }
+/**
+ * How the coord stream answered one sign request. Absent means `signed` when a transaction came back (the fakes leave it out).
+ *   signed        the purpose is armed and released a signature; `tx` is the transaction that went out
+ *   shadow        the purpose is in shadow: the signer answers what it WOULD sign (`would`) and signs nothing, so no transaction
+ *   refused       the purpose or a rule refused it (`reason` carries the signer's code and words)
+ *   not_routable  no route to the signer for this request on this port (`reason` says what is missing)
+ *   no_answer     the request went out and no result came back within the port's reads
+ */
+export type SignStatus = 'signed' | 'shadow' | 'refused' | 'not_routable' | 'no_answer';
+export interface SignAnswer { tx: Hex | null; ack: Ack | null; status?: SignStatus; reason?: string; would?: unknown }
+
 export interface StreamPort {
-  sign(step: PlanStep): Promise<{ tx: Hex | null; ack: Ack | null }>;
+  sign(step: PlanStep): Promise<SignAnswer>;
   settle(plan: Plan, steps: readonly RunStepResult[]): Promise<{ acks: readonly Ack[] } | null>;
 }
 export interface ChainPort {
@@ -36,7 +47,12 @@ export interface ChainPort {
 export interface Ports { wallet: WalletPort; stream: StreamPort; chain: ChainPort }
 
 /** A step as it ran. */
-export interface RunStepResult extends PlanStep { tx: Hex | null; ack: Ack | null; events: readonly ChainEvent[]; ok: boolean }
+export interface RunStepResult extends PlanStep {
+  tx: Hex | null; ack: Ack | null; events: readonly ChainEvent[]; ok: boolean;
+  /** a Moonbeam step's answer on the stream when it was not a plain signature; `skipped`: a user step not sent after a step that
+   *  only would sign (its chain state never came to be) */
+  sign?: { status: SignStatus | 'skipped'; reason?: string; would?: unknown };
+}
 
 // ── in-memory fakes ─────────────────────────────────────────────────────────────────────────────────────────────────────
 

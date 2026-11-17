@@ -22,6 +22,7 @@ const WIRE: RegExp[] = [
   /@taifoon\/jev(?:-wilson)?\b/g,                       // the grader's packages (dependencies and imports)
   /taifoon\.(?:decision|stamp)\.subject\.v1/g,          // the keccak domains of the on-chain subjects
   /taifoon\.payment\.(?:scheme|quote)\.v1/g,            // the payment scheme's schema ids
+  /taifoon\.(?:pipe\.envelope|sign\.request|sign\.result)\.v1/g, // the coord pipe's envelope and sign request/result schema ids
   /\b(?:reseller_markup|markup_bps|markup_units)\b/g,   // ledger and request field names
   /['"]n8n['"]/g,                                       // the onboard protocol and own label value
   /\/taifoon\|n8n\|genie\/i/g,                          // the journey's scrubber, which removes these words
