@@ -1,0 +1,26 @@
+{
+ "op": "POST pipe/ack",
+ "market": "mcp",
+ "stage": "settled",
+ "dir": "write",
+ "sdk": "playground.coordStream.sign",
+ "source": "contract",
+ "request": {
+  "method": "POST",
+  "path": "/v1/pipe/ack",
+  "query": {},
+  "body": {
+   "id": "0xe2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2",
+   "by": "moonbeam-playground"
+  }
+ },
+ "response": {
+  "status": 200,
+  "body": {
+   "id": "0xe2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2",
+   "state": "acked"
+  }
+ },
+ "coord_sha": "1bb3592f4bfbf1574baa6267c4bffb271c061b1e",
+ "read_at": "2026-11-17T19:54:43.295Z"
+}

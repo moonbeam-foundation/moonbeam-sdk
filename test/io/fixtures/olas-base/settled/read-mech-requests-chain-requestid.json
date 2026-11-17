@@ -1,0 +1,114 @@
+{
+ "op": "GET mech/requests/:chain/:requestId",
+ "market": "olas-base",
+ "stage": "settled",
+ "dir": "read",
+ "sdk": "market.mechRequest",
+ "source": "live",
+ "request": {
+  "method": "GET",
+  "path": "/v1/mech/requests/36927/0x2934ad507079b7a64861eada524691f181ade57a7ae64053794a3fb5ddc3469f",
+  "query": {}
+ },
+ "response": {
+  "status": 200,
+  "body": {
+   "ok": true,
+   "chainId": 36927,
+   "mech": "0xab9e7F14D4521cc28be6d14bFBa4F8425b0C390A",
+   "request_id": "0x2934ad507079b7a64861eada524691f181ade57a7ae64053794a3fb5ddc3469f",
+   "status": "delivered",
+   "product": "agent",
+   "flags": 0,
+   "record_asked": false,
+   "price": "10000",
+   "deadline": 1794943655,
+   "deadline_iso": "2026-11-17T19:27:35.000Z",
+   "task_hash": "0xbd9974f47cbaf17ccdf2c2c1aefc3c186d4bea02f7bfcfb3375b860731951132",
+   "task_uri": "data:application/json,%7B%22answer%22%3A%22be%20listed%20for%20the%20class%20to%20be%20offered%20its%20jobs%3A%20https%3A%2F%2Fcoord.taifoon.dev%2Fv1%2Flistings%22%2C%22demand%22%3A%22dm_70fca0a3ea2edfadf5691fb7%22%2C%22demand_url%22%3A%22https%3A%2F%2Fcoord.taifoon.dev%2Fv1%2Fdemands%2Fdm_70fca0a3ea2edfadf5691fb7%22%2C%22job%22%3A%22The%20USD%20spot%20price%20of%20an%20asset%20(market.price)%22%2C%22match%22%3A%7B%22required_skills%22%3A%5B%22market.price%22%2C%22market.read%22%5D%7D%2C%22pay%22%3A%22none%3A%20a%20practice%20job%20on%20the%20Taifoon%20devnet%2C%20graded%20by%20code%22%2C%22product%22%3A%22agent%22%2C%22stop%22%3A%22a%20public%20chain%20event%3A%20nothing%20is%20pushed%20to%20you%22%2C%22v%22%3A%22taifoon.mech.task.v1%22%7D",
+   "task": {
+    "answer": "be listed for the class to be offered its jobs: https://coord.taifoon.dev/v1/listings",
+    "demand": "dm_70fca0a3ea2edfadf5691fb7",
+    "demand_url": "https://coord.taifoon.dev/v1/demands/dm_70fca0a3ea2edfadf5691fb7",
+    "job": "The USD spot price of an asset (market.price)",
+    "match": {
+     "required_skills": [
+      "market.price",
+      "market.read"
+     ]
+    },
+    "pay": "none: a practice job on the Taifoon devnet, graded by code",
+    "product": "agent",
+    "stop": "a public chain event: nothing is pushed to you",
+    "v": "taifoon.mech.task.v1"
+   },
+   "result": {
+    "hash": "0x6705896bf96745c6d48a807deab0a28c675dbebd8ef3ccd9929366d54f7e46a1",
+    "uri": "https://coord.taifoon.dev/v1/mech/results/36927/0x2934ad507079b7a64861eada524691f181ade57a7ae64053794a3fb5ddc3469f",
+    "record_digest": null,
+    "tx": "0x3224a468837390fdaf25718f15ca3e5b424d2c8619ac34d883aab504b5035855",
+    "block": 3159789
+   },
+   "declined": null,
+   "refunded": null,
+   "events": [
+    {
+     "event": "Requested",
+     "tx": "0x251fb0cc630e3b6e4ff881a18384fe429cdd23478486ec563762682b4937bb9f",
+     "block": 3159779,
+     "log_index": 1,
+     "args": {
+      "requestId": "0x2934ad507079b7a64861eada524691f181ade57a7ae64053794a3fb5ddc3469f",
+      "product": 3,
+      "taskHash": "0xbd9974f47cbaf17ccdf2c2c1aefc3c186d4bea02f7bfcfb3375b860731951132",
+      "taskURI": "data:application/json,%7B%22answer%22%3A%22be%20listed%20for%20the%20class%20to%20be%20offered%20its%20jobs%3A%20https%3A%2F%2Fcoord.taifoon.dev%2Fv1%2Flistings%22%2C%22demand%22%3A%22dm_70fca0a3ea2edfadf5691fb7%22%2C%22demand_url%22%3A%22https%3A%2F%2Fcoord.taifoon.dev%2Fv1%2Fdemands%2Fdm_70fca0a3ea2edfadf5691fb7%22%2C%22job%22%3A%22The%20USD%20spot%20price%20of%20an%20asset%20(market.price)%22%2C%22match%22%3A%7B%22required_skills%22%3A%5B%22market.price%22%2C%22market.read%22%5D%7D%2C%22pay%22%3A%22none%3A%20a%20practice%20job%20on%20the%20Taifoon%20devnet%2C%20graded%20by%20code%22%2C%22product%22%3A%22agent%22%2C%22stop%22%3A%22a%20public%20chain%20event%3A%20nothing%20is%20pushed%20to%20you%22%2C%22v%22%3A%22taifoon.mech.task.v1%22%7D",
+      "flags": 0,
+      "price": "10000",
+      "deadline": "1794943655",
+      "fromCredits": false
+     }
+    },
+    {
+     "event": "Delivered",
+     "tx": "0x3224a468837390fdaf25718f15ca3e5b424d2c8619ac34d883aab504b5035855",
+     "block": 3159789,
+     "log_index": 1,
+     "args": {
+      "requestId": "0x2934ad507079b7a64861eada524691f181ade57a7ae64053794a3fb5ddc3469f",
+      "resultHash": "0x6705896bf96745c6d48a807deab0a28c675dbebd8ef3ccd9929366d54f7e46a1",
+      "resultURI": "https://coord.taifoon.dev/v1/mech/results/36927/0x2934ad507079b7a64861eada524691f181ade57a7ae64053794a3fb5ddc3469f",
+      "recordDigest": "0x0000000000000000000000000000000000000000000000000000000000000000",
+      "paid": "10000"
+     }
+    }
+   ],
+   "how_to_refund": null,
+   "scan": [
+    {
+     "event": "Requested",
+     "href": "/scan/36927/tx/0x251fb0cc630e3b6e4ff881a18384fe429cdd23478486ec563762682b4937bb9f"
+    },
+    {
+     "event": "Delivered",
+     "href": "/scan/36927/tx/0x3224a468837390fdaf25718f15ca3e5b424d2c8619ac34d883aab504b5035855"
+    }
+   ]
+  }
+ },
+ "coord_sha": "1bb3592f4bfbf1574baa6267c4bffb271c061b1e",
+ "read_at": "2026-11-17T19:55:51.267Z",
+ "args": {
+  "id": "0x2934ad507079b7a64861eada524691f181ade57a7ae64053794a3fb5ddc3469f"
+ },
+ "notes": {
+  "dropped": [
+   "result.worker (a payee, signer or treasury-like address field)",
+   "events[].args.worker (a payee, signer or treasury-like address field)",
+   "requester (a payee, requester, signer or treasury-like address field)",
+   "events[].args.requester (a payee, requester, signer or treasury-like address field)"
+  ],
+  "trimmed": [
+   "get_key (the free-key offer every keyless answer carries)"
+  ]
+ }
+}

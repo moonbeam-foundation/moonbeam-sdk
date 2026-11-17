@@ -1,0 +1,207 @@
+{
+  "rule": "GET only, no key, <= 150 calls, >= 1 s apart; 401/402/429 closes the route",
+  "calls": [
+    {
+      "n": 1,
+      "at": "2026-11-17T19:42:16.200Z",
+      "path": "/settle/0xa6d6f649a7b8d06168f30af1078115e86b2bf9dd8b495a448ba11ceef3d1168a",
+      "status": 200
+    },
+    {
+      "n": 2,
+      "at": "2026-11-17T19:42:17.301Z",
+      "path": "/sign/status",
+      "status": 200
+    },
+    {
+      "n": 3,
+      "at": "2026-11-17T19:42:19.952Z",
+      "path": "/listed?agent=8453%3A1170141&view=journey",
+      "status": 200
+    },
+    {
+      "n": 4,
+      "at": "2026-11-17T19:42:48.153Z",
+      "path": "/mech",
+      "status": 200
+    },
+    {
+      "n": 5,
+      "at": "2026-11-17T19:42:54.148Z",
+      "path": "/mech/requests?chain=36927&limit=3",
+      "status": 200
+    },
+    {
+      "n": 6,
+      "at": "2026-11-17T19:42:59.752Z",
+      "path": "/resale/sales?limit=3",
+      "status": 402,
+      "refused": true
+    },
+    {
+      "n": 7,
+      "at": "2026-11-17T19:43:00.853Z",
+      "path": "/chain/36927/tx/0xb13879351ac7c61d293a780de5bcab0993bd7385e6f2b42cc4705ed7f83748e7",
+      "status": 402,
+      "refused": true
+    },
+    {
+      "n": 8,
+      "at": "2026-11-17T19:43:01.954Z",
+      "path": "/proof/tx/36927/0x79d3221cbd512ab749867800e339415f12991642a895212d0e3989d852d7517e",
+      "status": 402,
+      "refused": true
+    },
+    {
+      "n": 9,
+      "at": "2026-11-17T19:43:03.054Z",
+      "path": "/agents/identity?chain=8453&ids=1170141",
+      "status": 200
+    },
+    {
+      "n": 10,
+      "at": "2026-11-17T19:43:10.444Z",
+      "path": "/registry/agents/8453/1170141",
+      "status": 200
+    },
+    {
+      "n": 11,
+      "at": "2026-11-17T19:43:11.545Z",
+      "path": "/pipe/claimable?limit=3",
+      "status": 200
+    },
+    {
+      "n": 12,
+      "at": "2026-11-17T19:54:56.128Z",
+      "path": "/listed?agent=8453%3A1170141&view=journey",
+      "status": 200
+    },
+    {
+      "n": 13,
+      "at": "2026-11-17T19:54:57.228Z",
+      "path": "/x402/bazaar?limit=3",
+      "status": 402,
+      "refused": true
+    },
+    {
+      "n": 14,
+      "at": "2026-11-17T19:54:58.328Z",
+      "path": "/venues/x402",
+      "status": 200
+    },
+    {
+      "n": 15,
+      "at": "2026-11-17T19:55:16.887Z",
+      "path": "/venues/erc8183",
+      "status": 200
+    },
+    {
+      "n": 16,
+      "at": "2026-11-17T19:55:21.522Z",
+      "path": "/mcp/registry?limit=3",
+      "status": 402,
+      "refused": true
+    },
+    {
+      "n": 17,
+      "at": "2026-11-17T19:55:24.602Z",
+      "path": "/a2a/registry?limit=3",
+      "status": 402,
+      "refused": true
+    },
+    {
+      "n": 18,
+      "at": "2026-11-17T19:55:25.702Z",
+      "path": "/list/lst_8339b4f9b0f5e5ab",
+      "status": 200
+    },
+    {
+      "n": 19,
+      "at": "2026-11-17T19:55:29.472Z",
+      "path": "/agents/identity?chain=8453&ids=1170141",
+      "status": 200
+    },
+    {
+      "n": 20,
+      "at": "2026-11-17T19:55:32.507Z",
+      "path": "/registry/agents/8453/1170141",
+      "status": 200
+    },
+    {
+      "n": 21,
+      "at": "2026-11-17T19:55:33.608Z",
+      "path": "/virtuals/sellers",
+      "status": 402,
+      "refused": true
+    },
+    {
+      "n": 22,
+      "at": "2026-11-17T19:55:34.709Z",
+      "path": "/olas/mechs?chain=8453",
+      "status": 402,
+      "refused": true
+    },
+    {
+      "n": 23,
+      "at": "2026-11-17T19:55:35.810Z",
+      "path": "/mech",
+      "status": 200
+    },
+    {
+      "n": 24,
+      "at": "2026-11-17T19:55:38.728Z",
+      "path": "/settle/0xa6d6f649a7b8d06168f30af1078115e86b2bf9dd8b495a448ba11ceef3d1168a",
+      "status": 200
+    },
+    {
+      "n": 25,
+      "at": "2026-11-17T19:55:41.773Z",
+      "path": "/jobs?ids=0xa6d6f649a7b8d06168f30af1078115e86b2bf9dd8b495a448ba11ceef3d1168a&chain=36927",
+      "status": 200
+    },
+    {
+      "n": 26,
+      "at": "2026-11-17T19:55:42.874Z",
+      "path": "/mech/requests?chain=36927&limit=3",
+      "status": 200
+    },
+    {
+      "n": 27,
+      "at": "2026-11-17T19:55:45.688Z",
+      "path": "/mech/results/36927/0x2934ad507079b7a64861eada524691f181ade57a7ae64053794a3fb5ddc3469f",
+      "status": 200
+    },
+    {
+      "n": 28,
+      "at": "2026-11-17T19:55:48.534Z",
+      "path": "/sign/status",
+      "status": 200
+    },
+    {
+      "n": 29,
+      "at": "2026-11-17T19:55:51.267Z",
+      "path": "/mech/requests/36927/0x2934ad507079b7a64861eada524691f181ade57a7ae64053794a3fb5ddc3469f",
+      "status": 200
+    },
+    {
+      "n": 30,
+      "at": "2026-11-17T19:55:54.964Z",
+      "path": "/pipe/claimable?chain=36927&limit=3",
+      "status": 200
+    },
+    {
+      "n": 31,
+      "at": "2026-11-17T19:56:25.894Z",
+      "path": "/mcp/registry/server?name=io.github.zvmzaretsky%2Futility-belt",
+      "status": 402,
+      "refused": true
+    },
+    {
+      "n": 32,
+      "at": "2026-11-17T19:56:26.994Z",
+      "path": "/a2a/registry/agent?id=879f2d3f-4e0e-47f4-8fec-77163a2a9577",
+      "status": 402,
+      "refused": true
+    }
+  ]
+}

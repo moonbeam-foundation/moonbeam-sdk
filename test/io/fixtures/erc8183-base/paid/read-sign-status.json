@@ -1,0 +1,773 @@
+{
+ "op": "GET sign/status",
+ "market": "erc8183-base",
+ "stage": "paid",
+ "dir": "read",
+ "sdk": "market.signerStatus",
+ "source": "live",
+ "request": {
+  "method": "GET",
+  "path": "/v1/sign/status",
+  "query": {}
+ },
+ "response": {
+  "status": 200,
+  "body": {
+   "schema": "taifoon.sign.status.v1",
+   "at": "2026-11-17T19:42:18.573Z",
+   "register": "taifoon.sign.v1",
+   "purposes": [
+    {
+     "id": "subscription.pull.arbitrum",
+     "mode": "shadow",
+     "key": "subscription-spender",
+     "vault": "vault:taifoon:kms",
+     "standards": [
+      "permit2.allowance"
+     ],
+     "fence": true,
+     "rules": [
+      "sign-known-requester",
+      "sign-fresh",
+      "sign-subscription-plan",
+      "sign-subscription-due",
+      "sign-allowance-read",
+      "sign-subscription-cancel",
+      "sign-value-caps"
+     ],
+     "counts": null
+    },
+    {
+     "id": "subscription.pull.arc",
+     "mode": "shadow",
+     "key": "subscription-spender",
+     "vault": "vault:taifoon:kms",
+     "standards": [
+      "permit2.allowance"
+     ],
+     "fence": true,
+     "rules": [
+      "sign-known-requester",
+      "sign-fresh",
+      "sign-subscription-plan",
+      "sign-subscription-due",
+      "sign-allowance-read",
+      "sign-subscription-cancel",
+      "sign-value-caps"
+     ],
+     "counts": null
+    },
+    {
+     "id": "subscription.pull.robinhood",
+     "mode": "shadow",
+     "key": "subscription-spender",
+     "vault": "vault:taifoon:kms",
+     "standards": [
+      "permit2.allowance"
+     ],
+     "fence": true,
+     "rules": [
+      "sign-known-requester",
+      "sign-fresh",
+      "sign-subscription-plan",
+      "sign-subscription-due",
+      "sign-allowance-read",
+      "sign-subscription-cancel",
+      "sign-value-caps"
+     ],
+     "counts": null
+    },
+    {
+     "id": "subscription.pull.monad",
+     "mode": "shadow",
+     "key": "subscription-spender",
+     "vault": "vault:taifoon:kms",
+     "standards": [
+      "permit2.allowance"
+     ],
+     "fence": true,
+     "rules": [
+      "sign-known-requester",
+      "sign-fresh",
+      "sign-subscription-plan",
+      "sign-subscription-due",
+      "sign-allowance-read",
+      "sign-subscription-cancel",
+      "sign-value-caps"
+     ],
+     "counts": null
+    },
+    {
+     "id": "ledger.checkpoint",
+     "mode": "shadow",
+     "key": "vault-ledger-attest",
+     "vault": "vault:orderbook:clob",
+     "standards": [],
+     "fence": true,
+     "rules": [
+      "sign-known-requester",
+      "sign-fresh",
+      "sign-extends-only"
+     ],
+     "counts": null
+    },
+    {
+     "id": "ledger.snapshot",
+     "mode": "shadow",
+     "key": "vault-ledger-attest",
+     "vault": "vault:orderbook:clob",
+     "standards": [],
+     "fence": true,
+     "rules": [
+      "sign-known-requester",
+      "sign-fresh",
+      "sign-snapshot-bound"
+     ],
+     "counts": null
+    },
+    {
+     "id": "custody.release",
+     "mode": "enrolled",
+     "key": "vault-custody",
+     "vault": "vault:orderbook:clob",
+     "standards": [
+      "evm.tx"
+     ],
+     "fence": true,
+     "rules": [
+      "sign-known-requester",
+      "sign-fresh",
+      "sign-user-intent",
+      "sign-destination-hold",
+      "sign-value-caps",
+      "sign-chain-balance"
+     ],
+     "counts": null
+    },
+    {
+     "id": "bridge.anchor",
+     "mode": "enrolled",
+     "key": "bridge-anchorer",
+     "vault": "none",
+     "vault_why": "a header the bridge's oracle vouches for: it moves no vault's money itself (only the anchorer's gas); the releases that depend on it are the bridge's",
+     "standards": [
+      "evm.tx"
+     ],
+     "fence": true,
+     "rules": [
+      "sign-known-requester",
+      "sign-fresh",
+      "sign-foreign-header"
+     ],
+     "counts": null
+    },
+    {
+     "id": "attest.batch",
+     "mode": "enrolled",
+     "key": "coord-attester",
+     "vault": "none",
+     "vault_why": "the pipe's batch groups and session certificates (Twigster): every vault's envelopes under the superroot, never one vault's money; metered by key coord-attester",
+     "standards": [],
+     "fence": true,
+     "rules": [
+      "sign-known-requester",
+      "sign-fresh",
+      "sign-batch-root"
+     ],
+     "counts": null
+    },
+    {
+     "id": "payout.root",
+     "mode": "shadow",
+     "key": "loop-payout",
+     "vault": "vault:taifoon:kms",
+     "standards": [
+      "claims.root"
+     ],
+     "fence": true,
+     "rules": [
+      "sign-known-requester",
+      "sign-fresh",
+      "sign-claims-root",
+      "sign-claims-inflow"
+     ],
+     "counts": null
+    },
+    {
+     "id": "payout.seller",
+     "mode": "armed",
+     "key": "loop-payout",
+     "vault": "vault:taifoon:loop",
+     "standards": [
+      "eip3009.transfer"
+     ],
+     "fence": true,
+     "rules": [
+      "sign-known-requester",
+      "sign-fresh",
+      "sign-seller-payout",
+      "sign-destination-hold",
+      "sign-value-caps",
+      "sign-sale-backing"
+     ],
+     "counts": null
+    },
+    {
+     "id": "payout.keyed",
+     "mode": "shadow",
+     "key": "loop-payout",
+     "vault": "vault:taifoon:loop",
+     "standards": [
+      "eip3009.transfer"
+     ],
+     "fence": true,
+     "rules": [
+      "sign-known-requester",
+      "sign-fresh",
+      "sign-seller-payout",
+      "sign-destination-hold",
+      "sign-value-caps",
+      "sign-credit-backing"
+     ],
+     "counts": null
+    },
+    {
+     "id": "subscription.pull",
+     "mode": "shadow",
+     "key": "subscription-spender",
+     "vault": "vault:taifoon:kms",
+     "standards": [
+      "permit2.allowance"
+     ],
+     "fence": true,
+     "rules": [
+      "sign-known-requester",
+      "sign-fresh",
+      "sign-subscription-plan",
+      "sign-subscription-due",
+      "sign-allowance-read",
+      "sign-subscription-cancel",
+      "sign-value-caps"
+     ],
+     "counts": null
+    },
+    {
+     "id": "subscription.pull.solana",
+     "mode": "shadow",
+     "key": "subscription-spender-solana",
+     "vault": "vault:taifoon:solana-ops",
+     "standards": [
+      "spl.delegate"
+     ],
+     "fence": true,
+     "rules": [
+      "sign-known-requester",
+      "sign-fresh",
+      "sign-value-caps"
+     ],
+     "counts": null
+    },
+    {
+     "id": "lambda.settle.loop",
+     "mode": "shadow",
+     "key": "loop-payout",
+     "vault": "vault:taifoon:loop",
+     "standards": [
+      "evm.tx"
+     ],
+     "fence": true,
+     "rules": [
+      "sign-known-requester",
+      "sign-fresh",
+      "sign-value-caps"
+     ],
+     "counts": null
+    },
+    {
+     "id": "payout.solana",
+     "mode": "shadow",
+     "key": "solana-ops",
+     "vault": "vault:taifoon:solana-ops",
+     "standards": [
+      "spl.transfer"
+     ],
+     "fence": true,
+     "rules": [
+      "sign-known-requester",
+      "sign-fresh",
+      "sign-value-caps"
+     ],
+     "counts": null
+    },
+    {
+     "id": "lambda.settle.kms",
+     "mode": "shadow",
+     "key": "loop-payout",
+     "vault": "vault:taifoon:kms",
+     "standards": [
+      "evm.tx"
+     ],
+     "fence": true,
+     "rules": [
+      "sign-known-requester",
+      "sign-fresh",
+      "sign-value-caps"
+     ],
+     "counts": null
+    },
+    {
+     "id": "lambda.settle.clob",
+     "mode": "shadow",
+     "key": "loop-payout",
+     "vault": "vault:orderbook:clob",
+     "standards": [
+      "evm.tx"
+     ],
+     "fence": true,
+     "rules": [
+      "sign-known-requester",
+      "sign-fresh",
+      "sign-value-caps"
+     ],
+     "counts": null
+    },
+    {
+     "id": "olas.mech",
+     "mode": "shadow",
+     "key": "loop-payout",
+     "vault": "vault:taifoon:loop",
+     "standards": [
+      "evm.tx"
+     ],
+     "fence": true,
+     "rules": [
+      "sign-known-requester",
+      "sign-fresh",
+      "sign-mech-exec",
+      "sign-value-caps"
+     ],
+     "counts": null
+    },
+    {
+     "id": "listing.keep",
+     "mode": "armed",
+     "key": "loop-payout",
+     "vault": "vault:taifoon:loop",
+     "standards": [
+      "eip3009.transfer"
+     ],
+     "fence": true,
+     "rules": [
+      "sign-known-requester",
+      "sign-fresh",
+      "sign-listing-keep",
+      "sign-value-caps"
+     ],
+     "counts": null
+    },
+    {
+     "id": "near.delegate",
+     "mode": "armed",
+     "key": "near-payer",
+     "vault": "vault:taifoon:near-payer",
+     "standards": [
+      "nep366.delegate"
+     ],
+     "fence": true,
+     "rules": [
+      "sign-known-requester",
+      "sign-fresh",
+      "sign-near-delegate",
+      "sign-value-caps",
+      "sign-sale-backing"
+     ],
+     "counts": null
+    },
+    {
+     "id": "buy.cmc",
+     "mode": "shadow",
+     "key": "cmc-payer",
+     "vault": "vault:taifoon:kms",
+     "standards": [
+      "eip3009.transfer"
+     ],
+     "fence": true,
+     "rules": [
+      "sign-known-requester",
+      "sign-fresh",
+      "sign-x402-buy",
+      "sign-value-caps"
+     ],
+     "counts": null
+    },
+    {
+     "id": "buy.ace",
+     "mode": "shadow",
+     "key": "solana-agent",
+     "vault": "vault:taifoon:solana-ops",
+     "standards": [
+      "spl.transfer",
+      "solana.tx"
+     ],
+     "fence": true,
+     "rules": [
+      "sign-known-requester",
+      "sign-fresh",
+      "sign-x402-buy",
+      "sign-value-caps"
+     ],
+     "counts": null
+    },
+    {
+     "id": "buy.ace_second",
+     "mode": "shadow",
+     "key": "solana-agent-cat2",
+     "vault": "vault:taifoon:solana-ops",
+     "standards": [
+      "spl.transfer",
+      "solana.tx"
+     ],
+     "fence": true,
+     "rules": [
+      "sign-known-requester",
+      "sign-fresh",
+      "sign-x402-buy",
+      "sign-value-caps"
+     ],
+     "counts": null
+    },
+    {
+     "id": "siwx.venice",
+     "mode": "shadow",
+     "key": "venice-siwx",
+     "vault": "vault:taifoon:kms",
+     "standards": [],
+     "fence": true,
+     "rules": [
+      "sign-known-requester",
+      "sign-fresh",
+      "sign-siwx-login"
+     ],
+     "counts": null
+    },
+    {
+     "id": "escrow.sap",
+     "mode": "shadow",
+     "key": "solana-agent",
+     "vault": "vault:taifoon:solana-ops",
+     "standards": [
+      "solana.tx"
+     ],
+     "fence": true,
+     "rules": [
+      "sign-known-requester",
+      "sign-fresh",
+      "sign-sap-escrow",
+      "sign-value-caps"
+     ],
+     "counts": null
+    }
+   ],
+   "keys": [
+    {
+     "id": "sign-result",
+     "money": false,
+     "op": "Sign",
+     "algorithm": "ED25519_SHA_512",
+     "purposes": [],
+     "counts": null
+    },
+    {
+     "id": "vault-ledger-attest",
+     "money": false,
+     "op": "GenerateMac",
+     "algorithm": "HMAC_SHA_256",
+     "purposes": [
+      "ledger.checkpoint",
+      "ledger.snapshot"
+     ],
+     "counts": null
+    },
+    {
+     "id": "vault-custody",
+     "money": true,
+     "op": "Sign",
+     "algorithm": "ECDSA_SHA_256_DIGEST",
+     "purposes": [
+      "custody.release"
+     ],
+     "counts": null
+    },
+    {
+     "id": "near-payer",
+     "money": true,
+     "op": "Sign",
+     "algorithm": "ED25519_SHA_512",
+     "purposes": [
+      "near.delegate"
+     ],
+     "counts": null
+    },
+    {
+     "id": "loop-payout",
+     "money": true,
+     "op": "Sign",
+     "algorithm": "ECDSA_SHA_256_DIGEST",
+     "purposes": [
+      "payout.root",
+      "payout.seller",
+      "payout.keyed",
+      "lambda.settle.loop",
+      "lambda.settle.kms",
+      "lambda.settle.clob",
+      "olas.mech",
+      "listing.keep"
+     ],
+     "counts": null
+    },
+    {
+     "id": "bridge-anchorer",
+     "money": true,
+     "op": "Sign",
+     "algorithm": "ECDSA_SHA_256_DIGEST",
+     "purposes": [
+      "bridge.anchor"
+     ],
+     "counts": null
+    },
+    {
+     "id": "subscription-spender",
+     "money": true,
+     "op": "Sign",
+     "algorithm": "ECDSA_SHA_256_DIGEST",
+     "purposes": [
+      "subscription.pull.arbitrum",
+      "subscription.pull.arc",
+      "subscription.pull.robinhood",
+      "subscription.pull.monad",
+      "subscription.pull"
+     ],
+     "counts": null
+    },
+    {
+     "id": "subscription-spender-solana",
+     "money": true,
+     "op": "Sign",
+     "algorithm": "ED25519_SHA_512",
+     "purposes": [
+      "subscription.pull.solana"
+     ],
+     "counts": null
+    },
+    {
+     "id": "solana-ops",
+     "money": true,
+     "op": "Sign",
+     "algorithm": "ED25519_SHA_512",
+     "purposes": [
+      "payout.solana"
+     ],
+     "counts": null
+    },
+    {
+     "id": "coord-attester",
+     "money": false,
+     "op": "Sign",
+     "algorithm": "ECDSA_SHA_256_DIGEST",
+     "purposes": [
+      "attest.batch"
+     ],
+     "counts": null
+    },
+    {
+     "id": "cmc-payer",
+     "money": true,
+     "op": "Sign",
+     "algorithm": "ECDSA_SHA_256_DIGEST",
+     "purposes": [
+      "buy.cmc"
+     ],
+     "counts": null
+    },
+    {
+     "id": "venice-siwx",
+     "money": true,
+     "op": "Sign",
+     "algorithm": "ECDSA_SHA_256_DIGEST",
+     "purposes": [
+      "siwx.venice"
+     ],
+     "counts": null
+    },
+    {
+     "id": "solana-agent",
+     "money": true,
+     "op": "Sign",
+     "algorithm": "ED25519_SHA_512",
+     "purposes": [
+      "buy.ace",
+      "escrow.sap"
+     ],
+     "counts": null
+    },
+    {
+     "id": "solana-agent-cat2",
+     "money": true,
+     "op": "Sign",
+     "algorithm": "ED25519_SHA_512",
+     "purposes": [
+      "buy.ace_second"
+     ],
+     "counts": null
+    }
+   ],
+   "vaults": [
+    {
+     "id": "vault:taifoon:kms",
+     "one_path": false,
+     "purposes": [
+      "payout.root"
+     ],
+     "outside": [
+      {
+       "path": "AWS Lambda taifoon-payout-releaser (KMS taifoon-vault/vault), armed 2026-10-13, has sent nothing",
+       "state": "live",
+       "fold": "payout.root"
+      },
+      {
+       "path": "kms-access drain of planner-queue.jsonl (ONE_PAYOUT_v1_, owner MFA per drain)",
+       "state": "built",
+       "fold": "payout.root"
+      }
+     ]
+    },
+    {
+     "id": "vault:taifoon:loop",
+     "one_path": false,
+     "purposes": [
+      "payout.seller"
+     ],
+     "outside": [
+      {
+       "path": "taifoon-loop-signer on 116, KMS alias/loop-signer (canaries and EIP-3009 payouts signed on the box)",
+       "state": "live",
+       "fold": "payout.seller"
+      },
+      {
+       "path": "the keyed payout relayer (RESALE_KEYED_PAYOUT, default off; runtime/keyed-submit.mjs)",
+       "state": "built",
+       "fold": "payout.seller"
+      }
+     ]
+    },
+    {
+     "id": "vault:taifoon:near-payer",
+     "one_path": true,
+     "purposes": [
+      "near.delegate"
+     ],
+     "outside": [
+      {
+       "path": "the loop signer's NEAR fallback, direct KMS Ed25519 (ops/loop-signer/src/kms.mjs): the key policy denies every principal but coord-signer",
+       "state": "refused",
+       "fold": "near.delegate"
+      }
+     ]
+    },
+    {
+     "id": "vault:taifoon:solana-ops",
+     "one_path": false,
+     "purposes": [],
+     "outside": [
+      {
+       "path": "kms-access sign-ed25519 on taifoon-vault/solana-ops (payout-batch, owner MFA; 5 USDC a tx, 20 a day)",
+       "state": "live",
+       "fold": "payout.solana"
+      }
+     ]
+    },
+    {
+     "id": "vault:orderbook:clob",
+     "one_path": false,
+     "purposes": [
+      "ledger.checkpoint",
+      "ledger.snapshot",
+      "custody.release"
+     ],
+     "outside": [
+      {
+       "path": "the custody daemon on its own KMS key (0x1d66…56b2)",
+       "state": "live",
+       "fold": "custody.release"
+      },
+      {
+       "path": "the box's GenerateMac on the ledger key (ONE-VAULT S8, until the vault is on the pipe)",
+       "state": "live",
+       "fold": "ledger.checkpoint"
+      }
+     ]
+    },
+    {
+     "id": "vault:orderbook:custody-registry",
+     "one_path": false,
+     "purposes": [],
+     "outside": []
+    },
+    {
+     "id": "vault:cubicle:keepers",
+     "one_path": false,
+     "purposes": [],
+     "outside": [
+      {
+       "path": "the Cubicle keepers' KMS key (cubicle/vault-keeper, under the Twigster budget)",
+       "state": "live",
+       "fold": "keeper.cubicle"
+      }
+     ]
+    },
+    {
+     "id": "vault:taifoon:ledger",
+     "one_path": false,
+     "purposes": [],
+     "outside": []
+    },
+    {
+     "id": "vault:assurance:pools",
+     "one_path": false,
+     "purposes": [],
+     "outside": []
+    },
+    {
+     "id": "vault:member:trading",
+     "one_path": false,
+     "purposes": [],
+     "outside": []
+    },
+    {
+     "id": "vault:taifoon:box",
+     "one_path": false,
+     "purposes": [],
+     "outside": [
+      {
+       "path": "kms-interim: per-vault IAM through kms-access for tenant vaults until the secure box is built",
+       "state": "live",
+       "fold": "box.tenant"
+      }
+     ]
+    }
+   ],
+   "one_path": {
+    "of": 7,
+    "releasing": 1
+   },
+   "counts_source": "— (no meter source is read by this route yet: the signer's meter lines fold here once the obs reader lands, tasks/sign-one-path.md PR 4)"
+  }
+ },
+ "coord_sha": "1bb3592f4bfbf1574baa6267c4bffb271c061b1e",
+ "read_at": "2026-11-17T19:42:17.301Z",
+ "notes": {
+  "trimmed": [
+   "get_key (the free-key offer every keyless answer carries)"
+  ]
+ }
+}

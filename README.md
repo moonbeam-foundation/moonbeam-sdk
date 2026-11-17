@@ -131,6 +131,24 @@ const run = await pg.run('no-show', { market: 'erc8183-base', quote, salt, deadl
 Moonbeam's own steps (the evaluator, the arbitrator, the keeper, the payout) are sign requests on the coord pipe, never a key.
 [docs/playground.md](docs/playground.md) has who signs each role per network, every case's steps, and the gaps.
 
+## Coord I/O coverage, every market and stage
+
+Every market Moonbeam lists on, every stage of a sale (listed, bought, delivered, settled, paid) and both directions (read,
+write) is one cell of `test/io/coverage.json`. Each cell holds coord operations with a recorded fixture (a public read, the devnet
+ledger, or a request and answer built only from coord's declared fields), or a named gap: `needs_key`, `needs_payment`,
+`needs_owner_arm`, `no_devnet_twin` or `not_in_coord`. `test/io/replay.test.ts` feeds every fixture through the SDK function
+that makes or reads that call; the gap count may only go down. The table per market is [docs/io-coverage.md](docs/io-coverage.md).
+
+When coord ships, check the matrix against its new catalogue (a coord checkout at the new sha):
+
+```bash
+npm run io:check -- --coord ../coord
+```
+
+It rewrites `test/io/coverage.json` and `docs/io-coverage.md`, and fails when a coord operation tagged to a kept market has no
+cell, an operation the map names is gone, or a fixture's request or answer no longer matches coord's declared shape. Place a new
+operation in `test/io/op-map.json`, then record its fixture with `npm run io:record -- --coord ../coord --only <call>`.
+
 ## Your key
 
 Markets, sellers, the sale's reads and agent cards read without a key, on a shared free rate. Listing, checking, handing over

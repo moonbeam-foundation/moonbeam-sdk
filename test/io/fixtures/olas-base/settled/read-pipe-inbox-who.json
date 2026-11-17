@@ -1,0 +1,32 @@
+{
+ "op": "GET pipe/inbox/:who",
+ "market": "olas-base",
+ "stage": "settled",
+ "dir": "read",
+ "sdk": "playground.coordStream.sign",
+ "source": "contract",
+ "request": {
+  "method": "GET",
+  "path": "/v1/pipe/inbox/moonbeam-playground",
+  "query": {
+   "wait": "25",
+   "limit": "50"
+  }
+ },
+ "response": {
+  "status": 200,
+  "body": {
+   "who": "moonbeam-playground",
+   "envelopes": [
+    {
+     "id": "0xe2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2",
+     "kind": "sign",
+     "reply_to": "0xe1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1",
+     "payload": "{\"schema\":\"taifoon.sign.result.v1\",\"request\":\"0xe1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1\",\"state\":\"shadowed\"}"
+    }
+   ]
+  }
+ },
+ "coord_sha": "1bb3592f4bfbf1574baa6267c4bffb271c061b1e",
+ "read_at": "2026-11-17T19:54:43.314Z"
+}

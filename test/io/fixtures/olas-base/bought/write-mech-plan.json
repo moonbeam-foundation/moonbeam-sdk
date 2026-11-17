@@ -1,0 +1,49 @@
+{
+ "op": "POST mech/plan",
+ "market": "olas-base",
+ "stage": "bought",
+ "dir": "write",
+ "sdk": "market.mechPlan",
+ "source": "contract",
+ "request": {
+  "method": "POST",
+  "path": "/v1/mech/plan",
+  "query": {},
+  "body": {
+   "chainId": 36927,
+   "task": {
+    "product": "agent",
+    "chainId": 8453,
+    "agentId": 1170141
+   },
+   "requester": "0xb1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1"
+  }
+ },
+ "response": {
+  "status": 200,
+  "body": {
+   "task": {
+    "text": "{\"product\":\"agent\",\"chainId\":8453,\"agentId\":1170141}",
+    "taskHash": "0x5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a",
+    "taskURI": "data:application/json,%7B%7D"
+   },
+   "price": "10000",
+   "flags": 0,
+   "request_id": "0x6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b",
+   "calls": [
+    {
+     "step": "approve",
+     "to": "0xa4a4a4a4a4a4a4a4a4a4a4a4a4a4a4a4a4a4a4a4",
+     "data": "0x095ea7b3"
+    },
+    {
+     "step": "request",
+     "to": "0xa6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6",
+     "data": "0x12345678"
+    }
+   ]
+  }
+ },
+ "coord_sha": "1bb3592f4bfbf1574baa6267c4bffb271c061b1e",
+ "read_at": "2026-11-17T19:54:43.034Z"
+}

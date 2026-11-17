@@ -1,0 +1,74 @@
+{
+ "op": "GET jobs",
+ "market": "erc8183-base",
+ "stage": "delivered",
+ "dir": "read",
+ "sdk": "jobs.readJobs",
+ "source": "live",
+ "request": {
+  "method": "GET",
+  "path": "/v1/jobs",
+  "query": {
+   "ids": "0xa6d6f649a7b8d06168f30af1078115e86b2bf9dd8b495a448ba11ceef3d1168a",
+   "chain": "36927"
+  }
+ },
+ "response": {
+  "status": 200,
+  "body": {
+   "ok": true,
+   "jobs": [
+    {
+     "id": "0xa6d6f649a7b8d06168f30af1078115e86b2bf9dd8b495a448ba11ceef3d1168a",
+     "found": true,
+     "source": "chain",
+     "job": null,
+     "chain_read": {
+      "hook": "0xe7e7660f51c221f3223ea58b42738037cdf048b3",
+      "tenant": null,
+      "token": "0x31854d915f31a1fbe57c2b06b5b60cbbd7d42d5b",
+      "price": "1000000",
+      "premium": "111750",
+      "deposit": "1111750",
+      "deadline": 1791306435,
+      "challenge_window": 0,
+      "pool": "0xab3c59b9bc4e4b6f247efd3450a0f4caa12cd022",
+      "state": 3,
+      "state_name": "Completed",
+      "machine_state": "Settled",
+      "hook_version": "V4",
+      "v4": {
+       "is_v4": true,
+       "evaluator": "0x8474c7b165243e49a44a86b6f303c58924778928",
+       "evaluator_fee": "0",
+       "submitted_at": 1791305974,
+       "review_window": 60,
+       "dispute_window": 60,
+       "dispute_deadline": null,
+       "open_cover_cap": "0",
+       "verdict_digest": null
+      },
+      "timeout": null
+     },
+     "note": "not in the index yet; read jobs(bytes32) (and v4Of on a V4 hook) on chain 36927"
+    }
+   ],
+   "invalid": [],
+   "index_ok": true,
+   "indexed_jobs": 34357,
+   "chain_reads": 1,
+   "how": "job = the observatory row (ending, verdict, parties, amounts, the hook terms and effects for a 32-byte id, events[] = the trail); chain_read = jobs(bytes32) read on the hooks of ?chain= for a 32-byte id the index lacks (or every 32-byte id with live=1); state_name follows the hook enum None|Funded|Submitted|Completed|Expired|Rejected|Cheated"
+  }
+ },
+ "coord_sha": "1bb3592f4bfbf1574baa6267c4bffb271c061b1e",
+ "read_at": "2026-11-17T19:55:41.773Z",
+ "notes": {
+  "trimmed": [
+   "get_key (the free-key offer every keyless answer carries)"
+  ],
+  "dropped": [
+   "jobs[].chain_read.buyer (the address a fee payee or payTo names)",
+   "jobs[].chain_read.seller (the address a fee payee or payTo names)"
+  ]
+ }
+}

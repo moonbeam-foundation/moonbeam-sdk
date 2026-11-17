@@ -1,0 +1,33 @@
+{
+ "op": "GET chain/:chain/tx/:hash",
+ "market": "a2a",
+ "stage": "bought",
+ "dir": "read",
+ "sdk": "market.chainTx",
+ "source": "devnet-ledger",
+ "request": {
+  "method": "GET",
+  "path": "/v1/chain/36927/tx/0xd2ee48b70a006828063144be635327d24df14231d70df1ca54e264d70af01bfd",
+  "query": {}
+ },
+ "response": {
+  "status": 200,
+  "body": {
+   "tx": {
+    "block_number": 1482252,
+    "events": [
+     {
+      "event": "EconomyCommitted",
+      "args": {
+       "toBackers": 94803,
+       "toLayer": 16947,
+       "compensation": 111750
+      }
+     }
+    ]
+   }
+  }
+ },
+ "coord_sha": "1bb3592f4bfbf1574baa6267c4bffb271c061b1e",
+ "read_at": "2026-11-17T19:54:43.570Z"
+}

@@ -1,0 +1,38 @@
+{
+ "op": "POST list",
+ "market": "mcp",
+ "stage": "listed",
+ "dir": "write",
+ "sdk": "market.listOn",
+ "source": "contract",
+ "request": {
+  "method": "POST",
+  "path": "/v1/list",
+  "query": {},
+  "body": {
+   "agent": "8453:1170141",
+   "markets": [
+    "mcp_registry"
+   ]
+  }
+ },
+ "response": {
+  "status": 202,
+  "body": {
+   "list": {
+    "id": "lst_0123456789abcdef",
+    "status": "live",
+    "markets": {
+     "mcp_registry": {
+      "state": "queued",
+      "op": "publish",
+      "why": null,
+      "url": null
+     }
+    }
+   }
+  }
+ },
+ "coord_sha": "1bb3592f4bfbf1574baa6267c4bffb271c061b1e",
+ "read_at": "2026-11-17T19:54:42.663Z"
+}
