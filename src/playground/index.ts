@@ -22,11 +22,12 @@ import { buildCalls, CASES, isCaseId, LIGHT_IDS, stepsOf } from './cases.js';
 import type { CaseId, LightId, Stage, Via, Wait } from './cases.js';
 import { checkPlacement, gapsOf, netOf, windowsOf } from './nets.js';
 import type { Gap, Net, NetId, Placement, SignerRef, SignerRole } from './nets.js';
-import type { Ack, ChainEvent, Ports, RunStepResult } from './ports.js';
+import type { Ack, ChainEvent, Ports, RunStepResult, SignAnswer } from './ports.js';
 
 export * from './nets.js';
 export * from './cases.js';
 export * from './ports.js';
+export * from './stream.js';
 export { playgroundDoc } from './doc.js';
 
 // ── gates ───────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -266,12 +267,17 @@ export function playground(o: PlaygroundOptions): Playground {
 // ── runs ────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 
 export interface RunLight { light: LightId; on: boolean; ack: Ack | null; event: ChainEvent | null; why?: string }
+/** A Moonbeam step the stream answered without a signature: in shadow (it would sign) or with no route to the signer. */
+export interface WouldSign { step: number; fn: string; signer: SignerRef; status: 'shadow' | 'not_routable'; reason: string; would?: unknown }
 export interface RunResult {
   plan: Plan;
-  status: 'ran' | 'stopped' | 'not_built';
+  /** `would_sign`: the run went through, but a Moonbeam step only would sign (shadow) or had no route: see `wouldSign` */
+  status: 'ran' | 'stopped' | 'not_built' | 'would_sign';
   steps: readonly RunStepResult[];
   /** the step the run stopped at, and why */
   stopped?: { step: number; fn: string; why: string };
+  /** every Moonbeam step the stream answered with shadow or not_routable, in order */
+  wouldSign?: readonly WouldSign[];
   legs: Plan['legs'];
   lights: readonly RunLight[];
 }
@@ -284,15 +290,35 @@ export async function runPlan(p: Plan, ports: Ports): Promise<RunResult> {
   const off = (why: string): RunLight[] => LIGHT_IDS.map((l) => ({ light: l, on: false, ack: null, event: null, why }));
   if (p.status === 'not_built') return { plan: p, status: 'not_built', steps: [], legs: null, lights: off(p.reason ?? 'not built') };
   const done: RunStepResult[] = [];
+  const wouldSign: WouldSign[] = [];
   let stopped: RunResult['stopped'];
+  // set once the stream answers a Moonbeam step with shadow or not_routable: no transaction exists from there on, so the user's
+  // later steps are not sent (their chain state never came to be) and no window is waited for; every later Moonbeam step is still
+  // asked, so the run names each one it would sign
+  let dry: string | null = null;
   for (const [i, s] of p.steps.entries()) {
-    if (s.waits) await ports.chain.waitUntil({ window: s.waits, ...(s.seconds !== undefined ? { seconds: s.seconds } : {}), ...(s.at !== undefined ? { at: s.at } : {}), after: done.at(-1)?.tx ?? null });
-    const { tx, ack } = s.signer.startsWith('wallet:') ? { ...(await ports.wallet.sign(s)), ack: null } : await ports.stream.sign(s);
+    const wallet = s.signer.startsWith('wallet:');
+    if (dry && wallet) { done.push({ ...s, tx: null, ack: null, events: [], ok: false, sign: { status: 'skipped', reason: `not sent: ${dry}` } }); continue; }
+    if (s.waits && !dry) await ports.chain.waitUntil({ window: s.waits, ...(s.seconds !== undefined ? { seconds: s.seconds } : {}), ...(s.at !== undefined ? { at: s.at } : {}), after: done.at(-1)?.tx ?? null });
+    const ans: SignAnswer = wallet ? { ...(await ports.wallet.sign(s)), ack: null } : await ports.stream.sign(s);
+    if (ans.status === 'shadow' || ans.status === 'not_routable') {
+      const reason = ans.reason ?? (ans.status === 'shadow' ? 'the purpose is in shadow' : 'no route to the signer');
+      const sign = { status: ans.status, reason, ...(ans.would !== undefined ? { would: ans.would } : {}) };
+      done.push({ ...s, tx: null, ack: ans.ack, events: [], ok: false, sign });
+      wouldSign.push({ step: i, fn: s.fn, signer: s.signer, ...sign });
+      dry ??= `${s.fn} (${s.signer}) ${ans.status === 'shadow' ? 'would sign only' : 'is not routable'}`;
+      continue;
+    }
+    const { tx, ack } = ans;
     const events = tx ? await ports.chain.event(tx) : [];
     const missing = s.expects.events.filter((e) => !has(events, e));
     const ok = tx !== null && missing.length === 0;
-    done.push({ ...s, tx, ack, events, ok });
-    if (!ok) { stopped = { step: i, fn: s.fn, why: tx === null ? `no transaction for ${s.fn} (${s.signer})` : `${s.fn} showed no ${missing.join(', ')}` }; break; }
+    done.push({ ...s, tx, ack, events, ok, ...(ans.status && ans.status !== 'signed' ? { sign: { status: ans.status, ...(ans.reason ? { reason: ans.reason } : {}) } } : {}) });
+    if (!ok) {
+      const why = tx === null ? `no transaction for ${s.fn} (${s.signer})${ans.reason ? `: ${ans.reason}` : ''}` : `${s.fn} showed no ${missing.join(', ')}`;
+      stopped = { step: i, fn: s.fn, why };
+      break;
+    }
   }
   const receipt = await ports.stream.settle(p, done);
   const ackOf = (l: LightId): Ack | null => receipt?.acks.find((x) => x.stage === l) ?? null;
@@ -324,5 +350,7 @@ export async function runPlan(p: Plan, ports: Ports): Promise<RunResult> {
       }
     }
   }
-  return { plan: p, status: stopped ? 'stopped' : 'ran', steps: done, ...(stopped ? { stopped } : {}), legs: p.legs, lights };
+  // a light the run expected stays off once a step only would sign; it says why
+  if (dry) for (const [k, l] of lights.entries()) if (!l.on && p.lights[k]?.expected && !l.event) lights[k] = { ...l, why: `${dry}: no transaction, so the light stays off` };
+  return { plan: p, status: stopped ? 'stopped' : dry ? 'would_sign' : 'ran', steps: done, ...(stopped ? { stopped } : {}), wouldSign, legs: p.legs, lights };
 }
