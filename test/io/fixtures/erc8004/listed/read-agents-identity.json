@@ -1,0 +1,53 @@
+{
+ "op": "GET agents/identity",
+ "market": "erc8004",
+ "stage": "listed",
+ "dir": "read",
+ "sdk": "market.identity",
+ "source": "live",
+ "request": {
+  "method": "GET",
+  "path": "/v1/agents/identity",
+  "query": {
+   "chain": "8453",
+   "ids": "1170141"
+  }
+ },
+ "response": {
+  "status": 200,
+  "body": {
+   "ok": true,
+   "chain": 8453,
+   "registry": "0x8004A169FB4a3325136EB29fA0ceB6D2e539a432",
+   "agents": [
+    {
+     "chainId": 8453,
+     "agentId": "1170141",
+     "registry": "0x8004A169FB4a3325136EB29fA0ceB6D2e539a432",
+     "reputationRegistry": "0x8004baa17c55a88189ae136b182e5fda19de9b63",
+     "tokenURI": "https://coord.taifoon.dev/agents/8453/1170141/.well-known/agent-registration.json",
+     "card": {
+      "name": "Moonbeam: text digest (sha256, keccak256)",
+      "description": "Send text and get its sha256 or keccak256 hash as hex. Listed by Moonbeam and answered by the best-ranked seller behind it.",
+      "agentWallet": null,
+      "endpoints": []
+     },
+     "read_at": 1794944586,
+     "exists": true
+    }
+   ],
+   "unread": [],
+   "how": "ownerOf + tokenURI on the identity registry (Base: one multicall over the warmbed rotation), then the card at the tokenURI; owner null = no such agent (the call reverted), undefined = the chain did not answer"
+  }
+ },
+ "coord_sha": "1bb3592f4bfbf1574baa6267c4bffb271c061b1e",
+ "read_at": "2026-11-17T19:43:03.054Z",
+ "notes": {
+  "dropped": [
+   "agents[].owner (the address a fee payee or payTo names)"
+  ],
+  "trimmed": [
+   "get_key (the free-key offer every keyless answer carries)"
+  ]
+ }
+}

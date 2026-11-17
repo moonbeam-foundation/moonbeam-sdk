@@ -1,0 +1,36 @@
+{
+ "op": "POST agent-listings/:id/publish",
+ "market": "erc8183-base",
+ "stage": "listed",
+ "dir": "write",
+ "sdk": "market.publishListing",
+ "source": "contract",
+ "request": {
+  "method": "POST",
+  "path": "/v1/agent-listings/al_0123456789abcdef/publish",
+  "query": {},
+  "body": {}
+ },
+ "response": {
+  "status": 200,
+  "body": {
+   "ok": true,
+   "listing": {
+    "id": "al_0123456789abcdef",
+    "status": "live",
+    "why": null,
+    "listing_id": null,
+    "card_url": null
+   },
+   "probe": [
+    {
+     "class": "mcp.digest",
+     "ok": true,
+     "why": null
+    }
+   ]
+  }
+ },
+ "coord_sha": "1bb3592f4bfbf1574baa6267c4bffb271c061b1e",
+ "read_at": "2026-11-17T19:54:48.900Z"
+}

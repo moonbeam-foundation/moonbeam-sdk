@@ -1,0 +1,72 @@
+{
+ "op": "GET registry/agents/:chain/:id",
+ "market": "erc8004",
+ "stage": "listed",
+ "dir": "read",
+ "sdk": "market.registryAgent",
+ "source": "live",
+ "request": {
+  "method": "GET",
+  "path": "/v1/registry/agents/8453/1170141",
+  "query": {}
+ },
+ "response": {
+  "status": 200,
+  "body": {
+   "agentId": 1170141,
+   "agentUri": "https://coord.taifoon.dev/agents/8453/1170141/.well-known/agent-registration.json",
+   "cardHost": "coord.taifoon.dev",
+   "chainId": 8453,
+   "endpoint": "https://coord.taifoon.dev/mcp",
+   "endpointKind": "Mcp",
+   "evidenceAsOf": 1794941991,
+   "filterReason": "None",
+   "firstSeen": 1794074976,
+   "jobClasses": [
+    "proof.verify.v5"
+   ],
+   "lastSeen": 1794701893,
+   "proof": "/agents/8453/1170141/proof",
+   "registrationTx": "0x19989b7c42c2e5b104872884e7faf26174aa5ce25d1b165cffa3a5cc80a10d40",
+   "registry": "0x8004a169fb4a3325136eb29fa0ceb6d2e539a432",
+   "skillCount": 2,
+   "skills": [
+    "mcp-digest",
+    "x402-resale-mcp-digest"
+   ],
+   "skillsSource": "declared",
+   "sources": [
+    "OnChain",
+    "Manifest",
+    "Wire"
+   ],
+   "status": "Live",
+   "teeServed": false,
+   "teeVerified": false,
+   "trust": {
+    "corroboration": 3,
+    "reachable": true,
+    "score": 520,
+    "stalenessDays": 0,
+    "sybilPenalty": 0,
+    "teeServed": false
+   },
+   "wire": {
+    "probedAt": 1794941991,
+    "protocol": "mcp",
+    "readyAt": 1794941991,
+    "status": "ready"
+   }
+  }
+ },
+ "coord_sha": "1bb3592f4bfbf1574baa6267c4bffb271c061b1e",
+ "read_at": "2026-11-17T19:43:10.444Z",
+ "notes": {
+  "dropped": [
+   "owner (the address a fee payee or payTo names)"
+  ],
+  "trimmed": [
+   "get_key (the free-key offer every keyless answer carries)"
+  ]
+ }
+}

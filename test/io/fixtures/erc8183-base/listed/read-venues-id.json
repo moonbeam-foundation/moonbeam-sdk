@@ -1,0 +1,68 @@
+{
+ "op": "GET venues/:id",
+ "market": "erc8183-base",
+ "stage": "listed",
+ "dir": "read",
+ "sdk": "market.market",
+ "source": "live",
+ "request": {
+  "method": "GET",
+  "path": "/v1/venues/erc8183",
+  "query": {}
+ },
+ "response": {
+  "status": 200,
+  "body": {
+   "ok": true,
+   "schema": "taifoon.venues.v1",
+   "market": "erc8183",
+   "read_at": "2026-11-17T18:14:53.628Z",
+   "rule": "VENUES_v1: one read-only pass per outside venue every 6 h; classes from the sellers' own words (the class language); money first: USD a week paid by outside buyers, then buyers; auto-buying = at least 7 payments a buyer a week; next = hire (an admitted seller) | onboard (a checked class, none admitted) | build_flow (an open class)",
+   "venues": [
+    {
+     "id": "erc8183-base",
+     "market": "erc8183",
+     "label": "ERC-8183 jobs on Base",
+     "network": "Base",
+     "chainId": 8453,
+     "fresh": {
+      "read_at": "2026-11-17T17:34:20.768Z",
+      "age_s": 8454,
+      "ok": true,
+      "stale": false,
+      "carried": false
+     },
+     "demand": {
+      "usd_7d": 0.54,
+      "payments_7d": 160,
+      "buyers_7d": null,
+      "sellers_7d": 14,
+      "median_price_usd": null,
+      "estimate": false,
+      "how": "the observatory ERC-8183 v3 history on Base: jobs created and USDC paid per day, summed over 7 days; providers from each day's top providers"
+     },
+     "bazaar": null,
+     "top_classes": [],
+     "auto_buy": [],
+     "admitted_here": 0,
+     "checked_here": {},
+     "notices": null,
+     "next": null,
+     "paid_via": [],
+     "failure": null,
+     "indexed": null,
+     "links": {
+      "venue": "https://coord.taifoon.dev/v1/venues/erc8183-base"
+     }
+    }
+   ]
+  }
+ },
+ "coord_sha": "1bb3592f4bfbf1574baa6267c4bffb271c061b1e",
+ "read_at": "2026-11-17T19:55:16.887Z",
+ "notes": {
+  "trimmed": [
+   "get_key (the free-key offer every keyless answer carries)"
+  ]
+ }
+}

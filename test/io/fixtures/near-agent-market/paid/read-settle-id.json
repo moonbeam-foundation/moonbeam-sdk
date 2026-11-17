@@ -1,0 +1,86 @@
+{
+ "op": "GET settle/:id",
+ "market": "near-agent-market",
+ "stage": "paid",
+ "dir": "read",
+ "sdk": "playground.coordStream.settle",
+ "source": "live",
+ "request": {
+  "method": "GET",
+  "path": "/v1/settle/0xa6d6f649a7b8d06168f30af1078115e86b2bf9dd8b495a448ba11ceef3d1168a",
+  "query": {}
+ },
+ "response": {
+  "status": 200,
+  "body": {
+   "ok": true,
+   "id": "0xa6d6f649a7b8d06168f30af1078115e86b2bf9dd8b495a448ba11ceef3d1168a",
+   "source": "evaluator-leg",
+   "kind": null,
+   "chainId": 36927,
+   "jobId": "0xa6d6f649a7b8d06168f30af1078115e86b2bf9dd8b495a448ba11ceef3d1168a",
+   "price": "1000000",
+   "token": "0x31854d915f31a1fbe57c2b06b5b60cbbd7d42d5b",
+   "tenant": null,
+   "verdict": "complete",
+   "decision_id": null,
+   "jev_decision_id": null,
+   "operator_decision_id": null,
+   "decided_by": null,
+   "at": 1791306004,
+   "transition": "complete",
+   "txs": [
+    {
+     "role": "open (openJob: price + premium + fee escrowed)",
+     "hash": "0xd2ee48b70a006828063144be635327d24df14231d70df1ca54e264d70af01bfd",
+     "link": "https://www.taifoon.io/scan/36927/tx/0xd2ee48b70a006828063144be635327d24df14231d70df1ca54e264d70af01bfd"
+    },
+    {
+     "role": "accept (seller of record, deposit)",
+     "hash": "0x4bbcff205d2b1d1d4807df98de5f8fe9e05f6f711027485a87db4628c951b96a",
+     "link": "https://www.taifoon.io/scan/36927/tx/0x4bbcff205d2b1d1d4807df98de5f8fe9e05f6f711027485a87db4628c951b96a"
+    },
+    {
+     "role": "submit (delivery)",
+     "hash": "0xb13879351ac7c61d293a780de5bcab0993bd7385e6f2b42cc4705ed7f83748e7",
+     "link": "https://www.taifoon.io/scan/36927/tx/0xb13879351ac7c61d293a780de5bcab0993bd7385e6f2b42cc4705ed7f83748e7"
+    },
+    {
+     "role": "ending (postVerdict: completed)",
+     "hash": "0x79d3221cbd512ab749867800e339415f12991642a895212d0e3989d852d7517e",
+     "link": "https://www.taifoon.io/scan/36927/tx/0x79d3221cbd512ab749867800e339415f12991642a895212d0e3989d852d7517e"
+    }
+   ],
+   "test_doer": true,
+   "premium": "111750",
+   "fee": "10000",
+   "deposit": "1111750",
+   "to_seller": "2111750",
+   "to_buyer": "0",
+   "to_pool": "94803",
+   "to_evaluator": "10000",
+   "pool": "0xab3c59b9bc4e4b6f247efd3450a0f4caa12cd022",
+   "opened_at": 1791305887,
+   "ended_at": 1791306004,
+   "decided_by_now": {
+    "recorded": null,
+    "now": null,
+    "corrected": false
+   },
+   "corrections": []
+  }
+ },
+ "coord_sha": "1bb3592f4bfbf1574baa6267c4bffb271c061b1e",
+ "read_at": "2026-11-17T19:42:16.200Z",
+ "notes": {
+  "dropped": [
+   "fee_to (a payee, requester, signer or treasury-like address field)",
+   "buyer (the address a fee payee or payTo names)",
+   "seller (the address a fee payee or payTo names)",
+   "doer (the address a fee payee or payTo names)"
+  ],
+  "trimmed": [
+   "get_key (the free-key offer every keyless answer carries)"
+  ]
+ }
+}

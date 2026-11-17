@@ -1,0 +1,31 @@
+{
+ "op": "POST handshake",
+ "market": "mcp",
+ "stage": "delivered",
+ "dir": "write",
+ "sdk": "market.handOver",
+ "source": "contract",
+ "request": {
+  "method": "POST",
+  "path": "/v1/handshake",
+  "query": {},
+  "body": {
+   "candidate": {
+    "kind": "mcp",
+    "address": "0x00000000000000000000000000000000000000b2",
+    "agentId": "1170141",
+    "chainId": 8453
+   },
+   "task": "Digest this text: the quick brown fox.",
+   "required_skills": [],
+   "chain": "8453",
+   "dispatch": false
+  }
+ },
+ "response": {
+  "status": 200,
+  "body": {}
+ },
+ "coord_sha": "1bb3592f4bfbf1574baa6267c4bffb271c061b1e",
+ "read_at": "2026-11-17T19:54:43.148Z"
+}

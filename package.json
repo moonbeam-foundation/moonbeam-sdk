@@ -156,7 +156,10 @@
     "gen:venues": "node scripts/gen-venues.mjs",
     "check:venues": "node scripts/gen-venues.mjs --check",
     "gen:playground": "node scripts/gen-playground.mjs",
-    "check:playground": "node scripts/gen-playground.mjs --check"
+    "check:playground": "node scripts/gen-playground.mjs --check",
+    "io:gen": "node scripts/io-coverage.mjs",
+    "io:check": "node scripts/io-coverage.mjs --check",
+    "io:record": "npm run build && node scripts/io-record.mjs"
   },
   "keywords": [
     "moonbeam",

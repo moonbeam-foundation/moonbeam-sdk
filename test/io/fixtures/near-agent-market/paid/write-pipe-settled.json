@@ -1,0 +1,31 @@
+{
+ "op": "POST pipe/settled",
+ "market": "near-agent-market",
+ "stage": "paid",
+ "dir": "write",
+ "sdk": "market.reportSettled",
+ "source": "contract",
+ "request": {
+  "method": "POST",
+  "path": "/v1/pipe/settled",
+  "query": {},
+  "body": {
+   "id": "0xe3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3",
+   "chain": "36927",
+   "tx": "0xf4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4"
+  }
+ },
+ "response": {
+  "status": 202,
+  "body": {
+   "outcome": "recorded",
+   "id": "0xe3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3",
+   "tx": "0xf4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4",
+   "chain": "36927",
+   "state": "claimable",
+   "reports": 1
+  }
+ },
+ "coord_sha": "1bb3592f4bfbf1574baa6267c4bffb271c061b1e",
+ "read_at": "2026-11-17T19:54:43.457Z"
+}

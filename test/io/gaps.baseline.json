@@ -1,0 +1,12 @@
+{
+ "rule": "_COORD_IO_COVERAGE_v1_: the gap count may only go down; lower it here when a gap closes",
+ "coord_sha": "1bb3592f4bfbf1574baa6267c4bffb271c061b1e",
+ "total": 54,
+ "by": {
+  "needs_key": 1,
+  "needs_payment": 28,
+  "needs_owner_arm": 6,
+  "no_devnet_twin": 2,
+  "not_in_coord": 17
+ }
+}

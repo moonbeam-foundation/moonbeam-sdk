@@ -281,3 +281,5 @@ export { SALE_STOPS, saleStop } from './sale-stops.js';
 export { JOURNEY_SCHEMA, JOURNEY_LEDS, journey, journeyOf, LIST_SCHEMA, LIST_VENUES, LIST_STEPS, HOUSE_AGENTS, list } from './listed.js';
 export type { Journey, JourneyVenue, JourneyLed, JourneyLight, JourneyEvidence, JourneyStanding, JourneyAct, JourneyNext, JourneyHuman, JourneyPrefill, LedState, ListPlan, ListStep, ListStepId, ListStepState, ListWho, ListOffering, ListHuman, ListCustom, ListVenue } from './listed.js';
 export type { SaleStop, StopNeeds, StopHop } from './sale-stops.js';
+// _COORD_IO_COVERAGE_v1_: the reads (and two writes) each stage of a kept market needs, found missing by test/io
+export { x402Bazaar, mcpRegistry, mcpServer, a2aRegistry, a2aAgent, virtualsSellers, olasMechs, mechDeployments, mechRequests, mechRequest, mechResult, mechPlan, chainTx, signerStatus, reportSettled } from './reads.js';

@@ -1,0 +1,107 @@
+{
+ "op": "GET mech",
+ "market": "olas-base",
+ "stage": "listed",
+ "dir": "read",
+ "sdk": "market.mechDeployments",
+ "source": "live",
+ "request": {
+  "method": "GET",
+  "path": "/v1/mech",
+  "query": {}
+ },
+ "response": {
+  "status": 200,
+  "body": {
+   "ok": true,
+   "what": "The coordination layer as a mech: post a request on chain, the layer’s worker runs the product and delivers the result hash + URI on chain.",
+   "deployments": [
+    {
+     "chainId": 36927,
+     "address": "0xab9e7F14D4521cc28be6d14bFBa4F8425b0C390A",
+     "block": 1163380,
+     "token": {
+      "address": "0x31854D915F31A1FBe57c2b06B5b60cbbD7D42D5b",
+      "symbol": "dUSDC",
+      "decimals": 6
+     },
+     "prices": {
+      "grade": {
+       "units": "50000",
+       "amount": 0.05,
+       "symbol": "dUSDC"
+      },
+      "proof": {
+       "units": "10000",
+       "amount": 0.01,
+       "symbol": "dUSDC"
+      },
+      "agent": {
+       "units": "10000",
+       "amount": 0.01,
+       "symbol": "dUSDC"
+      }
+     },
+     "minTimeout": 120,
+     "maxTimeout": 86400,
+     "record": "devnet",
+     "status": "devnet-only",
+     "totals": {
+      "requests": "8183",
+      "delivered": "6546",
+      "declined": "2",
+      "refunded": "1",
+      "escrowed_units": "16340000"
+     }
+    }
+   ],
+   "products": [
+    {
+     "id": 1,
+     "name": "grade",
+     "what": "Taifoon’s grade of a job, a handshake’s delivery, an Olas request or a text: facts proved in code, the RUBRIC_v1 answers, a composed verdict, the recorded decision",
+     "task": "{ \"product\": \"grade\", \"subject\": { \"handshake_id\" } | { \"jobId\", \"chainId\"? } | { \"olas\": \"0x…32 bytes\" } | { \"state\": \"text\" }, \"price_usdc\"? }"
+    },
+    {
+     "id": 2,
+     "name": "proof",
+     "what": "the V5 proof of a transaction (superroot-bound), as GET /v1/proof/tx/:chain/:tx returns it",
+     "task": "{ \"product\": \"proof\", \"chainId\": 8453, \"tx\": \"0x…\" }"
+    },
+    {
+     "id": 3,
+     "name": "agent",
+     "what": "an agent’s readiness (the 13-step checklist), or a match of agents for the skills a task needs",
+     "task": "{ \"product\": \"agent\", \"chainId\": 8453, \"agentId\": 95902 }  or  { \"product\": \"agent\", \"match\": { \"required_skills\": [\"…\"] } }"
+    }
+   ],
+   "request": {
+    "who": "anyone: no key, no allowlist",
+    "how": "POST /v1/mech/plan { chainId, task, record?, timeout?, requester? } → sign the returned approve + request calls with your wallet (or deposit() credits once and request without approve)",
+    "task": "the task is canonical JSON (taifoon.mech.task.v1), committed as keccak256 + an inline data: URI, so the whole task is on chain",
+    "record": "record: true sets FLAG_RECORD: the grade’s Jev decision and answers are recorded on the JevDecisionLog / JevAnswerLog of the mech’s chain, and the delivery carries the decision digest"
+   },
+   "deliver": "the worker (fixed in the constructor) calls deliver(requestId, resultHash, resultURI, recordDigest) before the deadline; resultURI is /v1/mech/results/:chain/:requestId and its bytes hash to resultHash",
+   "decline": "a task the worker can never serve (hash mismatch, unknown subject) is declined: the escrow goes back in the same transaction",
+   "refund": "a request not delivered by its deadline is refundable by anyone: refund(requestId) returns the escrow to the requester; deliver reverts after the deadline, so the two never race",
+   "trust": "no owner, no upgrade, no pause; workers, payee, token, prices and timeout bounds are fixed at deploy. A worker can only take an escrow by delivering before the deadline.",
+   "reads": {
+    "list": "/v1/mech/requests?chain=36927",
+    "one": "/v1/mech/requests/:chain/:requestId",
+    "result": "/v1/mech/results/:chain/:requestId"
+   },
+   "docs": "/docs/api"
+  }
+ },
+ "coord_sha": "1bb3592f4bfbf1574baa6267c4bffb271c061b1e",
+ "read_at": "2026-11-17T19:42:48.153Z",
+ "notes": {
+  "dropped": [
+   "deployments[].payee (a payee, requester, signer or treasury-like address field)",
+   "deployments[].workers (a payee, requester, signer or treasury-like address field)"
+  ],
+  "trimmed": [
+   "get_key (the free-key offer every keyless answer carries)"
+  ]
+ }
+}

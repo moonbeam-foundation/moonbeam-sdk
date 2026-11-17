@@ -1,0 +1,365 @@
+{
+ "op": "GET venues/:id",
+ "market": "x402-base",
+ "stage": "listed",
+ "dir": "read",
+ "sdk": "market.market",
+ "source": "live",
+ "request": {
+  "method": "GET",
+  "path": "/v1/venues/x402",
+  "query": {}
+ },
+ "response": {
+  "status": 200,
+  "body": {
+   "ok": true,
+   "schema": "taifoon.venues.v1",
+   "market": "x402",
+   "read_at": "2026-11-17T18:14:53.628Z",
+   "rule": "VENUES_v1: one read-only pass per outside venue every 6 h; classes from the sellers' own words (the class language); money first: USD a week paid by outside buyers, then buyers; auto-buying = at least 7 payments a buyer a week; next = hire (an admitted seller) | onboard (a checked class, none admitted) | build_flow (an open class)",
+   "venues": [
+    {
+     "id": "x402-base",
+     "market": "x402",
+     "label": "x402 on Base",
+     "network": "Base",
+     "chainId": 8453,
+     "fresh": {
+      "read_at": "2026-11-17T17:34:21.687Z",
+      "age_s": 8453,
+      "ok": true,
+      "stale": false,
+      "carried": false
+     },
+     "demand": {
+      "usd_7d": 473013.705133,
+      "payments_7d": 1702189,
+      "buyers_7d": 12984,
+      "sellers_7d": 5458,
+      "median_price_usd": 0.009952,
+      "estimate": false,
+      "how": "x402scan public.stats.overall (7 days, every facilitator it indexes); sellers from public.sellers.bazaar.list (7 days)"
+     },
+     "bazaar": {
+      "resources": 34449,
+      "hosts": 3177,
+      "median_price_usd": 0.005,
+      "read_at": "2026-11-17T17:33:33.116Z"
+     },
+     "top_classes": [
+      {
+       "class": "market.trade",
+       "title": "Buy, sell or bid in a market",
+       "usd_7d": 10599.58,
+       "buyers_7d": 553,
+       "median_price_usd": 0.009676,
+       "admitted": 0
+      },
+      {
+       "class": "market.read",
+       "title": "Read a market (prices, books, stats)",
+       "usd_7d": 9581.09,
+       "buyers_7d": 53,
+       "median_price_usd": 0.008366,
+       "admitted": 0
+      },
+      {
+       "class": "image.generate",
+       "title": "Generate an image",
+       "usd_7d": 8349.17,
+       "buyers_7d": 20,
+       "median_price_usd": 0.01,
+       "admitted": 0
+      }
+     ],
+     "auto_buy": [
+      {
+       "seller": "www.ax1.vc",
+       "usd_7d": 23763.48,
+       "buyers_7d": 1219,
+       "per_buyer_7d": 992.7,
+       "classes": [
+        "market.read",
+        "market.trade",
+        "image.generate"
+       ]
+      },
+      {
+       "seller": "x402.dtelecom.org",
+       "usd_7d": 7991.6,
+       "buyers_7d": 25,
+       "per_buyer_7d": 149.8,
+       "classes": [
+        "audio.tts",
+        "audio.stt"
+       ]
+      },
+      {
+       "seller": "x402.clashofcoins.com",
+       "usd_7d": 2441.32,
+       "buyers_7d": 553,
+       "per_buyer_7d": 79.6,
+       "classes": [
+        "market.trade"
+       ]
+      }
+     ],
+     "admitted_here": 5,
+     "checked_here": {
+      "json.shape": 4,
+      "rng.roll": 1,
+      "tx.decode": 1
+     },
+     "notices": {
+      "heard": 6872,
+      "answered": 6014,
+      "settled": 16,
+      "classes": [
+       "market.trade",
+       "market.read",
+       "image.generate"
+      ]
+     },
+     "next": {
+      "action": "build_flow",
+      "class": "market.trade",
+      "words": "Build a flow: buy, sell or bid in a market is graded by Jev",
+      "href": "/coordination/live?step=hire&side=build&class=market.trade"
+     },
+     "paid_via": [
+      {
+       "facilitator": "coinbase",
+       "sellers": 988,
+       "usd_7d": 42175.92
+      },
+      {
+       "facilitator": "ultravioletadao",
+       "sellers": 7,
+       "usd_7d": 374.23
+      },
+      {
+       "facilitator": "mrdn",
+       "sellers": 1,
+       "usd_7d": 297
+      }
+     ],
+     "failure": null,
+     "indexed": {
+      "usd_7d_x402": 16617.688526,
+      "buyers_7d": 331,
+      "sellers_indexed": 81
+     },
+     "links": {
+      "venue": "https://coord.taifoon.dev/v1/venues/x402-base"
+     }
+    },
+    {
+     "id": "x402-solana",
+     "market": "x402",
+     "label": "x402 on Solana",
+     "network": "Solana",
+     "chainId": null,
+     "fresh": {
+      "read_at": "2026-11-17T17:46:28.319Z",
+      "age_s": 7726,
+      "ok": true,
+      "stale": false,
+      "carried": false
+     },
+     "demand": {
+      "usd_7d": 69975.947979,
+      "payments_7d": 129074,
+      "buyers_7d": 308,
+      "sellers_7d": 194,
+      "median_price_usd": 0.005,
+      "estimate": false,
+      "how": "x402scan public.stats.overall (7 days, every facilitator it indexes); sellers from public.sellers.bazaar.list (7 days)"
+     },
+     "bazaar": {
+      "resources": 12512,
+      "hosts": 747,
+      "median_price_usd": 0.005,
+      "read_at": "2026-11-17T17:33:33.116Z"
+     },
+     "top_classes": [
+      {
+       "class": "web.search",
+       "title": "Search and retrieve information",
+       "usd_7d": 11975.07,
+       "buyers_7d": 9,
+       "median_price_usd": 0.004889,
+       "admitted": 0
+      },
+      {
+       "class": "payments.pay",
+       "title": "Pay or settle for an agent",
+       "usd_7d": 10777.44,
+       "buyers_7d": 2,
+       "median_price_usd": 0.006321,
+       "admitted": 0
+      },
+      {
+       "class": "nft.collect",
+       "title": "NFTs: mint, allowlists, raffles",
+       "usd_7d": 10776.5,
+       "buyers_7d": null,
+       "median_price_usd": 0.009125,
+       "admitted": 0
+      }
+     ],
+     "auto_buy": [
+      {
+       "seller": "sol.blockrun.ai",
+       "usd_7d": 2333.03,
+       "buyers_7d": 46,
+       "per_buyer_7d": 2352,
+       "classes": [
+        "market.read",
+        "web.search"
+       ]
+      },
+      {
+       "seller": "x402.sniperx.fun",
+       "usd_7d": 144.71,
+       "buyers_7d": 30,
+       "per_buyer_7d": 242,
+       "classes": [
+        "market.price"
+       ]
+      },
+      {
+       "seller": "x402.api.agentmail.to",
+       "usd_7d": 44.27,
+       "buyers_7d": 2,
+       "per_buyer_7d": 1019.5,
+       "classes": [
+        "web.search",
+        "workflow.run"
+       ]
+      }
+     ],
+     "admitted_here": 1,
+     "checked_here": {
+      "json.shape": 2
+     },
+     "notices": null,
+     "next": {
+      "action": "build_flow",
+      "class": "web.search",
+      "words": "Build a flow: search and retrieve information is graded by Jev",
+      "href": "/coordination/live?step=hire&side=build&class=web.search"
+     },
+     "paid_via": [
+      {
+       "facilitator": "coinbase",
+       "sellers": 75,
+       "usd_7d": 64895.44
+      },
+      {
+       "facilitator": "payAI",
+       "sellers": 6,
+       "usd_7d": 2384.66
+      }
+     ],
+     "failure": null,
+     "indexed": null,
+     "links": {
+      "venue": "https://coord.taifoon.dev/v1/venues/x402-solana"
+     }
+    },
+    {
+     "id": "x402-arbitrum",
+     "market": "x402",
+     "label": "Small USDC payments (x402-shaped) on Arbitrum",
+     "network": "Arbitrum One",
+     "chainId": 42161,
+     "fresh": {
+      "read_at": "2026-11-17T17:48:07.581Z",
+      "age_s": 7627,
+      "ok": true,
+      "stale": false,
+      "carried": false
+     },
+     "demand": {
+      "usd_7d": 710.513297,
+      "payments_7d": 64978,
+      "buyers_7d": null,
+      "sellers_7d": null,
+      "median_price_usd": 0.008076,
+      "estimate": true,
+      "how": "AuthorizationUsed of the stablecoin in 7 days (all counted), 200 receipts sampled: payments and USD scaled from the sample's share of transfers of at most 1 unit; buyers and sellers are not scaled (null), the sample's are in sampled; our addresses left out; sellers named from the catalogues: 170 x402 payment(s), 5.851596 USD, 102 buyer(s) to 23 of 138 listed payees (every Transfer of the stablecoin to a payTo an x402 catalogue lists on this network (CDP Bazaar, the open facilitator's discovery), 7 days: counted when the same tx carries the sender's EIP-3009 AuthorizationUsed (transferWithAuthorization, the x402 exact scheme) and it is at most 1 unit; measured, not sampled; our addresses left out)"
+     },
+     "bazaar": {
+      "resources": 5239,
+      "hosts": 291,
+      "median_price_usd": 0.005,
+      "read_at": "2026-11-17T17:33:33.116Z"
+     },
+     "top_classes": [
+      {
+       "class": "market.read",
+       "title": "Read a market (prices, books, stats)",
+       "usd_7d": 1.79,
+       "buyers_7d": 1,
+       "median_price_usd": 0.02,
+       "admitted": 0
+      },
+      {
+       "class": "market.trade",
+       "title": "Buy, sell or bid in a market",
+       "usd_7d": 1.76,
+       "buyers_7d": 1,
+       "median_price_usd": 0.013375,
+       "admitted": 0
+      },
+      {
+       "class": "web.search",
+       "title": "Search and retrieve information",
+       "usd_7d": 0.68,
+       "buyers_7d": 1,
+       "median_price_usd": 0.006556,
+       "admitted": 0
+      }
+     ],
+     "auto_buy": [],
+     "admitted_here": 1,
+     "checked_here": {
+      "json.shape": 1
+     },
+     "notices": {
+      "heard": 6872,
+      "answered": 6014,
+      "settled": 16,
+      "classes": [
+       "market.read",
+       "market.trade",
+       "web.search"
+      ]
+     },
+     "next": {
+      "action": "build_flow",
+      "class": "market.read",
+      "words": "Build a flow: read a market (prices, books, stats) is graded by Jev",
+      "href": "/coordination/live?step=hire&side=build&class=market.read"
+     },
+     "paid_via": [],
+     "failure": null,
+     "indexed": null,
+     "links": {
+      "venue": "https://coord.taifoon.dev/v1/venues/x402-arbitrum"
+     }
+    }
+   ]
+  }
+ },
+ "coord_sha": "1bb3592f4bfbf1574baa6267c4bffb271c061b1e",
+ "read_at": "2026-11-17T19:54:58.328Z",
+ "notes": {
+  "trimmed": [
+   "venues: 5 rows, the first 3 kept",
+   "venues[0].paid_via: 7 rows, the first 3 kept",
+   "get_key (the free-key offer every keyless answer carries)"
+  ]
+ }
+}

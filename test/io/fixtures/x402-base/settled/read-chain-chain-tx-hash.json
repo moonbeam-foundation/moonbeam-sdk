@@ -1,0 +1,48 @@
+{
+ "op": "GET chain/:chain/tx/:hash",
+ "market": "x402-base",
+ "stage": "settled",
+ "dir": "read",
+ "sdk": "market.chainTx",
+ "source": "devnet-ledger",
+ "request": {
+  "method": "GET",
+  "path": "/v1/chain/36927/tx/0x79d3221cbd512ab749867800e339415f12991642a895212d0e3989d852d7517e",
+  "query": {}
+ },
+ "response": {
+  "status": 200,
+  "body": {
+   "tx": {
+    "block_number": 1482310,
+    "events": [
+     {
+      "event": "PremiumSplit",
+      "args": {
+       "toBackers": 94803,
+       "toLayer": 16947
+      }
+     },
+     {
+      "event": "EvaluatorFeePaid",
+      "args": {
+       "amount": 10000
+      }
+     },
+     {
+      "event": "Settled",
+      "args": {
+       "ending": 1,
+       "toSeller": 2111750,
+       "toBuyer": 0,
+       "toPool": 94803,
+       "toEvaluator": 10000
+      }
+     }
+    ]
+   }
+  }
+ },
+ "coord_sha": "1bb3592f4bfbf1574baa6267c4bffb271c061b1e",
+ "read_at": "2026-11-17T19:54:43.572Z"
+}

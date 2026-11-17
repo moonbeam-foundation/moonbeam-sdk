@@ -1,0 +1,56 @@
+{
+ "op": "POST agent-listings",
+ "market": "erc8183-base",
+ "stage": "listed",
+ "dir": "write",
+ "sdk": "market.createListing",
+ "source": "contract",
+ "request": {
+  "method": "POST",
+  "path": "/v1/agent-listings",
+  "query": {},
+  "body": {
+   "identity": {
+    "name": "text digest",
+    "handle": "text-digest",
+    "tagline": "digests a text",
+    "category": "agents"
+   },
+   "hosting": {
+    "mode": "self_hosted",
+    "door": {
+     "kind": "a2a",
+     "endpoint": "https://agent.example.org/a2a"
+    }
+   },
+   "pricing": {
+    "seller_price_usd": "0.05",
+    "classes": [
+     "mcp.digest"
+    ],
+    "payout": "0x00000000000000000000000000000000000000b2"
+   }
+  }
+ },
+ "response": {
+  "status": 201,
+  "body": {
+   "listing": {
+    "id": "al_0123456789abcdef",
+    "status": "draft"
+   },
+   "token": {
+    "prefix": "alt_",
+    "shown_once": true
+   },
+   "signing_secret": {
+    "prefix": "als_",
+    "shown_once": true
+   },
+   "claim": null,
+   "next": "publish"
+  }
+ },
+ "coord_sha": "1bb3592f4bfbf1574baa6267c4bffb271c061b1e",
+ "read_at": "2026-11-17T19:54:42.790Z"
+}

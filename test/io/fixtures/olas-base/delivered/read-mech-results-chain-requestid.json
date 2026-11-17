@@ -1,0 +1,91 @@
+{
+ "op": "GET mech/results/:chain/:requestId",
+ "market": "olas-base",
+ "stage": "delivered",
+ "dir": "read",
+ "sdk": "market.mechResult",
+ "source": "live",
+ "request": {
+  "method": "GET",
+  "path": "/v1/mech/results/36927/0x2934ad507079b7a64861eada524691f181ade57a7ae64053794a3fb5ddc3469f",
+  "query": {}
+ },
+ "response": {
+  "status": 200,
+  "body": {
+   "at": "2026-11-17T19:17:51.616Z",
+   "chainId": 36927,
+   "contract": "0xab9e7f14d4521cc28be6d14bfba4f8425b0c390a",
+   "output": {
+    "kind": "taifoon.match",
+    "match": {
+     "candidates": [],
+     "eligible": 0,
+     "get_key": {
+      "cli": "npx @taifoon/cli login --free",
+      "free": true,
+      "http": {
+       "body": {},
+       "method": "POST",
+       "optional": {
+        "wallet_address": "0x… a label for your tenant; nothing is signed"
+       },
+       "url": "https://coord.taifoon.dev/v1/register"
+      },
+      "mcp": {
+       "arguments": {},
+       "server": "https://coord.taifoon.dev/mcp",
+       "tool": "taifoon_register"
+      },
+      "quickstart": "https://coord.taifoon.dev/v1/quickstart",
+      "why": "a free key in one call (no payment, nothing signed): send it as X-API-Key for its own budget on /v1/demands, /gw/rpc, /gw/mcp and /v1/agents/register"
+     },
+     "note": "no candidate covers every required skill; the closest are listed with what they lack (partial: still loading every handshake-ready agent the harvester knows, the harvest feed, agents registered by URL; ask again in a few seconds)",
+     "ok": true,
+     "request": {
+      "required_skills": [
+       "market.price",
+       "market.read"
+      ]
+     },
+     "searched": {
+      "cards": 0,
+      "loading": [
+       "every handshake-ready agent the harvester knows",
+       "the harvest feed",
+       "agents registered by URL"
+      ],
+      "partial": true,
+      "pool": "partial: agents registered by URL and the harvest feed's slice; the full set is loading on this server, ask again in a few seconds for every handshake-ready agent",
+      "unreadable": 0,
+      "vetted": 0,
+      "vetted_source": "the CRM answered with no vetted agent for these skills; showing the feed rank only"
+     }
+    },
+    "required_skills": [
+     "market.price",
+     "market.read"
+    ]
+   },
+   "product": "agent",
+   "requestId": "0x2934ad507079b7a64861eada524691f181ade57a7ae64053794a3fb5ddc3469f",
+   "served_by": "Taifoon coordination layer",
+   "sources": [
+    "POST https://coord.taifoon.dev/v1/match"
+   ],
+   "taskHash": "0xbd9974f47cbaf17ccdf2c2c1aefc3c186d4bea02f7bfcfb3375b860731951132",
+   "v": "taifoon.mech.result.v1"
+  }
+ },
+ "coord_sha": "1bb3592f4bfbf1574baa6267c4bffb271c061b1e",
+ "read_at": "2026-11-17T19:55:45.688Z",
+ "args": {
+  "id": "0x2934ad507079b7a64861eada524691f181ade57a7ae64053794a3fb5ddc3469f"
+ },
+ "notes": {
+  "dropped": [
+   "worker (a payee, signer or treasury-like address field)",
+   "requester (a payee, requester, signer or treasury-like address field)"
+  ]
+ }
+}

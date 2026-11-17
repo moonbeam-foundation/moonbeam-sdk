@@ -1,0 +1,33 @@
+{
+ "op": "GET pipe/claimable",
+ "market": "x402-base",
+ "stage": "paid",
+ "dir": "read",
+ "sdk": "market.claimablePayouts",
+ "source": "live",
+ "request": {
+  "method": "GET",
+  "path": "/v1/pipe/claimable",
+  "query": {
+   "chain": "36927",
+   "limit": "3"
+  }
+ },
+ "response": {
+  "status": 200,
+  "body": {
+   "at": 1794945357,
+   "count": 0,
+   "envelopes": [],
+   "how": "submit an open step (who: anyone) yourself, then POST /pipe/settled {id, chain, tx}; the pipe acks on the chain's inclusion of a transaction that matches the plan (first valid inclusion wins). Steps whose who is the operator wait for our signer.",
+   "schema": "taifoon.pipe.claimable.v1"
+  }
+ },
+ "coord_sha": "1bb3592f4bfbf1574baa6267c4bffb271c061b1e",
+ "read_at": "2026-11-17T19:55:54.964Z",
+ "notes": {
+  "trimmed": [
+   "get_key (the free-key offer every keyless answer carries)"
+  ]
+ }
+}
