@@ -564,12 +564,12 @@ export const VENUE_REGISTER: RegisterSnapshot = {
      }
     },
     "moonbeam": {
-     "listings": 0,
+     "listings": 1,
      "directories": [],
      "shared": null,
      "closed": null,
-     "wanted": 1,
-     "since": null,
+     "wanted": 0,
+     "since": "2026-11-15",
      "features": {
       "list": {
        "mark": "owner step",
@@ -894,12 +894,15 @@ export const VENUE_REGISTER: RegisterSnapshot = {
      }
     },
     "moonbeam": {
-     "listings": 0,
-     "directories": [],
+     "listings": 1,
+     "directories": [
+      "8004scan",
+      "QuickNode ERC-8004 Explorer"
+     ],
      "shared": "the operator’s one ERC-8004 agent, read for Moonbeam until Moonbeam registers its own",
      "closed": null,
      "wanted": 0,
-     "since": "2026-11-11",
+     "since": "2026-11-14",
      "features": {
       "list": {
        "mark": "partial",
