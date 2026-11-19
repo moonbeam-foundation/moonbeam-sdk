@@ -6,8 +6,7 @@
 //   contract       the answer test/io/calls.mjs writes for the call, checked against coord's declared fields before it is kept
 // A live answer is kept as served, less any treasury-like field and the keyless get_key offer (each dropped and named).
 //   node scripts/io-record.mjs --coord <path> [--only <call>] [--force] [--seed <dir>] [--remask]
-//   kms-access secret get moonbeam sdk-io-recorder/COORD_API_KEY | node scripts/io-record.mjs --coord <path> --key-stdin [--only <call>]
-//     (_IO_RECORDER_KEY_v1_: the owner-approved free key, on stdin only; see scripts/io-key.mjs)
+//   <key on stdin> | node scripts/io-record.mjs --coord <path> --key-stdin [--only <call>]   (_IO_RECORDER_KEY_v1_)
 import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
@@ -35,14 +34,10 @@ const DROP = /^(fee_to|fee_payee|pay_?to|payTo|payee|payees|treasury|safe|deploy
 /** addresses served under a treasury-like key anywhere in this run's answers (a fee payee, an x402 payTo): dropped wherever they recur */
 const TREASURY = new Set();
 const ADDR = /^0x[0-9a-fA-F]{40}$/;
-// _IO_OWN_KEYS_DROPPED_v1_: a live answer can also name one of our own signing keys (a settle record's buyer, seller or doer
-// read 2026-11-17 named the deployer and a stand-in signer). Those addresses are read here, at run time, from the operator's local
-// key registry (KMS_REGISTRY, default ~/projects/conclave-v2/access/projects.json) and never written into this repo; each field
-// holding one is dropped and named, like a fee payee. With no registry on the machine, nothing is added.
+// _IO_OWN_KEYS_DROPPED_v1_: addresses listed in the file IO_MASK_FILE names (on the recorder's machine only) are dropped too.
 try {
-  const reg = readFileSync(process.env.KMS_REGISTRY || join(process.env.HOME || '', 'projects/conclave-v2/access/projects.json'), 'utf8');
-  for (const a of reg.match(/0x[0-9a-fA-F]{40}/g) ?? []) TREASURY.add(a.toLowerCase());
-} catch { /* no local key registry: only the served treasury-like fields are dropped */ }
+  if (process.env.IO_MASK_FILE) for (const a of readFileSync(process.env.IO_MASK_FILE, 'utf8').match(/0x[0-9a-fA-F]{40}/g) ?? []) TREASURY.add(a.toLowerCase());
+} catch { /* none */ }
 function collect(v) {
   if (Array.isArray(v)) return v.forEach(collect);
   if (v && typeof v === 'object') for (const [k, x] of Object.entries(v)) { if (DROP.test(k) && typeof x === 'string' && ADDR.test(x)) TREASURY.add(x.toLowerCase()); else collect(x); }
@@ -55,6 +50,7 @@ function mask(v, path, notes) {
       const p = path ? `${path}.${k}` : k;
       if (DROP.test(k)) { notes.dropped.push(`${p} (a payee, requester, signer or treasury-like address field)`); continue; }
       if (typeof x === 'string' && TREASURY.has(x.toLowerCase())) { notes.dropped.push(`${p} (the address a fee payee or payTo names)`); continue; }
+      if (typeof x === 'string' && /\bkms\b|kms-|\bssm\b|\bMFA\b/i.test(x)) { notes.trimmed.push(`${p} (withheld)`); out[k] = '(withheld)'; continue; }
       if (k === 'get_key' && !path) { notes.trimmed.push('get_key (the free-key offer every keyless answer carries)'); continue; }
       out[k] = mask(x, p, notes);
     }

@@ -1,5 +1,4 @@
-// _IO_RECORDER_KEY_v1_ + _NO_SECRETS_IN_PACKAGE_v1_: no key-shaped string sits in this repo or in what `npm pack` would publish,
-// the published files never include the recorder (scripts/, test/), and the recorder's key door refuses what it must.
+// _IO_RECORDER_KEY_v1_ + _NO_SECRETS_IN_PACKAGE_v1_: no key-shaped string in the repo or the package; the key door holds.
 import { execFileSync } from 'node:child_process';
 import { existsSync, readFileSync, statSync } from 'node:fs';
 import { join } from 'node:path';
@@ -12,23 +11,8 @@ const root = join(__dirname, '..');
 const pkg = JSON.parse(readFileSync(join(root, 'package.json'), 'utf8'));
 // a key-shaped string built at run time, so this file itself holds none
 const fake = ['tfr', 'free', 'abcdefghijklmnop0123'].join('_');
-// _NO_OWN_ADDRESSES_v1_: our own key, Safe, payee and treasury addresses, read at test time from the operator's local key registry
-// (KMS_REGISTRY, default ~/projects/conclave-v2/access/projects.json) and never written here; with no registry (CI) the check is skipped
-function ownAddresses(): Set<string> {
-  const file = process.env.KMS_REGISTRY || join(process.env.HOME || '', 'projects/conclave-v2/access/projects.json');
-  const out = new Set<string>();
-  if (!existsSync(file)) return out;
-  const walk = (v: unknown, path: string) => {
-    if (Array.isArray(v)) v.forEach((x, i) => walk(x, `${path}.${i}`));
-    else if (v && typeof v === 'object') for (const [k, x] of Object.entries(v)) walk(x, `${path}.${k}`);
-    else if (typeof v === 'string' && /(keys\.[^.]+\.address|safe|owner|treasury|pay_?to|payout|reserve|solana|deployer|signer)/i.test(path)
-      && (/^0x[0-9a-fA-F]{40}$/.test(v) || /^[1-9A-HJ-NP-Za-km-z]{32,44}$/.test(v))) out.add(v.toLowerCase());
-  };
-  walk(JSON.parse(readFileSync(file, 'utf8')), '');
-  return out;
-}
-const OWN = ownAddresses();
-const ownIn = (text: string) => { const t = text.toLowerCase(); return [...OWN].filter((a) => t.includes(a)).map((a) => `${a.slice(0, 6)}…`); };
+// the maintainers' pre-publish check, where it is installed (skipped elsewhere)
+const guard = (() => { try { execFileSync('pack-guard', ['--help'], { stdio: 'ignore' }); return true; } catch { return false; } })();
 const textOf = (p: string) => { const f = join(root, p); if (!existsSync(f) || statSync(f).size > 4_000_000) return ''; const b = readFileSync(f); return b.includes(0) ? '' : b.toString('utf8'); };
 
 describe('_NO_SECRETS_IN_PACKAGE_v1_', () => {
@@ -68,11 +52,9 @@ describe('_NO_SECRETS_IN_PACKAGE_v1_', () => {
     expect(hits).toEqual([]);
   });
 
-  it.skipIf(OWN.size === 0)('no tracked or published file holds one of our own key, Safe, payee or treasury addresses', () => {
-    const tracked = execFileSync('git', ['ls-files'], { cwd: root, encoding: 'utf8' }).split('\n').filter(Boolean);
-    const hits = tracked.flatMap((p) => { const h = ownIn(textOf(p)); return h.length ? [`${p}: ${h.join(', ')}`] : []; });
-    expect(hits).toEqual([]);
-  });
+  it.skipIf(!guard)('the pre-publish check passes on the packed files and on every tracked file', () => {
+    for (const extra of [[], ['--git']]) execFileSync('pack-guard', ['--dir', root, ...extra], { stdio: 'pipe' });
+  }, 120_000);
 
   it('no file npm would publish holds a key', () => {
     const out = execFileSync('npm', ['pack', '--dry-run', '--json', '--ignore-scripts'], { cwd: root, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] });
