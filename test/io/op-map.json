@@ -95,6 +95,8 @@
     { "op": "GET agents/who/:address", "why": "one counterparty's ACP history, not a sale stage" },
     { "op": "GET agents/contracts", "why": "the contracts the ACP reads come from, not a sale stage" },
     { "op": "GET lambda/components", "why": "the lambda catalogue, no sale stage" },
+    { "op": "GET chat/completions", "why": "the inference door (OpenAI shape), not a listing market" },
+    { "op": "GET chat/completions/:model", "why": "the inference door (OpenAI shape), not a listing market" },
     { "op": "POST chat/completions/:model", "why": "the inference door (OpenAI shape), not a listing market" },
     { "op": "POST messages", "why": "the inference door (Anthropic shape), not a listing market" },
     { "op": "POST exchanges/auto", "why": "the operator's auto-exchange of edges, no market stage" },
