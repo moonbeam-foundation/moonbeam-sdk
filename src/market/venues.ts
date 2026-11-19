@@ -1,15 +1,16 @@
 // EVERY VENUE, ONE TABLE: the ten markets the Moonbeam product sells on, what a seller does on each (list, take a job, settle,
 // get paid), how it is listed there, the SDK call for each step, and each step's state as the product's market register reads it.
 // The states are never set here: they come from the register's snapshot (venues-data.ts, scripts/gen-venues.mjs), mapped one way:
-//   live → live · partial → partial · self_test → self-test · claimed, contradicted → not yet · none (the market has no such step) → n/a
+//   live → live · tested → tested · partial → partial · self_test → self-test · claimed, contradicted → not yet · none (the market has no such step) → n/a
 import type { OnboardTransport } from '../onboard/index.js';
 import { VENUE_REGISTER } from './venues-data.js';
 import { listStatus, type ListMarket, type ListRow } from './journey.js';
 import { markets } from './index.js';
 import { capState, cohortIdOf, cohortsOf, markOf, type CohortFacts, type CohortId, type CohortRows, type DeprecatedCohortId, type FeatureMark } from './cohorts.js';
 
-/** A step's state, said plainly: it runs for outside money (live), in part, only with Moonbeam on both sides (self-test), not yet, or the market has no such step (n/a). */
-export type VenueState = 'live' | 'partial' | 'self-test' | 'not yet' | 'n/a';
+/** A step's state, said plainly: it runs for outside money (live), Moonbeam ran it end to end itself and keeps the run as an I/O test
+ *  (tested, _VENUE_TESTED_v1_), in part, only with Moonbeam on both sides (self-test), not yet, or the market has no such step (n/a). */
+export type VenueState = 'live' | 'tested' | 'partial' | 'self-test' | 'not yet' | 'n/a';
 /** The register's own words for a step, kept as read. */
 export type RegisterWord = 'live' | 'partial' | 'self_test' | 'claimed' | 'contradicted' | 'none' | 'proven' | (string & {});
 /** What a seller does on a market. */
@@ -115,7 +116,7 @@ const S: Record<VenueId, Static> = {
 /** _VENUE_TRUTH_v1_: the cohort the register's evidence (each venue's list / take / settle / paid) was read for. */
 export const VENUE_EVIDENCE_OF: CohortId = cohortIdOf(VENUE_REGISTER.cohorts?.evidence_of ?? 'operator');
 
-const WORD: Record<string, VenueState> = { live: 'live', proven: 'live', partial: 'partial', self_test: 'self-test', claimed: 'not yet', contradicted: 'not yet', none: 'n/a' };
+const WORD: Record<string, VenueState> = { live: 'live', proven: 'live', tested: 'tested', partial: 'partial', self_test: 'self-test', claimed: 'not yet', contradicted: 'not yet', none: 'n/a' };
 const stateOf = (w: RegisterWord): VenueState => WORD[w] ?? 'not yet';
 
 function venueOf(s: Static, r: RegisterMarket): Venue {
