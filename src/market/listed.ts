@@ -10,6 +10,7 @@ import type { OnboardTransport } from '../onboard/index.js';
 import { jsonOf } from '../errors/index.js';
 import { MarketError, call, query } from './http.js';
 import { VENUE_IDS, type VenueId } from './venues.js';
+import { keyedFetch } from '../core/keyed.js';
 
 // ── journey ───────────────────────────────────────────────────────────────────────────────────────────────────────────
 
@@ -170,7 +171,7 @@ const checkCustom = (c: ListCustom | null | undefined): ListCustom | null => {
 const planVirtuals: Planner = async (t, { agent, account, custom, now, api }) => {
   const page = `${VIRTUALS_APP}/${agent}`;
   const url = `${api}/agents/${agent}`;
-  const r = await t.fetch(url, { method: 'GET', headers: { accept: 'application/json' } });
+  const r = await keyedFetch(t, url, { method: 'GET', headers: { accept: 'application/json' } });
   const body = await jsonOf(r);
   if (!r.ok && r.status !== 404) throw new MarketError(r.status, 'GET virtuals /agents/:id', body);
   const rec: VirtualsAgent | null = r.ok && body && typeof body === 'object' ? (((body as { data?: unknown }).data ?? body) as VirtualsAgent) : null;

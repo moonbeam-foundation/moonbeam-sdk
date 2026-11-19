@@ -1,6 +1,7 @@
 // The one HTTP door of ./market: every call goes through the transport given, the key only in the x-api-key header.
 import type { OnboardTransport } from '../onboard/index.js';
 import { CoordError, jsonOf, refusalOf } from '../errors/index.js';
+import { keyedFetch } from '../core/keyed.js';
 
 /** A refusal of a market call (a CoordError: status, code, message, nextStep, body). */
 export class MarketError extends CoordError {
@@ -19,7 +20,7 @@ export const seg = (v: string | number) => encodeURIComponent(String(v));
 
 export async function call<T>(t: OnboardTransport, method: 'GET' | 'POST', path: string, body?: unknown): Promise<T> {
   const what = `${method} ${path.split('?')[0]}`;
-  const r = await t.fetch(`${t.base}${path}`, { method, headers: headers(t, body !== undefined), ...(body !== undefined ? { body: JSON.stringify(body) } : {}) });
+  const r = await keyedFetch(t, `${t.base}${path}`, { method, headers: headers(t, body !== undefined), ...(body !== undefined ? { body: JSON.stringify(body) } : {}) });
   const j = await jsonOf(r);
   const refused = j && typeof j === 'object' && (j as { ok?: unknown }).ok === false;
   if (!r.ok || refused || j === null) throw new MarketError(r.status, what, j);

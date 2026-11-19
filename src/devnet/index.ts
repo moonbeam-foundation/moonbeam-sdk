@@ -17,6 +17,7 @@ import { jsonOf } from '../errors/index.js';
 import { agreementHash, agreementId, agreementTyped, checkCode, checkTask, edgeBody, edgeIds, endpointKey, onboardCheck, sellerOfRow, textTool, EDGE_CLASS, TENANT } from './edge.js';
 import type { AgreementTyped, CheckVerdict, EdgeBody, EdgeIds, EdgePool, EdgeQuote, McpTool, Seller } from './edge.js';
 import type { DevnetProfile } from './profile.js';
+import { keyedFetch } from '../core/keyed.js';
 
 export * from './profile.js';
 export * from './edge.js';
@@ -30,13 +31,13 @@ export const DEVNET_POOL_BACKING = 10n * 10n ** 18n;
 
 const hdr = (t: OnboardTransport): Record<string, string> => ({ accept: 'application/json', ...(t.apiKey ? { 'x-api-key': t.apiKey } : {}) });
 async function get<T>(t: OnboardTransport, path: string): Promise<T> {
-  const r = await t.fetch(`${t.base}${path}`, { method: 'GET', headers: hdr(t) });
+  const r = await keyedFetch(t, `${t.base}${path}`, { method: 'GET', headers: hdr(t) });
   const j = await jsonOf(r);
   if (!r.ok) throw new OnboardError(r.status, `GET ${path} → ${r.status}`, j);
   return j as T;
 }
 async function post<T>(t: OnboardTransport, path: string, body: unknown): Promise<{ status: number; body: T }> {
-  const r = await t.fetch(`${t.base}${path}`, { method: 'POST', headers: { ...hdr(t), 'content-type': 'application/json' }, body: JSON.stringify(body) });
+  const r = await keyedFetch(t, `${t.base}${path}`, { method: 'POST', headers: { ...hdr(t), 'content-type': 'application/json' }, body: JSON.stringify(body) });
   const j = await jsonOf(r);
   if (!r.ok) throw new OnboardError(r.status, `POST ${path} → ${r.status}`, j);
   return { status: r.status, body: j as T };

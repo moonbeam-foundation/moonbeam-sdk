@@ -216,7 +216,7 @@ export const DEFAULT_GUARD: JevGuard = Object.freeze({
 export async function quotaOf(t: OnboardTransport): Promise<{ free: number; blockCalls: number; blockGrid: number; burstPerMinute: number; usdcPerBlock: number | null; source: 'layer' | 'typed' }> {
   const typed = { free: QUOTA_FREE, blockCalls: QUOTA_BLOCK.calls, blockGrid: QUOTA_BLOCK.grid, burstPerMinute: QUOTA_BURST_PER_MINUTE, usdcPerBlock: null, source: 'typed' as const };
   try {
-    const r = await t.fetch(`${t.base}/judge/credits`, { method: 'GET', headers: headers(t) });
+    const r = await keyedFetch(t, `${t.base}/judge/credits`, { method: 'GET', headers: headers(t) });
     const j = (await r.json().catch(() => null)) as { ok?: boolean; grades?: { free?: { per_user?: number }; per_block?: number; per_minute?: number }; free?: { calls?: number }; price?: { grid_per_block?: number; usdc_per_block?: number; grid?: number; usdc?: number } } | null;
     if (!r.ok || !j?.ok) return typed;
     const free = j.grades?.free?.per_user ?? j.free?.calls; const per = j.grades?.per_block; const burst = j.grades?.per_minute;
@@ -642,7 +642,7 @@ export function claimCalls(token: Address): UnsignedCall[] {
 
 /** The one thing this module needs from the outside: a fetch and the base of the scrubbing proxy. */
 export interface OnboardTransport {
-  fetch: (url: string, init?: { method?: string; headers?: Record<string, string>; body?: string; signal?: AbortSignal }) => Promise<{ readonly ok: boolean; readonly status: number; json(): Promise<unknown> }>;
+  fetch: (url: string, init?: { method?: string; headers?: Record<string, string>; body?: string; signal?: AbortSignal; redirect?: 'error' | 'follow' | 'manual' }) => Promise<{ readonly ok: boolean; readonly status: number; json(): Promise<unknown> }>;
   /** the scrubbing proxy, e.g. "/api/onboard"; paths below mirror Moonbeam's own */
   base: string;
   /** forwarded as X-API-Key; without it the judge counts the free calls per address */
@@ -655,13 +655,13 @@ export class OnboardError extends CoordError {
 }
 
 async function get<T>(t: OnboardTransport, path: string): Promise<T> {
-  const r = await t.fetch(`${t.base}${path}`, { method: 'GET', headers: headers(t) });
+  const r = await keyedFetch(t, `${t.base}${path}`, { method: 'GET', headers: headers(t) });
   const j = await jsonOf(r);
   if (!r.ok) throw new OnboardError(r.status, `GET ${path} → ${r.status}`, j);
   return j as T;
 }
 async function post<T>(t: OnboardTransport, path: string, body: unknown): Promise<T> {
-  const r = await t.fetch(`${t.base}${path}`, { method: 'POST', headers: { ...headers(t), 'content-type': 'application/json' }, body: JSON.stringify(body) });
+  const r = await keyedFetch(t, `${t.base}${path}`, { method: 'POST', headers: { ...headers(t), 'content-type': 'application/json' }, body: JSON.stringify(body) });
   const j = await jsonOf(r);
   if (!r.ok) throw new OnboardError(r.status, `POST ${path} → ${r.status}`, j);
   return j as T;
@@ -822,6 +822,7 @@ export * as readiness from '../onboarding/index.js';
 
 // ── the premium and the seller's deposit approval (0.7.0) ──────────────────────────────────────────────────────────────
 import { premiumAmount, wilsonUpperFailure } from '@taifoon/jev-wilson';
+import { keyedFetch } from '../core/keyed.js';
 
 /** The premium of a covered job, in the job's token units: price × the upper Wilson bound on the seller's failure rate
  *  (k correct of n), floored exactly as Moonbeam's pool quote computes it (jev-wilson). Pass it to fundCalls({ premium }). */

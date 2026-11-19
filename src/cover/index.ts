@@ -12,6 +12,7 @@
 import type { OnboardTransport } from '../onboard/index.js';
 import { CoordError, jsonOf, refusalOf } from '../errors/index.js';
 import { parseJobRef } from '../jobs/index.js';
+import { keyedFetch } from '../core/keyed.js';
 
 export const COVER_VENUES = Object.freeze(['erc8183', 'bitagent', 'memo-acp', 'x402', 'olas-mech'] as const);
 export type CoverVenue = (typeof COVER_VENUES)[number];
@@ -77,7 +78,7 @@ export type NotInsurable = { ok: false; insurable: false; why: string[]; job?: u
 /** Read one cover quote. A job that cannot be covered now is an answer (insurable: false, why[]); any other refusal throws a CoordError. */
 export async function quoteCover(t: OnboardTransport, i: CoverQuoteInput): Promise<CoverQuote | NotInsurable> {
   const p = coverQuotePlan(i);
-  const r = await t.fetch(`${t.base}${p.path}`, { method: 'GET', headers: { accept: 'application/json', ...(t.apiKey ? { 'x-api-key': t.apiKey } : {}) } });
+  const r = await keyedFetch(t, `${t.base}${p.path}`, { method: 'GET', headers: { accept: 'application/json', ...(t.apiKey ? { 'x-api-key': t.apiKey } : {}) } });
   const j = (await jsonOf(r)) as Record<string, unknown> | null;
   if (j && j['insurable'] === false && Array.isArray(j['why'])) return { ok: false, insurable: false, why: (j['why'] as unknown[]).map(String), ...(j['job'] !== undefined ? { job: j['job'] } : {}) };
   if (!r.ok || !j || j['ok'] === false) throw new CoordError(refusalOf(j, r.status, `GET /cover/quote → ${r.status}`));

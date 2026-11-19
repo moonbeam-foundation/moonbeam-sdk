@@ -114,18 +114,19 @@ export const SALE_ID_RE = /^rs_[0-9a-z]+_[0-9a-f]{10}$/i;
 /** Read one resale sale by its id through the transport (reads only; a bad id is refused before any call). */
 export async function readSale(t: OnboardTransport, saleId: string): Promise<ResaleSale> {
   if (!SALE_ID_RE.test(saleId)) throw new RangeError('a sale id is rs_<stamp>_<10 hex> (the `sale.id` of a class wall’s 200 answer)');
-  const r = await t.fetch(`${t.base}/resale/sales/${saleId}`, { method: 'GET', headers: { accept: 'application/json', ...(t.apiKey ? { 'x-api-key': t.apiKey } : {}) } });
+  const r = await keyedFetch(t, `${t.base}/resale/sales/${saleId}`, { method: 'GET', headers: { accept: 'application/json', ...(t.apiKey ? { 'x-api-key': t.apiKey } : {}) } });
   return okOrThrow<ResaleSale>(r, await jsonOf(r), `GET /resale/sales/${saleId}`);
 }
 
 /** The reseller's own view (GET /v1/access/reseller): its children, their calls, what it paid at list, what they owe, the margin. */
 export async function readResellerView(t: OnboardTransport): Promise<Record<string, unknown>> {
-  const r = await t.fetch(`${t.base}/access/reseller`, { method: 'GET', headers: { accept: 'application/json', ...(t.apiKey ? { 'x-api-key': t.apiKey } : {}) } });
+  const r = await keyedFetch(t, `${t.base}/access/reseller`, { method: 'GET', headers: { accept: 'application/json', ...(t.apiKey ? { 'x-api-key': t.apiKey } : {}) } });
   return okOrThrow<Record<string, unknown>>(r, await jsonOf(r), 'GET /access/reseller');
 }
 
 // ── quoteSale and the attested resale steps (0.7.0) ──────────────────────────────────────────────────────────────────
 import { attest, attestKeccak, type Attested, type MoonbeamAttestOptions } from '../attest/index.js';
+import { keyedFetch } from '../core/keyed.js';
 
 /** Every venue the payment scheme prices: where a seller can be hired (venue_out), on its own network. */
 export const SELLER_VENUES = Object.freeze(Object.keys(VENUE_FEES)) as readonly string[];

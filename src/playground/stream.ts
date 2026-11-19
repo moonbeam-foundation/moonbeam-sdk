@@ -22,6 +22,7 @@ import type { Hex, OnboardTransport } from '../onboard/index.js';
 import type { Plan, PlanStep } from './index.js';
 import type { Ack, ChainEvent, ChainPort, RunStepResult, SignAnswer, StreamPort } from './ports.js';
 import type { LightId } from './cases.js';
+import { keyedFetch } from '../core/keyed.js';
 
 /** The devnet and Base chain ids a playground runs on. */
 export const STREAM_CHAINS = Object.freeze({ devnet: 36927, base: 8453 } as const);
@@ -162,7 +163,7 @@ export function coordStream(t: OnboardTransport, o: CoordStreamOptions): CoordSt
 
   async function call(method: 'GET' | 'POST', path: string, body?: unknown): Promise<{ ok: boolean; status: number; body: unknown }> {
     const headers: Record<string, string> = { accept: 'application/json', ...(body !== undefined ? { 'content-type': 'application/json' } : {}), ...(t.apiKey ? { 'x-api-key': t.apiKey } : {}) };
-    const r = await t.fetch(`${t.base}${path}`, { method, headers, ...(body !== undefined ? { body: JSON.stringify(body) } : {}) });
+    const r = await keyedFetch(t, `${t.base}${path}`, { method, headers, ...(body !== undefined ? { body: JSON.stringify(body) } : {}) });
     const j = await r.json().catch(() => null);
     if (STOPS.has(r.status)) throw new StreamRefused(r.status as 401 | 402 | 429, `${method} ${path.split('?')[0]}`, j);
     return { ok: r.ok, status: r.status, body: j };

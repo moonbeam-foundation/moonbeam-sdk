@@ -19,6 +19,7 @@ import { keccakHex, hexToBytes } from '../onboard/index.js';
 import { ethCall, RpcReverted, type BaseReader } from '../rpc/index.js';
 import { REGISTRY } from '../acp/moonbeam-acp.generated.js';
 import { jsonOf, okOrThrow } from '../errors/index.js';
+import { keyedFetch } from '../core/keyed.js';
 
 /** The V5 proof verifier (gated) on Base, from the address registry */
 export const V5_VERIFIER = REGISTRY.v5Verifier;
@@ -47,7 +48,7 @@ export async function readProof(t: OnboardTransport, tx: string, o: { chain?: nu
   if (!TX_RE.test(tx)) throw new RangeError('a transaction hash is 0x + 64 hex');
   const chain = o.chain ?? 8453;
   if (!Number.isSafeInteger(chain) || chain <= 0) throw new RangeError('a chain is a positive chain id');
-  const r = await t.fetch(`${t.base}/proof/tx/${chain}/${tx}`, { method: 'GET', headers: { accept: 'application/json', ...(t.apiKey ? { 'x-api-key': t.apiKey } : {}) } });
+  const r = await keyedFetch(t, `${t.base}/proof/tx/${chain}/${tx}`, { method: 'GET', headers: { accept: 'application/json', ...(t.apiKey ? { 'x-api-key': t.apiKey } : {}) } });
   const j = okOrThrow<Omit<TxProof, 'proven' | 'ref'> & { proven?: boolean }>(r, await jsonOf(r), `GET /proof/tx/${chain}/${tx}`);
   const checks = j.checks ?? {};
   const proven = Object.keys(checks).length > 0 && Object.values(checks).every(Boolean) && j.blob !== null;
