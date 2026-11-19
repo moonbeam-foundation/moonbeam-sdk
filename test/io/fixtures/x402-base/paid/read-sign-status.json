@@ -21,7 +21,7 @@
      "id": "subscription.pull.arbitrum",
      "mode": "shadow",
      "key": "subscription-spender",
-     "vault": "vault:taifoon:kms",
+     "vault": "(withheld)",
      "standards": [
       "permit2.allowance"
      ],
@@ -41,7 +41,7 @@
      "id": "subscription.pull.arc",
      "mode": "shadow",
      "key": "subscription-spender",
-     "vault": "vault:taifoon:kms",
+     "vault": "(withheld)",
      "standards": [
       "permit2.allowance"
      ],
@@ -61,7 +61,7 @@
      "id": "subscription.pull.robinhood",
      "mode": "shadow",
      "key": "subscription-spender",
-     "vault": "vault:taifoon:kms",
+     "vault": "(withheld)",
      "standards": [
       "permit2.allowance"
      ],
@@ -81,7 +81,7 @@
      "id": "subscription.pull.monad",
      "mode": "shadow",
      "key": "subscription-spender",
-     "vault": "vault:taifoon:kms",
+     "vault": "(withheld)",
      "standards": [
       "permit2.allowance"
      ],
@@ -180,7 +180,7 @@
      "id": "payout.root",
      "mode": "shadow",
      "key": "loop-payout",
-     "vault": "vault:taifoon:kms",
+     "vault": "(withheld)",
      "standards": [
       "claims.root"
      ],
@@ -235,7 +235,7 @@
      "id": "subscription.pull",
      "mode": "shadow",
      "key": "subscription-spender",
-     "vault": "vault:taifoon:kms",
+     "vault": "(withheld)",
      "standards": [
       "permit2.allowance"
      ],
@@ -300,10 +300,10 @@
      "counts": null
     },
     {
-     "id": "lambda.settle.kms",
+     "id": "(withheld)",
      "mode": "shadow",
      "key": "loop-payout",
-     "vault": "vault:taifoon:kms",
+     "vault": "(withheld)",
      "standards": [
       "evm.tx"
      ],
@@ -387,7 +387,7 @@
      "id": "buy.cmc",
      "mode": "shadow",
      "key": "cmc-payer",
-     "vault": "vault:taifoon:kms",
+     "vault": "(withheld)",
      "standards": [
       "eip3009.transfer"
      ],
@@ -440,7 +440,7 @@
      "id": "siwx.venice",
      "mode": "shadow",
      "key": "venice-siwx",
-     "vault": "vault:taifoon:kms",
+     "vault": "(withheld)",
      "standards": [],
      "fence": true,
      "rules": [
@@ -518,7 +518,7 @@
       "payout.seller",
       "payout.keyed",
       "lambda.settle.loop",
-      "lambda.settle.kms",
+      "(withheld)",
       "lambda.settle.clob",
       "olas.mech",
       "listing.keep"
@@ -623,19 +623,19 @@
    ],
    "vaults": [
     {
-     "id": "vault:taifoon:kms",
+     "id": "(withheld)",
      "one_path": false,
      "purposes": [
       "payout.root"
      ],
      "outside": [
       {
-       "path": "AWS Lambda taifoon-payout-releaser (KMS taifoon-vault/vault), armed 2026-10-13, has sent nothing",
+       "path": "(withheld)",
        "state": "live",
        "fold": "payout.root"
       },
       {
-       "path": "kms-access drain of planner-queue.jsonl (ONE_PAYOUT_v1_, owner MFA per drain)",
+       "path": "(withheld)",
        "state": "built",
        "fold": "payout.root"
       }
@@ -649,7 +649,7 @@
      ],
      "outside": [
       {
-       "path": "taifoon-loop-signer on 116, KMS alias/loop-signer (canaries and EIP-3009 payouts signed on the box)",
+       "path": "(withheld)",
        "state": "live",
        "fold": "payout.seller"
       },
@@ -668,7 +668,7 @@
      ],
      "outside": [
       {
-       "path": "the loop signer's NEAR fallback, direct KMS Ed25519 (ops/loop-signer/src/kms.mjs): the key policy denies every principal but coord-signer",
+       "path": "(withheld)",
        "state": "refused",
        "fold": "near.delegate"
       }
@@ -680,7 +680,7 @@
      "purposes": [],
      "outside": [
       {
-       "path": "kms-access sign-ed25519 on taifoon-vault/solana-ops (payout-batch, owner MFA; 5 USDC a tx, 20 a day)",
+       "path": "(withheld)",
        "state": "live",
        "fold": "payout.solana"
       }
@@ -696,7 +696,7 @@
      ],
      "outside": [
       {
-       "path": "the custody daemon on its own KMS key (0x1d66…56b2)",
+       "path": "(withheld)",
        "state": "live",
        "fold": "custody.release"
       },
@@ -719,7 +719,7 @@
      "purposes": [],
      "outside": [
       {
-       "path": "the Cubicle keepers' KMS key (cubicle/vault-keeper, under the Twigster budget)",
+       "path": "(withheld)",
        "state": "live",
        "fold": "keeper.cubicle"
       }
@@ -749,7 +749,7 @@
      "purposes": [],
      "outside": [
       {
-       "path": "kms-interim: per-vault IAM through kms-access for tenant vaults until the secure box is built",
+       "path": "(withheld)",
        "state": "live",
        "fold": "box.tenant"
       }
@@ -760,7 +760,7 @@
     "of": 7,
     "releasing": 1
    },
-   "counts_source": "— (no meter source is read by this route yet: the signer's meter lines fold here once the obs reader lands, tasks/sign-one-path.md PR 4)"
+   "counts_source": "\u2014 (no meter source is read by this route yet: the signer's meter lines fold here once the obs reader lands, tasks/sign-one-path.md PR 4)"
   }
  },
  "coord_sha": "1bb3592f4bfbf1574baa6267c4bffb271c061b1e",

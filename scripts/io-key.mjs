@@ -1,11 +1,6 @@
-// _IO_RECORDER_KEY_v1_: the one door for the I/O recorder's coord key (owner yes 2026-11-19: a free coord key, sealed in SSM as
-// moonbeam/sdk-io-recorder/COORD_API_KEY, used only to read coord for test/io fixtures, never in a published package).
-//   kms-access secret get moonbeam sdk-io-recorder/COORD_API_KEY | node scripts/io-record.mjs --coord <path> --key-stdin
-// The key arrives on stdin only (never argv, never env, never a file), is held in this module, goes only to coord's /v1 as
-// X-API-Key on a plain GET, and is never written: every fixture and log line is checked for it and for any key-shaped string
-// before it is kept (SECRET_PATTERNS, which test/no-secrets.test.ts also runs over the repo and the packed files).
+// _IO_RECORDER_KEY_v1_: the recorder's coord key arrives on stdin (a pipe), goes only to coord /v1, and is never written.
 
-/** key-shaped strings that must never sit in this repo or its package: coord free/live keys, AWS keys, Anthropic keys, PEM blocks */
+/** key-shaped strings that never belong in a fixture, a log or the package */
 export const SECRET_PATTERNS = [
   { name: 'coord key (tfr_)', re: /tfr_[A-Za-z0-9_-]{12,}/ },
   { name: 'coord live key (tfn_live_)', re: /tfn_live_[A-Za-z0-9_-]{8,}/ },
@@ -29,9 +24,9 @@ export function assertNoSecret(text, where) {
   if (hits.length) throw new Error(`refused to write ${where}: it holds ${hits.join(', ')}`);
 }
 
-/** read the key from stdin (a pipe from kms-access, never a terminal); hold it for liveGet */
+/** read the key from stdin (a pipe, never a terminal); hold it for liveGet */
 export async function readRecorderKey(stdin = process.stdin) {
-  if (stdin.isTTY) throw new Error('--key-stdin reads a pipe (kms-access secret get … |), not a terminal');
+  if (stdin.isTTY) throw new Error('--key-stdin reads a pipe, not a terminal');
   let raw = '';
   for await (const chunk of stdin) raw += chunk;
   const k = raw.trim();

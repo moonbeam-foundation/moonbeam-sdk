@@ -138,7 +138,7 @@
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
     "lint": "tsc --noEmit && vitest run --reporter=dot",
-    "prepublishOnly": "node scripts/npm-pack-scan.mjs --strict && npm run check",
+    "prepublishOnly": "pack-guard && npm run check",
     "postbuild": "node scripts/postbuild.mjs",
     "gen:registry": "node scripts/gen-moonbeam-acp.mjs",
     "check:registry": "node scripts/gen-moonbeam-acp.mjs --check",
@@ -161,8 +161,7 @@
     "check:playground": "node scripts/gen-playground.mjs --check",
     "io:gen": "node scripts/io-coverage.mjs",
     "io:check": "node scripts/io-coverage.mjs --check",
-    "io:record": "npm run build && node scripts/io-record.mjs",
-    "scan:pack": "node scripts/npm-pack-scan.mjs"
+    "io:record": "npm run build && node scripts/io-record.mjs"
   },
   "keywords": [
     "moonbeam",
