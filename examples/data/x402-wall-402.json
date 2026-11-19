@@ -9,7 +9,7 @@
     "amount": "5455",
     "maxAmountRequired": "5455",
     "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
-    "payTo": "0x3574999dd4c96eB73Bd6e11D4177010C83E14f5b",
+    "payTo": "0x1111111111111111111111111111111111111111",
     "maxTimeoutSeconds": 300,
     "extra": {
      "name": "USD Coin",
@@ -22,7 +22,7 @@
     "amount": "5455",
     "maxAmountRequired": "5455",
     "asset": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
-    "payTo": "0x3574999dd4c96eB73Bd6e11D4177010C83E14f5b",
+    "payTo": "0x1111111111111111111111111111111111111111",
     "maxTimeoutSeconds": 300,
     "extra": {
      "name": "USD Coin",
@@ -35,7 +35,7 @@
     "amount": "5455",
     "maxAmountRequired": "5455",
     "asset": "0x3600000000000000000000000000000000000000",
-    "payTo": "0x3574999dd4c96eB73Bd6e11D4177010C83E14f5b",
+    "payTo": "0x1111111111111111111111111111111111111111",
     "maxTimeoutSeconds": 300,
     "extra": {
      "name": "USDC",
@@ -48,7 +48,7 @@
     "amount": "5455",
     "maxAmountRequired": "5455",
     "asset": "0x5fc5360D0400a0Fd4f2af552ADD042D716F1d168",
-    "payTo": "0x3574999dd4c96eB73Bd6e11D4177010C83E14f5b",
+    "payTo": "0x1111111111111111111111111111111111111111",
     "maxTimeoutSeconds": 300,
     "extra": {
      "name": "Global Dollar",
@@ -61,7 +61,7 @@
     "amount": "5455",
     "maxAmountRequired": "5455",
     "asset": "0x754704Bc059F8C67012fEd69BC8A327a5aafb603",
-    "payTo": "0x3574999dd4c96eB73Bd6e11D4177010C83E14f5b",
+    "payTo": "0x1111111111111111111111111111111111111111",
     "maxTimeoutSeconds": 300,
     "extra": {
      "name": "USDC",
@@ -74,7 +74,7 @@
     "amount": "5455",
     "maxAmountRequired": "5455",
     "asset": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
-    "payTo": "GQcEn5pLcweo7qaiy3rDdsiUPiygygmFBaixNtNqhQVD",
+    "payTo": "PayTo1111111111111111111111111111111111111",
     "maxTimeoutSeconds": 300,
     "extra": {
      "feePayer": "F742C4VfFLQ9zRQyithoj5229ZgtX2WqKCSFKgH2EThq"
