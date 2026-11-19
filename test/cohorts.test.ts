@@ -50,6 +50,9 @@ describe('cohortOf: one cohort on one market', () => {
   });
   it('capState keeps the lower state and n/a as it is', () => {
     expect(capState('live', 'partial')).toBe('partial');
+    // _VENUE_TESTED_v1_: tested sits between partial and live
+    expect(MARK_STATE.tested).toBe('tested'); expect(MARK_STATE.ok).toBe('live');
+    expect(capState('live', 'tested')).toBe('tested'); expect(capState('tested', 'partial')).toBe('partial'); expect(capState('partial', 'tested')).toBe('partial');
     expect(capState('self-test', 'partial')).toBe('self-test');
     expect(capState('not yet', 'partial')).toBe('not yet');
     expect(capState('n/a', 'partial')).toBe('n/a');
@@ -136,7 +139,7 @@ describe('VENUES[].cohorts: the shipped table, per cohort', () => {
       for (const id of Object.values(STEP_FEATURE)) expect(f.features?.[id], `${m.id}.${c}.${id}`).toBeTruthy();
     }
     expect(Object.keys(STEP_FEATURE)).toEqual(['list', 'take', 'settle', 'paid']);
-    expect(Object.keys(MARK_STATE).sort()).toEqual(['broken', 'not built', 'ok', 'owner step', 'partial']);
+    expect(Object.keys(MARK_STATE).sort()).toEqual(['broken', 'not built', 'ok', 'owner step', 'partial', 'tested']);
   });
   it('_VENUE_TRUTH_v2_: a journey moves only the Moonbeam cohort\'s list, and only from a market\'s own read', () => {
     for (const m of VENUE_REGISTER.markets) {

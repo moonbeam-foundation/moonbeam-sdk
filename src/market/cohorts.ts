@@ -61,9 +61,11 @@ export type CohortFacts = {
 };
 
 /** The feature matrix's marks, as it writes them. */
-export type FeatureMark = 'ok' | 'partial' | 'not built' | 'owner step' | 'broken';
+export type FeatureMark = 'ok' | 'tested' | 'partial' | 'not built' | 'owner step' | 'broken';
 /** One mark as the snapshot keeps it: who takes the next step, the cohort's own words (Moonbeam's only), the time it was read. */
 export type FeatureRead = { mark: FeatureMark; who: string | null; says: string | null; read_at: string | null;
+  /** _VENUE_TESTED_v1_: on a tested mark, the SDK I/O fixture that keeps Moonbeam's own end-to-end run (a path under test/io) */
+  fixture?: string;
   /** set when a newer read of the market itself showed the matrix's broken mark stale: what it read, and the mark it replaced */
   proof?: { kind: string; url: string; ref: string; read_at: string; was: FeatureMark } };
 /** A house agent's journey that shows it listed by Moonbeam on a market's own read. */
@@ -72,7 +74,7 @@ export type JourneyRead = { standing: 'listed_by_moonbeam'; ref: string; proof: 
 export const STEP_FEATURE = Object.freeze({ list: 'list', take: 'jobs_received', settle: 'pay', paid: 'settle' } as const satisfies Record<VenueStep, string>);
 export type FeatureId = (typeof STEP_FEATURE)[VenueStep];
 /** A mark said as a venue state. */
-export const MARK_STATE: Readonly<Record<FeatureMark, VenueState>> = Object.freeze({ ok: 'live', partial: 'partial', 'not built': 'not yet', 'owner step': 'not yet', broken: 'not yet' });
+export const MARK_STATE: Readonly<Record<FeatureMark, VenueState>> = Object.freeze({ ok: 'live', tested: 'tested', partial: 'partial', 'not built': 'not yet', 'owner step': 'not yet', broken: 'not yet' });
 /** The venue state a cohort's mark says for one step, or null when the matrix holds no mark for it. */
 export const markOf = (f: CohortFacts | undefined, k: VenueStep): (FeatureRead & { state: VenueState }) | null => {
   const x = f?.features?.[STEP_FEATURE[k]];
@@ -84,7 +86,7 @@ export type CohortSource = 'features' | 'journey' | 'register';
 export type CohortStepRow = { state: CohortState; says: string | null; read_on: string | null; from?: CohortSource; who?: string | null };
 export type VenueCohort = { list: CohortStepRow; take: CohortStepRow; settle: CohortStepRow; listings: number; directories: string[]; wanted: number };
 
-const RANK: Record<string, number> = { 'n/a': -1, 'not yet': 0, 'self-test': 1, partial: 2, live: 3 };
+const RANK: Record<string, number> = { 'n/a': -1, 'not yet': 0, 'self-test': 1, partial: 2, tested: 3, live: 4 };
 /** The lower of two venue states (n/a is kept as it is). */
 export const capState = (s: VenueState, cap: VenueState): VenueState => (s === 'n/a' || (RANK[s] ?? 0) <= (RANK[cap] ?? 0) ? s : cap);
 

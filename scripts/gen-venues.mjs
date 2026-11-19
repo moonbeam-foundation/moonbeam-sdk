@@ -17,6 +17,7 @@
 // many listings are still wanted. --from and --listed each refresh their own part and keep the other. Public text never names the
 // register's internal ids or hosts: the scrub below fails the run if it would.
 import { readFileSync, writeFileSync } from 'node:fs';
+import { isIoFixture } from './tested-fixture.mjs';
 const snap = new URL('../src/market/venues-register.json', import.meta.url);
 const out = new URL('../src/market/venues-data.ts', import.meta.url);
 const arg = (k) => { const i = process.argv.indexOf(k); return i > 0 ? process.argv[i + 1] : null; };
@@ -45,7 +46,7 @@ const marketReadPath = arg('--market-read');
 // _VENUE_TRUTH_v2_: the feature matrix's features each SDK step reads (src/market/cohorts.ts STEP_FEATURE holds the same mapping;
 // test/cohorts.test.ts fails when the snapshot lacks one), and its marks as they are written
 const FEATURES = ['list', 'jobs_received', 'pay', 'settle'];
-const MARKS = ['ok', 'partial', 'not built', 'owner step', 'broken'];
+const MARKS = ['ok', 'tested', 'partial', 'not built', 'owner step', 'broken'];
 // a market's own read, never the register's row, moves a cohort's list from a journey
 const OWN_READ = (kind) => typeof kind === 'string' && kind !== 'register_row';
 // the stricter words of public text written by this generator from the feature matrix and the journeys
@@ -119,6 +120,9 @@ if (from || listedPath || featuresPath || journeyPaths || marketReadPath) {
     for (const x of cells) {
       if (!ids.has(RENAME[x.venue_id] ?? x.venue_id)) throw new Error(`the feature matrix names market ${x.venue_id}, which the register snapshot does not hold`);
       if (!MARKS.includes(x.mark)) throw new Error(`the feature matrix marks ${x.venue_id}.${x.feature} '${x.mark}', not one of ${MARKS.join(', ')}`);
+      // _VENUE_TESTED_v1_: a tested mark stands only on Moonbeam's own end-to-end run kept here as an I/O fixture (test/io/…)
+      if (x.mark === 'tested' && !isIoFixture(x.fixture))
+        throw new Error(`the feature matrix marks ${x.venue_id}.${x.feature} tested, but its fixture ${x.fixture ?? '(none)'} is not an I/O fixture of this SDK`);
     }
     // the operator cohort's own words name the operator, so only Moonbeam's are kept, and only when they are plain
     const featuresOf = (c, id) => {
@@ -126,7 +130,7 @@ if (from || listedPath || featuresPath || journeyPaths || marketReadPath) {
       if (!mine.length) return null;
       return Object.fromEntries(FEATURES.filter((f) => mine.some((x) => x.feature === f)).map((f) => {
         const x = mine.find((y) => y.feature === f);
-        return [f, { mark: x.mark, who: x.who ?? null, says: c === 'moonbeam' ? plain(x.how) : null, read_at: x.read_at ?? fm.read_at ?? null }];
+        return [f, { mark: x.mark, who: x.who ?? null, says: c === 'moonbeam' ? plain(x.how) : null, read_at: x.read_at ?? fm.read_at ?? null, ...(x.mark === 'tested' ? { fixture: x.fixture } : {}) }];
       }));
     };
     markets = markets.map((m) => ({ ...m, cohorts: Object.fromEntries(COHORTS.map((c) => {

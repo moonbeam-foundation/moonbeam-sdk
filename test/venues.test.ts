@@ -1,5 +1,5 @@
 import { createHash } from 'node:crypto';
-import { readFileSync } from 'node:fs';
+import { readdirSync, readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import * as market from '../src/market/index.js';
 import * as jobs from '../src/jobs/index.js';
@@ -80,8 +80,10 @@ describe('VENUES: every venue, one table', () => {
     for (const v of VENUES) {
       expect(doc, v.id).toContain(`| ${v.name} | ${c(v.list)} | ${c(v.take)} | ${c(v.settle)} | ${c(v.paid)} |`);
       // the README speaks for Moonbeam's own listings: its cohort, never the operator's states
+      // _README_VENUES_v1_: a row for each market Moonbeam lists on; a cut market is named once, never given a row
       const m = v.cohorts.moonbeam;
-      expect(readme, v.id).toMatch(new RegExp(`\\| ${m.list.state} \\| ${m.take.state} · ${m.settle.state} \\|`));
+      if (v.moonbeamLists) expect(readme, v.id).toContain(`| ${v.name} | ${v.does} | ${m.list.state} | ${m.take.state} · ${m.settle.state} |`);
+      else { expect(readme, v.id).not.toContain(`| ${v.name} |`); expect(readme.match(/Moonbeam does not list agents on [^\n]+/)?.[0], v.id).toContain(v.name); }
     }
     for (const s of SALE_STOPS) expect(doc, s.id).toContain(`| ${s.order} | \`${s.id}\` | ${s.label} |`);
     // NEAR (journey read 2026-11-15: @moonbeam listed by Moonbeam and read back, hire not yet): Moonbeam's line says live, its jobs not yet
@@ -257,5 +259,18 @@ describe('_MARKETS_CUT_v1_: the seven markets Moonbeam lists on', () => {
     }
     for (const v of market.VENUES) expect(v.moonbeamLists, v.id).toBe(market.listsOn(v.id));
     expect(market.VENUES.filter((v) => v.moonbeamLists)).toHaveLength(7);
+  });
+});
+
+describe('_VENUE_TESTED_v1_: a tested mark needs an I/O fixture of this SDK', () => {
+  it('names a test/io JSON file that exists, never a path outside it', async () => {
+    // @ts-expect-error a plain .mjs script with no types
+    const { isIoFixture } = await import('../scripts/tested-fixture.mjs');
+    const f = readdirSync(new URL('./io/fixtures', import.meta.url), { recursive: true }).map(String).find((p) => p.endsWith('.json'))!;
+    expect(isIoFixture(`test/io/fixtures/${f}`)).toBe(true);
+    expect(isIoFixture(undefined)).toBe(false);
+    expect(isIoFixture('test/io/fixtures/none/missing.json')).toBe(false);
+    expect(isIoFixture('test/io/../../package.json')).toBe(false);
+    expect(isIoFixture('src/market/venues-register.json')).toBe(false);
   });
 });

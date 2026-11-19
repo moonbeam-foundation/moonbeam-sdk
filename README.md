@@ -22,25 +22,31 @@ and names who signs each.
 
 ## Every venue
 
-One table in code, `VENUES` in `./market`. The columns below are Moonbeam's own listing on each market, `venue.cohorts.moonbeam`,
-read on 2026-11-14 from the markets' own pages and the listing reads. The operator's listings, and the register's proof for each
-step, are in [docs/VENUES.md](docs/VENUES.md).
+One table in code, `VENUES` in `./market`; the table below is generated from it. The operator's listings, and the register's
+proof for each step, are in [docs/VENUES.md](docs/VENUES.md).
+
+<!-- venues:moonbeam:start (scripts/gen-readme-venues.mjs) -->
+Read on 2026-11-14. The states are Moonbeam's own listing on each market (`venue.cohorts.moonbeam`).
 
 | Market | What a seller does there | Moonbeam: list | Take a job · settle | SDK calls |
 |---|---|---|---|---|
-| x402 (Bazaar, x402scan, Ultravioleta, PayAI) | paid per call in USDC on Base | live | partial · partial | `publishListing`, `handOver`, `agentSales` |
-| Virtuals ACP (ERC-8183 jobs) | an ERC-8183 job: deliver, graded, paid by the contract | live | partial · partial | `publishListing`, `readJobs`, `jobCalls` |
-| Virtuals memo jobs (memo-ACP) | a job moved by memos through the Virtuals router | closed | closed · closed | `publishListing`, `readJobs`, `jobCalls` |
-| BitAgent | ERC-8183 jobs on BitAgent's contract | not yet | not yet · not yet | `publishListing`, `readJobs`, `jobCalls` |
-| Olas Mech | one paid request, answered on chain | not yet | not yet · not yet | `readListing` (`export.olas`), `olasRequest` |
-| NEAR AI Agent Market | found by category, hired over A2A | live | not yet · not yet | `readListing` (`export.near`), `handOver` |
-| A2A Registry | a directory of agent cards | live | partial · n/a | `listOn`, `handOver` |
-| MCP Registry (+ Glama, PulseMCP) | the official registry of MCP servers | live | partial · n/a | `listOn`, `handOver` |
-| ERC-8004 | the identity every other market reads | live | n/a · n/a | `listOn`, `register8004Calls` |
-| Workflow nodes (npm) | the agent as a node in a workflow builder | not yet | not yet · n/a | `./workflows` |
+| x402 | Buyers pay per call in USDC on Base; each paid task is handed to your agent and settled through the facilitator. | live | partial · partial | `publishListing`, `handOver`, `agentSales` |
+| Virtuals ACP (ERC-8183 jobs) | A buyer opens an ERC-8183 job with a budget; the provider delivers, the evaluator completes or rejects, the contract pays. | live | partial · partial | `publishListing`, `readJobs`, `jobCalls` |
+| Olas Mech | A requester pays a mech on Base for one request; the mech delivers its answer on chain. | not yet | not yet · not yet | `readListing`, `olasRequest` |
+| NEAR AI Agent Market | Buyers find an agent by category and its own words, and hire it over A2A. | live | not yet · not yet | `readListing`, `handOver` |
+| A2A Registry | A directory of A2A agent cards; buyers call the agent at its card's endpoint. | live | partial · n/a | `listOn`, `handOver`, `agentSales` |
+| MCP Registry | The official MCP Registry and its mirrors (Glama, PulseMCP); clients call the agent's MCP door. | live | partial · n/a | `listOn`, `handOver`, `agentSales` |
+| ERC-8004 | The identity registry on Base every other market reads: the agent's id, card and endpoint. | live | n/a · n/a | `listOn` |
 
-**live**: listed and read back on the market (list), or running there (take, settle). **partial**: part of the step runs.
-**shared**: another cohort's listing stands in. **closed**: the market takes no new agent. **n/a**: the market has no such step.
+Moonbeam does not list agents on Virtuals memo jobs (memo-ACP), BitAgent or Workflow nodes (npm). They stay in `VENUES` as read-only rows (`moonbeamLists: false`).
+
+- **live**: listed and read back on the market (list), or running there for outside money (take, settle).
+- **tested**: Moonbeam ran the whole step end to end itself and keeps the run as an I/O test (`test/io`).
+- **partial**: part of the step runs.
+- **shared**: another cohort's listing stands in. **closed**: the market takes no new agent.
+- **n/a**: the market has no such step.
+<!-- venues:moonbeam:end -->
+
 x402 is where the buyers are: 400,545 USD was paid on it in the 7 days read on 2026-11-08 (`markets()`).
 
 `venues(t, { agent })` folds in what Moonbeam reads now: each market's own status and week of money, and where your agent
