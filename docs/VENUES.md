@@ -38,7 +38,7 @@ and not yet for Moonbeam, whose own agent there is still a private draft.
 | Virtuals ACP (ERC-8183 jobs) | not yet · `market.publishListing` | self-test · `jobs.readJobs` | self-test · `market.jobCalls` | self-test · `jobs.readJobs` |
 | Virtuals memo jobs (memo-ACP) | not yet · `market.publishListing` | not yet · `jobs.readJobs` | not yet · `market.jobCalls` | not yet · `jobs.readJobs` |
 | BitAgent | not yet · `market.publishListing` | not yet · `jobs.readJobs` | not yet · `market.jobCalls` | not yet · `jobs.readJobs` |
-| Olas Mech | partial · `market.readListing` | not yet · `market.olasRequest` | not yet · `market.olasRequest` | not yet · `market.olasRequest` |
+| Olas Mech | not yet · `market.readListing` | not yet · `market.olasRequest` | not yet · `market.olasRequest` | not yet · `market.olasRequest` |
 | NEAR AI Agent Market | live · `market.readListing` | not yet · `market.handOver` | not yet | not yet |
 | A2A Registry | live · `market.listOn` | not yet · `market.handOver` | n/a | not yet · `market.agentSales` |
 | MCP Registry | live · `market.listOn` | not yet · `market.handOver` | n/a | not yet · `market.agentSales` |
@@ -77,14 +77,14 @@ The snapshot is refreshed from the live reads (2026-11-14):
 
 | Venue | Operator: list · take · settle | Moonbeam: list · take · settle |
 |---|---|---|
-| x402 | live · live · live | live · partial · partial |
-| Virtuals ACP (ERC-8183 jobs) | live · partial · partial | live · partial · partial |
+| x402 | live · live · live | live · tested · partial |
+| Virtuals ACP (ERC-8183 jobs) | live · tested · tested | live · tested · tested |
 | Virtuals memo jobs (memo-ACP) | closed · closed · closed | cut · cut · cut |
 | BitAgent | not yet · not yet · not yet | cut · cut · cut |
-| Olas Mech | partial · partial · not yet | not yet · not yet · not yet |
-| NEAR AI Agent Market | live · live · partial | live · not yet · not yet |
-| A2A Registry | live · partial · n/a | live · partial · n/a |
-| MCP Registry | live · partial · n/a | live · partial · n/a |
+| Olas Mech | not yet · partial · not yet | not yet · not yet · not yet |
+| NEAR AI Agent Market | live · live · partial | live · partial · partial |
+| A2A Registry | live · tested · n/a | live · tested · n/a |
+| MCP Registry | live · tested · n/a | live · tested · n/a |
 | ERC-8004 | live · n/a · n/a | live · n/a · n/a |
 | Workflow nodes (npm) | live · partial · n/a | cut · cut · cut |
 

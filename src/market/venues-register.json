@@ -11,7 +11,7 @@
   ],
   "features": {
    "source": "LISTED_FEATURES_v1",
-   "read_at": "2026-11-15T20:10:56.072Z"
+   "read_at": "2026-11-19T07:31:56.419Z"
   },
   "journey": {
    "source": "listed.journey.v1",
@@ -73,25 +73,25 @@
        "mark": "ok",
        "who": "machine",
        "says": null,
-       "read_at": "2026-11-15T20:10:52.964Z"
+       "read_at": "2026-11-19T07:31:43.960Z"
       },
       "jobs_received": {
        "mark": "ok",
        "who": "seller",
        "says": null,
-       "read_at": "2026-11-15T03:49:52.157Z"
+       "read_at": "2026-11-19T07:31:44.326Z"
       },
       "pay": {
        "mark": "ok",
        "who": "buyer",
        "says": null,
-       "read_at": "2026-11-15T20:10:52.964Z"
+       "read_at": "2026-11-19T07:31:44.326Z"
       },
       "settle": {
        "mark": "partial",
        "who": "owner",
        "says": null,
-       "read_at": "2026-11-15T03:49:52.157Z"
+       "read_at": "2026-11-19T07:31:44.326Z"
       }
      }
     },
@@ -106,38 +106,39 @@
      "cut": null,
      "wanted": 2,
      "since": "2026-11-15",
-     "features": {
-      "list": {
-       "mark": "partial",
-       "who": "owner",
-       "says": "Moonbeam's door answers 402 with its price; x402scan and Ultravioleta list it from a free register; the CDP Bazaar and PayAI list a door only after a payment through them",
-       "read_at": "2026-11-15T20:10:52.506Z"
-      },
-      "jobs_received": {
-       "mark": "partial",
-       "who": "seller",
-       "says": "each paid call is a job; the deliveries and sales reads list them",
-       "read_at": "2026-11-15T03:49:52.599Z"
-      },
-      "pay": {
-       "mark": "partial",
-       "who": "buyer",
-       "says": "the buyer signs the x402 payment in the retry; settled calls land in the paid-in ledger",
-       "read_at": "2026-11-15T20:10:52.506Z"
-      },
-      "settle": {
-       "mark": "partial",
-       "who": "owner",
-       "says": "the buyer's payment settles at the call; a resold seller's share is paid by the payout run to a registered payee once the owner arms the vault key",
-       "read_at": "2026-11-15T03:49:52.599Z"
-      }
-     },
      "journey": {
       "standing": "listed_by_moonbeam",
       "ref": "8453:1176098",
       "proof": "x402_door",
       "says": "Moonbeam's x402 door sells it as data.onchain_query",
       "read_at": "2026-11-15T20:10:23.530Z"
+     },
+     "features": {
+      "list": {
+       "mark": "partial",
+       "who": "owner",
+       "says": "Moonbeam's door answers 402 with its price; x402scan and Ultravioleta list it from a free register; the CDP Bazaar and PayAI list a door only after a payment through them",
+       "read_at": "2026-11-19T07:31:42.787Z"
+      },
+      "jobs_received": {
+       "mark": "tested",
+       "who": "seller",
+       "says": "each paid call is a job; the deliveries and sales reads list them",
+       "read_at": "2026-11-19T07:31:44.983Z",
+       "fixture": "test/io/fixtures/x402-base/bought/run-fork-sell.json"
+      },
+      "pay": {
+       "mark": "partial",
+       "who": "buyer",
+       "says": "the buyer signs the x402 payment in the retry; settled calls land in the paid-in ledger",
+       "read_at": "2026-11-19T07:31:44.983Z"
+      },
+      "settle": {
+       "mark": "partial",
+       "who": "owner",
+       "says": "the buyer's payment settles at the call; a resold seller's share is paid by the payout run to a registered payee once the owner arms the vault key",
+       "read_at": "2026-11-19T07:31:44.983Z"
+      }
      }
     }
    }
@@ -186,25 +187,28 @@
        "mark": "ok",
        "who": "machine",
        "says": null,
-       "read_at": "2026-11-15T20:10:51.764Z"
+       "read_at": "2026-11-19T07:31:40.931Z"
       },
       "jobs_received": {
-       "mark": "partial",
+       "mark": "tested",
        "who": "seller",
        "says": null,
-       "read_at": "2026-11-15T03:50:05.726Z"
+       "read_at": "2026-11-19T07:31:55.926Z",
+       "fixture": "test/io/fixtures/erc8183-base/bought/run-fork-sell.json"
       },
       "pay": {
-       "mark": "partial",
+       "mark": "tested",
        "who": "buyer",
        "says": null,
-       "read_at": "2026-11-15T03:50:05.726Z"
+       "read_at": "2026-11-19T07:31:55.926Z",
+       "fixture": "test/io/fixtures/erc8183-base/bought/run-fork-buy.json"
       },
       "settle": {
-       "mark": "partial",
+       "mark": "tested",
        "who": "seller",
        "says": null,
-       "read_at": "2026-11-15T03:50:05.726Z"
+       "read_at": "2026-11-19T07:31:55.926Z",
+       "fixture": "test/io/fixtures/erc8183-base/paid/run-fork-sell.json"
       }
      }
     },
@@ -216,38 +220,41 @@
      "cut": null,
      "wanted": 0,
      "since": "2026-11-14",
-     "features": {
-      "list": {
-       "mark": "ok",
-       "who": "machine",
-       "says": "the seller's offerings are synced to Virtuals ACP from the offerings file by the hourly sync, from the sealed Virtuals session, which writes nothing unless the offerings file equals the published one",
-       "read_at": "2026-11-15T20:10:51.565Z"
-      },
-      "jobs_received": {
-       "mark": "partial",
-       "who": "seller",
-       "says": "jobs arrive at the seller service on Base",
-       "read_at": "2026-11-15T03:50:06.211Z"
-      },
-      "pay": {
-       "mark": "partial",
-       "who": "buyer",
-       "says": "the buyer funds the job's escrow on Base",
-       "read_at": "2026-11-15T03:50:06.211Z"
-      },
-      "settle": {
-       "mark": "partial",
-       "who": "seller",
-       "says": "the venue pays the provider from escrow when the job completes",
-       "read_at": "2026-11-15T03:50:06.211Z"
-      }
-     },
      "journey": {
       "standing": "listed_by_moonbeam",
       "ref": "8453:1176098",
       "proof": "virtuals.agent",
       "says": "Moonbeam's Virtuals agent shows it as the offering \"Moonbeam onchain query\"",
       "read_at": "2026-11-15T20:10:23.120Z"
+     },
+     "features": {
+      "list": {
+       "mark": "ok",
+       "who": "machine",
+       "says": "the seller's offerings are synced to Virtuals ACP from the offerings file by the hourly sync, from the sealed Virtuals session, which writes nothing unless the offerings file equals the published one",
+       "read_at": "2026-11-19T07:31:40.929Z"
+      },
+      "jobs_received": {
+       "mark": "tested",
+       "who": "seller",
+       "says": "jobs arrive at the seller service on Base",
+       "read_at": "2026-11-19T07:31:56.297Z",
+       "fixture": "test/io/fixtures/erc8183-base/bought/run-fork-sell.json"
+      },
+      "pay": {
+       "mark": "tested",
+       "who": "buyer",
+       "says": "the buyer funds the job's escrow on Base",
+       "read_at": "2026-11-19T07:31:56.297Z",
+       "fixture": "test/io/fixtures/erc8183-base/bought/run-fork-buy.json"
+      },
+      "settle": {
+       "mark": "tested",
+       "who": "seller",
+       "says": "the venue pays the provider from escrow when the job completes",
+       "read_at": "2026-11-19T07:31:56.297Z",
+       "fixture": "test/io/fixtures/erc8183-base/paid/run-fork-sell.json"
+      }
      }
     }
    }
@@ -347,25 +354,25 @@
        "mark": "owner step",
        "who": "owner",
        "says": null,
-       "read_at": "2026-11-15T03:50:06.211Z"
+       "read_at": "2026-11-19T07:31:56.297Z"
       },
       "jobs_received": {
        "mark": "owner step",
        "who": "owner",
        "says": null,
-       "read_at": "2026-11-15T03:50:06.211Z"
+       "read_at": "2026-11-19T07:31:56.297Z"
       },
       "pay": {
        "mark": "owner step",
        "who": "owner",
        "says": null,
-       "read_at": "2026-11-15T03:50:06.211Z"
+       "read_at": "2026-11-19T07:31:56.297Z"
       },
       "settle": {
        "mark": "owner step",
        "who": "owner",
        "says": null,
-       "read_at": "2026-11-15T03:50:06.211Z"
+       "read_at": "2026-11-19T07:31:56.297Z"
       }
      }
     },
@@ -379,28 +386,28 @@
      "since": null,
      "features": {
       "list": {
-       "mark": "owner step",
+       "mark": "not built",
        "who": "owner",
        "says": "the listing body is prepared but never sent: an agent on BitAgent needs the owner's sign-in",
-       "read_at": "2026-11-15T03:50:06.211Z"
+       "read_at": "2026-11-19T07:31:56.297Z"
       },
       "jobs_received": {
-       "mark": "owner step",
+       "mark": "not built",
        "who": "owner",
        "says": "gateway polling is built and off until the agent id is set",
-       "read_at": "2026-11-15T03:50:06.211Z"
+       "read_at": "2026-11-19T07:31:56.297Z"
       },
       "pay": {
-       "mark": "owner step",
+       "mark": "not built",
        "who": "owner",
        "says": "the buyer funds the job's escrow on Base",
-       "read_at": "2026-11-15T03:50:06.211Z"
+       "read_at": "2026-11-19T07:31:56.297Z"
       },
       "settle": {
-       "mark": "owner step",
+       "mark": "not built",
        "who": "owner",
        "says": "the venue pays from escrow when the job completes",
-       "read_at": "2026-11-15T03:50:06.211Z"
+       "read_at": "2026-11-19T07:31:56.297Z"
       }
      }
     }
@@ -447,28 +454,28 @@
      "since": "2026-11-11",
      "features": {
       "list": {
-       "mark": "partial",
-       "who": "owner",
+       "mark": "broken",
+       "who": "machine",
        "says": null,
-       "read_at": "2026-11-15T20:10:56.072Z"
+       "read_at": "2026-11-19T07:31:40.849Z"
       },
       "jobs_received": {
        "mark": "partial",
        "who": "seller",
        "says": null,
-       "read_at": "2026-11-15T03:50:06.231Z"
+       "read_at": "2026-11-19T07:31:56.315Z"
       },
       "pay": {
        "mark": "broken",
-       "who": "owner",
+       "who": "machine",
        "says": null,
-       "read_at": "2026-11-15T03:50:06.231Z"
+       "read_at": "2026-11-19T07:31:56.315Z"
       },
       "settle": {
        "mark": "partial",
        "who": "seller",
        "says": null,
-       "read_at": "2026-11-15T03:50:06.231Z"
+       "read_at": "2026-11-19T07:31:56.315Z"
       }
      }
     },
@@ -484,26 +491,26 @@
       "list": {
        "mark": "owner step",
        "who": "owner",
-       "says": "the mech is registered in the Olas marketplace on Base; a tool reads hireable only after one answered request",
-       "read_at": "2026-11-15T03:50:06.231Z"
+       "says": "the mech is registered in the Olas marketplace on Base with its card, and the worker serves any request naming it; a tool reads hireable after its first answered request",
+       "read_at": "2026-11-19T07:31:56.315Z"
       },
       "jobs_received": {
        "mark": "owner step",
        "who": "owner",
        "says": "requests that name the mech are served by the mech worker",
-       "read_at": "2026-11-15T03:50:06.231Z"
+       "read_at": "2026-11-19T07:31:56.315Z"
       },
       "pay": {
        "mark": "owner step",
        "who": "owner",
        "says": "the request is paid on chain when it is posted",
-       "read_at": "2026-11-15T03:50:06.231Z"
+       "read_at": "2026-11-19T07:31:56.315Z"
       },
       "settle": {
        "mark": "owner step",
        "who": "owner",
        "says": "payment is processed through the service's multisig after delivery",
-       "read_at": "2026-11-15T03:50:06.231Z"
+       "read_at": "2026-11-19T07:31:56.315Z"
       }
      }
     }
@@ -549,25 +556,25 @@
        "mark": "ok",
        "who": "machine",
        "says": null,
-       "read_at": "2026-11-15T20:10:51.144Z"
+       "read_at": "2026-11-19T07:31:41.312Z"
       },
       "jobs_received": {
        "mark": "ok",
        "who": "seller",
        "says": null,
-       "read_at": "2026-11-15T03:50:05.324Z"
+       "read_at": "2026-11-19T07:31:55.475Z"
       },
       "pay": {
        "mark": "partial",
        "who": "buyer",
        "says": null,
-       "read_at": "2026-11-15T03:50:05.324Z"
+       "read_at": "2026-11-19T07:31:55.475Z"
       },
       "settle": {
        "mark": "partial",
        "who": "owner",
        "says": null,
-       "read_at": "2026-11-15T03:50:05.324Z"
+       "read_at": "2026-11-19T07:31:55.475Z"
       }
      }
     },
@@ -579,38 +586,38 @@
      "cut": null,
      "wanted": 0,
      "since": "2026-11-15",
-     "features": {
-      "list": {
-       "mark": "owner step",
-       "who": "owner",
-       "says": "the fleet registers and onboards each agent on the NEAR market and flips it live",
-       "read_at": "2026-11-15T03:50:05.325Z"
-      },
-      "jobs_received": {
-       "mark": "owner step",
-       "who": "owner",
-       "says": "hires arrive on the signed webhook and as open assignments",
-       "read_at": "2026-11-15T03:50:05.325Z"
-      },
-      "pay": {
-       "mark": "owner step",
-       "who": "owner",
-       "says": "the buyer pays into the market's escrow; our ledger records it once the sale settles",
-       "read_at": "2026-11-15T03:50:05.325Z"
-      },
-      "settle": {
-       "mark": "owner step",
-       "who": "owner",
-       "says": "the market releases escrow on the buyer's acceptance; withdrawing the balance goes through the owner's adoption link",
-       "read_at": "2026-11-15T03:50:05.325Z"
-      }
-     },
      "journey": {
       "standing": "listed_by_moonbeam",
       "ref": "8453:1176098",
       "proof": "near_agent",
       "says": "listed live on NEAR AI market and open to buyers now",
       "read_at": "2026-11-15T20:10:23.362Z"
+     },
+     "features": {
+      "list": {
+       "mark": "ok",
+       "who": "machine",
+       "says": "the fleet registers and onboards each agent on the NEAR market and flips it live",
+       "read_at": "2026-11-19T07:31:41.296Z"
+      },
+      "jobs_received": {
+       "mark": "partial",
+       "who": "seller",
+       "says": "hires arrive on the signed webhook and as open assignments",
+       "read_at": "2026-11-19T07:31:55.475Z"
+      },
+      "pay": {
+       "mark": "partial",
+       "who": "buyer",
+       "says": "the buyer pays into the market's escrow; our ledger records it once the sale settles",
+       "read_at": "2026-11-19T07:31:55.475Z"
+      },
+      "settle": {
+       "mark": "partial",
+       "who": "owner",
+       "says": "the market releases escrow on the buyer's acceptance; withdrawing the balance goes through the owner's adoption link",
+       "read_at": "2026-11-19T07:31:55.475Z"
+      }
      }
     }
    }
@@ -662,25 +669,27 @@
        "mark": "ok",
        "who": "machine",
        "says": null,
-       "read_at": "2026-11-15T20:10:52.520Z"
+       "read_at": "2026-11-19T07:31:41.824Z"
       },
       "jobs_received": {
-       "mark": "partial",
+       "mark": "tested",
        "who": "seller",
        "says": null,
-       "read_at": "2026-11-15T03:49:55.460Z"
+       "read_at": "2026-11-19T07:31:46.716Z",
+       "fixture": "test/io/fixtures/a2a/bought/run-fork-sell.json"
       },
       "pay": {
        "mark": "partial",
        "who": "buyer",
        "says": null,
-       "read_at": "2026-11-15T03:49:55.460Z"
+       "read_at": "2026-11-19T07:31:46.716Z"
       },
       "settle": {
-       "mark": "partial",
+       "mark": "tested",
        "who": "seller",
        "says": null,
-       "read_at": "2026-11-15T03:49:55.460Z"
+       "read_at": "2026-11-19T07:31:46.716Z",
+       "fixture": "test/io/fixtures/a2a/paid/run-fork-sell.json"
       }
      }
     },
@@ -694,38 +703,40 @@
      "cut": null,
      "wanted": 1,
      "since": "2026-11-11",
-     "features": {
-      "list": {
-       "mark": "ok",
-       "who": "machine",
-       "says": "registered on the A2A Registry with its agent card; LocalMark and Agentropolis show it",
-       "read_at": "2026-11-15T20:10:52.519Z"
-      },
-      "jobs_received": {
-       "mark": "partial",
-       "who": "seller",
-       "says": "A2A messages arrive at our A2A endpoint; a paid one is a sale row",
-       "read_at": "2026-11-15T03:49:56.047Z"
-      },
-      "pay": {
-       "mark": "partial",
-       "who": "buyer",
-       "says": "a paid skill is paid through x402 in the retry",
-       "read_at": "2026-11-15T03:49:56.047Z"
-      },
-      "settle": {
-       "mark": "partial",
-       "who": "seller",
-       "says": "a paid message settles through x402 at the call",
-       "read_at": "2026-11-15T03:49:56.047Z"
-      }
-     },
      "journey": {
       "standing": "listed_by_moonbeam",
       "ref": "8453:1176098",
       "proof": "feature_cell",
       "says": "Moonbeam lists it on A2A Registry",
       "read_at": "2026-11-15T20:10:10.489Z"
+     },
+     "features": {
+      "list": {
+       "mark": "ok",
+       "who": "machine",
+       "says": "registered on the A2A Registry with its agent card; LocalMark shows it",
+       "read_at": "2026-11-19T07:31:41.873Z"
+      },
+      "jobs_received": {
+       "mark": "tested",
+       "who": "seller",
+       "says": "A2A messages arrive at our A2A endpoint; a paid one is a sale row",
+       "read_at": "2026-11-19T07:31:47.131Z",
+       "fixture": "test/io/fixtures/a2a/bought/run-fork-sell.json"
+      },
+      "pay": {
+       "mark": "partial",
+       "who": "buyer",
+       "says": "a paid skill is paid through x402 in the retry",
+       "read_at": "2026-11-19T07:31:47.131Z"
+      },
+      "settle": {
+       "mark": "tested",
+       "who": "seller",
+       "says": "a paid message settles through x402 at the call",
+       "read_at": "2026-11-19T07:31:47.131Z",
+       "fixture": "test/io/fixtures/a2a/paid/run-fork-sell.json"
+      }
      }
     }
    }
@@ -776,25 +787,27 @@
        "mark": "ok",
        "who": "machine",
        "says": null,
-       "read_at": "2026-11-15T20:10:52.911Z"
+       "read_at": "2026-11-19T07:31:41.755Z"
       },
       "jobs_received": {
-       "mark": "partial",
+       "mark": "tested",
        "who": "seller",
        "says": null,
-       "read_at": "2026-11-15T03:49:54.196Z"
+       "read_at": "2026-11-19T07:31:45.638Z",
+       "fixture": "test/io/fixtures/mcp/bought/run-fork-sell.json"
       },
       "pay": {
        "mark": "partial",
        "who": "buyer",
        "says": null,
-       "read_at": "2026-11-15T03:49:54.196Z"
+       "read_at": "2026-11-19T07:31:45.638Z"
       },
       "settle": {
-       "mark": "partial",
+       "mark": "tested",
        "who": "seller",
        "says": null,
-       "read_at": "2026-11-15T03:49:54.196Z"
+       "read_at": "2026-11-19T07:31:45.638Z",
+       "fixture": "test/io/fixtures/mcp/paid/run-fork-sell.json"
       }
      }
     },
@@ -806,38 +819,40 @@
      "cut": null,
      "wanted": 3,
      "since": "2026-11-11",
-     "features": {
-      "list": {
-       "mark": "ok",
-       "who": "machine",
-       "says": "Moonbeam's server is published to the official MCP Registry as network.moonbeam.next/paid-calls; Glama mirrors it",
-       "read_at": "2026-11-15T20:10:52.487Z"
-      },
-      "jobs_received": {
-       "mark": "partial",
-       "who": "seller",
-       "says": "tool calls arrive at our MCP door; a paid one is a sale row",
-       "read_at": "2026-11-15T03:49:54.372Z"
-      },
-      "pay": {
-       "mark": "partial",
-       "who": "buyer",
-       "says": "a paid tool is paid through its x402 wall in the retry",
-       "read_at": "2026-11-15T03:49:54.372Z"
-      },
-      "settle": {
-       "mark": "partial",
-       "who": "seller",
-       "says": "a paid tool settles through its x402 wall at the call",
-       "read_at": "2026-11-15T03:49:54.372Z"
-      }
-     },
      "journey": {
       "standing": "listed_by_moonbeam",
       "ref": "8453:1176098",
       "proof": "feature_cell",
       "says": "Moonbeam lists it on MCP Registry",
       "read_at": "2026-11-15T20:10:10.522Z"
+     },
+     "features": {
+      "list": {
+       "mark": "ok",
+       "who": "machine",
+       "says": "Moonbeam's server is published to the official MCP Registry as network.moonbeam.next/paid-calls; Glama mirrors it",
+       "read_at": "2026-11-19T07:31:43.051Z"
+      },
+      "jobs_received": {
+       "mark": "tested",
+       "who": "seller",
+       "says": "tool calls arrive at our MCP door; a paid one is a sale row",
+       "read_at": "2026-11-19T07:31:45.952Z",
+       "fixture": "test/io/fixtures/mcp/bought/run-fork-sell.json"
+      },
+      "pay": {
+       "mark": "partial",
+       "who": "buyer",
+       "says": "a paid tool is paid through its x402 wall in the retry",
+       "read_at": "2026-11-19T07:31:45.952Z"
+      },
+      "settle": {
+       "mark": "tested",
+       "who": "seller",
+       "says": "a paid tool settles through its x402 wall at the call",
+       "read_at": "2026-11-19T07:31:45.952Z",
+       "fixture": "test/io/fixtures/mcp/paid/run-fork-sell.json"
+      }
      }
     }
    }
@@ -885,25 +900,25 @@
        "mark": "ok",
        "who": "machine",
        "says": null,
-       "read_at": "2026-11-15T20:10:51.538Z"
+       "read_at": "2026-11-19T07:31:41.838Z"
       },
       "jobs_received": {
        "mark": "partial",
        "who": "seller",
        "says": null,
-       "read_at": "2026-11-15T03:49:57.523Z"
+       "read_at": "2026-11-19T07:31:47.664Z"
       },
       "pay": {
        "mark": "partial",
        "who": "buyer",
        "says": null,
-       "read_at": "2026-11-15T03:49:57.523Z"
+       "read_at": "2026-11-19T07:31:47.664Z"
       },
       "settle": {
        "mark": "partial",
        "who": "seller",
        "says": null,
-       "read_at": "2026-11-15T03:49:57.523Z"
+       "read_at": "2026-11-19T07:31:47.664Z"
       }
      }
     },
@@ -918,38 +933,38 @@
      "cut": null,
      "wanted": 0,
      "since": "2026-11-14",
-     "features": {
-      "list": {
-       "mark": "partial",
-       "who": "owner",
-       "says": "Moonbeam reads the one shared identity on Base until it registers its own",
-       "read_at": "2026-11-15T20:10:51.752Z"
-      },
-      "jobs_received": {
-       "mark": "partial",
-       "who": "seller",
-       "says": "an identity takes no job itself; jobs arrive at the endpoint it declares (see MCP Registry)",
-       "read_at": "2026-11-15T03:49:58.409Z"
-      },
-      "pay": {
-       "mark": "partial",
-       "who": "buyer",
-       "says": "payment goes through the declared endpoint's x402 wall",
-       "read_at": "2026-11-15T03:49:58.409Z"
-      },
-      "settle": {
-       "mark": "partial",
-       "who": "seller",
-       "says": "an identity settles nothing itself; the declared endpoint's wall settles the call",
-       "read_at": "2026-11-15T03:49:58.409Z"
-      }
-     },
      "journey": {
       "standing": "listed_by_moonbeam",
       "ref": "8453:1176098",
       "proof": "erc8004",
       "says": "Moonbeam's agent 8453:1176098 is registered on ERC-8004",
       "read_at": "2026-11-15T20:10:22.951Z"
+     },
+     "features": {
+      "list": {
+       "mark": "partial",
+       "who": "owner",
+       "says": "Moonbeam reads the one shared identity on Base until it registers its own",
+       "read_at": "2026-11-19T07:31:42.558Z"
+      },
+      "jobs_received": {
+       "mark": "partial",
+       "who": "seller",
+       "says": "an identity takes no job itself; jobs arrive at the endpoint it declares (see MCP Registry)",
+       "read_at": "2026-11-19T07:31:48.630Z"
+      },
+      "pay": {
+       "mark": "partial",
+       "who": "buyer",
+       "says": "payment goes through the declared endpoint's x402 wall",
+       "read_at": "2026-11-19T07:31:48.630Z"
+      },
+      "settle": {
+       "mark": "partial",
+       "who": "seller",
+       "says": "an identity settles nothing itself; the declared endpoint's wall settles the call",
+       "read_at": "2026-11-19T07:31:48.630Z"
+      }
      }
     }
    }
@@ -994,25 +1009,25 @@
        "mark": "ok",
        "who": "machine",
        "says": null,
-       "read_at": "2026-11-15T20:10:50.800Z"
+       "read_at": "2026-11-19T07:31:40.791Z"
       },
       "jobs_received": {
        "mark": "partial",
        "who": "seller",
        "says": null,
-       "read_at": "2026-11-15T03:50:06.332Z"
+       "read_at": "2026-11-19T07:31:56.419Z"
       },
       "pay": {
        "mark": "partial",
        "who": "buyer",
        "says": null,
-       "read_at": "2026-11-15T03:50:06.332Z"
+       "read_at": "2026-11-19T07:31:56.419Z"
       },
       "settle": {
        "mark": "partial",
        "who": "seller",
        "says": null,
-       "read_at": "2026-11-15T03:50:06.332Z"
+       "read_at": "2026-11-19T07:31:56.419Z"
       }
      }
     },
@@ -1027,27 +1042,27 @@
      "features": {
       "list": {
        "mark": "not built",
-       "who": "machine",
+       "who": "owner",
        "says": "the workflow node package is published to npm with provenance from its release workflow",
-       "read_at": "2026-11-15T03:50:06.332Z"
+       "read_at": "2026-11-19T07:31:56.419Z"
       },
       "jobs_received": {
        "mark": "not built",
-       "who": "machine",
+       "who": "owner",
        "says": "the node posts demands and hires; they arrive as listings and demands",
-       "read_at": "2026-11-15T03:50:06.332Z"
+       "read_at": "2026-11-19T07:31:56.419Z"
       },
       "pay": {
        "mark": "not built",
-       "who": "machine",
+       "who": "owner",
        "says": "the node pays from the buyer's plan or a top-up",
-       "read_at": "2026-11-15T03:50:06.332Z"
+       "read_at": "2026-11-19T07:31:56.419Z"
       },
       "settle": {
        "mark": "not built",
-       "who": "machine",
+       "who": "owner",
        "says": "a paid call settles on the buyer's plan or top-up",
-       "read_at": "2026-11-15T03:50:06.332Z"
+       "read_at": "2026-11-19T07:31:56.419Z"
       }
      }
     }

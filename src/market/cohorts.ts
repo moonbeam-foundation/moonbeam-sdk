@@ -90,9 +90,9 @@ export type CohortSource = 'features' | 'journey' | 'register';
 export type CohortStepRow = { state: CohortState; says: string | null; read_on: string | null; from?: CohortSource; who?: string | null };
 export type VenueCohort = { list: CohortStepRow; take: CohortStepRow; settle: CohortStepRow; listings: number; directories: string[]; wanted: number };
 
-const RANK: Record<string, number> = { 'n/a': -1, 'not yet': 0, 'self-test': 1, partial: 2, tested: 3, live: 4 };
+export const STATE_RANK: Record<string, number> = { 'n/a': -1, 'not yet': 0, 'self-test': 1, partial: 2, tested: 3, live: 4 };
 /** The lower of two venue states (n/a is kept as it is). */
-export const capState = (s: VenueState, cap: VenueState): VenueState => (s === 'n/a' || (RANK[s] ?? 0) <= (RANK[cap] ?? 0) ? s : cap);
+export const capState = (s: VenueState, cap: VenueState): VenueState => (s === 'n/a' || (STATE_RANK[s] ?? 0) <= (STATE_RANK[cap] ?? 0) ? s : cap);
 
 const NO_FACTS: CohortFacts = { listings: 0, directories: [], shared: null, closed: null, wanted: 0, since: null };
 

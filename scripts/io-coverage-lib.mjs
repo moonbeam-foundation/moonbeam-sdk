@@ -2,6 +2,7 @@
 // scripts/io-record.mjs (fixtures) and test/io/coverage.test.ts (the matrix, the ratchet, the rendered table).
 import { execFileSync } from 'node:child_process';
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
+import { isRunFile } from './paths-lib.mjs';
 import { join, relative } from 'node:path';
 
 export const GAP_REASONS = Object.freeze(['needs_key', 'needs_payment', 'needs_owner_arm', 'no_devnet_twin', 'not_in_coord']);
@@ -215,11 +216,11 @@ export function taggedOps(c, map) {
   return out;
 }
 
-/** The fixtures on disk, by repo-relative path. */
+/** The recorded coord calls on disk, by repo-relative path (a run file of scripts/gen-paths.mjs is not one). */
 export function fixturesOnDisk(root) {
   const dir = join(root, 'test/io/fixtures');
   const out = new Map();
-  const walk = (d) => { if (!existsSync(d)) return; for (const f of readdirSync(d)) { const p = join(d, f); if (statSync(p).isDirectory()) walk(p); else if (f.endsWith('.json')) out.set(relative(root, p), JSON.parse(readFileSync(p, 'utf8'))); } };
+  const walk = (d) => { if (!existsSync(d)) return; for (const f of readdirSync(d)) { const p = join(d, f); if (statSync(p).isDirectory()) walk(p); else if (f.endsWith('.json') && !isRunFile(f)) out.set(relative(root, p), JSON.parse(readFileSync(p, 'utf8'))); } };
   walk(dir);
   return out;
 }
