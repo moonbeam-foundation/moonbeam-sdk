@@ -5,6 +5,7 @@ import type { OnboardTransport } from '../onboard/index.js';
 import { jsonOf } from '../errors/index.js';
 import { MarketError, call, needKey, query, seg } from './http.js';
 import { jobCalls, publishListing, readListing, type Listing, type ListingView, type PlannedCall } from './index.js';
+import { keyedFetch } from '../core/keyed.js';
 
 // ── list ──────────────────────────────────────────────────────────────────────────────────────────────────────────────
 
@@ -125,7 +126,7 @@ export type PlanOffer = { plan: string; usdc: number; includes_usdc: number | nu
 export async function planOffers(t: OnboardTransport): Promise<{ topup: { usdc: number; units: string; what: string | null } | null; plans: PlanOffer[]; networks: string[] }> {
   const what = 'POST /access/subscribe';
   // no key and no create_key: Moonbeam answers its terms with 402 and mints nothing
-  const r = await t.fetch(`${t.base}/access/subscribe`, { method: 'POST', headers: { accept: 'application/json', 'content-type': 'application/json' }, body: '{}' });
+  const r = await keyedFetch(t, `${t.base}/access/subscribe`, { method: 'POST', headers: { accept: 'application/json', 'content-type': 'application/json' }, body: '{}' });
   const j = (await jsonOf(r)) as { code?: string; offer?: { usdc?: number; units?: string; what?: string }; monthly?: { plans?: Partial<PlanOffer>[] }; accepts?: { network?: string }[] } | null;
   if (r.status !== 402 || !j || j.code !== 'payment_required') throw new MarketError(r.status === 402 ? 502 : r.status, what, j);
   const plans = (j.monthly?.plans ?? []).filter((p) => typeof p.plan === 'string' && typeof p.usdc === 'number')
@@ -161,7 +162,7 @@ export async function agentSales(t: OnboardTransport, ref: string, o: { salesUrl
   const key = keyOfRef(ref);
   const url = (o.salesUrl ?? (typeof process !== 'undefined' ? process.env?.['MOONBEAM_SALES_URL'] : undefined) ?? '').trim();
   if (!/^https:\/\//.test(url)) throw new RangeError('agentSales reads the sale run: pass { salesUrl } or set MOONBEAM_SALES_URL (https)');
-  const r = await t.fetch(url, { method: 'GET', headers: { accept: 'application/json' } });
+  const r = await keyedFetch(t, url, { method: 'GET', headers: { accept: 'application/json' } });
   const j = (await jsonOf(r)) as { generated_at?: string; by_agent?: { rule?: string; days?: unknown[]; slices?: SaleSlice[] } } | null;
   const b = j?.by_agent;
   if (!r.ok || !b || b.rule !== 'SALE_SLICES_v1' || !Array.isArray(b.slices)) throw new MarketError(r.ok ? 502 : r.status, 'GET sale run', j);

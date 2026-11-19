@@ -18,6 +18,7 @@ import { isAddress } from '../onboard/index.js';
 import type { Address } from '../onboard/index.js';
 import { OnboardError } from '../onboard/index.js';
 import type { OnboardTransport } from '../onboard/index.js';
+import { keyedFetch } from '../core/keyed.js';
 
 /** The environment names a profile reads. None is required when the options or the API supply the field. */
 export const DEVNET_ENV = Object.freeze({
@@ -103,7 +104,7 @@ export function devnetLineOf(rows: readonly NetworkRow[], want: { chainId?: numb
 
 /** Read the registry rows (`GET /pools/networks`). Throws OnboardError on a refusal. */
 export async function readNetworks(t: OnboardTransport): Promise<NetworkRow[]> {
-  const r = await t.fetch(`${t.base}/pools/networks`, { method: 'GET', headers: { accept: 'application/json', ...(t.apiKey ? { 'x-api-key': t.apiKey } : {}) } });
+  const r = await keyedFetch(t, `${t.base}/pools/networks`, { method: 'GET', headers: { accept: 'application/json', ...(t.apiKey ? { 'x-api-key': t.apiKey } : {}) } });
   const j = (await r.json().catch(() => null)) as { supported?: NetworkRow[] } | null;
   if (!r.ok) throw new OnboardError(r.status, `GET /pools/networks → ${r.status}`, j);
   return Array.isArray(j?.supported) ? j.supported : [];
@@ -166,7 +167,7 @@ export async function devnetProfile(o: DevnetProfileOptions = {}, t?: OnboardTra
 
 /** The best RPC URL the API's rotation names for a chain (`GET /rpc/:chainId` → `best`), or null. */
 export async function readRpc(t: OnboardTransport, chainId: number): Promise<string | null> {
-  const r = await t.fetch(`${t.base}/rpc/${chainId}`, { method: 'GET', headers: { accept: 'application/json' } });
+  const r = await keyedFetch(t, `${t.base}/rpc/${chainId}`, { method: 'GET', headers: { accept: 'application/json' } });
   const j = (await r.json().catch(() => null)) as { best?: unknown } | null;
   return r.ok && typeof j?.best === 'string' && /^https?:\/\//.test(j.best) ? j.best : null;
 }

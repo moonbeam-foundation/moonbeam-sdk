@@ -10,6 +10,7 @@
  */
 import type { OnboardTransport } from '../onboard/index.js';
 import { jsonOf, okOrThrow } from '../errors/index.js';
+import { keyedFetch } from '../core/keyed.js';
 
 export type JobRefKind = 'acp-v3' | 'contract' | 'hook';
 export type JobRef = {
@@ -71,7 +72,7 @@ export async function readJobs(t: OnboardTransport, ids: readonly (string | numb
   const q = new URLSearchParams({ ids: keys.join(',') });
   if (o.chain !== undefined) q.set('chain', String(o.chain));
   if (o.live) q.set('live', '1');
-  const r = await t.fetch(`${t.base}/jobs?${q}`, { method: 'GET', headers: { accept: 'application/json', ...(t.apiKey ? { 'x-api-key': t.apiKey } : {}) } });
+  const r = await keyedFetch(t, `${t.base}/jobs?${q}`, { method: 'GET', headers: { accept: 'application/json', ...(t.apiKey ? { 'x-api-key': t.apiKey } : {}) } });
   const j = okOrThrow<{ jobs?: Omit<JobRow, 'ref' | 'hold'>[] }>(r, await jsonOf(r), 'GET /jobs');
   return (j.jobs ?? []).map((row) => {
     let ref: JobRef | null = null; try { ref = parseJobRef(row.id); } catch { ref = null; }

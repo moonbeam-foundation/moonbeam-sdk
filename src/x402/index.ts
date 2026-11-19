@@ -23,6 +23,7 @@ import type { OnboardTransport } from '../onboard/index.js';
 import { REGISTRY } from '../acp/moonbeam-acp.generated.js';
 import { subscribePlan } from '../resale/index.js';
 import { CoordError, jsonOf, refusalOf, type Refusal } from '../errors/index.js';
+import { keyedFetch } from '../core/keyed.js';
 
 export const X402_BASE_NETWORK = 'eip155:8453' as const;
 export const X402_SOLANA_NETWORK = 'solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp' as const;
@@ -151,7 +152,7 @@ function challengeOf(r: Answer, body: unknown): X402Body {
 
 /** GET a wall and return its 402 quote (the entry on your network, Base by default, and the whole body). Nothing is paid. */
 export async function quoteWall(t: OnboardTransport, path: string, o: { network?: string | readonly string[] } = {}): Promise<{ status: number; accept: X402Accept; body: X402Body }> {
-  const r = (await t.fetch(`${t.base}${path.startsWith('/') ? path : `/${path}`}`, { method: 'GET', headers: { accept: 'application/json', ...(t.apiKey ? { 'x-api-key': t.apiKey } : {}) } })) as Answer;
+  const r = (await keyedFetch(t, `${t.base}${path.startsWith('/') ? path : `/${path}`}`, { method: 'GET', headers: { accept: 'application/json', ...(t.apiKey ? { 'x-api-key': t.apiKey } : {}) } })) as Answer;
   const j = await jsonOf(r);
   if (r.status !== 402) throw new CoordError(refusalOf(j, r.status, `expected a 402 quote, got ${r.status}`));
   const body = challengeOf(r, j);
@@ -160,7 +161,7 @@ export async function quoteWall(t: OnboardTransport, path: string, o: { network?
 
 /** POST /v1/access/subscribe with a subscribePlan(): Moonbeam answers with the top-up's x402 quote (a 402) */
 export async function subscribe(t: OnboardTransport, plan: ReturnType<typeof subscribePlan> = subscribePlan(), o: { network?: string | readonly string[] } = {}): Promise<{ status: number; accept: X402Accept | null; body: unknown; refusal: Refusal | null }> {
-  const r = (await t.fetch(`${t.base}${plan.path}`, { method: plan.method, headers: { 'content-type': 'application/json', accept: 'application/json', ...(t.apiKey ? { 'x-api-key': t.apiKey } : {}) }, body: JSON.stringify(plan.body) })) as Answer;
+  const r = (await keyedFetch(t, `${t.base}${plan.path}`, { method: plan.method, headers: { 'content-type': 'application/json', accept: 'application/json', ...(t.apiKey ? { 'x-api-key': t.apiKey } : {}) }, body: JSON.stringify(plan.body) })) as Answer;
   const body = await jsonOf(r);
   let accept: X402Accept | null = null;
   if (r.status === 402) accept = pickAccept(challengeOf(r, body), o.network === undefined ? { network: `eip155:${plan.body.chainId}` } : o);
