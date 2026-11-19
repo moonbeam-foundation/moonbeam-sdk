@@ -27,8 +27,8 @@ const D = `0x${'cd'.repeat(32)}`;
 
 describe('x402 on Base: the EIP-3009 typed data, signed and recovered', () => {
   const wall = { ok: false, x402: { x402Version: 2, accepts: [
-    { scheme: 'exact', network: 'eip155:42161', amount: '11509', asset: '0xaf88d065e77c8cC2239327C5EDb3A432268e5831', payTo: '0x3574999dd4c96eB73Bd6e11D4177010C83E14f5b', maxTimeoutSeconds: 300 },
-    { scheme: 'exact', network: 'eip155:8453', amount: '11509', asset: REGISTRY.usdc, payTo: '0x3574999dd4c96eB73Bd6e11D4177010C83E14f5b', maxTimeoutSeconds: 300, extra: { name: 'USD Coin', version: '2' } },
+    { scheme: 'exact', network: 'eip155:42161', amount: '11509', asset: '0xaf88d065e77c8cC2239327C5EDb3A432268e5831', payTo: '0x1111111111111111111111111111111111111111', maxTimeoutSeconds: 300 },
+    { scheme: 'exact', network: 'eip155:8453', amount: '11509', asset: REGISTRY.usdc, payTo: '0x1111111111111111111111111111111111111111', maxTimeoutSeconds: 300, extra: { name: 'USD Coin', version: '2' } },
   ] } };
   it('picks the Base entry, refuses a wall without one', () => {
     expect(baseAccept(wall).network).toBe(X402_BASE_NETWORK);

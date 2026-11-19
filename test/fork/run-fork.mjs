@@ -128,7 +128,7 @@ try {
   }
 
   // ── 3. a resale: quote → x402 payment on Base → attested ───────────────────────────────────────────────────────
-  const wall = { x402Version: 2, accepts: [{ scheme: 'exact', network: 'eip155:8453', asset: REGISTRY.usdc, payTo: process.env.X402_PAY_TO ?? '0x3574999dd4c96eB73Bd6e11D4177010C83E14f5b', maxTimeoutSeconds: 300, extra: { name: 'USD Coin', version: '2' } }] };
+  const wall = { x402Version: 2, accepts: [{ scheme: 'exact', network: 'eip155:8453', asset: REGISTRY.usdc, payTo: process.env.X402_PAY_TO ?? '0x1111111111111111111111111111111111111111', maxTimeoutSeconds: 300, extra: { name: 'USD Coin', version: '2' } }] };
   const q = quoteSale({ venue_in: 'x402-base', venue_out: 'x402-base', seller_price: 9207n });
   if (!q.ok) throw new Error(q.why);
   const accept = { ...baseAccept(wall), amount: String(q.price_to_buyer) };

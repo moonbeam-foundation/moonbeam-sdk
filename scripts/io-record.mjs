@@ -6,17 +6,21 @@
 //   contract       the answer test/io/calls.mjs writes for the call, checked against coord's declared fields before it is kept
 // A live answer is kept as served, less any treasury-like field and the keyless get_key offer (each dropped and named).
 //   node scripts/io-record.mjs --coord <path> [--only <call>] [--force] [--seed <dir>] [--remask]
+//   kms-access secret get moonbeam sdk-io-recorder/COORD_API_KEY | node scripts/io-record.mjs --coord <path> --key-stdin [--only <call>]
+//     (_IO_RECORDER_KEY_v1_: the owner-approved free key, on stdin only; see scripts/io-key.mjs)
 import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { expandRows, fixturesOnDisk, loadCoord, pathRe, shapeIssues } from './io-coverage-lib.mjs';
 import { liveGet } from './io-live.mjs';
+import { assertNoSecret, readRecorderKey } from './io-key.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const arg = (k) => { const i = process.argv.indexOf(k); return i > 0 ? process.argv[i + 1] : undefined; };
 const coordPath = arg('--coord');
 if (!coordPath) { console.error('usage: io-record.mjs --coord <path> [--only <call>] [--force]'); process.exit(2); }
 const only = arg('--only');
+if (process.argv.includes('--key-stdin')) await readRecorderKey();
 const force = process.argv.includes('--force');
 const c = loadCoord(resolve(coordPath), { sha: arg('--sha') });
 const map = JSON.parse(readFileSync(join(root, 'test/io/op-map.json'), 'utf8'));
@@ -121,7 +125,9 @@ if (process.argv.includes('--remask')) {
     fx.response.body = mask(fx.response.body, '', notes);
     if (notes.dropped.length === n) continue;
     fx.notes = { ...(fx.notes ?? {}), dropped: [...new Set(notes.dropped.map((d) => d.replace(/\[\d+\]/g, '[]')))], ...(notes.trimmed.length ? { trimmed: [...new Set(notes.trimmed)] } : {}) };
-    writeFileSync(join(root, p), JSON.stringify(fx, null, 1) + '\n');
+    const text = JSON.stringify(fx, null, 1) + '\n';
+    assertNoSecret(text, p);
+    writeFileSync(join(root, p), text);
     console.log(`remasked ${p}`);
   }
   process.exit(0);
@@ -169,7 +175,9 @@ for (const row of rows) {
     if (issues.length && r.source !== 'live') { problems.push(`NOT KEPT ${r.fixture}: ${issues.join(', ')} (a ${r.source} fixture carries only what coord declares)`); continue; }
     if (issues.length) problems.push(`shape ${r.fixture}: ${issues.join(', ')}`);
     mkdirSync(dirname(join(root, r.fixture)), { recursive: true });
-    writeFileSync(join(root, r.fixture), JSON.stringify(fx, null, 1) + '\n');
+    const text = JSON.stringify(fx, null, 1) + '\n';
+    assertNoSecret(text, r.fixture);
+    writeFileSync(join(root, r.fixture), text);
     wrote++;
   }
 }

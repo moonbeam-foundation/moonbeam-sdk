@@ -183,7 +183,7 @@
     "accepts": {
      "network": "solana",
      "asset": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
-     "payTo": "GQcEn5pLcweo7qaiy3rDdsiUPiygygmFBaixNtNqhQVD"
+     "payTo": "PayTo1111111111111111111111111111111111111"
     }
    },
    "want": {
@@ -194,7 +194,7 @@
      "address": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
      "decimals": 6
     },
-    "pay_to": "GQcEn5pLcweo7qaiy3rDdsiUPiygygmFBaixNtNqhQVD",
+    "pay_to": "PayTo1111111111111111111111111111111111111",
     "state": "owed",
     "held_by": null
    }
