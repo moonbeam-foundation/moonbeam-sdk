@@ -3,6 +3,7 @@
 // holds for a cohort on a market (its listings, the directories that show them, a listing shared from the other cohort, a market closed
 // to new agents, the listings still wanted) and the market's evidence-backed steps into that cohort's own list / take / settle.
 // Pure: no reads, no clock. The rules, in order, for each step:
+//   0. a market the owner cut from the cohort (_MARKETS_CUT_v2_)      → cut
 //   1. a market closed to new agents                                  → closed
 //   2. the market has no such step (the venue row says n/a)           → n/a
 //   3. list: no listing and no directory shows one                    → shared (a listing the other cohort holds) or not yet
@@ -35,8 +36,9 @@ export type CohortRows = Record<CohortId, VenueCohort> & {
   /** @deprecated since 0.13.0, removed in 0.14.0: read `operator`. */
   readonly layer: VenueCohort;
 };
-/** A cohort's step: a venue state, or `closed` (the market takes no new agent) or `shared` (the other cohort's listing stands in). */
-export type CohortState = VenueState | 'closed' | 'shared';
+/** A cohort's step: a venue state, or `cut` (the owner cut this market from the cohort), `closed` (the market takes no new agent) or
+ *  `shared` (the other cohort's listing stands in). */
+export type CohortState = VenueState | 'cut' | 'closed' | 'shared';
 export type CohortStep = 'list' | 'take' | 'settle';
 export const COHORT_STEPS: readonly CohortStep[] = Object.freeze(['list', 'take', 'settle']);
 
@@ -50,6 +52,8 @@ export type CohortFacts = {
   shared: string | null;
   /** why the market takes no new agent, when it does not */
   closed: string | null;
+  /** _MARKETS_CUT_v2_: why the owner cut this market from the cohort (coord listed.cue who: "cut"), when they did */
+  cut?: string | null;
   /** listings the register still wants on this market */
   wanted: number;
   /** the date the newest listing was read */
@@ -105,6 +109,7 @@ export function cohortOf(cohortIn: CohortId | DeprecatedCohortId, facts: CohortF
   const row = (state: CohortState, says: string | null, read_on: string | null): CohortStepRow => ({ state, says, read_on });
   const step = (k: CohortStep): CohortStepRow => {
     const v = steps[k];
+    if (f.cut) return row('cut', f.cut, null);
     if (f.closed) return row('closed', f.closed, null);
     if (v.state === 'n/a') return row('n/a', v.says, v.read_on);
     if (k === 'list' && journey) return { state: 'live', says: journey.says, read_on: journey.read_at, from: 'journey', who: null };

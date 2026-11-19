@@ -34,10 +34,11 @@ export type RegisterSnapshot = { source: string | null; read_on: string | null; 
 export const VENUE_IDS = Object.freeze(['x402-base', 'erc8183-base', 'memoacp-base', 'bitagent-base', 'olas-base', 'near-agent-market', 'a2a', 'mcp', 'erc8004', 'workflow-nodes'] as const);
 export type VenueId = (typeof VENUE_IDS)[number];
 /**
- * _MARKETS_CUT_v1_ (2026-11-16): the seven markets Moonbeam lists agents on. BitAgent, Virtuals memo jobs (part of Virtuals ACP now) and
+ * _MARKETS_CUT_v1_ (2026-11-16) / _MARKETS_CUT_v2_ (2026-11-19): the markets Moonbeam lists agents on, read from coord (its listed register's
+ * who: "cut" rows, kept in the snapshot as cohorts.moonbeam.cut), never typed here. BitAgent, Virtuals memo jobs (part of Virtuals ACP now) and
  * workflow nodes stay in `VENUES` as read-only rows, for the sales already seen there, but Moonbeam does not list agents on them.
  */
-export const MOONBEAM_LISTS_ON = Object.freeze(['x402-base', 'erc8183-base', 'olas-base', 'near-agent-market', 'a2a', 'mcp', 'erc8004'] as const satisfies readonly VenueId[]);
+export const MOONBEAM_LISTS_ON: readonly VenueId[] = Object.freeze(VENUE_IDS.filter((id) => !VENUE_REGISTER.markets.find((m) => m.id === id)?.cohorts?.moonbeam?.cut));
 /** Whether Moonbeam lists agents on this market (`MOONBEAM_LISTS_ON`). */
 export const listsOn = (id: string): boolean => (MOONBEAM_LISTS_ON as readonly string[]).includes(id);
 /** How a seller's agent gets onto the market: the one list step (`listOn`), an account on the venue, or a registry the market reads. */

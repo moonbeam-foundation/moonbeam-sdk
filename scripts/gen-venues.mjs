@@ -96,13 +96,16 @@ if (from || listedPath || featuresPath || journeyPaths || marketReadPath) {
       // the market's own read of a shared listing says it best; a directory's copy comes after
       const shared = rows.filter((r) => r.shared).sort((a, b) => Number(!!a.via) - Number(!!b.via))[0];
       const closed = wanted.find((w) => w.closed === true);
+      // _MARKETS_CUT_v2_: the owner cut this market from the cohort (listed.cue who: "cut"); coord is the one source of the cut
+      const cut = wanted.find((w) => w.who === 'cut');
       return {
         listings: own.filter((r) => !r.via).length,
         directories: [...new Set(own.filter((r) => r.via).map((r) => dirName(r.via)))],
         // _SHARED_WORDS_v1_ (2026-11-15: "the layer's one ERC-8004 agent" reached public text): the operator cohort is named by its role
         shared: shared ? dirName(shared.shared).replace(/\bthe layer['’]s\b/gi, 'the operator’s').replace(/\bthe layer\b/gi, 'the operator') : null,
         closed: closed ? clause(closed.why) : null,
-        wanted: wanted.filter((w) => w.closed !== true).length,
+        cut: cut ? plain(cut.why) ?? 'the owner cut this market' : null,
+        wanted: wanted.filter((w) => w.closed !== true && w.who !== 'cut').length,
         since: rows.map((r) => r.since).filter(Boolean).sort().at(-1) ?? null,
       };
     };

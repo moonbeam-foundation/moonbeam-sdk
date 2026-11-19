@@ -68,6 +68,7 @@ export const VENUE_REGISTER: RegisterSnapshot = {
      ],
      "shared": null,
      "closed": null,
+     "cut": null,
      "wanted": 1,
      "since": "2026-11-11",
      "features": {
@@ -105,6 +106,7 @@ export const VENUE_REGISTER: RegisterSnapshot = {
      ],
      "shared": null,
      "closed": null,
+     "cut": null,
      "wanted": 2,
      "since": "2026-11-15",
      "features": {
@@ -179,6 +181,7 @@ export const VENUE_REGISTER: RegisterSnapshot = {
      "directories": [],
      "shared": null,
      "closed": null,
+     "cut": null,
      "wanted": 0,
      "since": "2026-11-11",
      "features": {
@@ -213,6 +216,7 @@ export const VENUE_REGISTER: RegisterSnapshot = {
      "directories": [],
      "shared": null,
      "closed": null,
+     "cut": null,
      "wanted": 0,
      "since": "2026-11-14",
      "features": {
@@ -287,6 +291,7 @@ export const VENUE_REGISTER: RegisterSnapshot = {
      "directories": [],
      "shared": null,
      "closed": "closed to new providers",
+     "cut": null,
      "wanted": 0,
      "since": null
     },
@@ -294,7 +299,8 @@ export const VENUE_REGISTER: RegisterSnapshot = {
      "listings": 0,
      "directories": [],
      "shared": null,
-     "closed": "closed to new providers",
+     "closed": null,
+     "cut": "Moonbeam does not list on Virtuals memo jobs; they are folded into Virtuals ACP (erc8183-base), whose agent covers these buyers",
      "wanted": 0,
      "since": null
     }
@@ -336,6 +342,7 @@ export const VENUE_REGISTER: RegisterSnapshot = {
      "directories": [],
      "shared": null,
      "closed": null,
+     "cut": null,
      "wanted": 1,
      "since": null,
      "features": {
@@ -370,7 +377,8 @@ export const VENUE_REGISTER: RegisterSnapshot = {
      "directories": [],
      "shared": null,
      "closed": null,
-     "wanted": 1,
+     "cut": "Moonbeam does not list on BitAgent",
+     "wanted": 0,
      "since": null,
      "features": {
       "list": {
@@ -437,6 +445,7 @@ export const VENUE_REGISTER: RegisterSnapshot = {
      "directories": [],
      "shared": null,
      "closed": null,
+     "cut": null,
      "wanted": 0,
      "since": "2026-11-11",
      "features": {
@@ -471,6 +480,7 @@ export const VENUE_REGISTER: RegisterSnapshot = {
      "directories": [],
      "shared": null,
      "closed": null,
+     "cut": null,
      "wanted": 1,
      "since": null,
      "features": {
@@ -534,6 +544,7 @@ export const VENUE_REGISTER: RegisterSnapshot = {
      "directories": [],
      "shared": null,
      "closed": null,
+     "cut": null,
      "wanted": 0,
      "since": "2026-11-11",
      "features": {
@@ -568,6 +579,7 @@ export const VENUE_REGISTER: RegisterSnapshot = {
      "directories": [],
      "shared": null,
      "closed": null,
+     "cut": null,
      "wanted": 0,
      "since": "2026-11-15",
      "features": {
@@ -645,6 +657,7 @@ export const VENUE_REGISTER: RegisterSnapshot = {
      ],
      "shared": null,
      "closed": null,
+     "cut": null,
      "wanted": 1,
      "since": "2026-11-11",
      "features": {
@@ -681,6 +694,7 @@ export const VENUE_REGISTER: RegisterSnapshot = {
      ],
      "shared": null,
      "closed": null,
+     "cut": null,
      "wanted": 1,
      "since": "2026-11-11",
      "features": {
@@ -757,6 +771,7 @@ export const VENUE_REGISTER: RegisterSnapshot = {
      ],
      "shared": null,
      "closed": null,
+     "cut": null,
      "wanted": 2,
      "since": "2026-11-11",
      "features": {
@@ -791,6 +806,7 @@ export const VENUE_REGISTER: RegisterSnapshot = {
      "directories": [],
      "shared": null,
      "closed": null,
+     "cut": null,
      "wanted": 3,
      "since": "2026-11-11",
      "features": {
@@ -864,6 +880,7 @@ export const VENUE_REGISTER: RegisterSnapshot = {
      ],
      "shared": null,
      "closed": null,
+     "cut": null,
      "wanted": 1,
      "since": "2026-11-11",
      "features": {
@@ -901,6 +918,7 @@ export const VENUE_REGISTER: RegisterSnapshot = {
      ],
      "shared": "the operator’s one ERC-8004 agent, read for Moonbeam until Moonbeam registers its own",
      "closed": null,
+     "cut": null,
      "wanted": 0,
      "since": "2026-11-14",
      "features": {
@@ -971,6 +989,7 @@ export const VENUE_REGISTER: RegisterSnapshot = {
      "directories": [],
      "shared": null,
      "closed": null,
+     "cut": null,
      "wanted": 0,
      "since": "2026-11-11",
      "features": {
@@ -1005,7 +1024,8 @@ export const VENUE_REGISTER: RegisterSnapshot = {
      "directories": [],
      "shared": null,
      "closed": null,
-     "wanted": 1,
+     "cut": "the owner cut this market",
+     "wanted": 0,
      "since": null,
      "features": {
       "list": {
