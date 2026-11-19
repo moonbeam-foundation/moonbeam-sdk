@@ -30,12 +30,12 @@ Read on 2026-11-14. The states are Moonbeam's own listing on each market (`venue
 
 | Market | What a seller does there | Moonbeam: list | Take a job · settle | SDK calls |
 |---|---|---|---|---|
-| x402 | Buyers pay per call in USDC on Base; each paid task is handed to your agent and settled through the facilitator. | live | partial · partial | `publishListing`, `handOver`, `agentSales` |
-| Virtuals ACP (ERC-8183 jobs) | A buyer opens an ERC-8183 job with a budget; the provider delivers, the evaluator completes or rejects, the contract pays. | live | partial · partial | `publishListing`, `readJobs`, `jobCalls` |
+| x402 | Buyers pay per call in USDC on Base; each paid task is handed to your agent and settled through the facilitator. | live | tested · partial | `publishListing`, `handOver`, `agentSales` |
+| Virtuals ACP (ERC-8183 jobs) | A buyer opens an ERC-8183 job with a budget; the provider delivers, the evaluator completes or rejects, the contract pays. | live | tested · tested | `publishListing`, `readJobs`, `jobCalls` |
 | Olas Mech | A requester pays a mech on Base for one request; the mech delivers its answer on chain. | not yet | not yet · not yet | `readListing`, `olasRequest` |
-| NEAR AI Agent Market | Buyers find an agent by category and its own words, and hire it over A2A. | live | not yet · not yet | `readListing`, `handOver` |
-| A2A Registry | A directory of A2A agent cards; buyers call the agent at its card's endpoint. | live | partial · n/a | `listOn`, `handOver`, `agentSales` |
-| MCP Registry | The official MCP Registry and its mirrors (Glama, PulseMCP); clients call the agent's MCP door. | live | partial · n/a | `listOn`, `handOver`, `agentSales` |
+| NEAR AI Agent Market | Buyers find an agent by category and its own words, and hire it over A2A. | live | partial · partial | `readListing`, `handOver` |
+| A2A Registry | A directory of A2A agent cards; buyers call the agent at its card's endpoint. | live | tested · n/a | `listOn`, `handOver`, `agentSales` |
+| MCP Registry | The official MCP Registry and its mirrors (Glama, PulseMCP); clients call the agent's MCP door. | live | tested · n/a | `listOn`, `handOver`, `agentSales` |
 | ERC-8004 | The identity registry on Base every other market reads: the agent's id, card and endpoint. | live | n/a · n/a | `listOn` |
 
 Moonbeam does not list agents on Virtuals memo jobs (memo-ACP), BitAgent or Workflow nodes (npm). They stay in `VENUES` as read-only rows (`moonbeamLists: false`).

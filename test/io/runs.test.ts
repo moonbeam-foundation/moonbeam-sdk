@@ -24,6 +24,13 @@ describe('_VENUE_PATHS_v1_ Moonbeam paths from coord', () => {
     expect(p.coord.sha).toBe(SHA);
   });
 
+  it('keeps a step\'s stream row without how it is signed', () => {
+    const r = { ...row('a', 'list', ['moonbeam']), steps: [{ id: 's', leaves: 'x', stream: { row: 'r', signer: 'operator-only' } }] };
+    const p = moonbeamPaths(pub([r]), SHA);
+    expect(p.rows[0].steps[0].stream).toEqual({ row: 'r' });
+    expect(JSON.stringify(p)).not.toContain('operator-only');
+  });
+
   it('refuses a file that is not coord venue paths, or no sha', () => {
     expect(() => moonbeamPaths({ rows: [] }, SHA)).toThrow(/VENUE_PATHS_v1/);
     expect(() => moonbeamPaths(pub([]), 'main')).toThrow(/sha/);
@@ -47,6 +54,7 @@ describe('_VENUE_PATHS_v1_ Moonbeam paths from coord', () => {
     expect(paths.markets.length).toBeGreaterThan(0);
     for (const r of paths.rows) { expect(paths.markets).toContain(r.market); expect(r.cohorts).toContain('moonbeam'); }
     expect(JSON.stringify(paths)).not.toMatch(/0x[0-9a-fA-F]{40}(?![0-9a-fA-F])/);
+    for (const r of paths.rows) for (const st of r.steps ?? []) expect(st.stream?.signer).toBeUndefined();
   });
 
   it('every run file of the snapshot is on disk as generated, and is not counted as a recorded call', () => {

@@ -2,6 +2,7 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { COHORT_ALIASES, COHORT_IDS, COHORT_STEPS, MOONBEAM_LISTS_ON, cohortIdOf, MARK_STATE, STEP_FEATURE, VENUES, VENUE_EVIDENCE_OF, capState, cohortOf, cohortsOf, markOf, type CohortFacts, type FeatureMark, type VenueStepRow } from '../src/market/index.js';
+import { STATE_RANK } from '../src/market/cohorts.js';
 import { VENUE_REGISTER } from '../src/market/venues-data.js';
 
 const r = (state: VenueStepRow['state'], says: string | null = `${state} read`, read_on: string | null = '2026-11-06'): VenueStepRow => ({ state, register: 'x', says, read_on, call: null });
@@ -89,35 +90,34 @@ describe('VENUES[].cohorts: the shipped table, per cohort', () => {
     for (const m of VENUE_REGISTER.markets) expect(Object.keys(m.cohorts ?? {}), m.id).toEqual([...COHORT_IDS]);
   });
   it('the venue row never reads higher than the evidence cohort\'s own mark, wherever the market is open', () => {
-    const RANK: Record<string, number> = { 'not yet': 0, 'self-test': 1, partial: 2, live: 3 };
     for (const v of VENUES) {
       const facts = VENUE_REGISTER.markets.find((m) => m.id === v.id)!.cohorts!.operator!;
       if (facts.closed) continue;
       for (const k of COHORT_STEPS) {
         const c = v.cohorts.operator[k];
-        if (c.from === 'features' && v[k].state !== 'n/a') expect(RANK[v[k].state]!, `${v.id}.${k}`).toBeLessThanOrEqual(RANK[c.state as string]!);
+        if (c.from === 'features' && v[k].state !== 'n/a') expect(STATE_RANK[v[k].state]!, `${v.id}.${k}`).toBeLessThanOrEqual(STATE_RANK[c.state as string]!);
       }
     }
   });
-  it('the states as read on the listed register, the feature matrix and the house agents\' journeys (2026-11-14)', () => {
+  it('the states as read on the listed register, the feature matrix and the house agents\' journeys (2026-11-19, coord venue paths)', () => {
     expect(states('x402-base', 'operator')).toEqual(['live', 'live', 'live']);
-    expect(states('x402-base', 'moonbeam')).toEqual(['live', 'partial', 'partial']);
+    expect(states('x402-base', 'moonbeam')).toEqual(['live', 'tested', 'partial']);
     // settle: the feature matrix still read broken (2026-11-14T20:18Z), before the sync that withdrew two nameless offerings;
     // Virtuals' own read of the operator's agent at 00:21Z shows all 13 offerings named, so the cell reads partial, with that proof
-    expect(states('erc8183-base', 'operator')).toEqual(['live', 'partial', 'partial']);
-    expect(at('erc8183-base').cohorts.operator.settle).toMatchObject({ from: 'features', state: 'partial' });
+    expect(states('erc8183-base', 'operator')).toEqual(['live', 'tested', 'tested']);
+    expect(at('erc8183-base').cohorts.operator.settle).toMatchObject({ from: 'features', state: 'tested' }); // coord's fork run of the sell path, kept as a run file
     // Moonbeam's Virtuals agent shows its house offerings: listed, read on the market itself through a house agent's journey
-    expect(states('erc8183-base', 'moonbeam')).toEqual(['live', 'partial', 'partial']);
+    expect(states('erc8183-base', 'moonbeam')).toEqual(['live', 'tested', 'tested']);
     expect(at('erc8183-base').cohorts.moonbeam.list).toMatchObject({ from: 'journey', state: 'live' });
     expect(states('memoacp-base', 'operator')).toEqual(['closed', 'closed', 'closed']);
     // _MARKETS_CUT_v2_: the three markets coord's listed register cuts from Moonbeam read cut, with the register's reason
     expect(states('memoacp-base', 'moonbeam')).toEqual(['cut', 'cut', 'cut']);
     expect(states('workflow-nodes', 'moonbeam')).toEqual(['cut', 'cut', 'cut']);
-    expect(states('mcp', 'moonbeam')).toEqual(['live', 'partial', 'n/a']);
-    expect(states('a2a', 'moonbeam')).toEqual(['live', 'partial', 'n/a']);
+    expect(states('mcp', 'moonbeam')).toEqual(['live', 'tested', 'n/a']);
+    expect(states('a2a', 'moonbeam')).toEqual(['live', 'tested', 'n/a']);
     expect(states('erc8004', 'moonbeam')).toEqual(['live', 'n/a', 'n/a']);
     expect(states('near-agent-market', 'operator')).toEqual(['live', 'live', 'partial']);
-    expect(states('near-agent-market', 'moonbeam')).toEqual(['live', 'not yet', 'not yet']);
+    expect(states('near-agent-market', 'moonbeam')).toEqual(['live', 'partial', 'partial']);
     expect(states('bitagent-base', 'moonbeam')).toEqual(['cut', 'cut', 'cut']);
     expect(at('bitagent-base').cohorts.moonbeam.list.says).toBe('Moonbeam does not list on BitAgent');
     expect([...MOONBEAM_LISTS_ON].sort()).toEqual(['a2a', 'erc8004', 'erc8183-base', 'mcp', 'near-agent-market', 'olas-base', 'x402-base']);

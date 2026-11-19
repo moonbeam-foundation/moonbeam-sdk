@@ -60,8 +60,8 @@ describe('VENUES: every venue, one table', () => {
     // ERC-8183 settle: the register's self-test; the operator's mark reads partial on Virtuals' own read, so it is not capped
     expect(VENUE_STEPS.map((k) => at('erc8183-base')[k].state)).toEqual(['not yet', 'self-test', 'self-test', 'self-test']);
     expect(at('erc8183-base').settle.capped).toBeUndefined();
-    // Olas list: proven by the register, partial while the market does not show the mech live
-    expect(at('olas-base').list).toMatchObject({ state: 'partial', capped: { mark: 'partial' } });
+    // Olas list: proven by the register, held at not yet while coord's feature matrix reads the list broken (2026-11-19T07:31Z)
+    expect(at('olas-base').list).toMatchObject({ state: 'not yet', register: 'live', capped: { mark: 'broken' } });
     expect(VENUE_STEPS.map((k) => at('near-agent-market')[k].state)).toEqual(['live', 'not yet', 'not yet', 'not yet']);
     expect(VENUE_STEPS.map((k) => at('erc8004')[k].state)).toEqual(['live', 'n/a', 'n/a', 'n/a']);
   });
@@ -86,10 +86,10 @@ describe('VENUES: every venue, one table', () => {
       else { expect(readme, v.id).not.toContain(`| ${v.name} |`); expect(readme.match(/Moonbeam does not list agents on [^\n]+/)?.[0], v.id).toContain(v.name); }
     }
     for (const s of SALE_STOPS) expect(doc, s.id).toContain(`| ${s.order} | \`${s.id}\` | ${s.label} |`);
-    // NEAR (journey read 2026-11-15: @moonbeam listed by Moonbeam and read back, hire not yet): Moonbeam's line says live, its jobs not yet
+    // NEAR (journey read 2026-11-15: @moonbeam listed by Moonbeam and read back; coord's feature matrix 2026-11-19: its jobs partial)
     const near = VENUES.find((v) => v.id === 'near-agent-market')!;
     expect(near.list.state).toBe('live'); expect(near.cohorts.moonbeam.list.state).toBe('live');
-    expect(readme).toMatch(/\| NEAR AI Agent Market \| [^|\n]+ \| live \| not yet · not yet \|/);
+    expect(readme).toMatch(/\| NEAR AI Agent Market \| [^|\n]+ \| live \| partial · partial \|/);
     expect(doc).toMatch(/## Every venue \(the operator's listings\)/);
     expect(`${doc}\n${readme}`).not.toMatch(/taifoon|\bn8n\b|0x[0-9a-f]{40}|36927/i);
   });
