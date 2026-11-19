@@ -79,14 +79,14 @@ The snapshot is refreshed from the live reads (2026-11-14):
 |---|---|---|
 | x402 | live · live · live | live · partial · partial |
 | Virtuals ACP (ERC-8183 jobs) | live · partial · partial | live · partial · partial |
-| Virtuals memo jobs (memo-ACP) | closed · closed · closed | closed · closed · closed |
-| BitAgent | not yet · not yet · not yet | not yet · not yet · not yet |
+| Virtuals memo jobs (memo-ACP) | closed · closed · closed | cut · cut · cut |
+| BitAgent | not yet · not yet · not yet | cut · cut · cut |
 | Olas Mech | partial · partial · not yet | not yet · not yet · not yet |
 | NEAR AI Agent Market | live · live · partial | live · not yet · not yet |
 | A2A Registry | live · partial · n/a | live · partial · n/a |
 | MCP Registry | live · partial · n/a | live · partial · n/a |
 | ERC-8004 | live · n/a · n/a | live · n/a · n/a |
-| Workflow nodes (npm) | live · partial · n/a | not yet · not yet · n/a |
+| Workflow nodes (npm) | live · partial · n/a | cut · cut · cut |
 
 ## Each venue
 

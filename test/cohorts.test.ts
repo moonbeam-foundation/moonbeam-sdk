@@ -1,7 +1,7 @@
 // _VENUE_TRUTH_v1_: each cohort's own list / take / settle, from the listed register's facts and the venue's evidence-backed steps.
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { COHORT_ALIASES, COHORT_IDS, COHORT_STEPS, cohortIdOf, MARK_STATE, STEP_FEATURE, VENUES, VENUE_EVIDENCE_OF, capState, cohortOf, cohortsOf, markOf, type CohortFacts, type FeatureMark, type VenueStepRow } from '../src/market/index.js';
+import { COHORT_ALIASES, COHORT_IDS, COHORT_STEPS, MOONBEAM_LISTS_ON, cohortIdOf, MARK_STATE, STEP_FEATURE, VENUES, VENUE_EVIDENCE_OF, capState, cohortOf, cohortsOf, markOf, type CohortFacts, type FeatureMark, type VenueStepRow } from '../src/market/index.js';
 import { VENUE_REGISTER } from '../src/market/venues-data.js';
 
 const r = (state: VenueStepRow['state'], says: string | null = `${state} read`, read_on: string | null = '2026-11-06'): VenueStepRow => ({ state, register: 'x', says, read_on, call: null });
@@ -110,13 +110,17 @@ describe('VENUES[].cohorts: the shipped table, per cohort', () => {
     expect(states('erc8183-base', 'moonbeam')).toEqual(['live', 'partial', 'partial']);
     expect(at('erc8183-base').cohorts.moonbeam.list).toMatchObject({ from: 'journey', state: 'live' });
     expect(states('memoacp-base', 'operator')).toEqual(['closed', 'closed', 'closed']);
-    expect(states('memoacp-base', 'moonbeam')).toEqual(['closed', 'closed', 'closed']);
+    // _MARKETS_CUT_v2_: the three markets coord's listed register cuts from Moonbeam read cut, with the register's reason
+    expect(states('memoacp-base', 'moonbeam')).toEqual(['cut', 'cut', 'cut']);
+    expect(states('workflow-nodes', 'moonbeam')).toEqual(['cut', 'cut', 'cut']);
     expect(states('mcp', 'moonbeam')).toEqual(['live', 'partial', 'n/a']);
     expect(states('a2a', 'moonbeam')).toEqual(['live', 'partial', 'n/a']);
     expect(states('erc8004', 'moonbeam')).toEqual(['live', 'n/a', 'n/a']);
     expect(states('near-agent-market', 'operator')).toEqual(['live', 'live', 'partial']);
     expect(states('near-agent-market', 'moonbeam')).toEqual(['live', 'not yet', 'not yet']);
-    expect(states('bitagent-base', 'moonbeam')).toEqual(['not yet', 'not yet', 'not yet']);
+    expect(states('bitagent-base', 'moonbeam')).toEqual(['cut', 'cut', 'cut']);
+    expect(at('bitagent-base').cohorts.moonbeam.list.says).toBe('Moonbeam does not list on BitAgent');
+    expect([...MOONBEAM_LISTS_ON].sort()).toEqual(['a2a', 'erc8004', 'erc8183-base', 'mcp', 'near-agent-market', 'olas-base', 'x402-base']);
     expect(states('olas-base', 'moonbeam')).toEqual(['not yet', 'not yet', 'not yet']);
     expect(at('near-agent-market').cohorts.operator.listings).toBe(9);
   });
@@ -127,7 +131,7 @@ describe('VENUES[].cohorts: the shipped table, per cohort', () => {
       for (const k of COHORT_STEPS) {
         const row = v.cohorts[c][k];
         if (row.from === 'features') expect(row.state, `${v.id}.${c}.${k}`).toBe(markOf(facts, k)!.state);
-        else expect(['not yet', 'shared', 'closed', 'n/a'], `${v.id}.${c}.${k}`).toContain(row.state);
+        else expect(['not yet', 'shared', 'closed', 'cut', 'n/a'], `${v.id}.${c}.${k}`).toContain(row.state);
       }
     }
   });
@@ -135,7 +139,7 @@ describe('VENUES[].cohorts: the shipped table, per cohort', () => {
     expect(VENUE_REGISTER.cohorts?.features).toMatchObject({ source: 'LISTED_FEATURES_v1' });
     for (const m of VENUE_REGISTER.markets) for (const c of COHORT_IDS) {
       const f = m.cohorts![c]!;
-      if (f.closed) continue;
+      if (f.closed || f.cut) continue;
       for (const id of Object.values(STEP_FEATURE)) expect(f.features?.[id], `${m.id}.${c}.${id}`).toBeTruthy();
     }
     expect(Object.keys(STEP_FEATURE)).toEqual(['list', 'take', 'settle', 'paid']);
