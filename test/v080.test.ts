@@ -176,7 +176,7 @@ describe('4. x402: PAYMENT-SIGNATURE, and the offer chosen by network', () => {
     expect(pickAccept(WALL).network).toBe('eip155:8453');
     expect(pickAccept(WALL, { network: 'arbitrum' })).toMatchObject({ network: 'eip155:42161', asset: '0xaf88d065e77c8cC2239327C5EDb3A432268e5831' });
     expect(pickAccept(WALL, { network: ['eip155:10', 'robinhood', 'base'] }).network).toBe('eip155:4663');
-    expect(pickAccept(WALL, { network: 'solana' })).toMatchObject({ payTo: 'GQcEn5pLcweo7qaiy3rDdsiUPiygygmFBaixNtNqhQVD', extra: { feePayer: 'F742C4VfFLQ9zRQyithoj5229ZgtX2WqKCSFKgH2EThq' } });
+    expect(pickAccept(WALL, { network: 'solana' })).toMatchObject({ payTo: 'PayTo1111111111111111111111111111111111111', extra: { feePayer: 'F742C4VfFLQ9zRQyithoj5229ZgtX2WqKCSFKgH2EThq' } });
     expect(() => pickAccept(WALL, { network: 'eip155:10' })).toThrow(/no exact payment on eip155:10 \(it offers: eip155:8453/);
     expect(baseAccept(WALL).network).toBe('eip155:8453');
     expect([chainIdOf('base'), chainIdOf('eip155:5042'), chainIdOf('solana'), caipOf('monad')]).toEqual([8453, 5042, null, 'eip155:143']);

@@ -16,7 +16,7 @@ const accept = live ? live.accept : pickAccept(recorded, { network });
 console.log(`the wall offers ${(live ? live.body : recorded.x402).accepts.map((a) => a.network).join(', ')}; on ${accept.network} it asks ${accept.amount} units of ${accept.asset}, paid to ${accept.payTo}`);
 const q = quoteSale({ venue_in: 'x402-base', venue_out: 'x402-base', seller_price: 9207n });
 console.log(`quoteSale: the seller's 9207 → the buyer pays ${q.price_to_buyer} (the same scheme the wall prices with)`);
-const rail = sellerRailOf({ accepts: { network: 'solana', asset: 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v', payTo: 'GQcEn5pLcweo7qaiy3rDdsiUPiygygmFBaixNtNqhQVD' } });
+const rail = sellerRailOf({ accepts: { network: 'solana', asset: 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v', payTo: 'PayTo1111111111111111111111111111111111111' } });
 console.log(`a seller who published a Solana offer is paid there: ${rail.network} ${rail.token?.symbol} to ${rail.pay_to} (${rail.state})`);
 if (chainIdOf(accept.network) === null) {
   console.log(`${accept.network} is not an EIP-3009 network: your Solana wallet sends ${accept.amount} units of ${accept.asset} to ${accept.payTo} (fee payer ${accept.extra?.feePayer ?? 'yours'})`);
