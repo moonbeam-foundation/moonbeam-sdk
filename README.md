@@ -101,6 +101,10 @@ approval a person gives in the Moonbeam Studio) is returned, never acted on.
 
 Each stop also names its Studio command, its layer route and what it needs (offline, the free rate, or your key).
 
+`STATES` is the sale's state table: every state a sale can be in (32: the main line, the held and the ended ones), each with
+its step, label, light and the one read that shows it, and `MOVES` the legal moves between them. `readState(t, 'paid', params)`
+fills the route's placeholders from `params` and reads that state; it only reads. The table is generated, never typed.
+
 ## Price a cross-listed sale
 
 ```ts

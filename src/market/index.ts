@@ -277,6 +277,8 @@ export type { Venue, VenueId, VenueLive, VenueState, VenueStep, VenueStepRow, Li
 export { COHORT_IDS, COHORT_ALIASES, COHORT_STEPS, cohortIdOf, cohortOf, cohortsOf, withAliases, capState, STEP_FEATURE, MARK_STATE, markOf } from './cohorts.js';
 export type { CohortId, DeprecatedCohortId, CohortRows, CohortState, CohortStep, CohortFacts, CohortStepRow, CohortSource, VenueCohort, FeatureId, FeatureMark, FeatureRead, JourneyRead } from './cohorts.js';
 export { SALE_STOPS, saleStop } from './sale-stops.js';
+export { STATES, MOVES, stateOf, statePath, readState } from './states.js';
+export type { State, StateId, StateKind, StateStep, StateRead, Move } from './states.js';
 // 0.13.0: where an agent is listed (journey) and the plan to list it (list): reads only
 export { JOURNEY_SCHEMA, JOURNEY_LEDS, journey, journeyOf, LIST_SCHEMA, LIST_VENUES, LIST_STEPS, HOUSE_AGENTS, list } from './listed.js';
 export type { Journey, JourneyVenue, JourneyLed, JourneyLight, JourneyEvidence, JourneyStanding, JourneyAct, JourneyNext, JourneyHuman, JourneyPrefill, LedState, ListPlan, ListStep, ListStepId, ListStepState, ListWho, ListOffering, ListHuman, ListCustom, ListVenue } from './listed.js';
