@@ -13,6 +13,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import { expandRows, fixturesOnDisk, loadCoord, pathRe, shapeIssues } from './io-coverage-lib.mjs';
 import { liveGet } from './io-live.mjs';
 import { assertNoSecret, readRecorderKey } from './io-key.mjs';
+import { collect, mask } from './io-mask.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const arg = (k) => { const i = process.argv.indexOf(k); return i > 0 ? process.argv[i + 1] : undefined; };
@@ -28,36 +29,6 @@ const dist = (p) => import(pathToFileURL(join(root, 'dist', p)).href);
 const s = sdkOf([await dist('market/index.js'), await dist('playground/index.js'), await dist('jobs/index.js')]);
 const ledger = JSON.parse(readFileSync(join(root, 'test/fixtures/economy/36927-v5.1-economy.ledger.json'), 'utf8'));
 const LIVE_BASE = 'https://coord.taifoon.dev/v1';
-
-// ── masking ───────────────────────────────────────────────────────────────────────────────────────────────────────────
-const DROP = /^(fee_to|fee_payee|pay_?to|payTo|payee|payees|treasury|safe|deployer|signer|signers|workers|worker|requester|from_signer)$/i;
-/** addresses served under a treasury-like key anywhere in this run's answers (a fee payee, an x402 payTo): dropped wherever they recur */
-const TREASURY = new Set();
-const ADDR = /^0x[0-9a-fA-F]{40}$/;
-// _IO_OWN_KEYS_DROPPED_v1_: addresses listed in the file IO_MASK_FILE names (on the recorder's machine only) are dropped too.
-try {
-  if (process.env.IO_MASK_FILE) for (const a of readFileSync(process.env.IO_MASK_FILE, 'utf8').match(/0x[0-9a-fA-F]{40}/g) ?? []) TREASURY.add(a.toLowerCase());
-} catch { /* none */ }
-function collect(v) {
-  if (Array.isArray(v)) return v.forEach(collect);
-  if (v && typeof v === 'object') for (const [k, x] of Object.entries(v)) { if (DROP.test(k) && typeof x === 'string' && ADDR.test(x)) TREASURY.add(x.toLowerCase()); else collect(x); }
-}
-function mask(v, path, notes) {
-  if (Array.isArray(v)) return v.map((x) => mask(x, `${path}[]`, notes));
-  if (v && typeof v === 'object') {
-    const out = {};
-    for (const [k, x] of Object.entries(v)) {
-      const p = path ? `${path}.${k}` : k;
-      if (DROP.test(k)) { notes.dropped.push(`${p} (a payee, requester, signer or treasury-like address field)`); continue; }
-      if (typeof x === 'string' && TREASURY.has(x.toLowerCase())) { notes.dropped.push(`${p} (the address a fee payee or payTo names)`); continue; }
-      if (typeof x === 'string' && /\bkms\b|kms-|\bssm\b|\bMFA\b/i.test(x)) { notes.trimmed.push(`${p} (withheld)`); out[k] = '(withheld)'; continue; }
-      if (k === 'get_key' && !path) { notes.trimmed.push('get_key (the free-key offer every keyless answer carries)'); continue; }
-      out[k] = mask(x, p, notes);
-    }
-    return out;
-  }
-  return v;
-}
 
 // ── answers by source ─────────────────────────────────────────────────────────────────────────────────────────────────
 const liveCache = new Map();

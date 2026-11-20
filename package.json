@@ -144,7 +144,7 @@
     "check:registry": "node scripts/gen-moonbeam-acp.mjs --check",
     "check:pins": "node scripts/check-pins.mjs",
     "check:diagrams": "node scripts/gen-diagrams.mjs >/dev/null && git diff --exit-code -- 'docs/workflows/*.svg' docs/WORKFLOWS.md",
-    "check": "npm run typecheck && npm run build && npm test && npm run check:pins && npm run check:workflows && npm run check:paths && npm run check:venues && npm run check:readme && npm run check:diagrams && npm run check:playground",
+    "check": "npm run typecheck && npm run build && npm test && npm run check:pins && npm run check:workflows && npm run check:paths && npm run check:venues && npm run check:acceptance && npm run check:readme && npm run check:diagrams && npm run check:playground",
     "sync": "node scripts/sync.mjs",
     "check:sync": "node scripts/sync.mjs --check",
     "test:fork": "node test/fork/run-fork.mjs",
@@ -163,7 +163,10 @@
     "io:check": "node scripts/io-coverage.mjs --check",
     "io:record": "npm run build && node scripts/io-record.mjs",
     "gen:paths": "npm run build && node scripts/gen-paths.mjs",
-    "check:paths": "node scripts/gen-paths.mjs --check"
+    "check:paths": "node scripts/gen-paths.mjs --check",
+    "gen:acceptance": "node scripts/gen-acceptance-tests.mjs",
+    "check:acceptance": "node scripts/gen-acceptance-tests.mjs --check",
+    "io:record-api": "node scripts/record-api-rung.mjs"
   },
   "keywords": [
     "moonbeam",
