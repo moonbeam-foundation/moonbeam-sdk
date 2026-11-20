@@ -20,8 +20,9 @@ export function liveLog(root) {
 
 const routeOf = (path) => path.split('?')[0].replace(/\/0x[0-9a-fA-F]{64}/g, '/:tx').replace(/\/[0-9]+(?=\/|$)/g, '/:n');
 
-/** GET one public path ('/listed?…'); answers { status, body, refused? }. Throws when the budget is spent or the route is closed. */
-export async function liveGet(root, path) {
+/** GET one public path ('/listed?…'); o.fetchImpl and o.gapMs are for tests only; answers { status, body, refused? }. Throws when the budget is spent or the route is closed. */
+export async function liveGet(root, path, o = {}) {
+  const doFetch = o.fetchImpl ?? fetch, gapMs = o.gapMs ?? GAP_MS;
   if (!path.startsWith('/') || /[\s#]/.test(path)) throw new Error(`not a path: ${path}`);
   const L = liveLog(root);
   if (L.log.calls.length >= LIVE_MAX) throw new Error(`live budget spent: ${L.log.calls.length} of ${LIVE_MAX}`);
@@ -29,14 +30,14 @@ export async function liveGet(root, path) {
   const closed = L.log.calls.find((c) => STOPS.has(c.status) && routeOf(c.path) === routeOf(path) && !!c.keyed === !!key);
   if (closed) return { status: closed.status, body: null, refused: true, closedBy: closed.path };
   const last = L.log.calls.at(-1);
-  const wait = last ? GAP_MS - (Date.now() - Date.parse(last.at)) : 0;
+  const wait = last ? gapMs - (Date.now() - Date.parse(last.at)) : 0;
   if (wait > 0) await new Promise((r) => setTimeout(r, wait));
   const at = new Date().toISOString();
   let status = 0, body = null;
   try {
     const url = new URL(`${LIVE_BASE}${path}`);
     if (url.origin !== new URL(LIVE_BASE).origin || !url.pathname.startsWith('/v1/')) throw new Error(`not coord /v1: ${url.origin}${url.pathname}`);
-    const r = await fetch(url, { method: 'GET', redirect: 'error', headers: { accept: 'application/json', 'user-agent': 'moonbeam-sdk-io-coverage', ...(key ? { 'x-api-key': key } : {}) } });
+    const r = await doFetch(url, { method: 'GET', redirect: 'error', headers: { accept: 'application/json', 'user-agent': 'moonbeam-sdk-io-coverage', ...(key ? { 'x-api-key': key } : {}) } });
     status = r.status;
     const text = await r.text();
     assertNoSecret(text, `the answer to GET ${path}`);
