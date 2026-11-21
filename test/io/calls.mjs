@@ -194,6 +194,13 @@ export const CALLS = {
       expect(result.calls.map((c) => c.signer)).toEqual(x.fx.response.body.calls.map((c) => c.signer));
       expect(result.body.jobId).toBe(x.fx.response.body.jobId);
     } },
+  // fund-job on the devnet job (POST /v1/assurance/call, coord api_bodies.AssuranceCall); the answer carries only coord's typed fields
+  jobCalls: { fn: 'market.jobCalls',
+    run: (s, t) => s.jobCalls(t, { chainId: DEVNET, action: { kind: 'fund-job', jobId: DEVNET_JOB, seller: SELLER, token: A('a4'), price: '1000000', deposit: '1111750' } }),
+    contract: () => ({ status: 200, body: { ok: true, note: 'Send these in order from the named signer.', calls: [
+      { chainId: DEVNET, action: 'approve', to: A('a4'), data: '0x095ea7b3', value: '0', effect: 'lets the hook take the price', signer: 'the buyer' },
+      { chainId: DEVNET, action: 'fund-job', to: A('a1'), data: '0x5d0a7e9b', value: '0', effect: 'funds the job', signer: 'the buyer' } ] } }),
+    check: ({ result, x, expect }) => expect(result.calls.map((c) => c.action)).toEqual(x.fx.response.body.calls.map((c) => c.action)) },
   reportSettled: { fn: 'market.reportSettled', key: true, run: (s, t) => s.reportSettled(t, { id: H('e3'), chain: DEVNET, tx: H('f4') }),
     contract: () => ({ status: 202, body: { outcome: 'recorded', id: H('e3'), tx: H('f4'), chain: String(DEVNET), state: 'claimable', reports: 1 } }),
     check: ({ result, expect }) => expect(result.outcome).toBe('recorded') },

@@ -1,0 +1,53 @@
+{
+ "op": "POST assurance/call",
+ "market": "erc8183-base",
+ "stage": "bought",
+ "dir": "write",
+ "sdk": "market.jobCalls",
+ "source": "contract",
+ "request": {
+  "method": "POST",
+  "path": "/v1/assurance/call",
+  "query": {},
+  "body": {
+   "chainId": 36927,
+   "action": {
+    "kind": "fund-job",
+    "jobId": "0xa6d6f649a7b8d06168f30af1078115e86b2bf9dd8b495a448ba11ceef3d1168a",
+    "seller": "0x00000000000000000000000000000000000000b2",
+    "token": "0xa4a4a4a4a4a4a4a4a4a4a4a4a4a4a4a4a4a4a4a4",
+    "price": "1000000",
+    "deposit": "1111750"
+   }
+  }
+ },
+ "response": {
+  "status": 200,
+  "body": {
+   "ok": true,
+   "note": "Send these in order from the named signer.",
+   "calls": [
+    {
+     "chainId": 36927,
+     "action": "approve",
+     "to": "0xa4a4a4a4a4a4a4a4a4a4a4a4a4a4a4a4a4a4a4a4",
+     "data": "0x095ea7b3",
+     "value": "0",
+     "effect": "lets the hook take the price",
+     "signer": "the buyer"
+    },
+    {
+     "chainId": 36927,
+     "action": "fund-job",
+     "to": "0xa1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1",
+     "data": "0x5d0a7e9b",
+     "value": "0",
+     "effect": "funds the job",
+     "signer": "the buyer"
+    }
+   ]
+  }
+ },
+ "coord_sha": "81c9e81706abcff95c7481be622f6e738f35fadf",
+ "read_at": "2026-11-21T20:21:18.160Z"
+}
