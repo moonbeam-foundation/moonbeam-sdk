@@ -138,7 +138,7 @@
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
     "lint": "tsc --noEmit && vitest run --reporter=dot",
-    "prepublishOnly": "pack-guard && npm run check",
+    "prepublishOnly": "node scripts/prepublish.mjs && npm run check",
     "postbuild": "node scripts/postbuild.mjs",
     "gen:registry": "node scripts/gen-moonbeam-acp.mjs",
     "check:registry": "node scripts/gen-moonbeam-acp.mjs --check",
