@@ -47,7 +47,7 @@ export const SALE_STOPS: readonly SaleStop[] = Object.freeze([
   stop(12, 'accrued', 'Booked', 'GET /v1/resale', 'market.saleLedger', 'GET /resale', 'free', 'live'),
   stop(13, 'split', 'Added up each week', 'GET /v1/pipe/queues', 'market.payoutQueues', 'GET /pipe/queues', 'free', 'partial'),
   stop(14, 'vault', 'The vault', 'GET /v1/vault/policy', 'market.vaultPolicy', 'GET /vault/policy', 'free', 'missing'),
-  stop(15, 'paid', 'Paid', 'GET /v1/vault/policy', 'market.claimablePayouts', 'GET /pipe/claimable', 'free', 'missing'),
+  stop(15, 'paid', 'Paid', 'GET /v1/resale/sales/:id', 'market.salePaid', 'GET /resale/sales/:id', 'free', 'missing'),
   stop(16, 'recorded', 'Recorded', 'GET /v1/root', 'market.saleRecord', 'GET /root', 'free', 'live'),
   stop(17, 'usage', 'What it cost', 'Settings → Usage', 'market.keyStanding', 'GET /access/key', 'key', null),
 ]);

@@ -133,6 +133,6 @@ public on a shared free rate that a key lifts, or `key`) and `hop` (how the Stud
 | 12 | `accrued` | Booked | GET /v1/resale | `market.saleLedger` | `GET /resale` | free |
 | 13 | `split` | Added up each week | GET /v1/pipe/queues | `market.payoutQueues` | `GET /pipe/queues` | free |
 | 14 | `vault` | The vault | GET /v1/vault/policy | `market.vaultPolicy` | `GET /vault/policy` | free |
-| 15 | `paid` | Paid | GET /v1/vault/policy | `market.claimablePayouts` | `GET /pipe/claimable` | free |
+| 15 | `paid` | Paid | GET /v1/resale/sales/:id | `market.salePaid` | `GET /resale/sales/:id` | free |
 | 16 | `recorded` | Recorded | GET /v1/root | `market.saleRecord` | `GET /root` | free |
 | 17 | `usage` | What it cost | Settings → Usage | `market.keyStanding` | `GET /access/key` | key |
