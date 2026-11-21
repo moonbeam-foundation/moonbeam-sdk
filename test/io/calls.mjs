@@ -11,6 +11,8 @@ export const DEVNET_JOB = '0xa6d6f649a7b8d06168f30af1078115e86b2bf9dd8b495a448ba
 export const LEDGER_TX = {
   bought: '0xd2ee48b70a006828063144be635327d24df14231d70df1ca54e264d70af01bfd',
   settled: '0x79d3221cbd512ab749867800e339415f12991642a895212d0e3989d852d7517e',
+  /** the job's submit (delivery) transaction, as its settle record names it (each market's delivered/read-settle-id.json) */
+  delivered: '0xb13879351ac7c61d293a780de5bcab0993bd7385e6f2b42cc4705ed7f83748e7',
 };
 /** a devnet JudgeAdapter the devnet.evaluate purpose may call (coord lang/gen/sign.json purposes.devnet.evaluate.devnet.calls) */
 export const DEVNET_ADAPTER = '0x8474c7b165243e49a44a86b6f303c58924778928';
@@ -61,13 +63,14 @@ export const CALLS = {
     check: ({ result, x, expect }) => expect(result.rows.length).toBe(rowsLen(x.fx.response.body, 'rows')) },
   mcpRegistry: { fn: 'market.mcpRegistry', run: (s, t) => s.mcpRegistry(t, { limit: 3 }),
     check: ({ result, x, expect }) => expect(result.rows.length).toBe(rowsLen(x.fx.response.body, 'rows')) },
-  // the name and the id are coord's own examples (api-operations.cue query[].example): the registry lists answered 402
+  // the name is coord's own example (api-operations.cue query[].example)
   mcpServer: { fn: 'market.mcpServer', args: () => ({ name: 'io.github.zvmzaretsky/utility-belt' }),
     run: (s, t, x) => s.mcpServer(t, x.args.name),
     check: ({ result, x, expect }) => expect(result.name).toBe(x.args.name) },
   a2aRegistry: { fn: 'market.a2aRegistry', run: (s, t) => s.a2aRegistry(t, { limit: 3 }),
     check: ({ result, x, expect }) => expect(result.rows.length).toBe(rowsLen(x.fx.response.body, 'rows')) },
-  a2aAgent: { fn: 'market.a2aAgent', args: () => ({ id: '879f2d3f-4e0e-47f4-8fec-77163a2a9577' }),
+  // the id is the first agent of the recorded registry read: coord's own example id is no longer in the registry (404 on 2026-11-21)
+  a2aAgent: { fn: 'market.a2aAgent', needs: 'a2aRegistry', args: (dep) => ({ id: dep.response.body.rows?.[0]?.id }),
     run: (s, t, x) => s.a2aAgent(t, x.args.id),
     check: ({ result, x, expect }) => expect(result.id).toBe(x.args.id) },
   listStatus: { fn: 'market.listStatus', run: (s, t) => s.listStatus(t, AGENT),
@@ -118,6 +121,9 @@ export const CALLS = {
       if (stage === 'paid') expect(acks.paid, 'the devnet job records no payout transaction: paid stays off').toBeUndefined();
       else expect(acks[stage]).toBe(want[stage]);
     } },
+  // the proof of the job's ending transaction on the devnet: what coordStream reads before it trusts any event
+  readProof: { fn: 'proof.readProof', run: (s, t, x) => s.readProof(t, LEDGER_TX[x.stage], { chain: DEVNET }),
+    check: ({ result, x, expect }) => { expect(result.tx.toLowerCase()).toBe(LEDGER_TX[x.stage]); expect(result.proven).toBe(Object.values(x.fx.response.body.checks ?? {}).length > 0 && Object.values(x.fx.response.body.checks).every(Boolean) && x.fx.response.body.blob !== null); } },
   chainTx: { fn: 'market.chainTx', run: (s, t, x) => s.chainTx(t, DEVNET, LEDGER_TX[x.stage]),
     check: ({ result, x, expect }) => {
       expect(result.events.map((e) => e.name)).toEqual(x.fx.response.body.tx.events.map((e) => e.event));

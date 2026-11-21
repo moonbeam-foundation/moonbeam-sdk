@@ -1,0 +1,147 @@
+{
+ "op": "GET x402/bazaar",
+ "market": "x402-base",
+ "stage": "listed",
+ "dir": "read",
+ "sdk": "market.x402Bazaar",
+ "source": "live",
+ "request": {
+  "method": "GET",
+  "path": "/v1/x402/bazaar",
+  "query": {
+   "limit": "3"
+  }
+ },
+ "response": {
+  "status": 200,
+  "body": {
+   "ok": true,
+   "total": 40032,
+   "offset": 0,
+   "count": 3,
+   "payable": 3,
+   "rows": [
+    {
+     "resource": "https://keyring-agent.blockchhub.link/api/send-native",
+     "host": "keyring-agent.blockchhub.link",
+     "service": null,
+     "description": "Pay the send-native execution fee (native coin transfer)",
+     "tags": [],
+     "method": "GET",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "50000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.05
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.05,
+     "quality": {
+      "paid_calls_30d": 13162,
+      "payers_30d": 4963,
+      "last_paid_at": "2026-11-21T18:12:01.813Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": true,
+      "status": "payable, paid lately"
+     },
+     "updated": "2026-11-21T19:24:14.016Z"
+    },
+    {
+     "resource": "https://ax1-new.vercel.app/api/dashboard/q-verdict/resource",
+     "host": "ax1-new.vercel.app",
+     "service": "AX1 Console",
+     "description": "Any agent can buy a Token Verdict over x402: AI grade, roast and live onchain metrics for any Base, Solana or Robinhood token. $0.02 in USDC, no account.\n\nCheck supported_token_chains in the quote for this deployment. Payment settles on Base. Includes a one-line verdict, shareable page and card imag",
+     "tags": [
+      "agents",
+      "token",
+      "verdict"
+     ],
+     "method": "POST",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "20000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.02
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.02,
+     "quality": {
+      "paid_calls_30d": 152765,
+      "payers_30d": 881,
+      "last_paid_at": "2026-11-21T18:59:41.551Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": true,
+      "status": "payable, paid lately"
+     },
+     "updated": "2026-11-21T19:33:30.382Z"
+    },
+    {
+     "resource": "https://keyring-agent.blockchhub.link/api/send-token",
+     "host": "keyring-agent.blockchhub.link",
+     "service": null,
+     "description": "Pay the send-token execution fee (ERC-20 transfer)",
+     "tags": [],
+     "method": "GET",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "50000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.05
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.05,
+     "quality": {
+      "paid_calls_30d": 13193,
+      "payers_30d": 5045,
+      "last_paid_at": "2026-11-21T18:11:19.577Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": true,
+      "status": "payable, paid lately"
+     },
+     "updated": "2026-11-21T19:23:07.392Z"
+    }
+   ],
+   "how_to_pay": "x402: request the resource, read its 402 (accepts: network, asset, amount, payTo), and repeat the request with an X-PAYMENT header your own wallet signs. Taifoon lists and never pays: discovery only.",
+   "readiness": "from the listing only: payable_on_layer_chain = a USDC price on Base (8453) or Arc (5042); input_described = the listing says how to call it; paid_last_7d = the facilitator saw a paid call in the last 7 days",
+   "source": "https://api.cdp.coinbase.com/platform/v2/x402/discovery/resources",
+   "cached": false,
+   "page_read": {
+    "state": "found",
+    "source": "live",
+    "age_s": 0,
+    "read_at": "2026-11-21T19:42:24.344Z"
+   }
+  }
+ },
+ "coord_sha": "9b4c6c382862727e655a3f06ecb7ed33d7a88905",
+ "read_at": "2026-11-21T19:42:22.008Z",
+ "notes": {
+  "dropped": [
+   "rows[].prices[].pay_to (a payee, requester, signer or treasury-like address field)"
+  ]
+ }
+}

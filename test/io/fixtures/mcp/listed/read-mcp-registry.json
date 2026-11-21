@@ -1,0 +1,120 @@
+{
+ "op": "GET mcp/registry",
+ "market": "mcp",
+ "stage": "listed",
+ "dir": "read",
+ "sdk": "market.mcpRegistry",
+ "source": "live",
+ "request": {
+  "method": "GET",
+  "path": "/v1/mcp/registry",
+  "query": {
+   "limit": "3"
+  }
+ },
+ "response": {
+  "status": 200,
+  "body": {
+   "ok": true,
+   "count": 3,
+   "next_cursor": "ac.snag/snag:1.0.0",
+   "query": null,
+   "open": 3,
+   "packages_only": 0,
+   "linked_erc8004": 0,
+   "rows": [
+    {
+     "name": "ac.inference.sh/mcp",
+     "title": "inference.sh",
+     "description": "run any ai model. compose agents, stack knowledge, connect tools. one api, pay per run.",
+     "version": "2.0.1",
+     "website": null,
+     "repository": null,
+     "status": "active",
+     "published_at": "2026-07-27T10:44:51.359634Z",
+     "updated_at": "2026-07-27T10:44:51.359634Z",
+     "remotes": [
+      {
+       "type": "streamable-http",
+       "url": "https://api.inference.sh/mcp",
+       "open": true,
+       "why": "streamable-http, https, no header required"
+      }
+     ],
+     "packages": 0,
+     "open_remote": "https://api.inference.sh/mcp",
+     "free": true,
+     "access": "open: a streamable-http endpoint that needs nothing from the caller",
+     "erc8004": [],
+     "record": "https://registry.modelcontextprotocol.io/v0.1/servers/ac.inference.sh%2Fmcp/versions/latest",
+     "probe": null
+    },
+    {
+     "name": "ac.mizan/registry",
+     "title": "Mizan",
+     "description": "Player ban records from 560+ game community ban lists, with Steam's own bans. Reads need no key.",
+     "version": "1.2.0",
+     "website": "https://mizan.ac/capabilities",
+     "repository": null,
+     "status": "active",
+     "published_at": "2026-11-05T23:35:33.188176Z",
+     "updated_at": "2026-11-05T23:35:33.188176Z",
+     "remotes": [
+      {
+       "type": "streamable-http",
+       "url": "https://mizan.ac/mcp",
+       "open": true,
+       "why": "streamable-http, https, no header required"
+      }
+     ],
+     "packages": 0,
+     "open_remote": "https://mizan.ac/mcp",
+     "free": true,
+     "access": "open: a streamable-http endpoint that needs nothing from the caller",
+     "erc8004": [],
+     "record": "https://registry.modelcontextprotocol.io/v0.1/servers/ac.mizan%2Fregistry/versions/latest",
+     "probe": null
+    },
+    {
+     "name": "ac.snag/snag",
+     "title": null,
+     "description": "Gives your coding agent the captured console, network, replay and screenshot evidence for a bug.",
+     "version": "1.0.0",
+     "website": null,
+     "repository": null,
+     "status": "active",
+     "published_at": "2026-09-09T10:35:53.194664Z",
+     "updated_at": "2026-09-09T10:35:53.194664Z",
+     "remotes": [
+      {
+       "type": "streamable-http",
+       "url": "https://mcp.snag.ac/mcp",
+       "open": true,
+       "why": "streamable-http, https, no header required"
+      }
+     ],
+     "packages": 0,
+     "open_remote": "https://mcp.snag.ac/mcp",
+     "free": true,
+     "access": "open: a streamable-http endpoint that needs nothing from the caller",
+     "erc8004": [],
+     "record": "https://registry.modelcontextprotocol.io/v0.1/servers/ac.snag%2Fsnag/versions/latest",
+     "probe": null
+    }
+   ],
+   "how_to_hire": "POST /v1/handshake { candidate: { address: \"<registry name>\", kind: \"mcp-registry\" }, task, tool, args, dispatch: true }: the broker reads the server’s own latest registry record and calls its open remote (initialize, tools/list, one tools/call); the reply is held under its keccak digest.",
+   "readiness": "open = a streamable-http https remote with no required header and no URL template, from the record alone; probe (?probe=1, at most 20 per page) = a live MCP initialize + tools/list: reachable = both answered, free = reachable and no payment wall",
+   "erc8004": "the ERC-8004 agents in /v1/agents/hireable whose endpoint is this remote (match endpoint), else whose host is its host (match host: a lead, not an identity)",
+   "source": "https://registry.modelcontextprotocol.io/v0.1/servers?version=latest",
+   "cached": false,
+   "page_read": {
+    "state": "found",
+    "source": "live",
+    "age_s": 0,
+    "read_at": "2026-11-21T19:42:26.378Z"
+   }
+  }
+ },
+ "coord_sha": "9b4c6c382862727e655a3f06ecb7ed33d7a88905",
+ "read_at": "2026-11-21T19:42:25.595Z"
+}

@@ -1,0 +1,140 @@
+{
+ "op": "GET proof/tx/:chain/:tx",
+ "market": "olas-base",
+ "stage": "settled",
+ "dir": "read",
+ "sdk": "proof.readProof",
+ "source": "live",
+ "request": {
+  "method": "GET",
+  "path": "/v1/proof/tx/36927/0x79d3221cbd512ab749867800e339415f12991642a895212d0e3989d852d7517e",
+  "query": {}
+ },
+ "response": {
+  "status": 200,
+  "body": {
+   "ok": true,
+   "chain_id": 36927,
+   "tx": "0x79d3221cbd512ab749867800e339415f12991642a895212d0e3989d852d7517e",
+   "block_number": 1482310,
+   "block_hash": "0xdf3d5d8d4855817fcb47f0f1cfa2fee486f032bec116f14461de216c6f85e64a",
+   "is_finalized": true,
+   "proven": true,
+   "proof_state": "proven",
+   "super_root_hash": "f6e8a2b37585e0c96200c82e5433ab6f897033ffc4c68b611b000dce4aad88cc",
+   "batch_id": 1793917538,
+   "finality_block": 1482310,
+   "finalized_block_hash": "0xdf3d5d8d4855817fcb47f0f1cfa2fee486f032bec116f14461de216c6f85e64a",
+   "verifiable_block": 2768031,
+   "checks": {
+    "receipt_found": true,
+    "tx_succeeded": true,
+    "proof_served": true,
+    "block_hash_matches": true,
+    "within_verifiable_range": true
+   },
+   "source": "receipt read from chain; block proof from the producer; block hash compared between the two",
+   "blob": {
+    "blockProof": {
+     "blockIndex": 1482310,
+     "inclusion": {
+      "blockHash": "0xdf3d5d8d4855817fcb47f0f1cfa2fee486f032bec116f14461de216c6f85e64a",
+      "blockNumber": 1482310,
+      "index": 1482310,
+      "root": "0x97ead6c4f61883975cceb88be4ae276107df5832ba14c663c2fe648eccc39fcb",
+      "siblings": [
+       "0x0ea3b92b2fa8c2e63605711c40a7ebe0ee1749c5963804306c729e288cf2f489",
+       "0x8ae8709e02ef6d7d615783629421a9ba59b4402f7f997ca1b2e7f1f90bd0a5bd",
+       "0x858eea07c99b32e9d6f4c155ca7de326fb47b29bc51e8cab7416cd9d25f2f76d",
+       "0x623ba56050b8d0d1fc985abbf7f07c17a5cfc6d06750558372214a7a978ed694",
+       "0x8b64f7c0adbf2e304098bb7b9439f50c919a41dab5c572d1d0e4db4165fc4828",
+       "0x30049fcbd0e09f3b156f1564ed171b219af9bb3a461dfcea11d6f997f11f3129",
+       "0x5d741bacf6cfa4e770c25587fb594ad92f50a6742a84c92310b31b87db415bb6",
+       "0xdac4eb642de06131280949363ce93a487f4bf16957e736fb2d3d09e9addd77d2",
+       "0x87adb2d8aa346bea7bfb46d8094e96c0d9945bbd62a67eeacbb301b15689942f",
+       "0xbac27c3b0f496cb161cd4e0a8486e2a4aa1affa9315561c994a8e1a42b0fe8d0",
+       "0x1250dc255401147e603383b8181b41ad94a5c800a4f2b44cedcd10111f847afe",
+       "0x38706b9b78431ad52aa9e6b851fcef953457fa6efea5f56ec66cae644cf4a862",
+       "0x33e83bf19cc6b8ba0712c65796f67f4dc79c47f2ef0181d6150b905ac8260672",
+       "0x24fd368b0e0a2016888a21e7a503b9832731833a84b5b0cccdf1c3def688a8b8",
+       "0x7b1f93be65fb6e0538bad2277cf714e6df3b518ff71f9cc667c178c087cb5927",
+       "0x3c5af4f204db6614137ea272ce5ddd9bf3f05a61018cc09a05e5119fa103a16a",
+       "0xa3e7558cf481e447d28e330d9098dd5f58be5b468665c8d667c421982121ba22",
+       "0x29ba49f12c22f6af84b58630b81a8bb61533a8be6f5241e150f2aae2e16bf2ad",
+       "0x59d78b4c3bad1491c9da6a46b5842304f1572c359f90f13a6f3bdbf3964bfdac",
+       "0x292205e675387b55efac9c4a37982e59a6113a5d1b610ec74d19ba62967ad25a",
+       "0xe5f13a6293f00562918a372073b8367330e25d1695bf5aa6aef9aa167da47c72",
+       "0xf7a14f41640091ca7dcffb452d64d4ca7079fc9eb41cfdb73c47c618ffe51c0b",
+       "0x5a9c16dc00d6ef18b7933a6f8dc65ccb55667138776f7dea101070dc8796e377",
+       "0x4df84f40ae0c8229d0d6069e5c8f39a7c299677a09d367fc7b05e3bc380ee652",
+       "0xcdc72595f74c7b1043d0e1ffbab734648c838dfb0527d971b602bc216c9619ef",
+       "0x0abf5ac974a1ed57f4050aa510dd9c74f508277b39d7973bb2dfccc5eeb0618d",
+       "0xb8cd74046ff337f0a7bf2c8e03e10f642c1886798d71806ab1e888d9e5ee87d0",
+       "0x838c5655cb21c6cb83313b5a631175dff4963772cce9108188b34ac87c81c41e",
+       "0x662ee4dd2dd7b2bc707961b1e646c4047669dcb6584f0d8d770daf5d7e7deb2e",
+       "0x388ab20e2573d171a88108e79d820e98f26c0b84aa8b2f4aa4968dbb818ea322",
+       "0x93237c50ba75ee485f4c22adf2f741400bdf8d6a9cc7df7ecae576221665d735",
+       "0x8448818bb4ae4562849e949e17ac16e0be16688e156b5cf15e098c627c0056a9"
+      ],
+      "tipBlockHash": "0x51dd06adf0c0fff17ec322e1089dc021fbfd6a4d2d1363e2d8ffe3069396a638",
+      "tipBlockNumber": 2768031,
+      "treeVersion": 283191,
+      "twigCount": 1778737
+     },
+     "l4Status": "block is bound by `inclusion`: its hash folds to miniMmrRoot at index = block number; `siblings` is left empty because the deployed v5.0 verifier folds the snapshot-tip header's hash, not this block's",
+     "siblings": []
+    },
+    "chainHeaders": [
+     {
+      "blockHash": "0xdf3d5d8d4855817fcb47f0f1cfa2fee486f032bec116f14461de216c6f85e64a",
+      "blockNumber": 1482310,
+      "chainId": 36927,
+      "chainType": 0,
+      "miniMmrRoot": "0x97ead6c4f61883975cceb88be4ae276107df5832ba14c663c2fe648eccc39fcb",
+      "stateRoot": "0x694128d201841f96896f8f9ac0b874a8957da04103c490afb1fa2739fb28bae9",
+      "twigCount": 1778737
+     }
+    ],
+    "event": {
+     "chainType": 0,
+     "encoded": "0x"
+    },
+    "finality": {
+     "block": 1482310,
+     "blockNumber": 1482310,
+     "chainId": 36927,
+     "checked_at": 1793917544,
+     "confirmations": 1285725,
+     "finalityType": 3,
+     "finalizedBlockHash": "0xdf3d5d8d4855817fcb47f0f1cfa2fee486f032bec116f14461de216c6f85e64a",
+     "finalizedBlockNumber": 1482310,
+     "finalized_block": null,
+     "level": "quick",
+     "proof": "0x0000000000000000000000000000000000000000000000000000000000139e5d51dd06adf0c0fff17ec322e1089dc021fbfd6a4d2d1363e2d8ffe3069396a638",
+     "rule": "quick: 1285725 confirmations on the collected chain (≥ 2); full needs no finalized head was read for this answer: full finality not claimed"
+    },
+    "superroot": {
+     "batchId": 1793917538,
+     "chainCount": 80,
+     "superrootHash": "0xf6e8a2b37585e0c96200c82e5433ab6f897033ffc4c68b611b000dce4aad88cc",
+     "totalTwigs": 105143562
+    },
+    "superrootProof": {
+     "siblings": [
+      "0xe8e0b4bfc58271ac233337f3d4e914b006eb4543f981bd58fea6f9b885a711f2",
+      "0x4d0f539628212f41aee951fdb368544c6afaf5de7c041f4f11429d3d674ba290",
+      "0x87cb722c67989d051cbaa5d596d4312a0940a7a7a249ef5ba96d776ff19db8b5",
+      "0xcb7fe60ea44598bdf9c5f4d2e95c10dd7a8a37daf1ba2c38dbd993e8b04dc0c0",
+      "0xdd73baaf94e0a3adde5a2d68095f59b07817f747b201be7fb932215a7ebeeb83",
+      "0xd17e330e11388cc2c9a520359f4931f0e494df2a3969df24856e81d6ebb35657",
+      "0x4b737616e67aee109bc438a84f59195a0954ca073fbc141b416207d108e44ccb"
+     ],
+     "targetChainIndex": 22
+    },
+    "verifiableBlock": 2768031
+   }
+  }
+ },
+ "coord_sha": "9b4c6c382862727e655a3f06ecb7ed33d7a88905",
+ "read_at": "2026-11-21T19:53:44.046Z"
+}
