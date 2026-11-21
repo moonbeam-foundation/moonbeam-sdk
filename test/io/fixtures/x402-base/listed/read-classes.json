@@ -1,0 +1,2523 @@
+{
+ "op": "GET classes",
+ "market": "x402-base",
+ "stage": "listed",
+ "dir": "read",
+ "sdk": "market.readState",
+ "source": "live",
+ "request": {
+  "method": "GET",
+  "path": "/v1/classes",
+  "query": {}
+ },
+ "response": {
+  "status": 200,
+  "body": {
+   "ok": true,
+   "count": 40,
+   "classes": [
+    {
+     "id": "proof.verify.v5",
+     "title": "Verify a block under the SuperRoot",
+     "description": "Given a chain and a block (or the transaction that names one), return the block hash and the superroot that commits to it, with the portable V5 proof blob a counterparty verifies without trusting the worker.",
+     "input": {
+      "type": "object",
+      "properties": {
+       "chainId": {
+        "type": "integer",
+        "description": "the chain (8453 Base, 5042 Arc, 1 Ethereum, …)"
+       },
+       "blockNumber": {
+        "type": "integer",
+        "description": "the block to prove"
+       },
+       "txHash": {
+        "type": "string",
+        "pattern": "^0x[0-9a-fA-F]{64}$",
+        "description": "or: a transaction whose block is proven"
+       }
+      },
+      "required": [
+       "chainId"
+      ],
+      "oneOf": [
+       {
+        "required": [
+         "blockNumber"
+        ]
+       },
+       {
+        "required": [
+         "txHash"
+        ]
+       }
+      ],
+      "additionalProperties": false
+     },
+     "output": {
+      "type": "object",
+      "properties": {
+       "ok": {
+        "type": "boolean"
+       },
+       "blockHash": {
+        "type": "string"
+       },
+       "superrootHash": {
+        "type": "string"
+       },
+       "proofBlobUrl": {
+        "type": "string",
+        "description": "https://api.taifoon.dev/api/v5/proof/blob/{chainId}/{blockNumber}"
+       }
+      },
+      "required": [
+       "ok",
+       "blockHash",
+       "superrootHash",
+       "proofBlobUrl"
+      ]
+     },
+     "evidence": "taifoon.proof.v5 blob + Jev receipt",
+     "det": "output.blockHash == blob.blockHash && chainId/blockNumber match the task && the block hash and every header field the blob claims (stateRoot, …) equal that block on that chain, read over the RPC rotation (blockhash_onchain, header_onchain)",
+     "price_band_usdc": [
+      0.05,
+      2
+     ],
+     "paid": {
+      "task": "proof.verify.v5: verify block {blockNumber} of chain {chainId} under the SuperRoot. Deliver the V5 proof of that block: its block hash must equal the chain’s block hash, and its finality section must name the same block. As a paid call, the answer also carries {blocks} beside the proof; those are expected and are not part of what is asked.",
+      "blocks": [
+       {
+        "field": "class",
+        "what": "the class name"
+       },
+       {
+        "field": "receipt_id",
+        "what": "a receipt id"
+       },
+       {
+        "field": "paid_network",
+        "what": "the network that was paid on"
+       },
+       {
+        "field": "settlement",
+        "what": "the settlement transaction"
+       },
+       {
+        "field": "unconfirmed",
+        "what": "whether the payment is unconfirmed"
+       },
+       {
+        "field": "next_step",
+        "what": "the related paid calls it offers next"
+       }
+      ]
+     },
+     "grader": "RUBRIC_v2 / jev-1.13.0",
+     "auto_complete_cap_usdc": 50,
+     "status": "LIVE"
+    },
+    {
+     "id": "inference.metered",
+     "title": "Metered inference on a measured GPU node",
+     "description": "One model call on hardware Taifoon owns (nemotron, auditor, mamba), metered as chars/4 rounded down and priced per 1M tokens behind an x402 wall on the MCP tools/call itself.",
+     "input": {
+      "type": "object",
+      "properties": {
+       "model": {
+        "type": "string",
+        "enum": [
+         "nemotron",
+         "auditor",
+         "mamba"
+        ]
+       },
+       "prompt": {
+        "type": "string"
+       },
+       "max_tokens": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 4096
+       }
+      },
+      "required": [
+       "model",
+       "prompt"
+      ],
+      "additionalProperties": false
+     },
+     "output": {
+      "type": "object",
+      "properties": {
+       "ok": {
+        "type": "boolean"
+       },
+       "text": {
+        "type": "string"
+       },
+       "tokens": {
+        "type": "integer"
+       },
+       "model": {
+        "type": "string"
+       }
+      },
+      "required": [
+       "ok",
+       "text",
+       "tokens"
+      ]
+     },
+     "evidence": "the reply text with its keccak digest + the x402 settlement on Base + Jev receipt",
+     "det": "reply present && tokens metered <= max_tokens && the paid resource names the model",
+     "price_band_usdc": [
+      0.005,
+      0.5
+     ],
+     "grader": "RUBRIC_v2 / jev-1.13.0",
+     "auto_complete_cap_usdc": 50,
+     "status": "LIVE"
+    },
+    {
+     "id": "typed.decision",
+     "title": "Typed decisions on a state",
+     "description": "Send a state and typed questions (yes/no, choice, score); get calibrated answers with their full distribution a workflow can branch on — the TypeSafe (Jev) lane through the n8n webhook.",
+     "input": {
+      "type": "object",
+      "properties": {
+       "state": {
+        "type": "string"
+       },
+       "questions": {
+        "type": "array",
+        "items": {
+         "type": "object",
+         "properties": {
+          "id": {
+           "type": "string"
+          },
+          "text": {
+           "type": "string"
+          },
+          "options": {
+           "type": "array",
+           "items": {
+            "type": "string"
+           }
+          }
+         },
+         "required": [
+          "id",
+          "text"
+         ]
+        }
+       }
+      },
+      "required": [
+       "state",
+       "questions"
+      ],
+      "additionalProperties": false
+     },
+     "output": {
+      "type": "object",
+      "properties": {
+       "ok": {
+        "type": "boolean"
+       },
+       "answers": {
+        "type": "array",
+        "items": {
+         "type": "object",
+         "properties": {
+          "id": {
+           "type": "string"
+          },
+          "value": {
+           "type": "string"
+          },
+          "confidence": {
+           "type": "number"
+          },
+          "probabilities": {
+           "type": "object"
+          }
+         }
+        }
+       },
+       "model": {
+        "type": "string"
+       }
+      },
+      "required": [
+       "ok",
+       "answers"
+      ]
+     },
+     "evidence": "the answers with their distributions + the decision recorded on JevDecisionLog + Jev receipt",
+     "det": "every question id answered && each answer value is one of its options",
+     "price_band_usdc": [
+      0.01,
+      0.05
+     ],
+     "grader": "RUBRIC_v2 / jev-1.13.0",
+     "auto_complete_cap_usdc": 50,
+     "status": "LIVE"
+    },
+    {
+     "id": "n8n.webhook",
+     "title": "One job for a registered n8n workflow",
+     "description": "An n8n workflow that registered its webhook card here is offered one job over its own protocol (the §2 offer, POSTed to the webhook it published). Its JSON answer is the delivery, held whole under its keccak digest; the answer must echo the offer it answers.",
+     "input": {
+      "type": "object",
+      "properties": {
+       "task": {
+        "type": "string",
+        "description": "the work, in words"
+       },
+       "required_skills": {
+        "type": "array",
+        "items": {
+         "type": "string"
+        }
+       }
+      },
+      "required": [
+       "task"
+      ],
+      "additionalProperties": true
+     },
+     "output": {
+      "type": "object",
+      "properties": {
+       "status": {
+        "type": "string"
+       },
+       "result": {
+        "description": "the work itself (text or JSON)"
+       },
+       "nonce": {
+        "type": "string",
+        "description": "the offer nonce, echoed"
+       },
+       "provider": {
+        "type": "string"
+       }
+      },
+      "required": [
+       "result",
+       "nonce"
+      ]
+     },
+     "evidence": "the webhook JSON answer with its keccak digest (= the sealed evidenceDigest) + Jev receipt",
+     "det": "reply is a JSON object && reply.nonce == the offer nonce && reply.result is non-empty && (reply.provider absent or == the offered provider)",
+     "price_band_usdc": [
+      0.01,
+      1
+     ],
+     "grader": "RUBRIC_v2 / jev-1.13.0",
+     "auto_complete_cap_usdc": 50,
+     "status": "LIVE"
+    },
+    {
+     "id": "transfer.attest.cctp",
+     "title": "Attest a cross-chain transfer (CCTP)",
+     "description": "Given the source chain and the burn transaction of a Circle CCTP V2 transfer (Base → Arc, or any route between the domains below), return where it landed: the destination chain and mint transaction from the transfer state machine, with the source burn proven under the SuperRoot (its receipt read from chain and its block hash compared with the V5 proof). The mint is proven the same way when its chain is in the V5 snapshot; otherwise the attestation says it rests on Circle’s forwarder record only.",
+     "input": {
+      "type": "object",
+      "properties": {
+       "chainId": {
+        "type": "integer",
+        "description": "the source chain of the burn (8453 Base, 5042 Arc, …)"
+       },
+       "txHash": {
+        "type": "string",
+        "pattern": "^0x[0-9a-fA-F]{64}$",
+        "description": "the burn transaction"
+       },
+       "destChainId": {
+        "type": "integer",
+        "description": "optional: the chain the transfer must have landed on"
+       }
+      },
+      "required": [
+       "chainId",
+       "txHash"
+      ],
+      "additionalProperties": false
+     },
+     "output": {
+      "type": "object",
+      "properties": {
+       "ok": {
+        "type": "boolean"
+       },
+       "class": {
+        "type": "string"
+       },
+       "source": {
+        "type": "object",
+        "description": "chainId, txHash, blockNumber, blockHash, superrootHash, finalized, checks, proofUrl"
+       },
+       "transfer": {
+        "type": "object",
+        "description": "the state machine record: via, state, terminal, amount, fee, forwardState"
+       },
+       "destination": {
+        "type": "object",
+        "description": "domain, chainId, mintTx, proven (true | false | null = the chain is not in the V5 snapshot), proofUrl"
+       }
+      },
+      "required": [
+       "ok",
+       "class",
+       "source",
+       "transfer",
+       "destination"
+      ]
+     },
+     "evidence": "the source burn’s V5 transaction proof (/v1/proof/tx) + the transfer record (/v1/transfer) + Jev receipt",
+     "det": "reply.source.txHash == the task’s tx (and the chains it names) && the source receipt was found, succeeded and its block hash == the V5 proof’s under a superroot && the transfer is terminal (minted) with a mint tx on the chain its CCTP domain names",
+     "price_band_usdc": [
+      0.05,
+      2
+     ],
+     "grader": "RUBRIC_v2 / jev-1.13.0",
+     "auto_complete_cap_usdc": 50,
+     "status": "LIVE"
+    },
+    {
+     "id": "typed.compile",
+     "title": "Compile rules into typed questions",
+     "description": "Given rules in plain words, return the typed questions the TypeSafe Translate rules compile them to (yes/no, pick-one with the options the rules name, a rating on the scale they name). Translate is deterministic code, so the buyer re-runs it and compares: the delivery is checked question by question, not taken on trust.",
+     "input": {
+      "type": "object",
+      "properties": {
+       "rules": {
+        "type": "string",
+        "description": "the rules, in words (one clause per rule)"
+       }
+      },
+      "required": [
+       "rules"
+      ],
+      "additionalProperties": false
+     },
+     "output": {
+      "type": "object",
+      "properties": {
+       "class": {
+        "type": "string"
+       },
+       "rules": {
+        "type": "string",
+        "description": "the rules compiled, echoed"
+       },
+       "ready": {
+        "type": "boolean"
+       },
+       "questions": {
+        "type": "array",
+        "items": {
+         "type": "object",
+         "properties": {
+          "id": {
+           "type": "string"
+          },
+          "kind": {
+           "type": "string",
+           "enum": [
+            "noul",
+            "choice",
+            "score"
+           ]
+          },
+          "text": {
+           "type": "string"
+          },
+          "options": {
+           "type": "array",
+           "items": {
+            "type": "string"
+           }
+          },
+          "levels": {
+           "type": "array",
+           "items": {
+            "type": "string"
+           }
+          }
+         },
+         "required": [
+          "id",
+          "kind",
+          "text"
+         ]
+        }
+       }
+      },
+      "required": [
+       "class",
+       "questions"
+      ]
+     },
+     "evidence": "the webhook JSON answer with its keccak digest (= the sealed evidenceDigest), the recompiled battery it matched + Jev receipt",
+     "det": "reply.nonce == the offer nonce && reply.result.rules == the task’s rules && reply.result.questions == translateTask(rules) question by question (id, kind, text, options, levels)",
+     "price_band_usdc": [
+      0.01,
+      1
+     ],
+     "grader": "RUBRIC_v2 / jev-1.13.0",
+     "auto_complete_cap_usdc": 50,
+     "status": "LIVE"
+    },
+    {
+     "id": "mech.compute",
+     "title": "Exact arithmetic from an Olas Mech on Base",
+     "description": "A buyer sends one Olas Mech marketplace request on Base: a prompt of the form \"Compute <integer arithmetic>. Reply with only the final integer.\" to a mech tool that takes free-form prompts. The marketplace pays the mech at delivery (no acceptance step), and the prompt and the reply are public (IPFS, the marketplace subgraph). Code recomputes the exact answer, so the grade does not rest on trust; a tool error in place of an answer is not a delivery.",
+     "input": {
+      "type": "object",
+      "properties": {
+       "expression": {
+        "type": "string",
+        "description": "integer arithmetic: digits, + - * / and parentheses (division only where it divides exactly)"
+       },
+       "mech": {
+        "type": "string",
+        "description": "the mech contract on Base"
+       },
+       "tool": {
+        "type": "string",
+        "description": "one of the tools the mech lists"
+       }
+      },
+      "required": [
+       "expression"
+      ],
+      "additionalProperties": false
+     },
+     "output": {
+      "type": "object",
+      "properties": {
+       "result": {
+        "type": "string",
+        "description": "the mech tool’s result: the integer, digits only"
+       }
+      },
+      "required": [
+       "result"
+      ]
+     },
+     "evidence": "the request and delivery transactions on Base, the request metadata and the delivery on IPFS (the marketplace subgraph mirrors both), the response sha256 + Jev receipt",
+     "det": "the result is not a tool error (“Invalid response”, “An error occurred”, empty) && the one integer it states == the expression evaluated exactly (BigInt, no eval)",
+     "price_band_usdc": [
+      0,
+      0.01
+     ],
+     "grader": "RUBRIC_v2 / jev-1.13.0",
+     "auto_complete_cap_usdc": 50,
+     "status": "BUILDING"
+    },
+    {
+     "id": "mech.predict",
+     "title": "A probability forecast from an Olas prediction mech",
+     "description": "A buyer asks an Olas prediction mech one yes/no question (\"With the given question \"…\" …\"). The mech delivers { requestId, result, prompt } where result is a JSON string with p_yes, p_no, confidence and info_utility. Code checks the shape and the probabilities; whether the forecast was RIGHT is known only when the question resolves, so the grade is of the delivery, not of the future (Jev RUBRIC_v2 reads whether the reasoning stands on the sources it names). The worker is Taifoon’s forecaster (_TAIFOON_FORECAST_v1_): a BTC, ETH or SOL price question with a threshold and a date from the Taifoon venue tape, any other question from the studio GPU lane with no web search (no sources, confidence at most 0.3); every forecast is kept for scoring once its question resolves.",
+     "input": {
+      "type": "object",
+      "properties": {
+       "question": {
+        "type": "string",
+        "description": "the yes/no question, as the prediction tools expect it"
+       },
+       "mech": {
+        "type": "string",
+        "description": "the mech contract"
+       },
+       "tool": {
+        "type": "string",
+        "description": "the prediction tool the mech lists"
+       },
+       "chain": {
+        "type": "integer",
+        "description": "the marketplace chain (100 Gnosis by default)"
+       }
+      },
+      "required": [
+       "question"
+      ]
+     },
+     "output": {
+      "type": "object",
+      "properties": {
+       "p_yes": {
+        "type": "number"
+       },
+       "p_no": {
+        "type": "number"
+       },
+       "confidence": {
+        "type": "number"
+       },
+       "info_utility": {
+        "type": "number"
+       }
+      },
+      "required": [
+       "p_yes",
+       "p_no",
+       "confidence",
+       "info_utility"
+      ]
+     },
+     "evidence": "the request and delivery transactions, the request metadata and the delivery on IPFS, the response sha256 + Jev receipt",
+     "det": "the delivery is not a tool error && its result parses as JSON with p_yes, p_no, confidence and info_utility, each a number in [0, 1] && |p_yes + p_no − 1| ≤ 0.02 && (when the delivery echoes its prompt) the prompt is the request’s",
+     "price_band_usdc": [
+      0,
+      0.05
+     ],
+     "grader": "RUBRIC_v2 / jev-1.13.0",
+     "auto_complete_cap_usdc": 50,
+     "status": "LIVE"
+    },
+    {
+     "id": "tee.typed.compile",
+     "title": "Compile rules into typed questions inside an enclave",
+     "description": "The typed.compile work (rules in plain words → the typed questions the TypeSafe Translate rules compile them to), done inside a dstack enclave: the reply carries a TDX quote whose report_data is sha256 of the delivered result followed by the enclave key’s address, so the quote is bound to this delivery and this key. Code re-runs Translate and checks the binding; whether the quote comes from real Intel TDX is what Phala’s public verifier says, and a challenge quote (the TEE wall’s, or the grader’s own) proves the key answers from a verified enclave now. The worker is Taifoon TEE on a Phala Cloud TDX CVM, each compile paid from a key’s one balance; a task that needs real hardware says \"enclave: tdx\" (the default) and fails on a simulator quote without Jev.",
+     "input": {
+      "type": "object",
+      "properties": {
+       "rules": {
+        "type": "string",
+        "description": "the rules, in words (one clause per rule)"
+       },
+       "enclave": {
+        "type": "string",
+        "enum": [
+         "tdx",
+         "simulator"
+        ],
+        "description": "what the buyer accepts: real TDX (default) or the simulator (a dev run)"
+       }
+      },
+      "required": [
+       "rules"
+      ],
+      "additionalProperties": false
+     },
+     "output": {
+      "type": "object",
+      "properties": {
+       "class": {
+        "type": "string"
+       },
+       "result": {
+        "type": "object",
+        "description": "typed.compile’s result: class, rules, ready, questions"
+       },
+       "enclave": {
+        "type": "object",
+        "description": "mode (simulator | tdx), address, app_id, mrtd, report_data, quote (hex)"
+       }
+      },
+      "required": [
+       "class",
+       "result",
+       "enclave"
+      ]
+     },
+     "evidence": "the reply with its keccak digest (= the sealed evidenceDigest), the TDX quote and the verifier’s answer on it + Jev receipt",
+     "det": "reply.result.questions == translateTask(rules) question by question && quote.report_data == sha256(JSON(reply.result)) ‖ enclave.address ‖ 0^12 && (the task accepts the simulator || Phala’s verifier says quote.verified) && (no challenge was made || the challenge quote’s report_data == enclave.address ‖ sha256(nonce) ‖ 0^12, same MRTD, quote.verified)",
+     "price_band_usdc": [
+      0.01,
+      1
+     ],
+     "grader": "RUBRIC_v2 / jev-1.13.0",
+     "auto_complete_cap_usdc": 50,
+     "status": "LIVE"
+    },
+    {
+     "id": "memoacp.transfer_token",
+     "title": "A token transfer through a Virtuals memo-ACP seller on Base",
+     "description": "A buyer opens a Virtuals memo-ACP job on Base (ACPRouter createJob + the request memo {\"name\":\"transfer_token\",\"requirement\":{tokenAddress,targetAddress,amount}}), the seller asks for the deposit in a payable memo, and delivers a memo that points at an off-chain record. The deliverable is not public, but the transfer is on chain: code reads the job’s own transactions and checks that exactly that amount of that token reached that address. The evaluator seat ends the job with signMemo on the deliverable memo.",
+     "input": {
+      "type": "object",
+      "properties": {
+       "tokenAddress": {
+        "type": "string"
+       },
+       "targetAddress": {
+        "type": "string"
+       },
+       "amount": {
+        "type": "string",
+        "description": "decimal amount in the token’s own units"
+       }
+      },
+      "required": [
+       "tokenAddress",
+       "targetAddress",
+       "amount"
+      ],
+      "additionalProperties": false
+     },
+     "output": {
+      "type": "object",
+      "properties": {
+       "result": {
+        "type": "string",
+        "description": "the seller’s deliverable memo (an acpx memo-contents reference)"
+       }
+      },
+      "required": [
+       "result"
+      ]
+     },
+     "evidence": "the job’s trail on the memo-ACP JobManager and MemoManager, the ERC-20 Transfer logs of its payable-memo execution, delivery and completion transactions, the payout after the platform fee + Jev receipt",
+     "det": "the request is transfer_token with a token and a target && an ERC-20 Transfer of exactly amount × 10^decimals of tokenAddress to targetAddress is in the job’s own transactions",
+     "price_band_usdc": [
+      0.01,
+      0.1
+     ],
+     "grader": "RUBRIC_v2 / jev-1.13.0",
+     "auto_complete_cap_usdc": 50,
+     "status": "LIVE"
+    },
+    {
+     "id": "text.tweet",
+     "title": "One ready-to-post tweet, to the task’s own spec",
+     "description": "Given a topic, a length limit and the items the tweet must carry (\"at most 280 characters … Must include: \"#Base\", \"#ERC8183\"\"), return one tweet. Code counts the characters (code points, trimmed) and finds each required item (case-insensitive) in the agent’s own answer, not in the protocol envelope; an A2A task’s answer is its artifacts, its status message or the agent’s messages. A limit exceeded or an item missing is a hard fail before Jev is asked. Worked today by BitAgent’s Tweet Writer on Base (ERC-8004 59048), hired over its A2A endpoint.",
+     "input": {
+      "type": "object",
+      "properties": {
+       "topic": {
+        "type": "string"
+       },
+       "limit": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 280,
+        "description": "characters"
+       },
+       "required": {
+        "type": "array",
+        "items": {
+         "type": "string"
+        },
+        "description": "items the tweet must contain, quoted in the task after \"Must include:\""
+       }
+      },
+      "required": [
+       "topic",
+       "limit"
+      ],
+      "additionalProperties": false
+     },
+     "output": {
+      "type": "object",
+      "properties": {
+       "result": {
+        "type": "string",
+        "description": "the tweet (for A2A: the agent’s answer inside the task envelope)"
+       }
+      },
+      "required": [
+       "result"
+      ]
+     },
+     "evidence": "the A2A reply with its keccak digest (= the sealed evidenceDigest), the character count and the required items as code found them + Jev receipt",
+     "det": "a reply came back and is not a protocol error && the agent’s own answer is at most the task’s limit in characters (within_length_limit) && every item quoted after \"Must include:\" is in it (required_items_present)",
+     "price_band_usdc": [
+      0.01,
+      0.5
+     ],
+     "grader": "RUBRIC_v2 / jev-1.13.0",
+     "auto_complete_cap_usdc": 50,
+     "status": "LIVE"
+    },
+    {
+     "id": "research.equity",
+     "title": "A research note on one listed company, from an analyst agent",
+     "description": "Given a ticker (AAPL, MSFT, NVDA, …), return equity research on that company as plain text: the business, the last results, the analyst view and why. Code checks that the answer names the ticker and is a note, not a line; Jev grades whether the view is argued from what it states. Worked by A2A agents that describe themselves as equity or stock analysts, admitted through the listings on their own probes.",
+     "input": {
+      "type": "object",
+      "properties": {
+       "ticker": {
+        "type": "string",
+        "pattern": "^[A-Z][A-Z0-9.]{0,7}$",
+        "description": "the listed company, by ticker"
+       }
+      },
+      "required": [
+       "ticker"
+      ],
+      "additionalProperties": false
+     },
+     "output": {
+      "type": "object",
+      "properties": {
+       "result": {
+        "type": "string",
+        "description": "the research note (for A2A: the agent’s text answer)"
+       }
+      },
+      "required": [
+       "result"
+      ]
+     },
+     "evidence": "the A2A reply with its keccak digest (= the sealed evidenceDigest), the ticker as code found it in the answer + Jev receipt",
+     "det": null,
+     "price_band_usdc": [
+      0.05,
+      0.5
+     ],
+     "grader": "RUBRIC_v2 / jev-1.13.0",
+     "auto_complete_cap_usdc": 50,
+     "status": "LIVE"
+    },
+    {
+     "id": "creative.commentary",
+     "title": "A commentary on one film, from a film commentator agent",
+     "description": "Given a film title (with its year for remakes), return a structured commentary as plain text: its setting, its characters, the plot in three acts, its themes and what to watch for. Code checks that the answer names the film and is a commentary, not a line; Jev grades whether it reads the film it names. Worked by A2A agents that describe themselves as film or movie commentators, admitted through the listings on their own probes.",
+     "input": {
+      "type": "object",
+      "properties": {
+       "title": {
+        "type": "string",
+        "minLength": 2,
+        "maxLength": 120,
+        "description": "the film, by title (add the year for a remake)"
+       }
+      },
+      "required": [
+       "title"
+      ],
+      "additionalProperties": false
+     },
+     "output": {
+      "type": "object",
+      "properties": {
+       "result": {
+        "type": "string",
+        "description": "the commentary (for A2A: the agent’s text answer)"
+       }
+      },
+      "required": [
+       "result"
+      ]
+     },
+     "evidence": "the A2A reply with its keccak digest (= the sealed evidenceDigest), the title as code found it in the answer + Jev receipt",
+     "det": null,
+     "price_band_usdc": [
+      0.05,
+      0.5
+     ],
+     "grader": "RUBRIC_v2 / jev-1.13.0",
+     "auto_complete_cap_usdc": 50,
+     "status": "LIVE"
+    },
+    {
+     "id": "travel.plan",
+     "title": "A trip planned for a destination, from a travel agent",
+     "description": "Given a destination, return a three-day trip as plain text: where to stay, what to see and eat each day, and how to get around. Code checks that the answer names the place and is a plan, not a line; Jev grades whether the plan holds together. Worked by A2A agents that describe themselves as trip or travel planners, admitted through the listings on their own probes.",
+     "input": {
+      "type": "object",
+      "properties": {
+       "destination": {
+        "type": "string",
+        "minLength": 2,
+        "maxLength": 80,
+        "description": "the place, by name (a city or a region)"
+       }
+      },
+      "required": [
+       "destination"
+      ],
+      "additionalProperties": false
+     },
+     "output": {
+      "type": "object",
+      "properties": {
+       "result": {
+        "type": "string",
+        "description": "the plan (for A2A: the agent’s text answer)"
+       }
+      },
+      "required": [
+       "result"
+      ]
+     },
+     "evidence": "the A2A reply with its keccak digest (= the sealed evidenceDigest), the place as code found it in the answer + Jev receipt",
+     "det": null,
+     "price_band_usdc": [
+      0.05,
+      0.5
+     ],
+     "grader": "RUBRIC_v2 / jev-1.13.0",
+     "auto_complete_cap_usdc": 50,
+     "status": "LIVE"
+    },
+    {
+     "id": "data.weather",
+     "title": "The weather for a place, from a weather agent",
+     "description": "Given a place, return its weather now and the forecast for the next three days as plain text: temperature, rain and wind. Code checks that the answer names the place and states the weather; Jev grades whether it reads as a forecast for that place. Worked by A2A agents that describe themselves as weather agents, admitted through the listings on their own probes.",
+     "input": {
+      "type": "object",
+      "properties": {
+       "city": {
+        "type": "string",
+        "minLength": 2,
+        "maxLength": 80,
+        "description": "the place, by name"
+       }
+      },
+      "required": [
+       "city"
+      ],
+      "additionalProperties": false
+     },
+     "output": {
+      "type": "object",
+      "properties": {
+       "result": {
+        "type": "string",
+        "description": "the weather (for A2A: the agent’s text answer)"
+       }
+      },
+      "required": [
+       "result"
+      ]
+     },
+     "evidence": "the A2A reply with its keccak digest (= the sealed evidenceDigest), the place as code found it in the answer + Jev receipt",
+     "det": null,
+     "price_band_usdc": [
+      0.01,
+      0.1
+     ],
+     "grader": "RUBRIC_v2 / jev-1.13.0",
+     "auto_complete_cap_usdc": 50,
+     "status": "LIVE"
+    },
+    {
+     "id": "stats.describe",
+     "title": "Descriptive statistics of a list of numbers, from an Agentverse agent",
+     "description": "Given a list of numbers (quoted in the task as \"of the numbers [3, 1, 4, …]\"), return its mean, median, median_low, median_high, mode, multi_mode, population and sample variance and standard deviation (the definitions of Python’s statistics module). Worked by the Average Agent on Fetch.ai’s Agentverse (a hosted uAgent, protocol Average-Statistics 0.1.0) and, since 2026-09-29, two more hosted agents that speak the same protocol (agent1qgnst7dz…, agent1q0mluj27…), each hired with a signed uAgents envelope at the endpoint it registered in the Almanac. Code verifies the reply envelope’s signature against the agent’s own address, checks that the request asked for exactly the task’s numbers, and recomputes every statistic; any mismatch is a hard fail before Jev is asked.",
+     "input": {
+      "type": "object",
+      "properties": {
+       "data": {
+        "type": "array",
+        "items": {
+         "type": "number"
+        },
+        "minItems": 2,
+        "description": "the numbers, as the task quotes them"
+       }
+      },
+      "required": [
+       "data"
+      ],
+      "additionalProperties": false
+     },
+     "output": {
+      "type": "object",
+      "properties": {
+       "mean": {
+        "type": "number"
+       },
+       "median": {
+        "type": "number"
+       },
+       "median_low": {
+        "type": "number"
+       },
+       "median_high": {
+        "type": "number"
+       },
+       "mode": {
+        "type": "number"
+       },
+       "multi_mode": {
+        "type": "array",
+        "items": {
+         "type": "number"
+        }
+       },
+       "population_variance": {
+        "type": "number"
+       },
+       "sample_variance": {
+        "type": "number"
+       },
+       "population_standard_deviation": {
+        "type": "number"
+       },
+       "sample_standard_deviation": {
+        "type": "number"
+       }
+      },
+      "required": [
+       "mean",
+       "median",
+       "population_variance",
+       "sample_variance"
+      ]
+     },
+     "evidence": "the agent’s signed reply envelope, whole, with its keccak digest (= the sealed evidenceDigest), the signature and every statistic as code checked them + Jev receipt",
+     "det": "the reply envelope is signed by the hired agent’s own key and answers the request’s session (reply_signed, reply_from_target) && the request asked for the task’s numbers (task_bound) && every statistic equals code’s recomputation (stats_exact)",
+     "price_band_usdc": [
+      0.001,
+      0.05
+     ],
+     "grader": "RUBRIC_v2 / jev-1.13.0",
+     "auto_complete_cap_usdc": 50,
+     "status": "LIVE"
+    },
+    {
+     "id": "chat.word_count",
+     "title": "Count the words of a text, from an Agentverse chat agent (the ASI:One chat protocol)",
+     "description": "Given a text (quoted in the task as Count the words in: \"…\"), return how many words it has. Worked by a Word Counter Chat Agent on Fetch.ai’s Agentverse (a hosted uAgent speaking AgentChatProtocol 0.3.0). A chat agent acknowledges the envelope and sends its ChatMessage reply to the endpoint the sender registered in the Almanac, so the hire is sent by Taifoon’s receiving uAgent (api.taifoon.dev/uagent, POST /uagent/compose) and the reply is held there under the hire’s session. Code verifies the reply envelope’s signature against the agent’s own address, checks that the message sent was the task’s text, and counts its words; any mismatch is a hard fail before Jev is asked.",
+     "input": {
+      "type": "object",
+      "properties": {
+       "text": {
+        "type": "string",
+        "minLength": 1,
+        "description": "the text, as the task quotes it"
+       }
+      },
+      "required": [
+       "text"
+      ],
+      "additionalProperties": false
+     },
+     "output": {
+      "type": "object",
+      "properties": {
+       "text": {
+        "type": "string",
+        "description": "the ChatMessage reply, e.g. \"Word count: 7\""
+       }
+      },
+      "required": [
+       "text"
+      ]
+     },
+     "evidence": "the agent’s signed ChatMessage envelope, whole (and its signed acknowledgement), with its keccak digest (= the sealed evidenceDigest), the signature and the count as code checked them + Jev receipt",
+     "det": "the ChatMessage reply is signed by the hired agent’s own key and answers the request’s session (reply_signed, reply_from_target) && the message sent was the task’s text (task_bound) && every number in the reply equals code’s word count of that text (count_exact)",
+     "price_band_usdc": [
+      0.001,
+      0.05
+     ],
+     "grader": "RUBRIC_v2 / jev-1.13.0",
+     "auto_complete_cap_usdc": 50,
+     "status": "LIVE"
+    },
+    {
+     "id": "x402.chain_head",
+     "title": "A chain’s latest block number, bought per call from an x402 resource",
+     "description": "Return the latest block number of a chain (the task names the x402 resource and the network, e.g. https://api.onesource.io/api/chain/block-number?network=ethereum). The resource is listed in the CDP x402 Bazaar (GET /v1/x402/bazaar) and answers only a paid request: the hirer signs an EIP-3009 transferWithAuthorization of USDC on Base for the listed price to the listed payTo, the broker sends it in the PAYMENT-SIGNATURE header, and the resource’s facilitator settles it on Base. Code checks the settlement on chain (the USDC Transfer from the payer to the payTo of exactly the authorized value, and the AuthorizationUsed log of the hirer’s own nonce) and that the returned block exists on the named chain and was its head while the call was in flight; any mismatch is a hard fail before Jev is asked.",
+     "input": {
+      "type": "object",
+      "properties": {
+       "resource": {
+        "type": "string",
+        "description": "the x402 resource URL, with its network query"
+       }
+      },
+      "required": [
+       "resource"
+      ],
+      "additionalProperties": false
+     },
+     "output": {
+      "type": "object",
+      "properties": {
+       "data": {
+        "type": "object",
+        "description": "{ result: \"0x…\" } — the block number, hex"
+       },
+       "meta": {
+        "type": "object"
+       }
+      },
+      "required": [
+       "data"
+      ]
+     },
+     "evidence": "the resource’s JSON answer, whole, with its keccak digest (= the sealed evidenceDigest), the facilitator’s settlement (PAYMENT-RESPONSE), the settlement transaction’s logs on Base and the block as code read it on the named chain + Jev receipt",
+     "det": "the resource called is the one the task names (task_bound) && the facilitator reports the payment settled for our payer (paid) && the settlement transaction on Base moved exactly the authorized USDC from the payer to the payTo and used the hirer’s own authorization nonce (settled_onchain) && the block returned exists on the named chain (block_exists) and was its head while the call was in flight (block_was_head)",
+     "price_band_usdc": [
+      0.001,
+      0.01
+     ],
+     "grader": "RUBRIC_v2 / jev-1.13.0",
+     "auto_complete_cap_usdc": 50,
+     "status": "LIVE"
+    },
+    {
+     "id": "mcp.digest",
+     "title": "The digest of a text, from an MCP server in the official MCP registry",
+     "description": "Given a hash algorithm (sha256 or keccak256) and a text (quoted in the task as of the UTF-8 text \"…\"), return its hex digest. Worked by an MCP server listed in the official MCP registry (registry.modelcontextprotocol.io) at the streamable-http endpoint it published there, free (no header required), hired with one tools/call after initialize and tools/list: today nine independent servers — the FabTally Utility Belt (io.github.zvmzaretsky/utility-belt, tool hash, sha256 and keccak256), and for sha256 only clean.tools (tools.clean/mcp), Doichain’s sendlabs server (io.github.neubuot/doichain), craftery.dev, FluentEDI, Cleanor, ProofX, utility-converter and Vega. Code recomputes the digest of the task’s text, checks that the call carried exactly that text and algorithm, and that the tool reported no error; any mismatch is a hard fail before Jev is asked.",
+     "input": {
+      "type": "object",
+      "properties": {
+       "algorithm": {
+        "type": "string",
+        "enum": [
+         "sha256",
+         "keccak256"
+        ]
+       },
+       "text": {
+        "type": "string",
+        "description": "the text, as the task quotes it (UTF-8)"
+       }
+      },
+      "required": [
+       "algorithm",
+       "text"
+      ],
+      "additionalProperties": false
+     },
+     "output": {
+      "type": "object",
+      "properties": {
+       "digest": {
+        "type": "string",
+        "description": "the hex digest (the tool’s own text content; 0x optional)"
+       }
+      },
+      "required": [
+       "digest"
+      ]
+     },
+     "evidence": "the tool’s reply, whole, with its keccak digest (= the sealed evidenceDigest), the tool call as sent (tool + arguments) and the digest as code recomputed it + Jev receipt",
+     "det": "the call carried the task’s text and algorithm (task_bound) && the tool reported no error (no_tool_error) && the reply holds the digest code recomputes from the task’s text (digest_exact)",
+     "price_band_usdc": [
+      0.001,
+      0.05
+     ],
+     "test_workers": [
+      {
+       "kind": "mcp",
+       "endpoint": "https://taifoon-next.vercel.app/api/failover-test-seller/mcp",
+       "tool": "hash",
+       "args": {
+        "algorithm": "input.algorithm",
+        "text": "input.text"
+       },
+       "card": "https://taifoon-next.vercel.app/api/failover-test-seller/card",
+       "only": {
+        "algorithm": [
+         "sha256"
+        ],
+        "text": [
+         "taifoon failover test"
+        ]
+       }
+      }
+     ],
+     "grader": "RUBRIC_v2 / jev-1.13.0",
+     "auto_complete_cap_usdc": 50,
+     "status": "LIVE"
+    },
+    {
+     "id": "agentkit.erc20_transfer",
+     "title": "An ERC-20 transfer, made by a Coinbase AgentKit agent",
+     "description": "Transfer an amount of an ERC-20 token to a recipient on a chain (the task names all four: transfer <amount> <symbol> (token 0x…) to 0x… on chain <id>). Worked by Coinbase AgentKit’s ERC20ActionProvider transfer action, run by an AgentKit agent with its own wallet and served over MCP by AgentKit’s own MCP extension (today the Taifoon AgentKit worker: AgentKit 0.10.4, a ViemWalletProvider on the Taifoon devnet 36927, dUSDC only, a few cents a call). The action sends the transfer from the agent’s wallet and answers with the transaction hash. Code reads that transaction on the named chain: it succeeded, it was sent by the hired agent, and it carries a Transfer log of exactly the task’s amount of the task’s token to the task’s recipient; it also checks the call carried the task’s token, amount and recipient. Any mismatch is a hard fail before Jev is asked.",
+     "input": {
+      "type": "object",
+      "properties": {
+       "tokenAddress": {
+        "type": "string",
+        "description": "the ERC-20 token"
+       },
+       "amount": {
+        "type": "string",
+        "description": "whole units, e.g. \"0.01\""
+       },
+       "destinationAddress": {
+        "type": "string",
+        "description": "the recipient"
+       }
+      },
+      "required": [
+       "tokenAddress",
+       "amount",
+       "destinationAddress"
+      ],
+      "additionalProperties": false
+     },
+     "output": {
+      "type": "object",
+      "properties": {
+       "text": {
+        "type": "string",
+        "description": "AgentKit’s answer: \"Transferred <amount> of <token> to <recipient>. Transaction hash for the transfer: 0x…\""
+       }
+      },
+      "required": [
+       "text"
+      ]
+     },
+     "evidence": "the action’s reply, whole, with its keccak digest (= the sealed evidenceDigest), the tool call as sent, and the transaction’s receipt as code read it on the named chain + Jev receipt",
+     "det": "the call carried the task’s token, amount and recipient (task_bound) && the action reported no error (no_tool_error) && the reply names a transaction (tx_named) && that transaction succeeded and was sent by the hired agent (settled_onchain) && it moved exactly the task’s amount of the task’s token from the agent to the task’s recipient (transfer_exact)",
+     "price_band_usdc": [
+      0.005,
+      0.05
+     ],
+     "grader": "RUBRIC_v2 / jev-1.13.0",
+     "auto_complete_cap_usdc": 50,
+     "status": "LIVE"
+    },
+    {
+     "id": "a2a.json_normalize",
+     "title": "A JSON object in a stable key order, from an A2A agent in the A2A Registry or an MCP canonicalize tool",
+     "description": "Given a JSON object (quoted in the task as the JSON object {…}), return the same object with its keys sorted at every depth by UTF-16 code units (the order RFC 8785 uses), arrays kept in their order. Worked by an A2A agent listed in the A2A Registry (a2aregistry.org) whose card declares no security scheme, hired with one A2A message at the URL in that card: today MACH Agent Lab Edge (skill normalize-json, capability lab.mock.json-normalize; a lab agent with no side effects and no payments). Since 2026-09-29 a second, independent seller over another transport: the Attractor Machine Commons server in the official MCP registry (io.github.NovanBaillif/attractor-machine-commons, tool canonicalize_json, free), hired with one tools/call. Code rebuilds the order itself from the task’s object and holds every seller to the same check: an A2A agent must answer with a data part (in any A2A dialect: 1.0, 0.3 or tasks/send) holding the normalized object, an MCP tool with a JSON result holding it (or its canonical string, byte for byte); the request must have carried exactly that object, and the seller must report no error. A reply with no such data (a prose acknowledgement) or any mismatch is a hard fail before Jev is asked. Objects with integer-like keys are out of the class (a JSON engine reorders them).",
+     "input": {
+      "type": "object",
+      "properties": {
+       "value": {
+        "type": "object",
+        "description": "the JSON object, as the task quotes it"
+       }
+      },
+      "required": [
+       "value"
+      ],
+      "additionalProperties": false
+     },
+     "output": {
+      "type": "object",
+      "properties": {
+       "normalized": {
+        "type": "object",
+        "description": "the same object, keys sorted at every depth (an MCP tool may return it as its canonical string)"
+       }
+      },
+      "required": [
+       "normalized"
+      ]
+     },
+     "evidence": "the seller’s reply, whole (the A2A JSON-RPC result, or the MCP tool result), with its keccak digest (= the sealed evidenceDigest), the request as sent (the A2A data part or text, or the tool call) and the order as code rebuilt it + Jev receipt",
+     "det": "the request carried the task’s object (task_bound) && the seller reported no error (no_error) && the reply carries data, an A2A data part in any dialect or an MCP JSON result (data_present) && that data holds a normalized object (or canonical string) equal to the task’s object with its keys sorted at every depth, byte for byte once serialized (normalized_exact)",
+     "price_band_usdc": [
+      0.001,
+      0.05
+     ],
+     "grader": "RUBRIC_v2 / jev-1.13.0",
+     "auto_complete_cap_usdc": 50,
+     "status": "LIVE"
+    },
+    {
+     "id": "credential.verify.celo",
+     "title": "A verifiable credential checked against its record on Celo, by an ERC-8004 agent on Celo",
+     "description": "Given a HashProof credential id (a UUID, quoted in the task as credential <id>), return what HashProof’s verifier says of it: its status (active, revoked, expired or not found), the record in the CredentialRegistry on Celo (IPFS CID, issuedAt, validUntil, revokedAt), the document pinned under that CID, and the registration transaction. Worked by an ERC-8004 agent on Celo whose record publishes its MCP endpoint: today HashProof (Celo agent 9669; agent 1867 publishes the same endpoint), tool verify_credential, free (no account, no key, no payment). Code reads getRecord(id) on HashProof’s CredentialRegistry on Celo (the address registry’s hashproof entry) and checks the reply’s record and status against it, recomputes the CID from the pinned document’s bytes (a raw-codec sha2-256 CID) and compares the document with the reply’s, and reads the registration transaction the reply names (a CredentialRegistered event for this id and CID); it also checks the call carried the task’s id. Any mismatch is a hard fail before Jev is asked.",
+     "input": {
+      "type": "object",
+      "properties": {
+       "id": {
+        "type": "string",
+        "description": "the credential id (UUID), as the task quotes it"
+       }
+      },
+      "required": [
+       "id"
+      ],
+      "additionalProperties": false
+     },
+     "output": {
+      "type": "object",
+      "properties": {
+       "status": {
+        "type": "string",
+        "enum": [
+         "active",
+         "revoked",
+         "expired",
+         "not_found"
+        ]
+       },
+       "verification_report": {
+        "type": "object",
+        "description": "contract { cid, issuedAt, validUntil, revokedAt, status } and ipfs { cid, json }"
+       },
+       "tx_hash": {
+        "type": "string"
+       }
+      },
+      "required": [
+       "status"
+      ]
+     },
+     "evidence": "the tool’s reply, whole, with its keccak digest (= the sealed evidenceDigest), the tool call as sent, the credential’s record as code read it on Celo, the pinned document’s bytes and the registration receipt + Jev receipt",
+     "det": "the call carried the task’s id (task_bound) && the tool reported no error (no_tool_error) && the reply’s record is the one getRecord(id) returns on Celo (record_exact) && its status is the one that record gives (status_exact) && the pinned document hashes to the record’s CID and equals the reply’s (document_exact, raw-codec CIDs) && the transaction it names registered this id and CID (tx_exact, when it names one)",
+     "price_band_usdc": [
+      0.001,
+      0.05
+     ],
+     "grader": "RUBRIC_v2 / jev-1.13.0",
+     "auto_complete_cap_usdc": 50,
+     "status": "LIVE"
+    },
+    {
+     "id": "agent.prehire_verdict",
+     "title": "A pre-hire verdict on a Monad ERC-8004 agent, stamped with the block it was measured at",
+     "description": "Given an ERC-8004 agent id on Monad (143) and a freshness bound in blocks, return a verdict on the agent, the block it was measured at, its age in blocks and whether that age is within the bound; a measurement older than the bound is refused, not served. Worked by Kanmani Sentinel (ERC-8004 143/10256) over A2A, paid per call with x402 exact (EIP-3009, USDC on Monad, 0.01 USDC ceiling) through the broker’s a2a-x402 path; the seller’s facilitator sends the transfer. Code checks the answer’s shape, that it is about the agent the hire sent, and the freshness rule (withinBound agrees with ageBlocks against the bound sent; a measurement outside the bound carries no verdict). Code re-derives two numbers before Jev is asked (REDERIVE_v1): the sample size and the claim-truth rate are compared with the seller’s own published record for the window ending at the measured block (GET /api/sla/{agentId} on the seller’s endpoint host), and recounted on Monad (the feedbacks the ERC-8004 Reputation Registry holds for the agent, and each transaction a feedback’s evidence is said to cite, read on the chain the record names). Which transaction a feedback’s evidence cites is taken from the seller’s record: code does not fetch the evidence documents. Code does not recompute the verdict itself; it stays the seller’s claim.",
+     "input": {
+      "type": "object",
+      "properties": {
+       "agentId": {
+        "type": "integer",
+        "description": "the ERC-8004 agent id on Monad (143)"
+       },
+       "maxAgeBlocks": {
+        "type": "integer",
+        "minimum": 1,
+        "description": "the freshness bound in blocks"
+       }
+      },
+      "required": [
+       "agentId",
+       "maxAgeBlocks"
+      ],
+      "additionalProperties": false
+     },
+     "output": {
+      "type": "object",
+      "properties": {
+       "answer": {
+        "type": "object",
+        "description": "{ agentId, verdict, rung, measuredAtBlock, ageBlocks, ageSeconds, withinBound, sampleSize, note, reproduce }"
+       },
+       "payment": {
+        "type": "object"
+       }
+      },
+      "required": [
+       "answer"
+      ]
+     },
+     "evidence": "the A2A task, whole, with its keccak digest, the x402 settlement on Monad (an EIP-3009 transfer sent by the seller’s facilitator) + Jev receipt",
+     "det": "the reply carries an answer object (data_present) about the agent the hire sent (task_bound) with every field of the stated shape (schema_ok) && withinBound equals ageBlocks <= the bound sent, and an answer outside the bound carries no verdict (freshness_rule) && the sample size and the rate are the seller’s published record’s (rederive_record) && they are the ones code recounts on Monad (rederive_chain; not made when a read fails)",
+     "price_band_usdc": [
+      0.001,
+      0.01
+     ],
+     "rederive": {
+      "subject": "agentId",
+      "block": "measuredAtBlock",
+      "chain_id": 143,
+      "record": {
+       "path": "/api/sla/{subject}?toBlock={block}",
+       "compare": [
+        {
+         "answer": "sampleSize",
+         "record": "sampleSize",
+         "as": "int"
+        },
+        {
+         "answer": "rung",
+         "record": "rateBps",
+         "as": "percent_text_bps"
+        }
+       ]
+      },
+      "recount": {
+       "kind": "erc8004_feedback_payments",
+       "registry": "0x8004BAa17C55a88189AE136b182e5fdA19dE9b63",
+       "claims_path": "/api/claims?agent={subject}&limit=100",
+       "networks": {
+        "monad": 143,
+        "monad mainnet": 143,
+        "monad-mainnet": 143,
+        "base": 8453,
+        "base mainnet": 8453,
+        "base-mainnet": 8453,
+        "ethereum": 1,
+        "eth": 1,
+        "mainnet": 1,
+        "optimism": 10,
+        "arbitrum": 42161,
+        "arbitrum one": 42161,
+        "polygon": 137,
+        "bsc": 56,
+        "celo": 42220
+       },
+       "sample": "sampleSize",
+       "rate": {
+        "answer": "rung",
+        "as": "percent_text_bps"
+       }
+      }
+     },
+     "grader": "RUBRIC_v2 / jev-1.13.0",
+     "auto_complete_cap_usdc": 50,
+     "status": "LIVE"
+    },
+    {
+     "id": "agent.bond_quote",
+     "title": "The bond a Monad ERC-8004 agent should post, from its claim-truth rate and sample size",
+     "description": "Given an ERC-8004 agent id on Monad (143), return a bond floor and a premium in basis points with the claim-truth rate and the sample size behind them, quoted at a block, or a refusal with its reason. Worked by Kanmani Assay (ERC-8004 143/10257) over A2A, paid per call with x402 exact (EIP-3009, USDC on Monad, 0.01 USDC ceiling) through the broker’s a2a-x402 path. Code checks the answer’s shape, that it is about the agent the hire sent, and the refusal rule (a quote carries both numbers and no refusal reason; a refusal carries a reason and no numbers). Code re-derives two numbers before Jev is asked (REDERIVE_v1): the sample size and the rate are compared with the seller’s own published record for the window ending at the quoted block (GET /api/sla/{agentId} on the seller’s endpoint host), and recounted on Monad (the feedbacks the ERC-8004 Reputation Registry holds for the agent, and each transaction a feedback’s evidence is said to cite, read on the chain the record names). Which transaction a feedback’s evidence cites is taken from the seller’s record: code does not fetch the evidence documents. Code does not recompute the floor or the premium: the pricing from the rate is the seller’s and stays a claim.",
+     "input": {
+      "type": "object",
+      "properties": {
+       "agentId": {
+        "type": "integer",
+        "description": "the ERC-8004 agent id on Monad (143)"
+       }
+      },
+      "required": [
+       "agentId"
+      ],
+      "additionalProperties": false
+     },
+     "output": {
+      "type": "object",
+      "properties": {
+       "answer": {
+        "type": "object",
+        "description": "{ agentId, floorBps, premiumBps, sampleSize, rate, quotedAtBlock, refusalReason, reproduce }"
+       },
+       "payment": {
+        "type": "object"
+       }
+      },
+      "required": [
+       "answer"
+      ]
+     },
+     "evidence": "the A2A task, whole, with its keccak digest, the x402 settlement on Monad + Jev receipt",
+     "det": "the reply carries an answer object (data_present) about the agent the hire sent (task_bound) with every field of the stated shape: bps in 0..10000, rate in [0, 1], sampleSize and quotedAtBlock integers (schema_ok) && a quote has both numbers and no refusal reason, a refusal a reason and no numbers (refusal_rule) && the sample size and the rate are the seller’s published record’s (rederive_record) && they are the ones code recounts on Monad (rederive_chain; not made when a read fails)",
+     "price_band_usdc": [
+      0.001,
+      0.01
+     ],
+     "rederive": {
+      "subject": "agentId",
+      "block": "quotedAtBlock",
+      "chain_id": 143,
+      "record": {
+       "path": "/api/sla/{subject}?toBlock={block}",
+       "compare": [
+        {
+         "answer": "sampleSize",
+         "record": "sampleSize",
+         "as": "int"
+        },
+        {
+         "answer": "rate",
+         "record": "rateBps",
+         "as": "rate_bps"
+        }
+       ]
+      },
+      "recount": {
+       "kind": "erc8004_feedback_payments",
+       "registry": "0x8004BAa17C55a88189AE136b182e5fdA19dE9b63",
+       "claims_path": "/api/claims?agent={subject}&limit=100",
+       "networks": {
+        "monad": 143,
+        "monad mainnet": 143,
+        "monad-mainnet": 143,
+        "base": 8453,
+        "base mainnet": 8453,
+        "base-mainnet": 8453,
+        "ethereum": 1,
+        "eth": 1,
+        "mainnet": 1,
+        "optimism": 10,
+        "arbitrum": 42161,
+        "arbitrum one": 42161,
+        "polygon": 137,
+        "bsc": 56,
+        "celo": 42220
+       },
+       "sample": "sampleSize",
+       "rate": {
+        "answer": "rate",
+        "as": "rate_bps"
+       }
+      }
+     },
+     "grader": "RUBRIC_v2 / jev-1.13.0",
+     "auto_complete_cap_usdc": 50,
+     "status": "LIVE"
+    },
+    {
+     "id": "market.price",
+     "title": "The USD spot price of one asset now, from a price tool or an agent that reads a market",
+     "description": "Given an asset symbol (BTC, ETH), return its USD spot price now. Worked by agents that already serve it: an MCP price tool called with the symbol (its JSON or text answer), or an A2A agent that answers with a price in JSON or a prices data part. Sellers come in through the listings only (a harvested ERC-8004 agent, admitted after its own class probes passed in a row); the class names no worker of its own. Code reads the price out of the answer (price_usd beside the symbol, a price on an object that names the symbol, a price under the symbol’s key, or the first dollar amount after the symbol in a text) and compares it with the reference the layer reads from a chain feed (the Chainlink USD feed of that asset on Base: ETH as GET /v1/gas/base native.usd, BTC by latestRoundData over the layer’s RPC rotation): a pass is a price inside 1 % of it. An MCP call must have carried the task’s symbol; an answer that carries a ref must carry this offer’s. Code cannot tell a live read from a recent one inside the band, and says so.",
+     "input": {
+      "type": "object",
+      "properties": {
+       "symbol": {
+        "type": "string",
+        "enum": [
+         "BTC",
+         "ETH"
+        ],
+        "description": "the asset, by ticker"
+       }
+      },
+      "required": [
+       "symbol"
+      ],
+      "additionalProperties": false
+     },
+     "output": {
+      "type": "object",
+      "properties": {
+       "symbol": {
+        "type": "string"
+       },
+       "price_usd": {
+        "type": "number",
+        "description": "the USD spot price (a tool may name it price or usd, or state it in text)"
+       },
+       "source": {
+        "type": "string"
+       }
+      },
+      "required": [
+       "price_usd"
+      ]
+     },
+     "evidence": "the seller’s reply, whole, with its keccak digest (= the sealed evidenceDigest), the request as sent, and the reference price as code read it (value, feed, age)",
+     "det": "the seller reported no error (no_error) && a USD price of the task’s symbol is in the answer (price_read, symbol_bound) && it is inside 1 % of the reference read from the chain feed (price_in_band; not made when the reference could not be read fresh) && an MCP call carried the task’s symbol (task_bound) && a ref in the answer is this offer’s (ref_echo, when the answer carries one)",
+     "price_band_usdc": [
+      0.001,
+      0.05
+     ],
+     "grader": "RUBRIC_v2 / jev-1.13.0",
+     "auto_complete_cap_usdc": 50,
+     "status": "LIVE"
+    },
+    {
+     "id": "plan.steps",
+     "title": "A goal planned in exactly N steps, as JSON, from an agent that plans",
+     "description": "Given a goal (one line) and a number of steps (3 to 7), return a plan as one JSON object { ref, goal, steps: [{ n, action, depends_on }] }. Worked by A2A agents that answer a text with a model (the agents that declare planning, reasoning or conversation skills). Sellers come in through the listings only, after their own class probes passed in a row. Code checks the shape and the binding: the answer echoes the offer’s ref and the goal verbatim, the steps are exactly N numbered 1 to N, every depends_on names only earlier steps, and every action is a sentence of its own (not empty, not the placeholder, not the goal, not a repeat). Code does not judge whether the plan is a good one: that claim stays uncovered and is Jev’s to grade under the rubric when a grade is asked.",
+     "input": {
+      "type": "object",
+      "properties": {
+       "goal": {
+        "type": "string",
+        "description": "the goal, one line, as the task quotes it"
+       },
+       "steps": {
+        "type": "integer",
+        "description": "how many steps (3 to 7)"
+       }
+      },
+      "required": [
+       "goal",
+       "steps"
+      ],
+      "additionalProperties": false
+     },
+     "output": {
+      "type": "object",
+      "properties": {
+       "ref": {
+        "type": "string"
+       },
+       "goal": {
+        "type": "string"
+       },
+       "steps": {
+        "type": "array",
+        "description": "[{ n, action, depends_on[] }], n from 1 to N"
+       }
+      },
+      "required": [
+       "ref",
+       "goal",
+       "steps"
+      ]
+     },
+     "evidence": "the seller’s reply, whole, with its keccak digest (= the sealed evidenceDigest) and the request as sent",
+     "det": "the answer carries a JSON object with a steps list (data_present) && its ref is this offer’s (ref_echo) && its goal is the task’s, verbatim (goal_bound) && exactly N steps numbered 1 to N (steps_exact) && every depends_on lists earlier steps only (deps_valid) && every action is a sentence of its own (actions_own). The quality of the plan is not checked by code",
+     "price_band_usdc": [
+      0.001,
+      0.05
+     ],
+     "grader": "RUBRIC_v2 / jev-1.13.0",
+     "auto_complete_cap_usdc": 50,
+     "status": "LIVE"
+    },
+    {
+     "id": "risk.address",
+     "title": "Before you pay: is this address in use, a known contract, or empty (a likely typo)? One JSON answer, its score checked exactly against the chain",
+     "description": "Given an address and a chain (Robinhood Chain 4663, Arc 5042, Base 8453, Arbitrum One 42161), return one JSON object { ref, address, chain_id, is_contract, score, level, reasons }. Worked by agents that assess risk and can read the chain. Sellers come in through the listings only, after their own class probes passed in a row. Code checks the shape (is_contract a boolean, score 0 to 100, level low | medium | high, at least one reason), that the level is the one the score gives (0-33 low, 34-66 medium, 67-100 high), that the answer is about the task’s address and chain and echoes the offer’s ref, that is_contract equals what eth_getCode says of that address on that chain when the answer is graded, and (_RISK_ADDRESS_EXACT_v1_) that the score and the level are EXACTLY the public rule on the chain facts code reads in one batch (eth_getCode, eth_getTransactionCount, eth_getBalance at latest) and Taifoon’s address registry: a live contract the registry lists 10, an account with no code that has sent transactions 20, a contract the registry does not list 45, an account with no code and no transaction sent that holds a balance 45, no code, no transaction sent and no balance 75 (TAIFOON_RISK_SELLER_v1, the rule Taifoon’s own seller answers by; any seller that implements it passes). When those facts cannot be read the check fails closed: no pass, the buyer is not charged. The wording of the reasons is the seller’s.",
+     "input": {
+      "type": "object",
+      "properties": {
+       "address": {
+        "type": "string",
+        "description": "the 0x address"
+       },
+       "chainId": {
+        "type": "integer",
+        "description": "the chain the address is read on"
+       }
+      },
+      "required": [
+       "address",
+       "chainId"
+      ],
+      "additionalProperties": false
+     },
+     "output": {
+      "type": "object",
+      "properties": {
+       "ref": {
+        "type": "string"
+       },
+       "address": {
+        "type": "string"
+       },
+       "chain_id": {
+        "type": "integer"
+       },
+       "is_contract": {
+        "type": "boolean"
+       },
+       "score": {
+        "type": "number"
+       },
+       "level": {
+        "type": "string",
+        "enum": [
+         "low",
+         "medium",
+         "high"
+        ]
+       },
+       "reasons": {
+        "type": "array"
+       }
+      },
+      "required": [
+       "ref",
+       "address",
+       "chain_id",
+       "is_contract",
+       "score",
+       "level",
+       "reasons"
+      ]
+     },
+     "evidence": "the seller’s reply, whole, with its keccak digest (= the sealed evidenceDigest), the request as sent, and the address’s code, nonce and balance as code read them on the chain",
+     "det": "the answer carries the JSON object (data_present) && its ref is this offer’s (ref_echo) && its address and chain are the task’s (address_bound) && every field is of the stated shape (schema_ok) && the level is the one the score gives (level_consistent) && is_contract equals eth_getCode on that chain (code_fact; not made when the chain could not be read) && the score and the level equal the rule recomputed on the chain facts (score_exact; false when the facts could not be read: fail closed)",
+     "price_band_usdc": [
+      0.001,
+      0.05
+     ],
+     "grader": "RUBRIC_v2 / jev-1.13.0",
+     "auto_complete_cap_usdc": 50,
+     "status": "LIVE"
+    },
+    {
+     "id": "data.onchain_query",
+     "title": "A factual on-chain question with one answer the layer reads itself (a pool’s tokens, a block’s hash)",
+     "description": "Given a question about Base 8453 with one answer (pool_tokens: the token0 and token1 contract addresses and the fee tier of a Uniswap V3 pool; block_hash: the hash of block N), return that answer. Worked by on-chain data routers (subgraphs, token APIs, RPC) and any agent that reads a chain. Sellers come in through the listings only, after their own class probes passed in a row. Code reads the facts wherever the answer states them (its own JSON, an executed subgraph result at any depth, `token0: 0x…` in text) and compares them with the layer’s own read: token0(), token1() and fee() of the pool over the chain’s rotation, or the block’s hash through GET /v1/chain/{chain}/block/{n}. A ref, a pool, a block or a fee the answer states must be the task’s. Nothing else is judged: the facts are the whole answer.",
+     "input": {
+      "type": "object",
+      "properties": {
+       "question": {
+        "type": "string",
+        "enum": [
+         "pool_tokens",
+         "block_hash"
+        ]
+       },
+       "chainId": {
+        "type": "integer",
+        "enum": [
+         8453
+        ]
+       },
+       "pool": {
+        "type": "string",
+        "description": "pool_tokens: the Uniswap V3 pool address"
+       },
+       "block": {
+        "type": "integer",
+        "description": "block_hash: the block number"
+       }
+      },
+      "required": [
+       "question",
+       "chainId"
+      ],
+      "additionalProperties": false
+     },
+     "output": {
+      "type": "object",
+      "properties": {
+       "ref": {
+        "type": "string"
+       },
+       "token0": {
+        "type": "string"
+       },
+       "token1": {
+        "type": "string"
+       },
+       "fee": {
+        "type": "integer"
+       },
+       "hash": {
+        "type": "string"
+       }
+      }
+     },
+     "evidence": "the seller’s reply, whole, with its keccak digest (= the sealed evidenceDigest), the request as sent, and the facts as the layer read them (source named)",
+     "det": "the seller reported no error (no_error) && the answer states the facts asked (data_present) && they equal the layer’s own read: token0 and token1 of the pool, or the block’s hash (answer_exact; not made when the chain could not be read) && a ref, pool, block or fee the answer states is the task’s (ref_echo, subject_bound, fee_exact, when stated)",
+     "price_band_usdc": [
+      0.001,
+      0.05
+     ],
+     "grader": "RUBRIC_v2 / jev-1.13.0",
+     "auto_complete_cap_usdc": 50,
+     "status": "LIVE"
+    },
+    {
+     "id": "web.find",
+     "title": "Public pages for a query, each containing the words asked, every page read by the layer",
+     "description": "Given a query (one line), 1 to 3 words every page must contain, and a number of results (3 to 5), return one JSON object { ref, query, results: [{ url, title }] }. Worked by search agents and APIs that answer a query with links. Code checks the shape and the binding and reads every page itself: each must answer and contain every word. Whether they are the best pages is not judged by code (Jev's rubric).",
+     "input": {
+      "type": "object",
+      "properties": {
+       "query": {
+        "type": "string",
+        "description": "the query, one line, as the task quotes it"
+       },
+       "must": {
+        "type": "array",
+        "description": "1 to 3 words or numbers every page must contain"
+       },
+       "results": {
+        "type": "integer",
+        "description": "how many pages (3 to 5)"
+       }
+      },
+      "required": [
+       "query",
+       "must",
+       "results"
+      ]
+     },
+     "output": {
+      "type": "object",
+      "properties": {
+       "ref": {
+        "type": "string"
+       },
+       "query": {
+        "type": "string"
+       },
+       "results": {
+        "type": "array",
+        "description": "[{ url, title }], exactly N distinct public http(s) pages"
+       }
+      },
+      "required": [
+       "ref",
+       "query",
+       "results"
+      ]
+     },
+     "evidence": "the seller’s reply, whole, with its keccak digest (= the sealed evidenceDigest), the request as sent, and each page as the layer read it (status, the words found)",
+     "det": "the seller reported no error (no_error) && the answer carries a JSON object with a results list (data_present) && its ref is this offer’s (ref_echo) && its query is the task’s, verbatim (query_bound) && exactly N results (count_exact) && each a public http(s) URL, no two the same page (urls_valid) && every page, read by the layer, answered 2xx (pages_live) && contains every word the task names (words_found)",
+     "price_band_usdc": [
+      0.001,
+      0.05
+     ],
+     "grader": "RUBRIC_v2 / jev-1.13.0",
+     "auto_complete_cap_usdc": 50,
+     "status": "LIVE"
+    },
+    {
+     "id": "trade.swap",
+     "title": "A quote to swap WETH for USDC on Base, checked against the layer’s own chain read. Nothing is sent or swapped",
+     "description": "Given a small amount of WETH in wei (1000000000000000 to 1000000000000000000), return a quote of swapping it for USDC on Base 8453 as one JSON object { ref, chain_id, token_in, token_out, amount_out, quote_only }: amount_out in USDC atomic units (6 decimals) as a string of digits, quote_only true. Worked by DEXes, aggregators and any agent that can price a swap. Sellers come in through the listings only, after their own class probes passed in a row, over A2A. Code checks the binding (the offer’s ref, the chain, WETH 0x4200000000000000000000000000000000000006 in and USDC 0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913 out), the form of amount_out, that the answer says it is a quote only, and that amount_out is within 1.5 % of the layer’s own read: Uniswap V3 QuoterV2 quoteExactInputSingle at the 0.05 % pool, by eth_call over the chain’s rotation. When that read fails the check fails closed: no pass, the buyer is not charged. A quote only: nothing is ever sent or swapped, and whether the seller could fill it is not judged by code.",
+     "input": {
+      "type": "object",
+      "properties": {
+       "chainId": {
+        "type": "integer",
+        "enum": [
+         8453
+        ]
+       },
+       "tokenIn": {
+        "type": "string",
+        "description": "WETH on Base"
+       },
+       "tokenOut": {
+        "type": "string",
+        "description": "USDC on Base"
+       },
+       "amountIn": {
+        "type": "string",
+        "description": "the WETH amount in wei, a string of digits"
+       }
+      },
+      "required": [
+       "chainId",
+       "tokenIn",
+       "tokenOut",
+       "amountIn"
+      ],
+      "additionalProperties": false
+     },
+     "output": {
+      "type": "object",
+      "properties": {
+       "ref": {
+        "type": "string"
+       },
+       "chain_id": {
+        "type": "integer"
+       },
+       "token_in": {
+        "type": "string"
+       },
+       "token_out": {
+        "type": "string"
+       },
+       "amount_out": {
+        "type": "string",
+        "description": "USDC atomic units (6 decimals), a string of digits"
+       },
+       "quote_only": {
+        "type": "boolean",
+        "description": "true: this is a quote, nothing was sent"
+       }
+      },
+      "required": [
+       "ref",
+       "chain_id",
+       "token_in",
+       "token_out",
+       "amount_out",
+       "quote_only"
+      ]
+     },
+     "evidence": "the seller’s reply, whole, with its keccak digest (= the sealed evidenceDigest), the request as sent, and the layer’s own quote (source and block named)",
+     "det": "the seller reported no error (no_error) && the answer carries a JSON object with amount_out (data_present) && its ref is this offer’s (ref_echo) && its chain and tokens are the task’s (pair_bound) && amount_out is USDC atomic units as a string of digits (amount_atomic) && it says quote_only true (quote_only) && amount_out is within 1.5 % of the layer’s own quote (quote_in_band; false when the quote could not be read: fail closed)",
+     "price_band_usdc": [
+      0.001,
+      0.05
+     ],
+     "grader": "RUBRIC_v2 / jev-1.13.0",
+     "auto_complete_cap_usdc": 50,
+     "status": "LIVE"
+    },
+    {
+     "id": "route.quote",
+     "title": "A quote to move USDC between chains, checked against arc’s own route read. Nothing is sent or bridged",
+     "description": "Given a small amount of USDC in atomic units (1000000 to 100000000) and two chains (Arc 5042, Base 8453, Arbitrum 42161), return a quote of moving it from one to the other as one JSON object { ref, src_chain_id, dst_chain_id, amount_in, amount_out, route, quote_only }: amount_out the USDC that arrives, in atomic units (6 decimals) as a string of digits, route the protocol’s slug, quote_only true. Worked by bridges, bridge aggregators and any agent that can price a cross-chain move. Sellers come in through the listings only, after their own class probes passed in a row, over A2A. Code checks the binding (the offer’s ref, the two chains, the amount), the form of amount_out, that the answer says it is a quote only, that the route is one arc priced from a live vendor quote for this move, and that amount_out is within 0.5 % of arc’s figure for that route (POST /v1/compare). When that read fails the check fails closed: no pass, the buyer is not charged. A quote only: nothing is ever sent or bridged, and whether the seller could fill it is not judged by code.",
+     "input": {
+      "type": "object",
+      "properties": {
+       "srcChainId": {
+        "type": "integer",
+        "enum": [
+         5042,
+         8453,
+         42161
+        ]
+       },
+       "dstChainId": {
+        "type": "integer",
+        "enum": [
+         5042,
+         8453,
+         42161
+        ]
+       },
+       "amount": {
+        "type": "string",
+        "description": "the USDC amount in atomic units (6 decimals), a string of digits"
+       },
+       "sender": {
+        "type": "string",
+        "description": "optional: the 0x address the move would be sent from"
+       }
+      },
+      "required": [
+       "srcChainId",
+       "dstChainId",
+       "amount"
+      ],
+      "additionalProperties": false
+     },
+     "output": {
+      "type": "object",
+      "properties": {
+       "ref": {
+        "type": "string"
+       },
+       "src_chain_id": {
+        "type": "integer"
+       },
+       "dst_chain_id": {
+        "type": "integer"
+       },
+       "amount_in": {
+        "type": "string"
+       },
+       "amount_out": {
+        "type": "string",
+        "description": "the USDC that arrives, atomic units (6 decimals), a string of digits"
+       },
+       "route": {
+        "type": "string",
+        "description": "the protocol slug quoted: cctp, across, lifi, …"
+       },
+       "quote_only": {
+        "type": "boolean",
+        "description": "true: this is a quote, nothing was sent"
+       }
+      },
+      "required": [
+       "ref",
+       "src_chain_id",
+       "dst_chain_id",
+       "amount_in",
+       "amount_out",
+       "route",
+       "quote_only"
+      ]
+     },
+     "evidence": "the seller’s reply, whole, with its keccak digest (= the sealed evidenceDigest), the request as sent, and arc’s routes as the layer read them (source and time named)",
+     "det": "the seller reported no error (no_error) && the answer carries a JSON object with amount_out (data_present) && its ref is this offer’s (ref_echo) && its chains and amount are the task’s (pair_bound) && amount_out is USDC atomic units as a string of digits (amount_atomic) && its route is one arc priced from a live vendor quote for this move (route_known) && it says quote_only true (quote_only) && amount_out is within 0.5 % of arc’s figure for that route (quote_in_band; route_known and quote_in_band false when arc could not be read: fail closed)",
+     "price_band_usdc": [
+      0.001,
+      0.05
+     ],
+     "grader": "RUBRIC_v2 / jev-1.13.0",
+     "auto_complete_cap_usdc": 50,
+     "status": "LIVE"
+    },
+    {
+     "id": "shop.catalog",
+     "title": "A shop’s product catalogue: a search for a term, or one product’s page, with names and prices",
+     "description": "Given a search term (or one product’s id), return the shop’s matching products, each with its name and price. Sold by x402 storefronts (gift cards, top-ups, eSIMs) per call. Code checks that the answer lists at least one item with a name and a price; a seller is admitted only on paid answers that pass.",
+     "input": {
+      "type": "object",
+      "properties": {
+       "query": {
+        "type": "string",
+        "minLength": 2,
+        "maxLength": 80,
+        "description": "a search term (a brand, a product)"
+       },
+       "slug": {
+        "type": "string",
+        "minLength": 2,
+        "maxLength": 120,
+        "description": "one product’s id, instead of a search"
+       }
+      },
+      "additionalProperties": true
+     },
+     "output": {
+      "type": "object",
+      "properties": {
+       "items": {
+        "type": "array",
+        "description": "the products: each with a name and a price"
+       }
+      }
+     },
+     "evidence": "the seller’s answer as it was paid for, its sha256, and the item code found with a name and a price",
+     "det": "the answer is JSON (json) && it lists at least one item (items) && an item carries a name (named) && the same item carries a price, a number or a numeric string (priced)",
+     "price_band_usdc": [
+      0.001,
+      0.05
+     ],
+     "grader": "RUBRIC_v2 / jev-1.13.0",
+     "auto_complete_cap_usdc": 50,
+     "status": "BUILDING"
+    },
+    {
+     "id": "feed.read",
+     "title": "A dated feed of items: news, trends or rates, read as the seller publishes it",
+     "description": "Given nothing or the feed’s own parameters (a keyword, a coin), return the seller’s feed: a list of items, dated. Sold by x402 news, trend and rate feeds per call. Code checks that the answer is HTTP 200 with a non-empty list of items and that the list, or each item, carries a date; a seller is admitted only on paid answers that pass.",
+     "input": {
+      "type": "object",
+      "properties": {},
+      "additionalProperties": true
+     },
+     "output": {
+      "type": "object",
+      "properties": {
+       "items": {
+        "type": "array",
+        "description": "the feed’s items, dated"
+       }
+      }
+     },
+     "evidence": "the seller’s answer as it was paid for, its sha256, and the list and date code found",
+     "det": "the answer is HTTP 200 (http_200) && JSON (json) && it carries a non-empty list of items (items) && the list, or every item of it, carries a date (dated)",
+     "price_band_usdc": [
+      0.001,
+      0.05
+     ],
+     "grader": "RUBRIC_v2 / jev-1.13.0",
+     "auto_complete_cap_usdc": 50,
+     "status": "BUILDING"
+    },
+    {
+     "id": "market.odds",
+     "title": "The odds of a prediction market: its outcomes and their prices",
+     "description": "Given nothing or a market’s own parameters, return prediction markets, each with its question and its outcomes priced between 0 and 1. Sold by x402 market data sellers per call. Code checks that the answer carries at least one market with a name and at least two outcome prices between 0 and 1; a seller is admitted only on paid answers that pass.",
+     "input": {
+      "type": "object",
+      "properties": {},
+      "additionalProperties": true
+     },
+     "output": {
+      "type": "object",
+      "properties": {
+       "markets": {
+        "type": "array",
+        "description": "the markets: a question and outcome prices between 0 and 1"
+       }
+      }
+     },
+     "evidence": "the seller’s answer as it was paid for, its sha256, and the market code found with its outcome prices",
+     "det": "the answer is JSON (json) && it carries at least one market (markets) && a market carries a name or question (named) && two or more outcome prices, each between 0 and 1 (odds)",
+     "price_band_usdc": [
+      0.001,
+      0.05
+     ],
+     "grader": "RUBRIC_v2 / jev-1.13.0",
+     "auto_complete_cap_usdc": 50,
+     "status": "BUILDING"
+    },
+    {
+     "id": "wire.reply",
+     "title": "One job for an answering agent, over its own protocol",
+     "description": "An agent the harvester heard answer in its own protocol (MCP tools/call, A2A message/send, the legacy tasks/send) is offered one job there. No capability is assumed: its skills are what it exposed on the wire (its tool names and descriptions, its A2A card, its x402 resource), kept raw beside the registry record (skillsSource derived:<surface>). The reply is the delivery, held whole under its keccak digest.",
+     "input": {
+      "type": "object",
+      "properties": {
+       "task": {
+        "type": "string",
+        "description": "the work, in words"
+       },
+       "tool": {
+        "type": "string",
+        "description": "MCP: the tool to call, one of the tools the agent listed"
+       },
+       "args": {
+        "type": "object",
+        "description": "MCP: the tool arguments"
+       }
+      },
+      "required": [
+       "task"
+      ],
+      "additionalProperties": true
+     },
+     "output": {
+      "type": "object",
+      "properties": {
+       "result": {
+        "description": "the reply text (MCP content / structuredContent, A2A message or artifact parts)"
+       }
+      },
+      "required": [
+       "result"
+      ]
+     },
+     "evidence": "the reply with its keccak digest (= the sealed evidenceDigest) + Jev receipt",
+     "det": "a reply came back && it is not a protocol error or a tool isError && its result is non-empty && (the offer nonce is echoed, where the protocol carries it back)",
+     "price_band_usdc": [
+      0.01,
+      1
+     ],
+     "grader": "RUBRIC_v2 / jev-1.13.0",
+     "auto_complete_cap_usdc": 50,
+     "status": "LIVE"
+    },
+    {
+     "id": "market.candles",
+     "title": "OHLCV bars of BTC, ETH, SOL or NQ, ES, YM futures from the Taifoon venue tape, for a past window, with their digest",
+     "description": "Given a market (BTC, ETH, SOL, NQ, ES, YM), a timeframe (15s, 1m, 5m, 1h) and a past window (from, to in unix seconds; to at least 120 s before now; at most 1000 bars), return the bars of the Taifoon venue tape for that window and the sha256 digest of the bars. The tape seals a past window, so the same request gives the same bars. Futures follow the CME session (weekend halt, the daily break). Worked by the layer's own paid route (GET https://coord.taifoon.dev/v1/market/candles, x402 on Base). Code checks that the bars hash to the digest, equal a replay of the tape for the same window, sit on the window's grid, are bars (low ≤ open, close ≤ high) and are continuous (a bar one step after another opens inside 1 % of its close), and, for crypto, that the last close is inside 1 % of the Chainlink feed on Base for that asset (made when the window ended inside the last hour and the feed was read fresh).",
+     "input": {
+      "type": "object",
+      "properties": {
+       "market": {
+        "type": "string",
+        "enum": [
+         "BTC",
+         "ETH",
+         "SOL",
+         "NQ",
+         "ES",
+         "YM"
+        ]
+       },
+       "tf": {
+        "type": "string",
+        "enum": [
+         "15s",
+         "1m",
+         "5m",
+         "1h"
+        ]
+       },
+       "from": {
+        "type": "integer",
+        "description": "unix seconds"
+       },
+       "to": {
+        "type": "integer",
+        "description": "unix seconds, at least 120 s before now"
+       }
+      },
+      "required": [
+       "market",
+       "tf",
+       "from",
+       "to"
+      ],
+      "additionalProperties": false
+     },
+     "output": {
+      "type": "object",
+      "properties": {
+       "candles": {
+        "type": "array",
+        "description": "[{ t, o, h, l, c, v }]"
+       },
+       "digest": {
+        "type": "string",
+        "description": "sha256 over \"t,o,h,l,c,v\" lines"
+       },
+       "sealed": {
+        "type": "boolean"
+       },
+       "source": {
+        "type": "string"
+       }
+      },
+      "required": [
+       "candles",
+       "digest"
+      ]
+     },
+     "evidence": "the bars with their digest, the tape URL that replays them, and the reference read (feed, value, age)",
+     "det": "the bars hash to the digest (digest_ok) && a replay of the tape for the window gives the same digest (replay_equal) && every bar is on the window's grid, in order, and a bar (on_grid) && the window is past (past_only) && continuous (continuity) && for crypto the last close is inside 1 % of the Chainlink feed on Base (close_in_band; not made for a window that ended more than an hour ago or when the feed was not read fresh)",
+     "price_band_usdc": [
+      0.002,
+      0.01
+     ],
+     "paid": {
+      "task": "market.candles: return the OHLCV bars of {market} at {tf} from the Taifoon venue tape for the past window from {from} to {to} (unix seconds), with the sha256 digest of the bars. Accepted when the bars hash to the digest and equal a replay of the tape for the same window. As a paid call, the answer also carries {blocks} beside the bars; those are expected and are not part of what is asked.",
+      "blocks": [
+       {
+        "field": "check",
+        "what": "the route’s own check"
+       },
+       {
+        "field": "price",
+        "what": "its price"
+       },
+       {
+        "field": "tsul",
+        "what": "the fee statement"
+       },
+       {
+        "field": "not_advice",
+        "what": "a line that it is not advice"
+       },
+       {
+        "field": "payment",
+        "what": "the payment record"
+       },
+       {
+        "field": "next_step",
+        "what": "the related paid calls it offers next"
+       }
+      ],
+      "legacy": [
+       {
+        "field": "get_key",
+        "what": "the router’s key pointer",
+        "until": "2026-10-05"
+       }
+      ]
+     },
+     "grader": "RUBRIC_v2 / jev-1.13.0",
+     "auto_complete_cap_usdc": 50,
+     "status": "LIVE"
+    },
+    {
+     "id": "trading.record",
+     "title": "A trader’s realized record recomputed from its fills, against the same round trips held long (paper flagged)",
+     "description": "Given a trader on the Taifoon venue (its attribution) or on Hyperliquid (its address), return its realized record recomputed by code from its fills (FIFO lots per market, the venue's own pairing): fills, notional, PnL before fees, fees, wins, losses, max drawdown, and the null \"the same round trips held long\", with the fills themselves and their sha256 digest. Every Taifoon-venue record is paper (the devnet venue trades paper balances) and says so; a Hyperliquid record is not paper. Facts about past fills, not advice. Worked by the layer's own paid route (GET https://coord.taifoon.dev/v1/trading/record, x402 on Base). Code recomputes PnL, wins, losses and the null from the fills behind the digest and compares them with the answer.",
+     "input": {
+      "type": "object",
+      "properties": {
+       "attribution": {
+        "type": "string",
+        "description": "the Taifoon venue account (llm-taifoon-trader-…)"
+       },
+       "venue": {
+        "type": "string",
+        "enum": [
+         "taifoon-clob",
+         "hyperliquid"
+        ]
+       },
+       "address": {
+        "type": "string",
+        "description": "venue=hyperliquid: the 0x address"
+       }
+      },
+      "oneOf": [
+       {
+        "required": [
+         "attribution"
+        ]
+       },
+       {
+        "required": [
+         "venue",
+         "address"
+        ]
+       }
+      ],
+      "additionalProperties": false
+     },
+     "output": {
+      "type": "object",
+      "properties": {
+       "paper": {
+        "type": "boolean"
+       },
+       "pnl_realized": {
+        "type": "number"
+       },
+       "wins": {
+        "type": "integer"
+       },
+       "losses": {
+        "type": "integer"
+       },
+       "null": {
+        "type": "object"
+       },
+       "edge_vs_null": {
+        "type": "number"
+       },
+       "fills_digest": {
+        "type": "string"
+       },
+       "fills_rows": {
+        "type": "array"
+       }
+      },
+      "required": [
+       "paper",
+       "pnl_realized",
+       "wins",
+       "losses",
+       "fills_digest",
+       "fills_rows"
+      ]
+     },
+     "evidence": "the fills (t, market, side, qty, price, fee) with their digest, the venue’s own rollup beside the recomputed record",
+     "det": "the fills hash to fills_digest (digest_ok) && PnL, wins, losses, fills and fees recomputed from them equal the answer (record_equal) && the null and the edge over it equal the ones the fills give (null_equal) && paper is true for the Taifoon venue and false for Hyperliquid (paper_flag)",
+     "price_band_usdc": [
+      0.01,
+      0.05
+     ],
+     "paid": {
+      "task": "trading.record: return the realized record of {trader}, recomputed by code from its fills, against the same round trips held long, with the fills and their sha256 digest. Accepted when the fills hash to the digest, when the PnL, wins, losses, fills and fees and the null with the edge over it, recomputed from those fills, equal the answer, and when paper is true for the Taifoon venue and false for Hyperliquid. As a paid call, the answer also carries {blocks} beside the record; those are expected and are not part of what is asked.",
+      "blocks": [
+       {
+        "field": "check",
+        "what": "the route’s own check"
+       },
+       {
+        "field": "price",
+        "what": "its price"
+       },
+       {
+        "field": "tsul",
+        "what": "the fee statement"
+       },
+       {
+        "field": "not_advice",
+        "what": "a line that it is not advice"
+       },
+       {
+        "field": "payment",
+        "what": "the payment record"
+       },
+       {
+        "field": "next_step",
+        "what": "the related paid calls it offers next"
+       }
+      ],
+      "legacy": [
+       {
+        "field": "get_key",
+        "what": "the router’s key pointer",
+        "until": "2026-10-05"
+       }
+      ]
+     },
+     "grader": "RUBRIC_v2 / jev-1.13.0",
+     "auto_complete_cap_usdc": 50,
+     "status": "LIVE"
+    },
+    {
+     "id": "trading.mandate.v1",
+     "title": "Trade one vault for one epoch, inside a mandate",
+     "description": "For one settlement epoch, place orders for the hirer’s vault only on the mandate’s markets and inside its caps, then submit the root over the epoch’s evidence (venue-signed fills and the vault’s finalised statement). Graded by code: chain intact, inside the mandate, conformance to the listed machine (replayed on the sealed tape), settlement matches the fills. A loss inside the mandate is the owner’s risk; a breach is a reject and, with a loss, a cheat paid from the seller’s deposit then the pool.",
+     "input": {
+      "type": "object",
+      "properties": {
+       "vault": {
+        "type": "string",
+        "description": "the vault address (chapter 07)"
+       },
+       "vaultChainId": {
+        "type": "integer",
+        "description": "8453 Base or 4663 Robinhood"
+       },
+       "mandate": {
+        "type": "object",
+        "description": "the Mandate (markets, caps, period, attribution, kind: vault)"
+       },
+       "listingDigest": {
+        "type": "string",
+        "description": "the listed machine (registry file_sha256)"
+       },
+       "period": {
+        "type": "object",
+        "description": "{ from, to } unix seconds: one epoch"
+       },
+       "venues": {
+        "type": "array",
+        "description": "venue ids traded (taifoon-clob, vault-spot:8453, vault-spot:4663)"
+       }
+      },
+      "required": [
+       "vault",
+       "vaultChainId",
+       "mandate",
+       "period"
+      ]
+     },
+     "output": {
+      "type": "object",
+      "properties": {
+       "evidenceDigest": {
+        "type": "string",
+        "description": "sha256 over sorted venue:root lines (lib/trading-mandate digestOf)"
+       },
+       "evidence": {
+        "type": "array",
+        "description": "one typed evidence file per venue: { kind, venue, items }"
+       },
+       "settlement": {
+        "type": "object",
+        "description": "the epoch’s SettlementStatement { epoch, pnl, marks, receiptsRoot }"
+       }
+      },
+      "required": [
+       "evidenceDigest",
+       "evidence"
+      ]
+     },
+     "evidence": "the typed evidence per venue (clob-fills, vault-events) with its Merkle root, the digest as submitted on the hook, the vault’s finalised statement, the stepper’s emitted orders + Jev receipt",
+     "det": "chain intact (every kind known, the root over venues == the submitted evidenceDigest) && inside the mandate (markets, period, size, notional, running position, shorting, attribution) && conformance (every order is one the listed machine emits at that bar; stand-aside allowed, no added order) && settlement matches (the statement’s PnL == the PnL recomputed from the fills, to 1e-6)",
+     "price_band_usdc": [
+      0,
+      50
+     ],
+     "grader": "RUBRIC_v2 / jev-1.13.0",
+     "auto_complete_cap_usdc": 50,
+     "status": "BUILDING"
+    },
+    {
+     "id": "trading.mandate.external.v1",
+     "title": "Trade the hirer’s own venue account for one epoch, inside a mandate (hire fee only)",
+     "description": "The same epoch job on an external venue (Hyperliquid, Kraken, Interactive Brokers, Polymarket) where the funds stay in the hirer’s own account. Graded by code on checks 1 to 3 (chain intact, inside the mandate, conformance); no vault settles it, so no settlement check, no profit cut and no cover above the seller’s deposit: the hire is a hire fee only, and the listing says so.",
+     "input": {
+      "type": "object",
+      "properties": {
+       "venue": {
+        "type": "string",
+        "enum": [
+         "hyperliquid",
+         "kraken",
+         "interactive-brokers",
+         "polymarket"
+        ]
+       },
+       "account": {
+        "type": "string",
+        "description": "the hirer’s account or address at the venue (evidence is read by address where the venue is public, or from an owner-signed export)"
+       },
+       "mandate": {
+        "type": "object",
+        "description": "the Mandate (kind: external)"
+       },
+       "listingDigest": {
+        "type": "string"
+       },
+       "period": {
+        "type": "object",
+        "description": "{ from, to } unix seconds: one epoch"
+       }
+      },
+      "required": [
+       "venue",
+       "account",
+       "mandate",
+       "period"
+      ]
+     },
+     "output": {
+      "type": "object",
+      "properties": {
+       "evidenceDigest": {
+        "type": "string"
+       },
+       "evidence": {
+        "type": "array",
+        "description": "one typed evidence file: hyperliquid-userfills or owner-signed-export"
+       }
+      },
+      "required": [
+       "evidenceDigest",
+       "evidence"
+      ]
+     },
+     "evidence": "the typed evidence (hyperliquid-userfills read by address, or an owner-signed export) with its Merkle root, the digest as submitted + Jev receipt",
+     "det": "chain intact && inside the mandate && conformance; settlement is not applicable (no vault): hire fee only",
+     "price_band_usdc": [
+      0,
+      50
+     ],
+     "grader": "RUBRIC_v2 / jev-1.13.0",
+     "auto_complete_cap_usdc": 50,
+     "status": "BUILDING"
+    },
+    {
+     "id": "script.port.pine",
+     "title": "A Pine v5 or v6 script ported to a cubicle.script by the runner’s own importer",
+     "description": "Given a Pine v5 or v6 strategy or indicator (at most 64 KB) and, optionally, the market it reads, its bar size and the script’s name, return the cubicle.script YAML the runner’s own importer (cubicle-script import-pine) writes for it, with the importer’s version, the sha256 of the Pine it ported and its notes. A construct outside the importer’s subset is refused and named, never guessed. Worked by the Cubicle studio card’s MCP tool script_import_pine. The importer is deterministic and versioned, so code re-runs the same version on the task’s Pine and options and compares the YAML byte for byte; a run code could not make is reported as not run, never as passed.",
+     "input": {
+      "type": "object",
+      "properties": {
+       "pine": {
+        "type": "string",
+        "description": "the Pine source text (//@version=5 or 6)"
+       },
+       "market": {
+        "type": "string",
+        "description": "the market the script reads; the importer’s default when left out"
+       },
+       "tf": {
+        "type": "string",
+        "description": "the bar size; the importer’s default when left out"
+       },
+       "name": {
+        "type": "string",
+        "description": "the script’s name (lower case, digits, . _ -); imported when left out"
+       }
+      },
+      "required": [
+       "pine"
+      ],
+      "additionalProperties": false
+     },
+     "output": {
+      "type": "object",
+      "properties": {
+       "script": {
+        "type": "string",
+        "description": "the cubicle.script YAML the importer wrote"
+       },
+       "tool": {
+        "type": "string",
+        "description": "the importer and its version: cubicle-script X.Y.Z"
+       },
+       "pine_sha256": {
+        "type": "string",
+        "description": "sha256 of the Pine bytes it ported"
+       },
+       "notes": {
+        "type": "array",
+        "description": "where Pine and the runner differ (fills, warm-up, na)"
+       }
+      },
+      "required": [
+       "script",
+       "tool"
+      ]
+     },
+     "evidence": "the importer’s reply, whole, with its keccak digest (= the sealed evidenceDigest), the task’s Pine with its sha256, and the YAML the grader’s own run of the same importer version wrote + Jev receipt",
+     "det": "the reply names the importer and its version, cubicle-script X.Y.Z (tool_named) && its pine_sha256, when it states one, is the sha256 of the task’s Pine bytes (pine_bound) && the YAML is equal byte for byte to what the grader’s own run of that importer version writes for the task’s Pine and options (reimport_match; not run when the grader holds no run of that version, and a check not run is never passed)",
+     "price_band_usdc": [
+      0.01,
+      0.05
+     ],
+     "grader": "RUBRIC_v2 / jev-1.13.0",
+     "auto_complete_cap_usdc": 50,
+     "status": "BUILDING"
+    }
+   ],
+   "walls": {
+    "rule": "ONE_WALL_PER_CLASS_v1",
+    "house": [
+     "agent.directory",
+     "chat.converse",
+     "compute.attested",
+     "data.onchain_query",
+     "inference.metered",
+     "market.candles",
+     "market.price",
+     "mech.predict",
+     "predict.market",
+     "reason.general",
+     "tee.typed.compile",
+     "text.generate",
+     "web.search"
+    ],
+    "listing_only": [
+     "trade.swap"
+    ],
+    "why": {
+     "house": "served by Taifoon’s own wall on the catalogue’s terms (products.json x402): the door answers it before the reseller pipeline is read",
+     "listing_only": "listed and probed only: a quote the layer checks, no wall takes money for it"
+    },
+    "resale": "every other class: the reseller pipeline’s wall (resale[] of api.taifoon.dev/coordination/reseller-pipeline.json)"
+   },
+   "hire": {
+    "how": "POST /v1/handshake { candidate: { address: <worker card address>, kind, endpoint: <worker endpoint> }, task: \"<class id>: …\", dispatch: true, tool, args } → POST /v1/judge/compose { handshake_id, price_usdc }",
+    "cards": "/v1/our-cards"
+   },
+   "note": "Every worker is an endpoint that already serves production traffic; DET is what code checks on the reply before the judge is asked; the grader is RUBRIC_v1 composed in code from Jev’s atomic answers."
+  }
+ },
+ "coord_sha": "49dd07d6fbf91b0c0094984353289f5ce1c50630",
+ "read_at": "2026-11-21T00:09:14.218Z",
+ "notes": {
+  "dropped": [
+   "classes[].workers (a payee, requester, signer or treasury-like address field)"
+  ]
+ }
+}

@@ -1,0 +1,4819 @@
+{
+ "op": "GET exchanges",
+ "market": "x402-base",
+ "stage": "listed",
+ "dir": "read",
+ "sdk": "market.readState",
+ "source": "live",
+ "request": {
+  "method": "GET",
+  "path": "/v1/exchanges",
+  "query": {}
+ },
+ "response": {
+  "status": 200,
+  "body": {
+   "ok": true,
+   "schema": "taifoon.exchanges.v1",
+   "rows": [
+    {
+     "agreement": {
+      "docs": [
+       "TSUL-1.1",
+       "TAT"
+      ],
+      "hash": "0xc9662887ef4b6850647290f6b94ae5177922dabad799fb78ce71ef0ed8b03812",
+      "how": "eip712",
+      "id": "agr_c9662887ef4b6850",
+      "party": "onchain_seller",
+      "signature": null
+     },
+     "agreement_basis": "house_unsigned",
+     "auto": {
+      "agent": "http:drs-agent-web-search.dangerous40-ds.workers.dev",
+      "at": "2026-11-19T13:26:51.909Z",
+      "card_url": null,
+      "class_source": "asked",
+      "door": "http",
+      "fit": {
+       "args": {
+        "id": "bitcoin",
+        "pair": "BTC/USD",
+        "symbol": "BTC",
+        "vs_currency": "usd"
+       },
+       "basis": "fit",
+       "checks": {
+        "input": true,
+        "reply": true,
+        "words": true
+       },
+       "class": "market.price",
+       "ok": true,
+       "reply_field": "price_usdc",
+       "rule": "CLASS_FIT_v1",
+       "why": "the resource drs-agent-web-search.dangerous40-ds.workers.dev/ fits market.price: it names price, spot, was called with market.price's input, and answered price_usdc",
+       "words": [
+        "price",
+        "spot"
+       ]
+      },
+      "free_call": {
+       "chars": 200,
+       "class_probe": {
+        "class": "market.price",
+        "ok": true,
+        "why": "the resource drs-agent-web-search.dangerous40-ds.workers.dev/ fits market.price: it names price, spot, was called with market.price's input, and answered price_usdc; generic@1: a non-empty answer"
+       },
+       "reply_digest": "0x9401bdde5285ea4b93289692bcf371c4516908dbc9e7886751769c8aba5422d9"
+      },
+      "http": {
+       "args": {
+        "id": "bitcoin",
+        "pair": "BTC/USD",
+        "symbol": "BTC",
+        "vs_currency": "usd"
+       },
+       "content": {
+        "ok": true,
+        "rule": "generic@1",
+        "why": "a non-empty answer"
+       },
+       "content_type": "application/json",
+       "method": "GET",
+       "rule": "AUTO_ONBOARD_HTTP_v1",
+       "seller": "drs-agent-web-search.dangerous40-ds.workers.dev",
+       "status": 200,
+       "url": "https://drs-agent-web-search.dangerous40-ds.workers.dev",
+       "venue": "x402-base"
+      },
+      "inferred": [],
+      "input_schema": {
+       "properties": {
+        "id": {},
+        "pair": {},
+        "symbol": {},
+        "vs_currency": {}
+       },
+       "type": "object"
+      },
+      "pay_to_network": "eip155:8453",
+      "pay_to_source": "seller_accepts",
+      "price_source": "venue_listing",
+      "rule": "AUTO_ONBOARD_TAIFOON_v1",
+      "seller_payout": "owed_on_sale",
+      "terms": "none_published",
+      "tool": null
+     },
+     "chain_id": 8453,
+     "check": {
+      "handshake_id": null,
+      "passed": true,
+      "reply_digest": "0x9401bdde5285ea4b93289692bcf371c4516908dbc9e7886751769c8aba5422d9",
+      "rules": [
+       "auto.free_call@1",
+       "http.get:x402-base",
+       "class_fit:market.price",
+       "generic@1"
+      ],
+      "status": "ready"
+     },
+     "class": "market.price",
+     "created_at": "2026-11-19T13:26:51.909Z",
+     "edge_id": "edge_fc3955d5e738dfeb",
+     "id": "exchange:market.price.fc3955d5e738dfeb",
+     "lambda": {
+      "acts": [],
+      "id": "lambda:exchange-taifoon-fc3955d5e738dfeb",
+      "vault": "vault:taifoon:loop"
+     },
+     "meter_row": {
+      "grid": true,
+      "id": "meter:exchange-taifoon-fc3955d5e738dfeb",
+      "legs": [
+       "seller_share",
+       "our_fee",
+       "reseller_markup"
+      ]
+     },
+     "pool": {
+      "address": null,
+      "factory": "0x317D55623C974197B6dd1C107Cb0cfc3EF04f1eB",
+      "line": "8453:taifoon",
+      "state": "planned",
+      "tx": null
+     },
+     "quote": {
+      "deposit": "0",
+      "line": "8453:taifoon",
+      "pool_id": null,
+      "premium": null,
+      "price": "2333",
+      "token": "USDC"
+     },
+     "schema": "taifoon.exchange.edge.v1",
+     "seller": {
+      "agent_id": "http.drs-agent-web-search.dangerous40-ds.workers.dev:2eec2301ad0e",
+      "chain_id": 8453,
+      "endpoint": "https://drs-agent-web-search.dangerous40-ds.workers.dev",
+      "protocol": "http"
+     },
+     "state": "quoted",
+     "tenant": "taifoon",
+     "updated_at": "2026-11-19T13:26:51.909Z"
+    },
+    {
+     "agreement": {
+      "docs": [
+       "TSUL-1.1",
+       "TAT"
+      ],
+      "hash": "0x1818ddc8eae9a1b5a180173f15e48afec8f4614d74ea0c76b6c3f7798355c0f2",
+      "how": "eip712",
+      "id": "agr_1818ddc8eae9a1b5",
+      "party": "onchain_seller",
+      "signature": null
+     },
+     "agreement_basis": "house_unsigned",
+     "auto": {
+      "agent": "listing:ls_fdca35bbc3e1957e",
+      "at": "2026-11-18T16:06:06.974Z",
+      "card_url": "https://n8n.taifoon.dev/author-live/json-normalize/card",
+      "class_source": "class_probe",
+      "door": "n8n",
+      "fit": {
+       "basis": "class_probe",
+       "class": "a2a.json_normalize",
+       "ok": true,
+       "rule": "CLASS_FIT_v1",
+       "why": "a2a.json_normalize: the free call passed its code check (the class probe)"
+      },
+      "free_call": {
+       "chars": 214,
+       "class_probe": {
+        "class": "a2a.json_normalize",
+        "ok": true,
+        "why": "a2a.json_normalize: every decisive check passed (nonce_echo, task_bound, no_error, data_present, normalized_exact)"
+       },
+       "reply_digest": "0xb808d2332747c01e4b0778954372ac7b8f8cbf566d977a5d02a8e4cc85ae86fc"
+      },
+      "inferred": [],
+      "input_schema": null,
+      "n8n": {
+       "listing": "ls_fdca35bbc3e1957e",
+       "pass_streak": 1,
+       "probe_at": "2026-11-18T16:06:06.663Z",
+       "probe_fails": 0,
+       "task_example": "a2a.json_normalize: return the JSON object {\"zeta\":\"b4062100\",\"alpha\":{\"y\":[3,1,2],\"b\":\"probe\"},\"mid\":true} with its keys sorted at every depth, arrays kept in order."
+      },
+      "pay_to_network": "eip155:8453",
+      "pay_to_source": "listing_payout",
+      "price_source": "listing_card",
+      "rule": "AUTO_ONBOARD_TAIFOON_v1",
+      "seller_payout": "owed_on_sale",
+      "terms": "ours",
+      "tool": null
+     },
+     "chain_id": 8453,
+     "check": {
+      "handshake_id": null,
+      "passed": true,
+      "reply_digest": "0xb808d2332747c01e4b0778954372ac7b8f8cbf566d977a5d02a8e4cc85ae86fc",
+      "rules": [
+       "auto.class_probe@1",
+       "class_probe:a2a.json_normalize",
+       "listing:ls_fdca35bbc3e1957e"
+      ],
+      "status": "ready"
+     },
+     "class": "a2a.json_normalize",
+     "created_at": "2026-11-18T16:06:06.974Z",
+     "edge_id": "edge_950025af555e2d66",
+     "id": "exchange:a2a.json_normalize.950025af555e2d66",
+     "lambda": {
+      "acts": [],
+      "id": "lambda:exchange-taifoon-950025af555e2d66",
+      "vault": "vault:taifoon:loop"
+     },
+     "meter_row": {
+      "grid": true,
+      "id": "meter:exchange-taifoon-950025af555e2d66",
+      "legs": [
+       "seller_share",
+       "our_fee",
+       "reseller_markup"
+      ]
+     },
+     "pool": {
+      "address": null,
+      "factory": "0x317D55623C974197B6dd1C107Cb0cfc3EF04f1eB",
+      "line": "8453:taifoon",
+      "state": "planned",
+      "tx": null
+     },
+     "quote": {
+      "deposit": "0",
+      "line": "8453:taifoon",
+      "pool_id": null,
+      "premium": null,
+      "price": "8000",
+      "token": "USDC"
+     },
+     "schema": "taifoon.exchange.edge.v1",
+     "seller": {
+      "agent_id": "n8n.ls_fdca35bbc3e1957e",
+      "chain_id": 8453,
+      "endpoint": "https://n8n.taifoon.dev/author-live/json-normalize",
+      "protocol": "n8n"
+     },
+     "state": "quoted",
+     "tenant": "taifoon",
+     "updated_at": "2026-11-18T16:06:06.974Z"
+    },
+    {
+     "agreement": {
+      "docs": [
+       "TSUL-1.1",
+       "TAT"
+      ],
+      "hash": "0xf0a20083f46f76607f6ea8175535651f8e04c9e81bb801902614cbcc2960c08d",
+      "how": "eip712",
+      "id": "agr_f0a20083f46f7660",
+      "party": "onchain_seller",
+      "signature": null
+     },
+     "agreement_basis": "house_unsigned",
+     "auto": {
+      "agent": "listing:ls_a1a59a5a7088411a",
+      "at": "2026-11-14T12:10:53.936Z",
+      "card_url": "https://n8n.taifoon.dev/webhook/tfn-word-count-test-card?listing=tfl_ea37ba18b2e34678ac144745dc49d717",
+      "class_source": "class_probe",
+      "door": "n8n",
+      "fit": {
+       "basis": "class_probe",
+       "class": "chat.word_count",
+       "ok": true,
+       "rule": "CLASS_FIT_v1",
+       "why": "chat.word_count: the free call passed its code check (the class probe)"
+      },
+      "free_call": {
+       "chars": 146,
+       "class_probe": {
+        "class": "chat.word_count",
+        "ok": true,
+        "why": "chat.word_count: every decisive check passed (nonce_echo, task_bound, count_exact)"
+       },
+       "reply_digest": "0xbb8e32212af9b08dba045c99654c3dcd10191426ef20f27aba0fb209acd66a66"
+      },
+      "inferred": [
+       "price"
+      ],
+      "input_schema": null,
+      "n8n": {
+       "listing": "ls_a1a59a5a7088411a",
+       "pass_streak": 1,
+       "probe_at": "2026-11-14T12:10:49.686Z",
+       "probe_fails": 0,
+       "task_example": "chat.word_count: Count the words in: \"taifoon class probe 91416a70 counts these words\" (reply with the number of words)"
+      },
+      "pay_to_network": "eip155:8453",
+      "pay_to_source": "listing_payout",
+      "price_source": "scheme_minimum",
+      "rule": "AUTO_ONBOARD_TAIFOON_v1",
+      "seller_payout": "owed_on_sale",
+      "terms": "seller_claimed",
+      "tool": null
+     },
+     "chain_id": 8453,
+     "check": {
+      "handshake_id": null,
+      "passed": true,
+      "reply_digest": "0xbb8e32212af9b08dba045c99654c3dcd10191426ef20f27aba0fb209acd66a66",
+      "rules": [
+       "auto.class_probe@1",
+       "class_probe:chat.word_count",
+       "listing:ls_a1a59a5a7088411a"
+      ],
+      "status": "ready"
+     },
+     "class": "chat.word_count",
+     "created_at": "2026-11-14T12:10:53.936Z",
+     "edge_id": "edge_fcf3f111bc490a2b",
+     "id": "exchange:chat.word_count.fcf3f111bc490a2b",
+     "lambda": {
+      "acts": [],
+      "id": "lambda:exchange-taifoon-fcf3f111bc490a2b",
+      "vault": "vault:taifoon:loop"
+     },
+     "meter_row": {
+      "grid": true,
+      "id": "meter:exchange-taifoon-fcf3f111bc490a2b",
+      "legs": [
+       "seller_share",
+       "our_fee",
+       "reseller_markup"
+      ]
+     },
+     "pool": {
+      "address": null,
+      "factory": "0x317D55623C974197B6dd1C107Cb0cfc3EF04f1eB",
+      "line": "8453:taifoon",
+      "state": "planned",
+      "tx": null
+     },
+     "quote": {
+      "deposit": "0",
+      "line": "8453:taifoon",
+      "pool_id": null,
+      "premium": null,
+      "price": "1000",
+      "token": "USDC"
+     },
+     "schema": "taifoon.exchange.edge.v1",
+     "seller": {
+      "agent_id": "n8n.ls_a1a59a5a7088411a",
+      "chain_id": 8453,
+      "endpoint": "https://n8n.taifoon.dev/webhook/tfn-word-count-test",
+      "protocol": "n8n"
+     },
+     "state": "quoted",
+     "tenant": "taifoon",
+     "updated_at": "2026-11-14T12:10:53.936Z"
+    },
+    {
+     "agreement": {
+      "docs": [
+       "TSUL-1.1",
+       "TAT"
+      ],
+      "hash": "0x6a414839167a571e8dceb177be40f41fc737feb9425dd61509a1e647dbd78d14",
+      "how": "eip712",
+      "id": "agr_6a414839167a571e",
+      "party": "onchain_seller",
+      "signature": null
+     },
+     "agreement_basis": "house_unsigned",
+     "chain_id": 8453,
+     "check": {
+      "handshake_id": null,
+      "passed": true,
+      "reply_digest": null,
+      "rules": [
+       "house.deliverable@1",
+       "model:deepseek-v4-pro-0813",
+       "supply:deepinfra:deepseek-v4-pro-0813"
+      ],
+      "status": "ready"
+     },
+     "class": "inference.chat",
+     "created_at": "2026-11-10T09:33:42.067Z",
+     "edge_id": "edge_3ccdd2ec7148fd26",
+     "house": {
+      "at": "2026-11-10T09:33:42.067Z",
+      "bound": {
+       "max_tokens": 512,
+       "prompt_tokens": 2000
+      },
+      "demand": {
+       "buyers": 16,
+       "id": "demand:morpheus/deepseek-v4-pro-0813",
+       "price_units": "12917",
+       "venue": "morpheus"
+      },
+      "model": "deepseek-v4-pro-0813",
+      "model_key": "deepseek-v4-pro-0813",
+      "rule": "HOUSE_OFFER_v1",
+      "seller_payout": "none_house",
+      "supply": {
+       "card": "deepinfra:deepseek-v4-pro-0813",
+       "cost_units": "3932",
+       "listing": "gpu:deepseek-v4-pro-0813:deepinfra",
+       "provider": "deepinfra",
+       "provider_name": "DeepInfra (serverless inference)",
+       "provider_usd_per_1m": {
+        "in": 1.3,
+        "out": 2.6
+       },
+       "served_model": "deepseek-ai/DeepSeek-V4-Pro-0813"
+      },
+      "upstream_paid_by": "key_balance"
+     },
+     "id": "exchange:inference.chat.3ccdd2ec7148fd26",
+     "lambda": {
+      "acts": [],
+      "id": "lambda:exchange-taifoon-3ccdd2ec7148fd26",
+      "vault": "vault:taifoon:loop"
+     },
+     "meter_row": {
+      "grid": true,
+      "id": "meter:exchange-taifoon-3ccdd2ec7148fd26",
+      "legs": [
+       "seller_share",
+       "our_fee",
+       "reseller_markup"
+      ]
+     },
+     "pool": {
+      "address": null,
+      "factory": "0x317D55623C974197B6dd1C107Cb0cfc3EF04f1eB",
+      "line": "8453:taifoon",
+      "state": "planned",
+      "tx": null
+     },
+     "quote": {
+      "deposit": "0",
+      "line": "8453:taifoon",
+      "pool_id": null,
+      "premium": null,
+      "price": "3932",
+      "token": "USDC"
+     },
+     "schema": "taifoon.exchange.edge.v1",
+     "seller": {
+      "agent_id": "house.deepseek-v4-pro-0813",
+      "chain_id": 8453,
+      "endpoint": "https://coord.taifoon.dev/v1/chat/completions",
+      "protocol": "openai"
+     },
+     "state": "quoted",
+     "tenant": "taifoon",
+     "updated_at": "2026-11-10T09:33:42.067Z"
+    },
+    {
+     "agreement": {
+      "docs": [
+       "TSUL-1.1",
+       "TAT"
+      ],
+      "hash": "0x81a6c35e2efa6e4a3987a5dcc572e5d1e8f969ee1db9d6f181eab0fcaac3ea61",
+      "how": "eip712",
+      "id": "agr_81a6c35e2efa6e4a",
+      "party": "onchain_seller",
+      "signature": null
+     },
+     "agreement_basis": "house_unsigned",
+     "chain_id": 8453,
+     "check": {
+      "handshake_id": null,
+      "passed": true,
+      "reply_digest": null,
+      "rules": [
+       "house.deliverable@1",
+       "model:glm-4.6",
+       "supply:venice:glm-4.6"
+      ],
+      "status": "ready"
+     },
+     "class": "inference.chat",
+     "created_at": "2026-11-10T09:33:38.758Z",
+     "edge_id": "edge_d083c1bf49238899",
+     "house": {
+      "at": "2026-11-10T09:33:38.758Z",
+      "bound": {
+       "max_tokens": 512,
+       "prompt_tokens": 2000
+      },
+      "demand": {
+       "buyers": 16,
+       "id": "demand:morpheus/glm-4-6",
+       "price_units": "12917",
+       "venue": "morpheus"
+      },
+      "model": "glm-4.6",
+      "model_key": "glm-4.6",
+      "rule": "HOUSE_OFFER_v1",
+      "seller_payout": "none_house",
+      "supply": {
+       "card": "venice:glm-4.6",
+       "cost_units": "1756",
+       "listing": "gpu:glm-4.6:venice",
+       "provider": "venice",
+       "provider_name": "Venice AI (private inference; USD credits, staked DIEM, x402 USDC)",
+       "provider_usd_per_1m": {
+        "in": 0.43,
+        "out": 1.75
+       },
+       "served_model": "zai-org-glm-4.6"
+      },
+      "upstream_paid_by": "key_balance"
+     },
+     "id": "exchange:inference.chat.d083c1bf49238899",
+     "lambda": {
+      "acts": [],
+      "id": "lambda:exchange-taifoon-d083c1bf49238899",
+      "vault": "vault:taifoon:loop"
+     },
+     "live_evidence": {
+      "at": "2026-11-14T12:01:41.399Z",
+      "id": "0xb0f44ab286ff588d82acdb01e70a707ac8c714491e7612e96ba1c5ab15e98730",
+      "meter_line": "meter:exchange-taifoon-d083c1bf49238899:1794657701399:8d9f911d",
+      "network": "eip155:5042",
+      "payer": "0xc9c7b38c0942914fc8ea12063bc92dcd3b581670",
+      "tx": "0xb0f44ab286ff588d82acdb01e70a707ac8c714491e7612e96ba1c5ab15e98730",
+      "units": "2108"
+     },
+     "meter_row": {
+      "grid": true,
+      "id": "meter:exchange-taifoon-d083c1bf49238899",
+      "legs": [
+       "seller_share",
+       "our_fee",
+       "reseller_markup"
+      ]
+     },
+     "pool": {
+      "address": null,
+      "factory": "0x317D55623C974197B6dd1C107Cb0cfc3EF04f1eB",
+      "line": "8453:taifoon",
+      "state": "planned",
+      "tx": null
+     },
+     "quote": {
+      "deposit": "0",
+      "line": "8453:taifoon",
+      "pool_id": null,
+      "premium": null,
+      "price": "1756",
+      "token": "USDC"
+     },
+     "schema": "taifoon.exchange.edge.v1",
+     "seller": {
+      "agent_id": "house.glm-4.6",
+      "chain_id": 8453,
+      "endpoint": "https://coord.taifoon.dev/v1/chat/completions",
+      "protocol": "openai"
+     },
+     "state": "live",
+     "tenant": "taifoon",
+     "updated_at": "2026-11-14T12:01:41.399Z"
+    },
+    {
+     "agreement": {
+      "docs": [
+       "TSUL-1.1",
+       "TAT"
+      ],
+      "hash": "0x33a1adb615bb012acb6262ce30eb830b36f9e313a61fcb9d7ba19a415943bc5b",
+      "how": "eip712",
+      "id": "agr_33a1adb615bb012a",
+      "party": "onchain_seller",
+      "signature": null
+     },
+     "agreement_basis": "house_unsigned",
+     "chain_id": 8453,
+     "check": {
+      "handshake_id": null,
+      "passed": true,
+      "reply_digest": null,
+      "rules": [
+       "house.deliverable@1",
+       "model:deepseek-v4.1-flash",
+       "supply:deepinfra:deepseek-v4.1-flash"
+      ],
+      "status": "ready"
+     },
+     "class": "inference.chat",
+     "created_at": "2026-11-10T09:33:35.537Z",
+     "edge_id": "edge_f9e44d015270ebb7",
+     "house": {
+      "at": "2026-11-10T09:33:35.537Z",
+      "bound": {
+       "max_tokens": 512,
+       "prompt_tokens": 2000
+      },
+      "demand": {
+       "buyers": 16,
+       "id": "demand:morpheus/deepseek-v4-1-flash",
+       "price_units": "12917",
+       "venue": "morpheus"
+      },
+      "model": "deepseek-v4.1-flash",
+      "model_key": "deepseek-v4.1-flash",
+      "rule": "HOUSE_OFFER_v1",
+      "seller_payout": "none_house",
+      "supply": {
+       "card": "deepinfra:deepseek-v4.1-flash",
+       "cost_units": "708",
+       "listing": "gpu:deepseek-v4.1-flash:deepinfra",
+       "provider": "deepinfra",
+       "provider_name": "DeepInfra (serverless inference)",
+       "provider_usd_per_1m": {
+        "in": 0.2,
+        "out": 0.6
+       },
+       "served_model": "deepseek-ai/DeepSeek-V4.1-Flash"
+      },
+      "upstream_paid_by": "key_balance"
+     },
+     "id": "exchange:inference.chat.f9e44d015270ebb7",
+     "lambda": {
+      "acts": [],
+      "id": "lambda:exchange-taifoon-f9e44d015270ebb7",
+      "vault": "vault:taifoon:loop"
+     },
+     "meter_row": {
+      "grid": true,
+      "id": "meter:exchange-taifoon-f9e44d015270ebb7",
+      "legs": [
+       "seller_share",
+       "our_fee",
+       "reseller_markup"
+      ]
+     },
+     "pool": {
+      "address": null,
+      "factory": "0x317D55623C974197B6dd1C107Cb0cfc3EF04f1eB",
+      "line": "8453:taifoon",
+      "state": "planned",
+      "tx": null
+     },
+     "quote": {
+      "deposit": "0",
+      "line": "8453:taifoon",
+      "pool_id": null,
+      "premium": null,
+      "price": "708",
+      "token": "USDC"
+     },
+     "schema": "taifoon.exchange.edge.v1",
+     "seller": {
+      "agent_id": "house.deepseek-v4.1-flash",
+      "chain_id": 8453,
+      "endpoint": "https://coord.taifoon.dev/v1/chat/completions",
+      "protocol": "openai"
+     },
+     "state": "quoted",
+     "tenant": "taifoon",
+     "updated_at": "2026-11-10T09:33:35.537Z"
+    },
+    {
+     "agreement": {
+      "docs": [
+       "TSUL-1.1",
+       "TAT"
+      ],
+      "hash": "0x7d5e8dd4ee2c52a9ebe9f193cf8736ac605e93d914fd82ddf6ccb0797fb1496e",
+      "how": "eip712",
+      "id": "agr_7d5e8dd4ee2c52a9",
+      "party": "onchain_seller",
+      "signature": null
+     },
+     "agreement_basis": "house_unsigned",
+     "chain_id": 8453,
+     "check": {
+      "handshake_id": null,
+      "passed": true,
+      "reply_digest": null,
+      "rules": [
+       "house.deliverable@1",
+       "model:glm-4.7-flash-heretic",
+       "supply:venice:glm-4.7-flash-heretic"
+      ],
+      "status": "ready"
+     },
+     "class": "inference.chat",
+     "created_at": "2026-11-10T09:33:32.249Z",
+     "edge_id": "edge_ef9ce9686f47c85d",
+     "house": {
+      "at": "2026-11-10T09:33:32.249Z",
+      "bound": {
+       "max_tokens": 512,
+       "prompt_tokens": 2000
+      },
+      "demand": {
+       "buyers": 16,
+       "id": "demand:morpheus/glm-4-7-flash-heretic",
+       "price_units": "12917",
+       "venue": "morpheus"
+      },
+      "model": "glm-4.7-flash-heretic",
+      "model_key": "glm-4.7-flash-heretic",
+      "rule": "HOUSE_OFFER_v1",
+      "seller_payout": "none_house",
+      "supply": {
+       "card": "venice:glm-4.7-flash-heretic",
+       "cost_units": "345",
+       "listing": "gpu:glm-4.7-flash-heretic:venice",
+       "provider": "venice",
+       "provider_name": "Venice AI (private inference; USD credits, staked DIEM, x402 USDC)",
+       "provider_usd_per_1m": {
+        "in": 0.07,
+        "out": 0.4
+       },
+       "served_model": "olafangensan-glm-4.7-flash-heretic"
+      },
+      "upstream_paid_by": "key_balance"
+     },
+     "id": "exchange:inference.chat.ef9ce9686f47c85d",
+     "lambda": {
+      "acts": [],
+      "id": "lambda:exchange-taifoon-ef9ce9686f47c85d",
+      "vault": "vault:taifoon:loop"
+     },
+     "meter_row": {
+      "grid": true,
+      "id": "meter:exchange-taifoon-ef9ce9686f47c85d",
+      "legs": [
+       "seller_share",
+       "our_fee",
+       "reseller_markup"
+      ]
+     },
+     "pool": {
+      "address": null,
+      "factory": "0x317D55623C974197B6dd1C107Cb0cfc3EF04f1eB",
+      "line": "8453:taifoon",
+      "state": "planned",
+      "tx": null
+     },
+     "quote": {
+      "deposit": "0",
+      "line": "8453:taifoon",
+      "pool_id": null,
+      "premium": null,
+      "price": "345",
+      "token": "USDC"
+     },
+     "schema": "taifoon.exchange.edge.v1",
+     "seller": {
+      "agent_id": "house.glm-4.7-flash-heretic",
+      "chain_id": 8453,
+      "endpoint": "https://coord.taifoon.dev/v1/chat/completions",
+      "protocol": "openai"
+     },
+     "state": "quoted",
+     "tenant": "taifoon",
+     "updated_at": "2026-11-10T09:33:32.249Z"
+    },
+    {
+     "agreement": {
+      "docs": [
+       "TSUL-1.1",
+       "TAT"
+      ],
+      "hash": "0xbcbad642e8e351204c2329b46861dc15f72f6390791f2e4b0530fb657a175d23",
+      "how": "eip712",
+      "id": "agr_bcbad642e8e35120",
+      "party": "onchain_seller",
+      "signature": null
+     },
+     "agreement_basis": "house_unsigned",
+     "chain_id": 8453,
+     "check": {
+      "handshake_id": null,
+      "passed": true,
+      "reply_digest": null,
+      "rules": [
+       "house.deliverable@1",
+       "model:minimax-m2.5",
+       "supply:venice:minimax-m2.5"
+      ],
+      "status": "ready"
+     },
+     "class": "inference.chat",
+     "created_at": "2026-11-10T09:33:21.454Z",
+     "edge_id": "edge_4f01bd8621b93a0b",
+     "house": {
+      "at": "2026-11-10T09:33:21.454Z",
+      "bound": {
+       "max_tokens": 512,
+       "prompt_tokens": 2000
+      },
+      "demand": {
+       "buyers": 16,
+       "id": "demand:morpheus/minimax-m2-5",
+       "price_units": "12917",
+       "venue": "morpheus"
+      },
+      "model": "minimax-m2.5",
+      "model_key": "minimax-m2.5",
+      "rule": "HOUSE_OFFER_v1",
+      "seller_payout": "none_house",
+      "supply": {
+       "card": "venice:minimax-m2.5",
+       "cost_units": "1027",
+       "listing": "gpu:minimax-m2.5:venice",
+       "provider": "venice",
+       "provider_name": "Venice AI (private inference; USD credits, staked DIEM, x402 USDC)",
+       "provider_usd_per_1m": {
+        "in": 0.27,
+        "out": 0.95
+       },
+       "served_model": "minimax-m25"
+      },
+      "upstream_paid_by": "key_balance"
+     },
+     "id": "exchange:inference.chat.4f01bd8621b93a0b",
+     "lambda": {
+      "acts": [],
+      "id": "lambda:exchange-taifoon-4f01bd8621b93a0b",
+      "vault": "vault:taifoon:loop"
+     },
+     "live_evidence": {
+      "at": "2026-11-15T06:01:57.211Z",
+      "id": "0x2e3148908f0e526f34d7dba6540f81b3eb677a27a7db9bca9136ed50594844a7",
+      "meter_line": "meter:exchange-taifoon-4f01bd8621b93a0b:1794722517211:bdf0698a",
+      "network": "eip155:5042",
+      "payer": "0xc9c7b38c0942914fc8ea12063bc92dcd3b581670",
+      "tx": "0x2e3148908f0e526f34d7dba6540f81b3eb677a27a7db9bca9136ed50594844a7",
+      "units": "1233"
+     },
+     "meter_row": {
+      "grid": true,
+      "id": "meter:exchange-taifoon-4f01bd8621b93a0b",
+      "legs": [
+       "seller_share",
+       "our_fee",
+       "reseller_markup"
+      ]
+     },
+     "pool": {
+      "address": null,
+      "factory": "0x317D55623C974197B6dd1C107Cb0cfc3EF04f1eB",
+      "line": "8453:taifoon",
+      "state": "planned",
+      "tx": null
+     },
+     "quote": {
+      "deposit": "0",
+      "line": "8453:taifoon",
+      "pool_id": null,
+      "premium": null,
+      "price": "1027",
+      "token": "USDC"
+     },
+     "schema": "taifoon.exchange.edge.v1",
+     "seller": {
+      "agent_id": "house.minimax-m2.5",
+      "chain_id": 8453,
+      "endpoint": "https://coord.taifoon.dev/v1/chat/completions",
+      "protocol": "openai"
+     },
+     "state": "live",
+     "tenant": "taifoon",
+     "updated_at": "2026-11-15T06:01:57.211Z"
+    },
+    {
+     "agreement": {
+      "docs": [
+       "TSUL-1.1",
+       "TAT"
+      ],
+      "hash": "0x94ab20d2aebe16111b6da890184fda79a5a45a93c75b071332918e4ccacfa561",
+      "how": "eip712",
+      "id": "agr_94ab20d2aebe1611",
+      "party": "onchain_seller",
+      "signature": null
+     },
+     "agreement_basis": "house_unsigned",
+     "chain_id": 8453,
+     "check": {
+      "handshake_id": null,
+      "passed": true,
+      "reply_digest": null,
+      "rules": [
+       "house.deliverable@1",
+       "model:deepseek-v3.2",
+       "supply:deepinfra:deepseek-v3"
+      ],
+      "status": "ready"
+     },
+     "class": "inference.chat",
+     "created_at": "2026-11-10T09:33:18.004Z",
+     "edge_id": "edge_a83a61be9f19a8a2",
+     "house": {
+      "at": "2026-11-10T09:33:18.004Z",
+      "bound": {
+       "max_tokens": 512,
+       "prompt_tokens": 2000
+      },
+      "demand": {
+       "buyers": 16,
+       "id": "demand:morpheus/deepseek-v3-2",
+       "price_units": "12917",
+       "venue": "morpheus"
+      },
+      "model": "deepseek-v3.2",
+      "model_key": "deepseek-v3.2",
+      "rule": "HOUSE_OFFER_v1",
+      "seller_payout": "none_house",
+      "supply": {
+       "card": "deepinfra:deepseek-v3",
+       "cost_units": "715",
+       "listing": "gpu:deepseek-v3.2:deepinfra",
+       "provider": "deepinfra",
+       "provider_name": "DeepInfra (serverless inference)",
+       "provider_usd_per_1m": {
+        "in": 0.26,
+        "out": 0.38
+       },
+       "served_model": "deepseek-ai/DeepSeek-V3.2"
+      },
+      "upstream_paid_by": "key_balance"
+     },
+     "id": "exchange:inference.chat.a83a61be9f19a8a2",
+     "lambda": {
+      "acts": [],
+      "id": "lambda:exchange-taifoon-a83a61be9f19a8a2",
+      "vault": "vault:taifoon:loop"
+     },
+     "meter_row": {
+      "grid": true,
+      "id": "meter:exchange-taifoon-a83a61be9f19a8a2",
+      "legs": [
+       "seller_share",
+       "our_fee",
+       "reseller_markup"
+      ]
+     },
+     "pool": {
+      "address": null,
+      "factory": "0x317D55623C974197B6dd1C107Cb0cfc3EF04f1eB",
+      "line": "8453:taifoon",
+      "state": "planned",
+      "tx": null
+     },
+     "quote": {
+      "deposit": "0",
+      "line": "8453:taifoon",
+      "pool_id": null,
+      "premium": null,
+      "price": "715",
+      "token": "USDC"
+     },
+     "schema": "taifoon.exchange.edge.v1",
+     "seller": {
+      "agent_id": "house.deepseek-v3.2",
+      "chain_id": 8453,
+      "endpoint": "https://coord.taifoon.dev/v1/chat/completions",
+      "protocol": "openai"
+     },
+     "state": "quoted",
+     "tenant": "taifoon",
+     "updated_at": "2026-11-10T09:33:18.004Z"
+    },
+    {
+     "agreement": {
+      "docs": [
+       "TSUL-1.1",
+       "TAT"
+      ],
+      "hash": "0xae560e20cadfdde9e9bf585953b53c4952de5cc26749d70fbea1b77a2855759d",
+      "how": "eip712",
+      "id": "agr_ae560e20cadfdde9",
+      "party": "onchain_seller",
+      "signature": "0xb0009557c215c98b6f8a02370eef20acb61681247579deeeadc6f689ea23d1735a26e252522f964db6f241a51362a9c2fd11eb793b4ba570a27f03860d50d9581c"
+     },
+     "agreement_basis": "signed",
+     "chain_id": 36927,
+     "check": {
+      "handshake_id": null,
+      "passed": true,
+      "reply_digest": "0x571a46f90122eb89e4248950356d7ae34ae94225f302d786f748f149159debf7",
+      "rules": [
+       "auto.free_call@1",
+       "mcp.tools_call:get_time",
+       "payee.onchain_fallback:harvester",
+       "onboard.tool-answer@2",
+       "from:exchange:mcp.tool_call.56190b8ffff44a76"
+      ],
+      "status": "ready"
+     },
+     "class": "mcp.tool_call",
+     "created_at": "2026-11-09T00:26:09.034Z",
+     "edge_id": "edge_fc2bbe713108b941",
+     "id": "exchange:mcp.tool_call.fc2bbe713108b941",
+     "lambda": {
+      "acts": [],
+      "id": "lambda:exchange-moonbeam-fc2bbe713108b941",
+      "vault": "vault:taifoon:loop"
+     },
+     "meter_row": {
+      "grid": true,
+      "id": "meter:exchange-moonbeam-fc2bbe713108b941",
+      "legs": [
+       "seller_share",
+       "our_fee",
+       "reseller_markup"
+      ]
+     },
+     "pool": {
+      "address": null,
+      "factory": "0xfa1C556d095F4d1577F4D53c94C35EF2CF782494",
+      "line": "v4-glmr",
+      "state": "planned",
+      "tx": null
+     },
+     "quote": {
+      "deposit": "2000000000000000000",
+      "line": "36927:moonbeam",
+      "pool_id": null,
+      "premium": null,
+      "price": "1000000000000000000",
+      "token": "dGLMR"
+     },
+     "schema": "taifoon.exchange.edge.v1",
+     "seller": {
+      "agent_id": "2344",
+      "chain_id": 8453,
+      "endpoint": "https://clawdmint-api.vercel.app/mcp",
+      "protocol": "mcp"
+     },
+     "state": "dry",
+     "tenant": "moonbeam",
+     "updated_at": "2026-11-09T00:26:09.034Z"
+    },
+    {
+     "agreement": {
+      "docs": [
+       "TSUL-1.1",
+       "TAT"
+      ],
+      "hash": "0xfad803e199932547e18381833a3ddc49a896f3344bac7ecc4420b2a1e23d8c9b",
+      "how": "eip712",
+      "id": "agr_fad803e199932547",
+      "party": "onchain_seller",
+      "signature": "0x96b123ce73c111b7f1fbf51f182182bd5f67c4c4f15cf37741e5b46f16c243b57acf1b7dbcb4892a2f9cbda5081d0ad7392005d889e82d6a57bd8eb4257f90421b"
+     },
+     "agreement_basis": "signed",
+     "chain_id": 36927,
+     "check": {
+      "handshake_id": null,
+      "passed": true,
+      "reply_digest": "0x6014b081adc8a4244c528784e0bf54554ff83e27bcbc3fdeb4adb9ca0c75bde1",
+      "rules": [
+       "auto.free_call@1",
+       "mcp.tools_call:get_time",
+       "payee.onchain_fallback:harvester",
+       "onboard.tool-answer@2",
+       "from:exchange:mcp.tool_call.07b23069656eda0a"
+      ],
+      "status": "ready"
+     },
+     "class": "mcp.tool_call",
+     "created_at": "2026-11-09T00:26:05.870Z",
+     "edge_id": "edge_3076a55f68020cca",
+     "id": "exchange:mcp.tool_call.3076a55f68020cca",
+     "lambda": {
+      "acts": [],
+      "id": "lambda:exchange-moonbeam-3076a55f68020cca",
+      "vault": "vault:taifoon:loop"
+     },
+     "meter_row": {
+      "grid": true,
+      "id": "meter:exchange-moonbeam-3076a55f68020cca",
+      "legs": [
+       "seller_share",
+       "our_fee",
+       "reseller_markup"
+      ]
+     },
+     "pool": {
+      "address": null,
+      "factory": "0xfa1C556d095F4d1577F4D53c94C35EF2CF782494",
+      "line": "v4-glmr",
+      "state": "planned",
+      "tx": null
+     },
+     "quote": {
+      "deposit": "2000000000000000000",
+      "line": "36927:moonbeam",
+      "pool_id": null,
+      "premium": null,
+      "price": "1000000000000000000",
+      "token": "dGLMR"
+     },
+     "schema": "taifoon.exchange.edge.v1",
+     "seller": {
+      "agent_id": "2468",
+      "chain_id": 56,
+      "endpoint": "https://clawdmint-api.vercel.app/mcp",
+      "protocol": "mcp"
+     },
+     "state": "dry",
+     "tenant": "moonbeam",
+     "updated_at": "2026-11-09T00:26:05.870Z"
+    },
+    {
+     "agreement": {
+      "docs": [
+       "TSUL-1.1",
+       "TAT"
+      ],
+      "hash": "0xc9b2c7cf4eb24f9588d1b55a8699e32506b167ea7c393a78e0fb403be255c10f",
+      "how": "eip712",
+      "id": "agr_c9b2c7cf4eb24f95",
+      "party": "onchain_seller",
+      "signature": "0x87b78d687f56ed5fa3445fb4e104a929aa35dc71db561950fc2809b9873aaa9b18edbd112044adc49e345296ae756b90a9f5da2649920f9b47bbb8ea7b008ebf1c"
+     },
+     "agreement_basis": "signed",
+     "chain_id": 36927,
+     "check": {
+      "handshake_id": null,
+      "passed": true,
+      "reply_digest": "0xa058179881dee83e353aef1b9599ea99a711362af13937ed7f556f702b51ef1d",
+      "rules": [
+       "auto.free_call@1",
+       "mcp.tools_call:get_time",
+       "payee.onchain_fallback:harvester",
+       "onboard.tool-answer@2",
+       "from:exchange:mcp.tool_call.a37a02c5a1282ae3"
+      ],
+      "status": "ready"
+     },
+     "class": "mcp.tool_call",
+     "created_at": "2026-11-09T00:26:01.642Z",
+     "edge_id": "edge_0d8e53a519c56e40",
+     "id": "exchange:mcp.tool_call.0d8e53a519c56e40",
+     "lambda": {
+      "acts": [],
+      "id": "lambda:exchange-moonbeam-0d8e53a519c56e40",
+      "vault": "vault:taifoon:loop"
+     },
+     "meter_row": {
+      "grid": true,
+      "id": "meter:exchange-moonbeam-0d8e53a519c56e40",
+      "legs": [
+       "seller_share",
+       "our_fee",
+       "reseller_markup"
+      ]
+     },
+     "pool": {
+      "address": null,
+      "factory": "0xfa1C556d095F4d1577F4D53c94C35EF2CF782494",
+      "line": "v4-glmr",
+      "state": "planned",
+      "tx": null
+     },
+     "quote": {
+      "deposit": "2000000000000000000",
+      "line": "36927:moonbeam",
+      "pool_id": null,
+      "premium": null,
+      "price": "1000000000000000000",
+      "token": "dGLMR"
+     },
+     "schema": "taifoon.exchange.edge.v1",
+     "seller": {
+      "agent_id": "1619",
+      "chain_id": 43114,
+      "endpoint": "https://clawdmint-api.vercel.app/mcp",
+      "protocol": "mcp"
+     },
+     "state": "dry",
+     "tenant": "moonbeam",
+     "updated_at": "2026-11-09T00:26:01.642Z"
+    },
+    {
+     "agreement": {
+      "docs": [
+       "TSUL-1.1",
+       "TAT"
+      ],
+      "hash": "0x84b7e492a4ba8bcd39913c3e01ca232f571b65f15e00317dc869ed60555b48ed",
+      "how": "eip712",
+      "id": "agr_84b7e492a4ba8bcd",
+      "party": "onchain_seller",
+      "signature": "0x6565df9cb2b3a3494a89af9d277f31fc31576971487db20e7baddb46ab7a7fd42ef548bf76dc4b5d6ad76cd3e2731214a6e25e875ffa41a167454f09675585881c"
+     },
+     "agreement_basis": "signed",
+     "chain_id": 36927,
+     "check": {
+      "handshake_id": null,
+      "passed": true,
+      "reply_digest": "0x02a06647d16a756ef959f2c8a6628e26585f17f5bc3114e9727c2a2477d5b6ea",
+      "rules": [
+       "auto.free_call@1",
+       "mcp.tools_call:get_time",
+       "payee.onchain_fallback:harvester",
+       "onboard.tool-answer@2",
+       "from:exchange:mcp.tool_call.370fafc1bbf4ea9b"
+      ],
+      "status": "ready"
+     },
+     "class": "mcp.tool_call",
+     "created_at": "2026-11-09T00:25:57.358Z",
+     "edge_id": "edge_1e231e13a39eca67",
+     "id": "exchange:mcp.tool_call.1e231e13a39eca67",
+     "lambda": {
+      "acts": [],
+      "id": "lambda:exchange-moonbeam-1e231e13a39eca67",
+      "vault": "vault:taifoon:loop"
+     },
+     "meter_row": {
+      "grid": true,
+      "id": "meter:exchange-moonbeam-1e231e13a39eca67",
+      "legs": [
+       "seller_share",
+       "our_fee",
+       "reseller_markup"
+      ]
+     },
+     "pool": {
+      "address": null,
+      "factory": "0xfa1C556d095F4d1577F4D53c94C35EF2CF782494",
+      "line": "v4-glmr",
+      "state": "planned",
+      "tx": null
+     },
+     "quote": {
+      "deposit": "2000000000000000000",
+      "line": "36927:moonbeam",
+      "pool_id": null,
+      "premium": null,
+      "price": "1000000000000000000",
+      "token": "dGLMR"
+     },
+     "schema": "taifoon.exchange.edge.v1",
+     "seller": {
+      "agent_id": "163",
+      "chain_id": 42220,
+      "endpoint": "https://clawdmint-api.vercel.app/mcp",
+      "protocol": "mcp"
+     },
+     "state": "dry",
+     "tenant": "moonbeam",
+     "updated_at": "2026-11-09T00:25:57.358Z"
+    },
+    {
+     "agreement": {
+      "docs": [
+       "TSUL-1.1",
+       "TAT"
+      ],
+      "hash": "0xae00153342a8935023c946001fe11043666dd7483adaa180e94eabd6a29bb65f",
+      "how": "eip712",
+      "id": "agr_ae00153342a89350",
+      "party": "onchain_seller",
+      "signature": "0x08b09dcd7fafda32dd1c5bb7fc6ac787a4ea09dd572cdd215c8f04e765bd9afb01fa569935d9170665d953bb0db1d64bf47830cfe9d79ee4f917a154a8b1c8e31b"
+     },
+     "agreement_basis": "signed",
+     "chain_id": 36927,
+     "check": {
+      "handshake_id": null,
+      "passed": true,
+      "reply_digest": "0x109411d24ab9a11596bba4811d0182fd761e0600ff59291ca1b91501e6fc3ae1",
+      "rules": [
+       "auto.free_call@1",
+       "mcp.tools_call:get_time",
+       "payee.onchain_fallback:harvester",
+       "onboard.tool-answer@2",
+       "from:exchange:mcp.tool_call.929bcefd00f512ae"
+      ],
+      "status": "ready"
+     },
+     "class": "mcp.tool_call",
+     "created_at": "2026-11-09T00:25:54.176Z",
+     "edge_id": "edge_5839f2a4c49dbb06",
+     "id": "exchange:mcp.tool_call.5839f2a4c49dbb06",
+     "lambda": {
+      "acts": [],
+      "id": "lambda:exchange-moonbeam-5839f2a4c49dbb06",
+      "vault": "vault:taifoon:loop"
+     },
+     "meter_row": {
+      "grid": true,
+      "id": "meter:exchange-moonbeam-5839f2a4c49dbb06",
+      "legs": [
+       "seller_share",
+       "our_fee",
+       "reseller_markup"
+      ]
+     },
+     "pool": {
+      "address": null,
+      "factory": "0xfa1C556d095F4d1577F4D53c94C35EF2CF782494",
+      "line": "v4-glmr",
+      "state": "planned",
+      "tx": null
+     },
+     "quote": {
+      "deposit": "2000000000000000000",
+      "line": "36927:moonbeam",
+      "pool_id": null,
+      "premium": null,
+      "price": "1000000000000000000",
+      "token": "dGLMR"
+     },
+     "schema": "taifoon.exchange.edge.v1",
+     "seller": {
+      "agent_id": "505",
+      "chain_id": 42161,
+      "endpoint": "https://clawdmint-api.vercel.app/mcp",
+      "protocol": "mcp"
+     },
+     "state": "dry",
+     "tenant": "moonbeam",
+     "updated_at": "2026-11-09T00:25:54.176Z"
+    },
+    {
+     "agreement": {
+      "docs": [
+       "TSUL-1.1",
+       "TAT"
+      ],
+      "hash": "0x5334f1f36a5407b3cf055bbcf29ff4464769776a0fed30bcaf58e96ba8417ed5",
+      "how": "eip712",
+      "id": "agr_5334f1f36a5407b3",
+      "party": "onchain_seller",
+      "signature": "0x090e9869f9968a25b3f3e0bda89eb45d688bd1e787b42efb058e33e97cffcc8476b3245f44588ea07f55b9f01a6b369716d66c2324719438c897110f067c61d01c"
+     },
+     "agreement_basis": "signed",
+     "chain_id": 36927,
+     "check": {
+      "handshake_id": null,
+      "passed": true,
+      "reply_digest": "0xb37198d2f03853859de4e5221e788ce19499903cd0f8c85b6850cf8f8fa891c0",
+      "rules": [
+       "auto.free_call@1",
+       "mcp.tools_call:get_time",
+       "payee.onchain_fallback:harvester",
+       "onboard.tool-answer@2",
+       "from:exchange:mcp.tool_call.4a772233db223798"
+      ],
+      "status": "ready"
+     },
+     "class": "mcp.tool_call",
+     "created_at": "2026-11-09T00:25:50.834Z",
+     "edge_id": "edge_7745829b3de9c396",
+     "id": "exchange:mcp.tool_call.7745829b3de9c396",
+     "lambda": {
+      "acts": [],
+      "id": "lambda:exchange-moonbeam-7745829b3de9c396",
+      "vault": "vault:taifoon:loop"
+     },
+     "meter_row": {
+      "grid": true,
+      "id": "meter:exchange-moonbeam-7745829b3de9c396",
+      "legs": [
+       "seller_share",
+       "our_fee",
+       "reseller_markup"
+      ]
+     },
+     "pool": {
+      "address": null,
+      "factory": "0xfa1C556d095F4d1577F4D53c94C35EF2CF782494",
+      "line": "v4-glmr",
+      "state": "planned",
+      "tx": null
+     },
+     "quote": {
+      "deposit": "2000000000000000000",
+      "line": "36927:moonbeam",
+      "pool_id": null,
+      "premium": null,
+      "price": "1000000000000000000",
+      "token": "dGLMR"
+     },
+     "schema": "taifoon.exchange.edge.v1",
+     "seller": {
+      "agent_id": "629",
+      "chain_id": 2741,
+      "endpoint": "https://clawdmint-api.vercel.app/mcp",
+      "protocol": "mcp"
+     },
+     "state": "dry",
+     "tenant": "moonbeam",
+     "updated_at": "2026-11-09T00:25:50.834Z"
+    },
+    {
+     "agreement": {
+      "docs": [
+       "TSUL-1.1",
+       "TAT"
+      ],
+      "hash": "0xd4a57bd8ff0d356df99f3cfa3a38da3b0a211ae98a8ec72c865f5c88c5a74893",
+      "how": "eip712",
+      "id": "agr_d4a57bd8ff0d356d",
+      "party": "onchain_seller",
+      "signature": null
+     },
+     "agreement_basis": "house_unsigned",
+     "chain_id": 8453,
+     "check": {
+      "handshake_id": null,
+      "passed": true,
+      "reply_digest": null,
+      "rules": [
+       "house.deliverable@1",
+       "model:glm-5.2",
+       "supply:deepinfra:glm-5.2"
+      ],
+      "status": "ready"
+     },
+     "class": "inference.chat",
+     "created_at": "2026-11-09T00:14:15.799Z",
+     "edge_id": "edge_79e446b54a0e1acf",
+     "house": {
+      "at": "2026-11-09T00:14:15.799Z",
+      "bound": {
+       "max_tokens": 512,
+       "prompt_tokens": 2000
+      },
+      "demand": {
+       "buyers": 16,
+       "id": "demand:morpheus/glm-5-2",
+       "price_units": "12917",
+       "venue": "morpheus"
+      },
+      "model": "glm-5.2",
+      "model_key": "glm-5.2",
+      "rule": "HOUSE_OFFER_v1",
+      "seller_payout": "none_house",
+      "supply": {
+       "card": "deepinfra:glm-5.2",
+       "cost_units": "2729",
+       "listing": "gpu:glm-5.2:deepinfra",
+       "provider": "deepinfra",
+       "provider_name": "DeepInfra (serverless inference)",
+       "provider_usd_per_1m": {
+        "in": 0.75,
+        "out": 2.4
+       },
+       "served_model": "zai-org/GLM-5.2"
+      },
+      "upstream_paid_by": "key_balance"
+     },
+     "id": "exchange:inference.chat.79e446b54a0e1acf",
+     "lambda": {
+      "acts": [],
+      "id": "lambda:exchange-taifoon-79e446b54a0e1acf",
+      "vault": "vault:taifoon:loop"
+     },
+     "meter_row": {
+      "grid": true,
+      "id": "meter:exchange-taifoon-79e446b54a0e1acf",
+      "legs": [
+       "seller_share",
+       "our_fee",
+       "reseller_markup"
+      ]
+     },
+     "pool": {
+      "address": null,
+      "factory": "0x317D55623C974197B6dd1C107Cb0cfc3EF04f1eB",
+      "line": "8453:taifoon",
+      "state": "planned",
+      "tx": null
+     },
+     "quote": {
+      "deposit": "0",
+      "line": "8453:taifoon",
+      "pool_id": null,
+      "premium": null,
+      "price": "2729",
+      "token": "USDC"
+     },
+     "schema": "taifoon.exchange.edge.v1",
+     "seller": {
+      "agent_id": "house.glm-5.2",
+      "chain_id": 8453,
+      "endpoint": "https://coord.taifoon.dev/v1/chat/completions",
+      "protocol": "openai"
+     },
+     "state": "quoted",
+     "tenant": "taifoon",
+     "updated_at": "2026-11-09T00:14:15.799Z"
+    },
+    {
+     "agreement": {
+      "docs": [
+       "TSUL-1.1",
+       "TAT"
+      ],
+      "hash": "0x40af047b744794263d1c4318a9a034349b4430a50f8f091d241a1929286719d2",
+      "how": "eip712",
+      "id": "agr_40af047b74479426",
+      "party": "onchain_seller",
+      "signature": null
+     },
+     "agreement_basis": "house_unsigned",
+     "chain_id": 8453,
+     "check": {
+      "handshake_id": null,
+      "passed": true,
+      "reply_digest": null,
+      "rules": [
+       "house.deliverable@1",
+       "model:deepseek-v4-flash",
+       "supply:deepinfra:deepseek-v4-flash"
+      ],
+      "status": "ready"
+     },
+     "class": "inference.chat",
+     "created_at": "2026-11-09T00:14:12.572Z",
+     "edge_id": "edge_66c2265e6f99fda8",
+     "house": {
+      "at": "2026-11-09T00:14:12.572Z",
+      "bound": {
+       "max_tokens": 512,
+       "prompt_tokens": 2000
+      },
+      "demand": {
+       "buyers": 16,
+       "id": "demand:morpheus/deepseek-v4-flash",
+       "price_units": "12917",
+       "venue": "morpheus"
+      },
+      "model": "deepseek-v4-flash",
+      "model_key": "deepseek-v4-flash",
+      "rule": "HOUSE_OFFER_v1",
+      "seller_payout": "none_house",
+      "supply": {
+       "card": "deepinfra:deepseek-v4-flash",
+       "cost_units": "273",
+       "listing": "gpu:deepseek-v4-flash:deepinfra",
+       "provider": "deepinfra",
+       "provider_name": "DeepInfra (serverless inference)",
+       "provider_usd_per_1m": {
+        "in": 0.09,
+        "out": 0.18
+       },
+       "served_model": "deepseek-ai/DeepSeek-V4-Flash"
+      },
+      "upstream_paid_by": "key_balance"
+     },
+     "id": "exchange:inference.chat.66c2265e6f99fda8",
+     "lambda": {
+      "acts": [],
+      "id": "lambda:exchange-taifoon-66c2265e6f99fda8",
+      "vault": "vault:taifoon:loop"
+     },
+     "meter_row": {
+      "grid": true,
+      "id": "meter:exchange-taifoon-66c2265e6f99fda8",
+      "legs": [
+       "seller_share",
+       "our_fee",
+       "reseller_markup"
+      ]
+     },
+     "pool": {
+      "address": null,
+      "factory": "0x317D55623C974197B6dd1C107Cb0cfc3EF04f1eB",
+      "line": "8453:taifoon",
+      "state": "planned",
+      "tx": null
+     },
+     "quote": {
+      "deposit": "0",
+      "line": "8453:taifoon",
+      "pool_id": null,
+      "premium": null,
+      "price": "273",
+      "token": "USDC"
+     },
+     "schema": "taifoon.exchange.edge.v1",
+     "seller": {
+      "agent_id": "house.deepseek-v4-flash",
+      "chain_id": 8453,
+      "endpoint": "https://coord.taifoon.dev/v1/chat/completions",
+      "protocol": "openai"
+     },
+     "state": "quoted",
+     "tenant": "taifoon",
+     "updated_at": "2026-11-09T00:14:12.572Z"
+    },
+    {
+     "agreement": {
+      "docs": [
+       "TSUL-1.1",
+       "TAT"
+      ],
+      "hash": "0x0230724ddb706502e6c6ef03b22316e8ca630b85a94ebd95eaa3f0cb0b4bd343",
+      "how": "eip712",
+      "id": "agr_0230724ddb706502",
+      "party": "onchain_seller",
+      "signature": null
+     },
+     "agreement_basis": "house_unsigned",
+     "chain_id": 8453,
+     "check": {
+      "handshake_id": null,
+      "passed": true,
+      "reply_digest": null,
+      "rules": [
+       "house.deliverable@1",
+       "model:deepseek-v4-pro",
+       "supply:deepinfra:deepseek-v4-pro"
+      ],
+      "status": "ready"
+     },
+     "class": "inference.chat",
+     "created_at": "2026-11-09T00:14:09.323Z",
+     "edge_id": "edge_a69d67c6bab87a73",
+     "house": {
+      "at": "2026-11-09T00:14:09.323Z",
+      "bound": {
+       "max_tokens": 512,
+       "prompt_tokens": 2000
+      },
+      "demand": {
+       "buyers": 16,
+       "id": "demand:morpheus/deepseek-v4-pro",
+       "price_units": "12917",
+       "venue": "morpheus"
+      },
+      "model": "deepseek-v4-pro",
+      "model_key": "deepseek-v4-pro",
+      "rule": "HOUSE_OFFER_v1",
+      "seller_payout": "none_house",
+      "supply": {
+       "card": "deepinfra:deepseek-v4-pro",
+       "cost_units": "3932",
+       "listing": "gpu:deepseek-v4-pro:deepinfra",
+       "provider": "deepinfra",
+       "provider_name": "DeepInfra (serverless inference)",
+       "provider_usd_per_1m": {
+        "in": 1.3,
+        "out": 2.6
+       },
+       "served_model": "deepseek-ai/DeepSeek-V4-Pro"
+      },
+      "upstream_paid_by": "key_balance"
+     },
+     "id": "exchange:inference.chat.a69d67c6bab87a73",
+     "lambda": {
+      "acts": [],
+      "id": "lambda:exchange-taifoon-a69d67c6bab87a73",
+      "vault": "vault:taifoon:loop"
+     },
+     "live_evidence": {
+      "at": "2026-11-14T06:00:46.338Z",
+      "id": "0x7ee578cbf76f7627c8b346e7be6749643d8f8ac11c3f45318bfb4c11e95b95a3",
+      "meter_line": "meter:exchange-taifoon-a69d67c6bab87a73:1794636046338:31d60ed1",
+      "network": "eip155:5042",
+      "payer": "0xc9c7b38c0942914fc8ea12063bc92dcd3b581670",
+      "tx": "0x7ee578cbf76f7627c8b346e7be6749643d8f8ac11c3f45318bfb4c11e95b95a3",
+      "units": "4719"
+     },
+     "meter_row": {
+      "grid": true,
+      "id": "meter:exchange-taifoon-a69d67c6bab87a73",
+      "legs": [
+       "seller_share",
+       "our_fee",
+       "reseller_markup"
+      ]
+     },
+     "pool": {
+      "address": null,
+      "factory": "0x317D55623C974197B6dd1C107Cb0cfc3EF04f1eB",
+      "line": "8453:taifoon",
+      "state": "planned",
+      "tx": null
+     },
+     "quote": {
+      "deposit": "0",
+      "line": "8453:taifoon",
+      "pool_id": null,
+      "premium": null,
+      "price": "3932",
+      "token": "USDC"
+     },
+     "schema": "taifoon.exchange.edge.v1",
+     "seller": {
+      "agent_id": "house.deepseek-v4-pro",
+      "chain_id": 8453,
+      "endpoint": "https://coord.taifoon.dev/v1/chat/completions",
+      "protocol": "openai"
+     },
+     "state": "live",
+     "tenant": "taifoon",
+     "updated_at": "2026-11-14T06:00:46.338Z"
+    },
+    {
+     "agreement": {
+      "docs": [
+       "TSUL-1.1",
+       "TAT"
+      ],
+      "hash": "0xa31d5276e9eae68d78fd80b617ab3ff6e7e742a24099a033c30dd746d169932a",
+      "how": "eip712",
+      "id": "agr_a31d5276e9eae68d",
+      "party": "onchain_seller",
+      "signature": null
+     },
+     "agreement_basis": "house_unsigned",
+     "chain_id": 8453,
+     "check": {
+      "handshake_id": null,
+      "passed": true,
+      "reply_digest": null,
+      "rules": [
+       "house.deliverable@1",
+       "model:deepseek-v4-flash-0731",
+       "supply:deepinfra:deepseek-v4-flash-0731"
+      ],
+      "status": "ready"
+     },
+     "class": "inference.chat",
+     "created_at": "2026-11-09T00:14:05.991Z",
+     "edge_id": "edge_548d4723a1485ea2",
+     "house": {
+      "at": "2026-11-09T00:14:05.991Z",
+      "bound": {
+       "max_tokens": 512,
+       "prompt_tokens": 2000
+      },
+      "demand": {
+       "buyers": 16,
+       "id": "demand:morpheus/deepseek-v4-flash-0731",
+       "price_units": "12917",
+       "venue": "morpheus"
+      },
+      "model": "deepseek-v4-flash-0731",
+      "model_key": "deepseek-v4-flash-0731",
+      "rule": "HOUSE_OFFER_v1",
+      "seller_payout": "none_house",
+      "supply": {
+       "card": "deepinfra:deepseek-v4-flash-0731",
+       "cost_units": "213",
+       "listing": "gpu:deepseek-v4-flash-0731:deepinfra",
+       "provider": "deepinfra",
+       "provider_name": "DeepInfra (serverless inference)",
+       "provider_usd_per_1m": {
+        "in": 0.06,
+        "out": 0.18
+       },
+       "served_model": "deepseek-ai/DeepSeek-V4-Flash-0731"
+      },
+      "upstream_paid_by": "key_balance"
+     },
+     "id": "exchange:inference.chat.548d4723a1485ea2",
+     "lambda": {
+      "acts": [],
+      "id": "lambda:exchange-taifoon-548d4723a1485ea2",
+      "vault": "vault:taifoon:loop"
+     },
+     "meter_row": {
+      "grid": true,
+      "id": "meter:exchange-taifoon-548d4723a1485ea2",
+      "legs": [
+       "seller_share",
+       "our_fee",
+       "reseller_markup"
+      ]
+     },
+     "pool": {
+      "address": null,
+      "factory": "0x317D55623C974197B6dd1C107Cb0cfc3EF04f1eB",
+      "line": "8453:taifoon",
+      "state": "planned",
+      "tx": null
+     },
+     "quote": {
+      "deposit": "0",
+      "line": "8453:taifoon",
+      "pool_id": null,
+      "premium": null,
+      "price": "213",
+      "token": "USDC"
+     },
+     "schema": "taifoon.exchange.edge.v1",
+     "seller": {
+      "agent_id": "house.deepseek-v4-flash-0731",
+      "chain_id": 8453,
+      "endpoint": "https://coord.taifoon.dev/v1/chat/completions",
+      "protocol": "openai"
+     },
+     "state": "quoted",
+     "tenant": "taifoon",
+     "updated_at": "2026-11-09T00:14:05.991Z"
+    },
+    {
+     "agreement": {
+      "docs": [
+       "TSUL-1.1",
+       "TAT"
+      ],
+      "hash": "0xffb5755b9c1a8cb48cf8b5781047ef66b1930341ff310e461f9cc8a69e8c8d11",
+      "how": "eip712",
+      "id": "agr_ffb5755b9c1a8cb4",
+      "party": "onchain_seller",
+      "signature": null
+     },
+     "agreement_basis": "house_unsigned",
+     "auto": {
+      "agent": "8453:2344",
+      "at": "2026-11-09T00:13:57.592Z",
+      "card_url": null,
+      "class_source": "door",
+      "door": "mcp",
+      "fit": {
+       "basis": "generic",
+       "class": "mcp.tool_call",
+       "ok": true,
+       "rule": "CLASS_FIT_v1",
+       "why": "mcp.tool_call is the door's own class: it sells the tool's answer as it is"
+      },
+      "free_call": {
+       "chars": 61,
+       "reply_digest": "0x571a46f90122eb89e4248950356d7ae34ae94225f302d786f748f149159debf7"
+      },
+      "inferred": [
+       "class",
+       "price"
+      ],
+      "input_schema": {
+       "properties": {},
+       "required": [],
+       "type": "object"
+      },
+      "pay_to_basis": "onchain_owner",
+      "pay_to_network": "eip155:8453",
+      "pay_to_source": "registered",
+      "price_source": "scheme_minimum",
+      "reach": {
+       "by": "harvester",
+       "probed_at": 1794163210,
+       "url": "https://clawdmint-api.vercel.app/mcp"
+      },
+      "rule": "AUTO_ONBOARD_TAIFOON_v1",
+      "seller_payout": "not_wired",
+      "terms": "none_published",
+      "tool": "get_time"
+     },
+     "chain_id": 8453,
+     "check": {
+      "handshake_id": null,
+      "passed": true,
+      "reply_digest": "0x571a46f90122eb89e4248950356d7ae34ae94225f302d786f748f149159debf7",
+      "rules": [
+       "auto.free_call@1",
+       "mcp.tools_call:get_time",
+       "payee.onchain_fallback:harvester"
+      ],
+      "status": "ready"
+     },
+     "class": "mcp.tool_call",
+     "created_at": "2026-11-09T00:13:57.592Z",
+     "edge_id": "edge_56190b8ffff44a76",
+     "id": "exchange:mcp.tool_call.56190b8ffff44a76",
+     "lambda": {
+      "acts": [],
+      "id": "lambda:exchange-taifoon-56190b8ffff44a76",
+      "vault": "vault:taifoon:loop"
+     },
+     "meter_row": {
+      "grid": true,
+      "id": "meter:exchange-taifoon-56190b8ffff44a76",
+      "legs": [
+       "seller_share",
+       "our_fee",
+       "reseller_markup"
+      ]
+     },
+     "pool": {
+      "address": null,
+      "factory": "0x317D55623C974197B6dd1C107Cb0cfc3EF04f1eB",
+      "line": "8453:taifoon",
+      "state": "planned",
+      "tx": null
+     },
+     "quote": {
+      "deposit": "0",
+      "line": "8453:taifoon",
+      "pool_id": null,
+      "premium": null,
+      "price": "1000",
+      "token": "USDC"
+     },
+     "schema": "taifoon.exchange.edge.v1",
+     "seller": {
+      "agent_id": "2344",
+      "chain_id": 8453,
+      "endpoint": "https://clawdmint-api.vercel.app/mcp",
+      "protocol": "mcp"
+     },
+     "state": "quoted",
+     "tenant": "taifoon",
+     "updated_at": "2026-11-09T00:13:57.592Z"
+    },
+    {
+     "agreement": {
+      "docs": [
+       "TSUL-1.1",
+       "TAT"
+      ],
+      "hash": "0x0a37a5c061565fe5f2a8431837ec08f30899fb237245b378cc3e5e4f1199df70",
+      "how": "eip712",
+      "id": "agr_0a37a5c061565fe5",
+      "party": "onchain_seller",
+      "signature": null
+     },
+     "agreement_basis": "house_unsigned",
+     "auto": {
+      "agent": "56:2468",
+      "at": "2026-11-09T00:13:46.378Z",
+      "card_url": null,
+      "class_source": "door",
+      "door": "mcp",
+      "fit": {
+       "basis": "generic",
+       "class": "mcp.tool_call",
+       "ok": true,
+       "rule": "CLASS_FIT_v1",
+       "why": "mcp.tool_call is the door's own class: it sells the tool's answer as it is"
+      },
+      "free_call": {
+       "chars": 61,
+       "reply_digest": "0x6014b081adc8a4244c528784e0bf54554ff83e27bcbc3fdeb4adb9ca0c75bde1"
+      },
+      "inferred": [
+       "class",
+       "price"
+      ],
+      "input_schema": {
+       "properties": {},
+       "required": [],
+       "type": "object"
+      },
+      "pay_to_basis": "onchain_owner",
+      "pay_to_network": "eip155:56",
+      "pay_to_source": "registered",
+      "price_source": "scheme_minimum",
+      "reach": {
+       "by": "harvester",
+       "probed_at": 1794163210,
+       "url": "https://clawdmint-api.vercel.app/mcp"
+      },
+      "rule": "AUTO_ONBOARD_TAIFOON_v1",
+      "seller_payout": "not_wired",
+      "terms": "none_published",
+      "tool": "get_time"
+     },
+     "chain_id": 8453,
+     "check": {
+      "handshake_id": null,
+      "passed": true,
+      "reply_digest": "0x6014b081adc8a4244c528784e0bf54554ff83e27bcbc3fdeb4adb9ca0c75bde1",
+      "rules": [
+       "auto.free_call@1",
+       "mcp.tools_call:get_time",
+       "payee.onchain_fallback:harvester"
+      ],
+      "status": "ready"
+     },
+     "class": "mcp.tool_call",
+     "created_at": "2026-11-09T00:13:46.378Z",
+     "edge_id": "edge_07b23069656eda0a",
+     "id": "exchange:mcp.tool_call.07b23069656eda0a",
+     "lambda": {
+      "acts": [],
+      "id": "lambda:exchange-taifoon-07b23069656eda0a",
+      "vault": "vault:taifoon:loop"
+     },
+     "meter_row": {
+      "grid": true,
+      "id": "meter:exchange-taifoon-07b23069656eda0a",
+      "legs": [
+       "seller_share",
+       "our_fee",
+       "reseller_markup"
+      ]
+     },
+     "pool": {
+      "address": null,
+      "factory": "0x317D55623C974197B6dd1C107Cb0cfc3EF04f1eB",
+      "line": "8453:taifoon",
+      "state": "planned",
+      "tx": null
+     },
+     "quote": {
+      "deposit": "0",
+      "line": "8453:taifoon",
+      "pool_id": null,
+      "premium": null,
+      "price": "1000",
+      "token": "USDC"
+     },
+     "schema": "taifoon.exchange.edge.v1",
+     "seller": {
+      "agent_id": "2468",
+      "chain_id": 56,
+      "endpoint": "https://clawdmint-api.vercel.app/mcp",
+      "protocol": "mcp"
+     },
+     "state": "quoted",
+     "tenant": "taifoon",
+     "updated_at": "2026-11-09T00:13:46.378Z"
+    },
+    {
+     "agreement": {
+      "docs": [
+       "TSUL-1.1",
+       "TAT"
+      ],
+      "hash": "0x14274fe1b7ee76a70341197f8c99f1ad777e2f9c7bc5d765de48180a2cb005cb",
+      "how": "eip712",
+      "id": "agr_14274fe1b7ee76a7",
+      "party": "onchain_seller",
+      "signature": null
+     },
+     "agreement_basis": "house_unsigned",
+     "auto": {
+      "agent": "43114:1619",
+      "at": "2026-11-09T00:13:32.541Z",
+      "card_url": null,
+      "class_source": "door",
+      "door": "mcp",
+      "fit": {
+       "basis": "generic",
+       "class": "mcp.tool_call",
+       "ok": true,
+       "rule": "CLASS_FIT_v1",
+       "why": "mcp.tool_call is the door's own class: it sells the tool's answer as it is"
+      },
+      "free_call": {
+       "chars": 61,
+       "reply_digest": "0xa058179881dee83e353aef1b9599ea99a711362af13937ed7f556f702b51ef1d"
+      },
+      "inferred": [
+       "class",
+       "price"
+      ],
+      "input_schema": {
+       "properties": {},
+       "required": [],
+       "type": "object"
+      },
+      "pay_to_basis": "onchain_owner",
+      "pay_to_network": "eip155:43114",
+      "pay_to_source": "registered",
+      "price_source": "scheme_minimum",
+      "reach": {
+       "by": "harvester",
+       "probed_at": 1794163210,
+       "url": "https://clawdmint-api.vercel.app/mcp"
+      },
+      "rule": "AUTO_ONBOARD_TAIFOON_v1",
+      "seller_payout": "not_wired",
+      "terms": "none_published",
+      "tool": "get_time"
+     },
+     "chain_id": 8453,
+     "check": {
+      "handshake_id": null,
+      "passed": true,
+      "reply_digest": "0xa058179881dee83e353aef1b9599ea99a711362af13937ed7f556f702b51ef1d",
+      "rules": [
+       "auto.free_call@1",
+       "mcp.tools_call:get_time",
+       "payee.onchain_fallback:harvester"
+      ],
+      "status": "ready"
+     },
+     "class": "mcp.tool_call",
+     "created_at": "2026-11-09T00:13:32.541Z",
+     "edge_id": "edge_a37a02c5a1282ae3",
+     "id": "exchange:mcp.tool_call.a37a02c5a1282ae3",
+     "lambda": {
+      "acts": [],
+      "id": "lambda:exchange-taifoon-a37a02c5a1282ae3",
+      "vault": "vault:taifoon:loop"
+     },
+     "meter_row": {
+      "grid": true,
+      "id": "meter:exchange-taifoon-a37a02c5a1282ae3",
+      "legs": [
+       "seller_share",
+       "our_fee",
+       "reseller_markup"
+      ]
+     },
+     "pool": {
+      "address": null,
+      "factory": "0x317D55623C974197B6dd1C107Cb0cfc3EF04f1eB",
+      "line": "8453:taifoon",
+      "state": "planned",
+      "tx": null
+     },
+     "quote": {
+      "deposit": "0",
+      "line": "8453:taifoon",
+      "pool_id": null,
+      "premium": null,
+      "price": "1000",
+      "token": "USDC"
+     },
+     "schema": "taifoon.exchange.edge.v1",
+     "seller": {
+      "agent_id": "1619",
+      "chain_id": 43114,
+      "endpoint": "https://clawdmint-api.vercel.app/mcp",
+      "protocol": "mcp"
+     },
+     "state": "quoted",
+     "tenant": "taifoon",
+     "updated_at": "2026-11-09T00:13:32.541Z"
+    },
+    {
+     "agreement": {
+      "docs": [
+       "TSUL-1.1",
+       "TAT"
+      ],
+      "hash": "0x9bc7a4f1869a77c93c8427ec5aaf082c957d32d2b2005f9ce5750639734291fe",
+      "how": "eip712",
+      "id": "agr_9bc7a4f1869a77c9",
+      "party": "onchain_seller",
+      "signature": null
+     },
+     "agreement_basis": "house_unsigned",
+     "auto": {
+      "agent": "42220:163",
+      "at": "2026-11-09T00:13:15.854Z",
+      "card_url": null,
+      "class_source": "door",
+      "door": "mcp",
+      "fit": {
+       "basis": "generic",
+       "class": "mcp.tool_call",
+       "ok": true,
+       "rule": "CLASS_FIT_v1",
+       "why": "mcp.tool_call is the door's own class: it sells the tool's answer as it is"
+      },
+      "free_call": {
+       "chars": 61,
+       "reply_digest": "0x02a06647d16a756ef959f2c8a6628e26585f17f5bc3114e9727c2a2477d5b6ea"
+      },
+      "inferred": [
+       "class",
+       "price"
+      ],
+      "input_schema": {
+       "properties": {},
+       "required": [],
+       "type": "object"
+      },
+      "pay_to_basis": "onchain_owner",
+      "pay_to_network": "eip155:42220",
+      "pay_to_source": "registered",
+      "price_source": "scheme_minimum",
+      "reach": {
+       "by": "harvester",
+       "probed_at": 1794163210,
+       "url": "https://clawdmint-api.vercel.app/mcp"
+      },
+      "rule": "AUTO_ONBOARD_TAIFOON_v1",
+      "seller_payout": "not_wired",
+      "terms": "none_published",
+      "tool": "get_time"
+     },
+     "chain_id": 8453,
+     "check": {
+      "handshake_id": null,
+      "passed": true,
+      "reply_digest": "0x02a06647d16a756ef959f2c8a6628e26585f17f5bc3114e9727c2a2477d5b6ea",
+      "rules": [
+       "auto.free_call@1",
+       "mcp.tools_call:get_time",
+       "payee.onchain_fallback:harvester"
+      ],
+      "status": "ready"
+     },
+     "class": "mcp.tool_call",
+     "created_at": "2026-11-09T00:13:15.854Z",
+     "edge_id": "edge_370fafc1bbf4ea9b",
+     "id": "exchange:mcp.tool_call.370fafc1bbf4ea9b",
+     "lambda": {
+      "acts": [],
+      "id": "lambda:exchange-taifoon-370fafc1bbf4ea9b",
+      "vault": "vault:taifoon:loop"
+     },
+     "meter_row": {
+      "grid": true,
+      "id": "meter:exchange-taifoon-370fafc1bbf4ea9b",
+      "legs": [
+       "seller_share",
+       "our_fee",
+       "reseller_markup"
+      ]
+     },
+     "pool": {
+      "address": null,
+      "factory": "0x317D55623C974197B6dd1C107Cb0cfc3EF04f1eB",
+      "line": "8453:taifoon",
+      "state": "planned",
+      "tx": null
+     },
+     "quote": {
+      "deposit": "0",
+      "line": "8453:taifoon",
+      "pool_id": null,
+      "premium": null,
+      "price": "1000",
+      "token": "USDC"
+     },
+     "schema": "taifoon.exchange.edge.v1",
+     "seller": {
+      "agent_id": "163",
+      "chain_id": 42220,
+      "endpoint": "https://clawdmint-api.vercel.app/mcp",
+      "protocol": "mcp"
+     },
+     "state": "quoted",
+     "tenant": "taifoon",
+     "updated_at": "2026-11-09T00:13:15.854Z"
+    },
+    {
+     "agreement": {
+      "docs": [
+       "TSUL-1.1",
+       "TAT"
+      ],
+      "hash": "0xf55944aacd38c95f254886e3ae74973f9b8ad9834b8c0099390f25ffda3aa44a",
+      "how": "eip712",
+      "id": "agr_f55944aacd38c95f",
+      "party": "onchain_seller",
+      "signature": null
+     },
+     "agreement_basis": "house_unsigned",
+     "auto": {
+      "agent": "42161:505",
+      "at": "2026-11-09T00:13:00.704Z",
+      "card_url": null,
+      "class_source": "door",
+      "door": "mcp",
+      "fit": {
+       "basis": "generic",
+       "class": "mcp.tool_call",
+       "ok": true,
+       "rule": "CLASS_FIT_v1",
+       "why": "mcp.tool_call is the door's own class: it sells the tool's answer as it is"
+      },
+      "free_call": {
+       "chars": 61,
+       "reply_digest": "0x109411d24ab9a11596bba4811d0182fd761e0600ff59291ca1b91501e6fc3ae1"
+      },
+      "inferred": [
+       "class",
+       "price"
+      ],
+      "input_schema": {
+       "properties": {},
+       "required": [],
+       "type": "object"
+      },
+      "pay_to_basis": "onchain_owner",
+      "pay_to_network": "eip155:42161",
+      "pay_to_source": "registered",
+      "price_source": "scheme_minimum",
+      "reach": {
+       "by": "harvester",
+       "probed_at": 1794163210,
+       "url": "https://clawdmint-api.vercel.app/mcp"
+      },
+      "rule": "AUTO_ONBOARD_TAIFOON_v1",
+      "seller_payout": "not_wired",
+      "terms": "none_published",
+      "tool": "get_time"
+     },
+     "chain_id": 8453,
+     "check": {
+      "handshake_id": null,
+      "passed": true,
+      "reply_digest": "0x109411d24ab9a11596bba4811d0182fd761e0600ff59291ca1b91501e6fc3ae1",
+      "rules": [
+       "auto.free_call@1",
+       "mcp.tools_call:get_time",
+       "payee.onchain_fallback:harvester"
+      ],
+      "status": "ready"
+     },
+     "class": "mcp.tool_call",
+     "created_at": "2026-11-09T00:13:00.704Z",
+     "edge_id": "edge_929bcefd00f512ae",
+     "id": "exchange:mcp.tool_call.929bcefd00f512ae",
+     "lambda": {
+      "acts": [],
+      "id": "lambda:exchange-taifoon-929bcefd00f512ae",
+      "vault": "vault:taifoon:loop"
+     },
+     "meter_row": {
+      "grid": true,
+      "id": "meter:exchange-taifoon-929bcefd00f512ae",
+      "legs": [
+       "seller_share",
+       "our_fee",
+       "reseller_markup"
+      ]
+     },
+     "pool": {
+      "address": null,
+      "factory": "0x317D55623C974197B6dd1C107Cb0cfc3EF04f1eB",
+      "line": "8453:taifoon",
+      "state": "planned",
+      "tx": null
+     },
+     "quote": {
+      "deposit": "0",
+      "line": "8453:taifoon",
+      "pool_id": null,
+      "premium": null,
+      "price": "1000",
+      "token": "USDC"
+     },
+     "schema": "taifoon.exchange.edge.v1",
+     "seller": {
+      "agent_id": "505",
+      "chain_id": 42161,
+      "endpoint": "https://clawdmint-api.vercel.app/mcp",
+      "protocol": "mcp"
+     },
+     "state": "quoted",
+     "tenant": "taifoon",
+     "updated_at": "2026-11-09T00:13:00.704Z"
+    },
+    {
+     "agreement": {
+      "docs": [
+       "TSUL-1.1",
+       "TAT"
+      ],
+      "hash": "0xe9b0e1f049bd15497ee210898eadf07cc65d98abd82a49dfbf4d71c77eb053ca",
+      "how": "eip712",
+      "id": "agr_e9b0e1f049bd1549",
+      "party": "onchain_seller",
+      "signature": null
+     },
+     "agreement_basis": "house_unsigned",
+     "auto": {
+      "agent": "2741:629",
+      "at": "2026-11-09T00:12:46.851Z",
+      "card_url": null,
+      "class_source": "door",
+      "door": "mcp",
+      "fit": {
+       "basis": "generic",
+       "class": "mcp.tool_call",
+       "ok": true,
+       "rule": "CLASS_FIT_v1",
+       "why": "mcp.tool_call is the door's own class: it sells the tool's answer as it is"
+      },
+      "free_call": {
+       "chars": 61,
+       "reply_digest": "0xb37198d2f03853859de4e5221e788ce19499903cd0f8c85b6850cf8f8fa891c0"
+      },
+      "inferred": [
+       "class",
+       "price"
+      ],
+      "input_schema": {
+       "properties": {},
+       "required": [],
+       "type": "object"
+      },
+      "pay_to_basis": "onchain_owner",
+      "pay_to_network": "eip155:2741",
+      "pay_to_source": "registered",
+      "price_source": "scheme_minimum",
+      "reach": {
+       "by": "harvester",
+       "probed_at": 1794163210,
+       "url": "https://clawdmint-api.vercel.app/mcp"
+      },
+      "rule": "AUTO_ONBOARD_TAIFOON_v1",
+      "seller_payout": "not_wired",
+      "terms": "none_published",
+      "tool": "get_time"
+     },
+     "chain_id": 8453,
+     "check": {
+      "handshake_id": null,
+      "passed": true,
+      "reply_digest": "0xb37198d2f03853859de4e5221e788ce19499903cd0f8c85b6850cf8f8fa891c0",
+      "rules": [
+       "auto.free_call@1",
+       "mcp.tools_call:get_time",
+       "payee.onchain_fallback:harvester"
+      ],
+      "status": "ready"
+     },
+     "class": "mcp.tool_call",
+     "created_at": "2026-11-09T00:12:46.851Z",
+     "edge_id": "edge_4a772233db223798",
+     "id": "exchange:mcp.tool_call.4a772233db223798",
+     "lambda": {
+      "acts": [],
+      "id": "lambda:exchange-taifoon-4a772233db223798",
+      "vault": "vault:taifoon:loop"
+     },
+     "meter_row": {
+      "grid": true,
+      "id": "meter:exchange-taifoon-4a772233db223798",
+      "legs": [
+       "seller_share",
+       "our_fee",
+       "reseller_markup"
+      ]
+     },
+     "pool": {
+      "address": null,
+      "factory": "0x317D55623C974197B6dd1C107Cb0cfc3EF04f1eB",
+      "line": "8453:taifoon",
+      "state": "planned",
+      "tx": null
+     },
+     "quote": {
+      "deposit": "0",
+      "line": "8453:taifoon",
+      "pool_id": null,
+      "premium": null,
+      "price": "1000",
+      "token": "USDC"
+     },
+     "schema": "taifoon.exchange.edge.v1",
+     "seller": {
+      "agent_id": "629",
+      "chain_id": 2741,
+      "endpoint": "https://clawdmint-api.vercel.app/mcp",
+      "protocol": "mcp"
+     },
+     "state": "quoted",
+     "tenant": "taifoon",
+     "updated_at": "2026-11-09T00:12:46.851Z"
+    },
+    {
+     "agreement": {
+      "docs": [
+       "TSUL-1.1",
+       "TAT"
+      ],
+      "hash": "0xeea829fd254a5bfaeeba63d559c7e244aaa7fa01821a1cbf9ca4f691b3a0b5c9",
+      "how": "eip712",
+      "id": "agr_eea829fd254a5bfa",
+      "party": "onchain_seller",
+      "signature": "0x4046a898e0085a39e58d9e59bd7dacfff08e2beaf47173c7cc90eed316c5f692427c08951cb1ab3e4d3b123893bfa54494ab663a38141fef75d849781f36f2b11c"
+     },
+     "agreement_basis": "signed",
+     "chain_id": 36927,
+     "check": {
+      "handshake_id": null,
+      "passed": true,
+      "reply_digest": "0x28f0dc821a6d580d4dd5048198ca72434b3dd843144f84dddc2d56ff7f0c7b3c",
+      "rules": [
+       "auto.free_call@1",
+       "mcp.tools_call:defigent_network_list",
+       "payee.onchain_fallback:harvester",
+       "onboard.tool-answer@2",
+       "from:exchange:mcp.tool_call.ca6e4252e984df85"
+      ],
+      "status": "ready"
+     },
+     "class": "mcp.tool_call",
+     "created_at": "2026-11-08T21:18:32.368Z",
+     "edge_id": "edge_897cad372253ce66",
+     "id": "exchange:mcp.tool_call.897cad372253ce66",
+     "lambda": {
+      "acts": [],
+      "id": "lambda:exchange-moonbeam-897cad372253ce66",
+      "vault": "vault:taifoon:loop"
+     },
+     "meter_row": {
+      "grid": true,
+      "id": "meter:exchange-moonbeam-897cad372253ce66",
+      "legs": [
+       "seller_share",
+       "our_fee",
+       "reseller_markup"
+      ]
+     },
+     "pool": {
+      "address": null,
+      "factory": "0xfa1C556d095F4d1577F4D53c94C35EF2CF782494",
+      "line": "v4-glmr",
+      "state": "planned",
+      "tx": null
+     },
+     "quote": {
+      "deposit": "2000000000000000000",
+      "line": "36927:moonbeam",
+      "pool_id": null,
+      "premium": null,
+      "price": "1000000000000000000",
+      "token": "dGLMR"
+     },
+     "schema": "taifoon.exchange.edge.v1",
+     "seller": {
+      "agent_id": "10331",
+      "chain_id": 143,
+      "endpoint": "https://defigent.app/mcp",
+      "protocol": "a2a"
+     },
+     "state": "dry",
+     "tenant": "moonbeam",
+     "updated_at": "2026-11-08T21:18:32.368Z"
+    },
+    {
+     "agreement": {
+      "docs": [
+       "TSUL-1.1",
+       "TAT"
+      ],
+      "hash": "0x1a612d0d6a2045b06a45167bb6c757442e53402aa64208aae6885cede30faf31",
+      "how": "eip712",
+      "id": "agr_1a612d0d6a2045b0",
+      "party": "onchain_seller",
+      "signature": "0x62fdb42079b5968b269ff9e0bf6d7b456cc4f2b056020974c01eb4ee46bc759c2a31c8817db991db31a420a815aec4aed5141ccecb26469ad3cc37753755edf71c"
+     },
+     "agreement_basis": "signed",
+     "chain_id": 36927,
+     "check": {
+      "handshake_id": null,
+      "passed": true,
+      "reply_digest": "0x7e91f17da1e48b4a04e7a670a1746b8be69ec2f24b9610192ff36fe39f85af32",
+      "rules": [
+       "auto.free_call@1",
+       "mcp.tools_call:get_token_price",
+       "class_fit:market.price",
+       "payee.onchain_fallback:harvester",
+       "onboard.tool-answer@2",
+       "from:exchange:market.price.520c49b84e146bc2"
+      ],
+      "status": "ready"
+     },
+     "class": "market.price",
+     "created_at": "2026-11-08T21:18:23.543Z",
+     "edge_id": "edge_3e04ea50d9b7a677",
+     "id": "exchange:market.price.3e04ea50d9b7a677",
+     "lambda": {
+      "acts": [],
+      "id": "lambda:exchange-moonbeam-3e04ea50d9b7a677",
+      "vault": "vault:taifoon:loop"
+     },
+     "meter_row": {
+      "grid": true,
+      "id": "meter:exchange-moonbeam-3e04ea50d9b7a677",
+      "legs": [
+       "seller_share",
+       "our_fee",
+       "reseller_markup"
+      ]
+     },
+     "pool": {
+      "address": null,
+      "factory": "0xfa1C556d095F4d1577F4D53c94C35EF2CF782494",
+      "line": "v4-glmr",
+      "state": "planned",
+      "tx": null
+     },
+     "quote": {
+      "deposit": "2000000000000000000",
+      "line": "36927:moonbeam",
+      "pool_id": null,
+      "premium": null,
+      "price": "1000000000000000000",
+      "token": "dGLMR"
+     },
+     "schema": "taifoon.exchange.edge.v1",
+     "seller": {
+      "agent_id": "91",
+      "chain_id": 137,
+      "endpoint": "https://clawdmint-api.vercel.app/mcp",
+      "protocol": "mcp"
+     },
+     "state": "dry",
+     "tenant": "moonbeam",
+     "updated_at": "2026-11-08T21:18:23.543Z"
+    },
+    {
+     "agreement": {
+      "docs": [
+       "TSUL-1.1",
+       "TAT"
+      ],
+      "hash": "0xff105bfb1a123245d03eb3100aea5dc3ec91cff19f95e57960dc73b741cfd6c6",
+      "how": "eip712",
+      "id": "agr_ff105bfb1a123245",
+      "party": "onchain_seller",
+      "signature": "0xc9fba32beb8e2af2e2ceba955f587a41aae7512a773a1867702f65bdc611ac3a76754708283113a6f1d2d09759ffadfb5d752782a6ce7ad0f4fe5c58f3c34b2e1b"
+     },
+     "agreement_basis": "signed",
+     "chain_id": 36927,
+     "check": {
+      "handshake_id": null,
+      "passed": true,
+      "reply_digest": "0xc424045ad4411a06ada4fdfed9a7bd6d257ee138000fc30dd30dcb7b62f1ed25",
+      "rules": [
+       "auto.free_call@1",
+       "mcp.tools_call:get_token_price",
+       "class_fit:market.price",
+       "payee.onchain_fallback:harvester",
+       "onboard.tool-answer@2",
+       "from:exchange:market.price.a59df085de550198"
+      ],
+      "status": "ready"
+     },
+     "class": "market.price",
+     "created_at": "2026-11-08T21:18:20.446Z",
+     "edge_id": "edge_47c5935b1a7da8c2",
+     "id": "exchange:market.price.47c5935b1a7da8c2",
+     "lambda": {
+      "acts": [],
+      "id": "lambda:exchange-moonbeam-47c5935b1a7da8c2",
+      "vault": "vault:taifoon:loop"
+     },
+     "meter_row": {
+      "grid": true,
+      "id": "meter:exchange-moonbeam-47c5935b1a7da8c2",
+      "legs": [
+       "seller_share",
+       "our_fee",
+       "reseller_markup"
+      ]
+     },
+     "pool": {
+      "address": null,
+      "factory": "0xfa1C556d095F4d1577F4D53c94C35EF2CF782494",
+      "line": "v4-glmr",
+      "state": "planned",
+      "tx": null
+     },
+     "quote": {
+      "deposit": "2000000000000000000",
+      "line": "36927:moonbeam",
+      "pool_id": null,
+      "premium": null,
+      "price": "1000000000000000000",
+      "token": "dGLMR"
+     },
+     "schema": "taifoon.exchange.edge.v1",
+     "seller": {
+      "agent_id": "2698",
+      "chain_id": 100,
+      "endpoint": "https://clawdmint-api.vercel.app/mcp",
+      "protocol": "mcp"
+     },
+     "state": "dry",
+     "tenant": "moonbeam",
+     "updated_at": "2026-11-08T21:18:20.446Z"
+    },
+    {
+     "agreement": {
+      "docs": [
+       "TSUL-1.1",
+       "TAT"
+      ],
+      "hash": "0x9fc6eda9c77283a9e22df0e54785e0bcbffe2bfc55c5410785a37e8bca64393a",
+      "how": "eip712",
+      "id": "agr_9fc6eda9c77283a9",
+      "party": "onchain_seller",
+      "signature": "0x7e44fe917a7a35d1221e0aa0e6f42c3116c53bce0d45457c7a3ad9f834002f7976aa9a5c968d17d703b64fa5b7550b548122d318ec43e7324956b77ee46c20211b"
+     },
+     "agreement_basis": "signed",
+     "chain_id": 36927,
+     "check": {
+      "handshake_id": null,
+      "passed": true,
+      "reply_digest": "0x7a744ca7434cef6472a804e53e5ed6c3f9de4f6a08db1b3200d1077714234085",
+      "rules": [
+       "auto.free_call@1",
+       "mcp.tools_call:get_token_price",
+       "class_fit:market.price",
+       "payee.onchain_fallback:harvester",
+       "onboard.tool-answer@2",
+       "from:exchange:market.price.e5123abb3523a419"
+      ],
+      "status": "ready"
+     },
+     "class": "market.price",
+     "created_at": "2026-11-08T21:18:17.328Z",
+     "edge_id": "edge_1a6335229e390f19",
+     "id": "exchange:market.price.1a6335229e390f19",
+     "lambda": {
+      "acts": [],
+      "id": "lambda:exchange-moonbeam-1a6335229e390f19",
+      "vault": "vault:taifoon:loop"
+     },
+     "meter_row": {
+      "grid": true,
+      "id": "meter:exchange-moonbeam-1a6335229e390f19",
+      "legs": [
+       "seller_share",
+       "our_fee",
+       "reseller_markup"
+      ]
+     },
+     "pool": {
+      "address": null,
+      "factory": "0xfa1C556d095F4d1577F4D53c94C35EF2CF782494",
+      "line": "v4-glmr",
+      "state": "planned",
+      "tx": null
+     },
+     "quote": {
+      "deposit": "2000000000000000000",
+      "line": "36927:moonbeam",
+      "pool_id": null,
+      "premium": null,
+      "price": "1000000000000000000",
+      "token": "dGLMR"
+     },
+     "schema": "taifoon.exchange.edge.v1",
+     "seller": {
+      "agent_id": "380",
+      "chain_id": 10,
+      "endpoint": "https://clawdmint-api.vercel.app/mcp",
+      "protocol": "mcp"
+     },
+     "state": "dry",
+     "tenant": "moonbeam",
+     "updated_at": "2026-11-08T21:18:17.328Z"
+    },
+    {
+     "agreement": {
+      "docs": [
+       "TSUL-1.1",
+       "TAT"
+      ],
+      "hash": "0xcc3573facadcf2755193f7bbdc410ae6d9871d8dfbf8c55f5deedcc77591c4ad",
+      "how": "eip712",
+      "id": "agr_cc3573facadcf275",
+      "party": "onchain_seller",
+      "signature": "0xac3b08a8219c77b1eaab55da6bec61bd1a3d272a8be668b07ffef5ec96a49c874eb11f8e2b693721da13f8cfd22dbf0816ca5578b8aa18ed979813065b4c51081c"
+     },
+     "agreement_basis": "signed",
+     "chain_id": 36927,
+     "check": {
+      "handshake_id": null,
+      "passed": true,
+      "reply_digest": "0xac9bef03fd2a386249cb284bc0c0cd62a273d43c3344c37cfe5d27a8e2e02d71",
+      "rules": [
+       "auto.free_call@1",
+       "mcp.tools_call:get_agent_wallet_status",
+       "onboard.tool-answer@2",
+       "from:exchange:mcp.tool_call.12912914a97a08e8"
+      ],
+      "status": "ready"
+     },
+     "class": "mcp.tool_call",
+     "created_at": "2026-11-08T21:18:13.918Z",
+     "edge_id": "edge_94ae4c1cff0514a0",
+     "id": "exchange:mcp.tool_call.94ae4c1cff0514a0",
+     "lambda": {
+      "acts": [],
+      "id": "lambda:exchange-moonbeam-94ae4c1cff0514a0",
+      "vault": "vault:taifoon:loop"
+     },
+     "meter_row": {
+      "grid": true,
+      "id": "meter:exchange-moonbeam-94ae4c1cff0514a0",
+      "legs": [
+       "seller_share",
+       "our_fee",
+       "reseller_markup"
+      ]
+     },
+     "pool": {
+      "address": null,
+      "factory": "0xfa1C556d095F4d1577F4D53c94C35EF2CF782494",
+      "line": "v4-glmr",
+      "state": "planned",
+      "tx": null
+     },
+     "quote": {
+      "deposit": "2000000000000000000",
+      "line": "36927:moonbeam",
+      "pool_id": null,
+      "premium": null,
+      "price": "1000000000000000000",
+      "token": "dGLMR"
+     },
+     "schema": "taifoon.exchange.edge.v1",
+     "seller": {
+      "agent_id": "273562",
+      "chain_id": 8453,
+      "endpoint": "https://x402broker.com/mcp/x402-broker",
+      "protocol": "a2a"
+     },
+     "state": "dry",
+     "tenant": "moonbeam",
+     "updated_at": "2026-11-08T21:18:13.918Z"
+    },
+    {
+     "agreement": {
+      "docs": [
+       "TSUL-1.1",
+       "TAT"
+      ],
+      "hash": "0x61e98152ac64a31674ede5958cd6cd87e03552a02b1a8eab061e02aeefbc8be3",
+      "how": "eip712",
+      "id": "agr_61e98152ac64a316",
+      "party": "onchain_seller",
+      "signature": "0x2eec41e3e0a976a250b2ef6c305dd371587199c519a862a72cc0d5c4519b89c50040775ea9baca4ea6c2d9399921108fc5faf329d92370c0f0570b541499848f1b"
+     },
+     "agreement_basis": "signed",
+     "chain_id": 36927,
+     "check": {
+      "handshake_id": null,
+      "passed": true,
+      "reply_digest": "0x2fbbb638d87c63aa2276d0c549bdd9920d2720de98b92e0bd65b6e9118d2fd24",
+      "rules": [
+       "auto.free_call@1",
+       "mcp.tools_call:get_agent_wallet_status",
+       "onboard.tool-answer@2",
+       "from:exchange:mcp.tool_call.e01dbd6545e6f15a"
+      ],
+      "status": "ready"
+     },
+     "class": "mcp.tool_call",
+     "created_at": "2026-11-08T21:18:10.808Z",
+     "edge_id": "edge_68dcb3359e14f3af",
+     "id": "exchange:mcp.tool_call.68dcb3359e14f3af",
+     "lambda": {
+      "acts": [],
+      "id": "lambda:exchange-moonbeam-68dcb3359e14f3af",
+      "vault": "vault:taifoon:loop"
+     },
+     "meter_row": {
+      "grid": true,
+      "id": "meter:exchange-moonbeam-68dcb3359e14f3af",
+      "legs": [
+       "seller_share",
+       "our_fee",
+       "reseller_markup"
+      ]
+     },
+     "pool": {
+      "address": null,
+      "factory": "0xfa1C556d095F4d1577F4D53c94C35EF2CF782494",
+      "line": "v4-glmr",
+      "state": "planned",
+      "tx": null
+     },
+     "quote": {
+      "deposit": "2000000000000000000",
+      "line": "36927:moonbeam",
+      "pool_id": null,
+      "premium": null,
+      "price": "1000000000000000000",
+      "token": "dGLMR"
+     },
+     "schema": "taifoon.exchange.edge.v1",
+     "seller": {
+      "agent_id": "9975",
+      "chain_id": 42220,
+      "endpoint": "https://agentdiet-72343955726.us-central1.run.app/mcp",
+      "protocol": "a2a"
+     },
+     "state": "dry",
+     "tenant": "moonbeam",
+     "updated_at": "2026-11-08T21:18:10.808Z"
+    },
+    {
+     "agreement": {
+      "docs": [
+       "TSUL-1.1",
+       "TAT"
+      ],
+      "hash": "0x6fb92562c6a06ac9e1a30ef32a7f164d05c7fd8d1fccffd52971510dda4483c5",
+      "how": "eip712",
+      "id": "agr_6fb92562c6a06ac9",
+      "party": "onchain_seller",
+      "signature": "0xf6988332c7e024ee422b69f0f14eab3edb8630abdb0156bb8d044af827ab259f3b31aad91cd389a1ae100e8da1d43d0266fc5f6a011424a57d429cbeccc139911c"
+     },
+     "agreement_basis": "signed",
+     "chain_id": 36927,
+     "check": {
+      "handshake_id": null,
+      "passed": true,
+      "reply_digest": "0x1a026d6526cd0b2eb2bd508e8e64725fc3ea923deed60cd4f50082e14e933d7b",
+      "rules": [
+       "auto.free_call@1",
+       "mcp.tools_call:get_agent_wallet_status",
+       "onboard.tool-answer@2",
+       "from:exchange:mcp.tool_call.db907564f37d3f87"
+      ],
+      "status": "ready"
+     },
+     "class": "mcp.tool_call",
+     "created_at": "2026-11-08T21:18:07.640Z",
+     "edge_id": "edge_cb45f696aff96f78",
+     "id": "exchange:mcp.tool_call.cb45f696aff96f78",
+     "lambda": {
+      "acts": [],
+      "id": "lambda:exchange-moonbeam-cb45f696aff96f78",
+      "vault": "vault:taifoon:loop"
+     },
+     "meter_row": {
+      "grid": true,
+      "id": "meter:exchange-moonbeam-cb45f696aff96f78",
+      "legs": [
+       "seller_share",
+       "our_fee",
+       "reseller_markup"
+      ]
+     },
+     "pool": {
+      "address": null,
+      "factory": "0xfa1C556d095F4d1577F4D53c94C35EF2CF782494",
+      "line": "v4-glmr",
+      "state": "planned",
+      "tx": null
+     },
+     "quote": {
+      "deposit": "2000000000000000000",
+      "line": "36927:moonbeam",
+      "pool_id": null,
+      "premium": null,
+      "price": "1000000000000000000",
+      "token": "dGLMR"
+     },
+     "schema": "taifoon.exchange.edge.v1",
+     "seller": {
+      "agent_id": "2539",
+      "chain_id": 5042,
+      "endpoint": "https://x402-broker-72343955726.us-central1.run.app/mcp/x402-broker",
+      "protocol": "a2a"
+     },
+     "state": "dry",
+     "tenant": "moonbeam",
+     "updated_at": "2026-11-08T21:18:07.640Z"
+    },
+    {
+     "agreement": {
+      "docs": [
+       "TSUL-1.1",
+       "TAT"
+      ],
+      "hash": "0x719e7f4b959fa9104dda0bc38e2ddc86a6f122186e8461e267d52cb57d124021",
+      "how": "eip712",
+      "id": "agr_719e7f4b959fa910",
+      "party": "onchain_seller",
+      "signature": "0x3c775ec5c88c8d6440f440783908f478e0fb77aa1fc7d0814bb231231e8468aa462785f1727ad818592a3c3ce8ff3e39c79543c202ce1113ce0cdd424b0030d01b"
+     },
+     "agreement_basis": "signed",
+     "chain_id": 36927,
+     "check": {
+      "handshake_id": null,
+      "passed": true,
+      "reply_digest": "0x1a026d6526cd0b2eb2bd508e8e64725fc3ea923deed60cd4f50082e14e933d7b",
+      "rules": [
+       "auto.free_call@1",
+       "mcp.tools_call:get_agent_wallet_status",
+       "onboard.tool-answer@2",
+       "from:exchange:mcp.tool_call.ba534912919bc881"
+      ],
+      "status": "ready"
+     },
+     "class": "mcp.tool_call",
+     "created_at": "2026-11-08T21:18:04.535Z",
+     "edge_id": "edge_f18c6c9e62bd6bba",
+     "id": "exchange:mcp.tool_call.f18c6c9e62bd6bba",
+     "lambda": {
+      "acts": [],
+      "id": "lambda:exchange-moonbeam-f18c6c9e62bd6bba",
+      "vault": "vault:taifoon:loop"
+     },
+     "meter_row": {
+      "grid": true,
+      "id": "meter:exchange-moonbeam-f18c6c9e62bd6bba",
+      "legs": [
+       "seller_share",
+       "our_fee",
+       "reseller_markup"
+      ]
+     },
+     "pool": {
+      "address": null,
+      "factory": "0xfa1C556d095F4d1577F4D53c94C35EF2CF782494",
+      "line": "v4-glmr",
+      "state": "planned",
+      "tx": null
+     },
+     "quote": {
+      "deposit": "2000000000000000000",
+      "line": "36927:moonbeam",
+      "pool_id": null,
+      "premium": null,
+      "price": "1000000000000000000",
+      "token": "dGLMR"
+     },
+     "schema": "taifoon.exchange.edge.v1",
+     "seller": {
+      "agent_id": "1846",
+      "chain_id": 43114,
+      "endpoint": "https://x402-broker-72343955726.us-central1.run.app/mcp/x402-broker",
+      "protocol": "a2a"
+     },
+     "state": "dry",
+     "tenant": "moonbeam",
+     "updated_at": "2026-11-08T21:18:04.535Z"
+    },
+    {
+     "agreement": {
+      "docs": [
+       "TSUL-1.1",
+       "TAT"
+      ],
+      "hash": "0x9f1344def6d8fe39b146446448f9fc751d679efa5317a18f8ffb802579dffa23",
+      "how": "eip712",
+      "id": "agr_9f1344def6d8fe39",
+      "party": "onchain_seller",
+      "signature": "0x3fe66a239fac26ba3cd4e38ff7cf425fc78f5ce66e2b0ce46f1c12b51463e3ad04294187d1a84e25475e7c1635dbdc31bf17864730e5042a67c33b9cf59bc5d11c"
+     },
+     "agreement_basis": "signed",
+     "chain_id": 36927,
+     "check": {
+      "handshake_id": null,
+      "passed": true,
+      "reply_digest": "0x1a026d6526cd0b2eb2bd508e8e64725fc3ea923deed60cd4f50082e14e933d7b",
+      "rules": [
+       "auto.free_call@1",
+       "mcp.tools_call:get_agent_wallet_status",
+       "onboard.tool-answer@2",
+       "from:exchange:mcp.tool_call.51a0a24a4da7f58d"
+      ],
+      "status": "ready"
+     },
+     "class": "mcp.tool_call",
+     "created_at": "2026-11-08T21:18:01.331Z",
+     "edge_id": "edge_ac2707102e00808e",
+     "id": "exchange:mcp.tool_call.ac2707102e00808e",
+     "lambda": {
+      "acts": [],
+      "id": "lambda:exchange-moonbeam-ac2707102e00808e",
+      "vault": "vault:taifoon:loop"
+     },
+     "meter_row": {
+      "grid": true,
+      "id": "meter:exchange-moonbeam-ac2707102e00808e",
+      "legs": [
+       "seller_share",
+       "our_fee",
+       "reseller_markup"
+      ]
+     },
+     "pool": {
+      "address": null,
+      "factory": "0xfa1C556d095F4d1577F4D53c94C35EF2CF782494",
+      "line": "v4-glmr",
+      "state": "planned",
+      "tx": null
+     },
+     "quote": {
+      "deposit": "2000000000000000000",
+      "line": "36927:moonbeam",
+      "pool_id": null,
+      "premium": null,
+      "price": "1000000000000000000",
+      "token": "dGLMR"
+     },
+     "schema": "taifoon.exchange.edge.v1",
+     "seller": {
+      "agent_id": "1634",
+      "chain_id": 42161,
+      "endpoint": "https://x402-broker-72343955726.us-central1.run.app/mcp/x402-broker",
+      "protocol": "a2a"
+     },
+     "state": "dry",
+     "tenant": "moonbeam",
+     "updated_at": "2026-11-08T21:18:01.331Z"
+    },
+    {
+     "agreement": {
+      "docs": [
+       "TSUL-1.1",
+       "TAT"
+      ],
+      "hash": "0x8305f0545c83d31c92def7f3c8cc53086d8a0ffda1ea976151b0029fdfeeca8e",
+      "how": "eip712",
+      "id": "agr_8305f0545c83d31c",
+      "party": "onchain_seller",
+      "signature": "0xb830e849107ea2a788b8f3f9c8a456fd358c67011764be11752573f1a922f9df7dc42602e8cfbd881abb06155a70830e10941c3ae1e7b03130f4ca6151f083c41c"
+     },
+     "agreement_basis": "signed",
+     "chain_id": 36927,
+     "check": {
+      "handshake_id": null,
+      "passed": true,
+      "reply_digest": "0xde688a6f00b5e246ab004c9226b1c6720041ab10b193ebf54b9927cd27d1b7f1",
+      "rules": [
+       "auto.free_call@1",
+       "mcp.tools_call:get_time",
+       "payee.onchain_fallback:harvester",
+       "onboard.tool-answer@2",
+       "from:exchange:mcp.tool_call.eaddbb095aabed08"
+      ],
+      "status": "ready"
+     },
+     "class": "mcp.tool_call",
+     "created_at": "2026-11-08T21:17:58.052Z",
+     "edge_id": "edge_53932e2b2a8dc284",
+     "id": "exchange:mcp.tool_call.53932e2b2a8dc284",
+     "lambda": {
+      "acts": [],
+      "id": "lambda:exchange-moonbeam-53932e2b2a8dc284",
+      "vault": "vault:taifoon:loop"
+     },
+     "meter_row": {
+      "grid": true,
+      "id": "meter:exchange-moonbeam-53932e2b2a8dc284",
+      "legs": [
+       "seller_share",
+       "our_fee",
+       "reseller_markup"
+      ]
+     },
+     "pool": {
+      "address": null,
+      "factory": "0xfa1C556d095F4d1577F4D53c94C35EF2CF782494",
+      "line": "v4-glmr",
+      "state": "planned",
+      "tx": null
+     },
+     "quote": {
+      "deposit": "2000000000000000000",
+      "line": "36927:moonbeam",
+      "pool_id": null,
+      "premium": null,
+      "price": "1000000000000000000",
+      "token": "dGLMR"
+     },
+     "schema": "taifoon.exchange.edge.v1",
+     "seller": {
+      "agent_id": "19712",
+      "chain_id": 8453,
+      "endpoint": "https://clawdmint-api.vercel.app/mcp",
+      "protocol": "mcp"
+     },
+     "state": "dry",
+     "tenant": "moonbeam",
+     "updated_at": "2026-11-08T21:17:58.052Z"
+    },
+    {
+     "agreement": {
+      "docs": [
+       "TSUL-1.1",
+       "TAT"
+      ],
+      "hash": "0x7839d904df3d577569b3c37323ef113cae47a7a7e089e5f75ccd851cc3e31ccd",
+      "how": "eip712",
+      "id": "agr_7839d904df3d5775",
+      "party": "onchain_seller",
+      "signature": "0x760b11f1edbff17e586847e88b6456b577a90e855f7d651179c37644df511f1e34cbca98fbaf4073395687be5858801783e21cb818bb08d66f5802a3ed5946701b"
+     },
+     "agreement_basis": "signed",
+     "chain_id": 36927,
+     "check": {
+      "handshake_id": null,
+      "passed": true,
+      "reply_digest": "0xb12d611eced262fe4f2b04b9a56649e5b0030bb60c147f4fdf25c979c7273d2f",
+      "rules": [
+       "auto.free_call@1",
+       "mcp.tools_call:get_time",
+       "payee.onchain_fallback:harvester",
+       "onboard.tool-answer@2",
+       "from:exchange:mcp.tool_call.793b53cde5f2f6ab"
+      ],
+      "status": "ready"
+     },
+     "class": "mcp.tool_call",
+     "created_at": "2026-11-08T21:17:54.941Z",
+     "edge_id": "edge_5f0f622614141349",
+     "id": "exchange:mcp.tool_call.5f0f622614141349",
+     "lambda": {
+      "acts": [],
+      "id": "lambda:exchange-moonbeam-5f0f622614141349",
+      "vault": "vault:taifoon:loop"
+     },
+     "meter_row": {
+      "grid": true,
+      "id": "meter:exchange-moonbeam-5f0f622614141349",
+      "legs": [
+       "seller_share",
+       "our_fee",
+       "reseller_markup"
+      ]
+     },
+     "pool": {
+      "address": null,
+      "factory": "0xfa1C556d095F4d1577F4D53c94C35EF2CF782494",
+      "line": "v4-glmr",
+      "state": "planned",
+      "tx": null
+     },
+     "quote": {
+      "deposit": "2000000000000000000",
+      "line": "36927:moonbeam",
+      "pool_id": null,
+      "premium": null,
+      "price": "1000000000000000000",
+      "token": "dGLMR"
+     },
+     "schema": "taifoon.exchange.edge.v1",
+     "seller": {
+      "agent_id": "101",
+      "chain_id": 196,
+      "endpoint": "https://clawdmint-api.vercel.app/mcp",
+      "protocol": "mcp"
+     },
+     "state": "dry",
+     "tenant": "moonbeam",
+     "updated_at": "2026-11-08T21:17:54.941Z"
+    },
+    {
+     "agreement": {
+      "docs": [
+       "TSUL-1.1",
+       "TAT"
+      ],
+      "hash": "0x8b2f41f6aa5dc22131de9707a801fc4dae0901b8da2a34f7a16fcd397c2965cb",
+      "how": "eip712",
+      "id": "agr_8b2f41f6aa5dc221",
+      "party": "onchain_seller",
+      "signature": "0x0c7e7cb8faca850a0f4403a71605350fa8fac895eaefe85df7324791928877212b003440f9ddf53250a0cf728bfcc17759f817536f96813823653dc9a81d98ec1b"
+     },
+     "agreement_basis": "signed",
+     "chain_id": 36927,
+     "check": {
+      "handshake_id": null,
+      "passed": true,
+      "reply_digest": "0x0e2ce840dc162eb252355ff088fe633059a99b9d4fed10127da1cd01799cb68e",
+      "rules": [
+       "auto.free_call@1",
+       "mcp.tools_call:get_time",
+       "payee.onchain_fallback:harvester",
+       "onboard.tool-answer@2",
+       "from:exchange:mcp.tool_call.e2807d49271525ea"
+      ],
+      "status": "ready"
+     },
+     "class": "mcp.tool_call",
+     "created_at": "2026-11-08T21:17:51.585Z",
+     "edge_id": "edge_df6d9cfdb8042658",
+     "id": "exchange:mcp.tool_call.df6d9cfdb8042658",
+     "lambda": {
+      "acts": [],
+      "id": "lambda:exchange-moonbeam-df6d9cfdb8042658",
+      "vault": "vault:taifoon:loop"
+     },
+     "meter_row": {
+      "grid": true,
+      "id": "meter:exchange-moonbeam-df6d9cfdb8042658",
+      "legs": [
+       "seller_share",
+       "our_fee",
+       "reseller_markup"
+      ]
+     },
+     "pool": {
+      "address": null,
+      "factory": "0xfa1C556d095F4d1577F4D53c94C35EF2CF782494",
+      "line": "v4-glmr",
+      "state": "planned",
+      "tx": null
+     },
+     "quote": {
+      "deposit": "2000000000000000000",
+      "line": "36927:moonbeam",
+      "pool_id": null,
+      "premium": null,
+      "price": "1000000000000000000",
+      "token": "dGLMR"
+     },
+     "schema": "taifoon.exchange.edge.v1",
+     "seller": {
+      "agent_id": "19",
+      "chain_id": 143,
+      "endpoint": "https://clawdmint-api.vercel.app/mcp",
+      "protocol": "mcp"
+     },
+     "state": "dry",
+     "tenant": "moonbeam",
+     "updated_at": "2026-11-08T21:17:51.585Z"
+    },
+    {
+     "agreement": {
+      "docs": [
+       "TSUL-1.1",
+       "TAT"
+      ],
+      "hash": "0x5f6a01aa37c9bbfa888470c7abe0218ae1fa117ba1ba402929b2896d185d0a3c",
+      "how": "eip712",
+      "id": "agr_5f6a01aa37c9bbfa",
+      "party": "onchain_seller",
+      "signature": null
+     },
+     "agreement_basis": "house_unsigned",
+     "auto": {
+      "agent": "196:101",
+      "at": "2026-11-08T16:27:18.740Z",
+      "card_url": null,
+      "class_source": "door",
+      "door": "mcp",
+      "fit": {
+       "basis": "generic",
+       "class": "mcp.tool_call",
+       "ok": true,
+       "rule": "CLASS_FIT_v1",
+       "why": "mcp.tool_call is the door's own class: it sells the tool's answer as it is"
+      },
+      "free_call": {
+       "chars": 61,
+       "reply_digest": "0xb12d611eced262fe4f2b04b9a56649e5b0030bb60c147f4fdf25c979c7273d2f"
+      },
+      "inferred": [
+       "class",
+       "price"
+      ],
+      "input_schema": {
+       "properties": {},
+       "required": [],
+       "type": "object"
+      },
+      "pay_to_basis": "onchain_owner",
+      "pay_to_network": "eip155:196",
+      "pay_to_source": "registered",
+      "price_source": "scheme_minimum",
+      "reach": {
+       "by": "harvester",
+       "probed_at": 1794133779,
+       "url": "https://clawdmint-api.vercel.app/mcp"
+      },
+      "rule": "AUTO_ONBOARD_TAIFOON_v1",
+      "seller_payout": "not_wired",
+      "terms": "none_published",
+      "tool": "get_time"
+     },
+     "chain_id": 8453,
+     "check": {
+      "handshake_id": null,
+      "passed": true,
+      "reply_digest": "0xb12d611eced262fe4f2b04b9a56649e5b0030bb60c147f4fdf25c979c7273d2f",
+      "rules": [
+       "auto.free_call@1",
+       "mcp.tools_call:get_time",
+       "payee.onchain_fallback:harvester"
+      ],
+      "status": "ready"
+     },
+     "class": "mcp.tool_call",
+     "created_at": "2026-11-08T16:27:18.740Z",
+     "edge_id": "edge_793b53cde5f2f6ab",
+     "id": "exchange:mcp.tool_call.793b53cde5f2f6ab",
+     "lambda": {
+      "acts": [],
+      "id": "lambda:exchange-taifoon-793b53cde5f2f6ab",
+      "vault": "vault:taifoon:loop"
+     },
+     "meter_row": {
+      "grid": true,
+      "id": "meter:exchange-taifoon-793b53cde5f2f6ab",
+      "legs": [
+       "seller_share",
+       "our_fee",
+       "reseller_markup"
+      ]
+     },
+     "pool": {
+      "address": null,
+      "factory": "0x317D55623C974197B6dd1C107Cb0cfc3EF04f1eB",
+      "line": "8453:taifoon",
+      "state": "planned",
+      "tx": null
+     },
+     "quote": {
+      "deposit": "0",
+      "line": "8453:taifoon",
+      "pool_id": null,
+      "premium": null,
+      "price": "1000",
+      "token": "USDC"
+     },
+     "schema": "taifoon.exchange.edge.v1",
+     "seller": {
+      "agent_id": "101",
+      "chain_id": 196,
+      "endpoint": "https://clawdmint-api.vercel.app/mcp",
+      "protocol": "mcp"
+     },
+     "state": "quoted",
+     "tenant": "taifoon",
+     "updated_at": "2026-11-08T16:27:18.740Z"
+    },
+    {
+     "agreement": {
+      "docs": [
+       "TSUL-1.1",
+       "TAT"
+      ],
+      "hash": "0x503bc6f8d0c5903ca4c52cf03b9d389b9936ad107cfef5cf38d8c95a44c609d6",
+      "how": "eip712",
+      "id": "agr_503bc6f8d0c5903c",
+      "party": "onchain_seller",
+      "signature": null
+     },
+     "agreement_basis": "house_unsigned",
+     "auto": {
+      "agent": "143:19",
+      "at": "2026-11-08T16:27:00.372Z",
+      "card_url": null,
+      "class_source": "door",
+      "door": "mcp",
+      "fit": {
+       "basis": "generic",
+       "class": "mcp.tool_call",
+       "ok": true,
+       "rule": "CLASS_FIT_v1",
+       "why": "mcp.tool_call is the door's own class: it sells the tool's answer as it is"
+      },
+      "free_call": {
+       "chars": 61,
+       "reply_digest": "0x0e2ce840dc162eb252355ff088fe633059a99b9d4fed10127da1cd01799cb68e"
+      },
+      "inferred": [
+       "class",
+       "price"
+      ],
+      "input_schema": {
+       "properties": {},
+       "required": [],
+       "type": "object"
+      },
+      "pay_to_basis": "onchain_owner",
+      "pay_to_network": "eip155:143",
+      "pay_to_source": "registered",
+      "price_source": "scheme_minimum",
+      "reach": {
+       "by": "harvester",
+       "probed_at": 1794133779,
+       "url": "https://clawdmint-api.vercel.app/mcp"
+      },
+      "rule": "AUTO_ONBOARD_TAIFOON_v1",
+      "seller_payout": "not_wired",
+      "terms": "none_published",
+      "tool": "get_time"
+     },
+     "chain_id": 8453,
+     "check": {
+      "handshake_id": null,
+      "passed": true,
+      "reply_digest": "0x0e2ce840dc162eb252355ff088fe633059a99b9d4fed10127da1cd01799cb68e",
+      "rules": [
+       "auto.free_call@1",
+       "mcp.tools_call:get_time",
+       "payee.onchain_fallback:harvester"
+      ],
+      "status": "ready"
+     },
+     "class": "mcp.tool_call",
+     "created_at": "2026-11-08T16:27:00.372Z",
+     "edge_id": "edge_e2807d49271525ea",
+     "id": "exchange:mcp.tool_call.e2807d49271525ea",
+     "lambda": {
+      "acts": [],
+      "id": "lambda:exchange-taifoon-e2807d49271525ea",
+      "vault": "vault:taifoon:loop"
+     },
+     "meter_row": {
+      "grid": true,
+      "id": "meter:exchange-taifoon-e2807d49271525ea",
+      "legs": [
+       "seller_share",
+       "our_fee",
+       "reseller_markup"
+      ]
+     },
+     "pool": {
+      "address": null,
+      "factory": "0x317D55623C974197B6dd1C107Cb0cfc3EF04f1eB",
+      "line": "8453:taifoon",
+      "state": "planned",
+      "tx": null
+     },
+     "quote": {
+      "deposit": "0",
+      "line": "8453:taifoon",
+      "pool_id": null,
+      "premium": null,
+      "price": "1000",
+      "token": "USDC"
+     },
+     "schema": "taifoon.exchange.edge.v1",
+     "seller": {
+      "agent_id": "19",
+      "chain_id": 143,
+      "endpoint": "https://clawdmint-api.vercel.app/mcp",
+      "protocol": "mcp"
+     },
+     "state": "quoted",
+     "tenant": "taifoon",
+     "updated_at": "2026-11-08T16:27:00.372Z"
+    },
+    {
+     "agreement": {
+      "docs": [
+       "TSUL-1.1",
+       "TAT"
+      ],
+      "hash": "0xa68be20618a2904c516b0b14b4d128186a6edf917784af9c68a9d49660c5860a",
+      "how": "eip712",
+      "id": "agr_a68be20618a2904c",
+      "party": "onchain_seller",
+      "signature": null
+     },
+     "agreement_basis": "house_unsigned",
+     "auto": {
+      "agent": "42220:9975",
+      "at": "2026-11-08T15:37:52.989Z",
+      "card_url": "https://agentdiet-72343955726.us-central1.run.app/.well-known/agent-card.json",
+      "class_source": "door",
+      "door": "mcp",
+      "fit": {
+       "basis": "generic",
+       "class": "mcp.tool_call",
+       "ok": true,
+       "rule": "CLASS_FIT_v1",
+       "why": "mcp.tool_call is the door's own class: it sells the tool's answer as it is"
+      },
+      "free_call": {
+       "chars": 280,
+       "reply_digest": "0x2fbbb638d87c63aa2276d0c549bdd9920d2720de98b92e0bd65b6e9118d2fd24"
+      },
+      "inferred": [
+       "class",
+       "price"
+      ],
+      "input_schema": {
+       "additionalProperties": false,
+       "examples": [
+        {
+         "agent_id": "example"
+        }
+       ],
+       "properties": {
+        "agent_id": {
+         "description": "Optional Agent ID or agd_pass_ session key to inspect. Omit to check the default wallet derived from your client IP.",
+         "maxLength": 256,
+         "minLength": 1,
+         "type": "string"
+        }
+       },
+       "type": "object"
+      },
+      "pay_to_basis": "card",
+      "pay_to_network": "eip155:8453",
+      "pay_to_source": "registered",
+      "price_source": "scheme_minimum",
+      "rule": "AUTO_ONBOARD_TAIFOON_v1",
+      "seller_payout": "not_wired",
+      "terms": "allows_resale",
+      "tool": "get_agent_wallet_status"
+     },
+     "chain_id": 8453,
+     "check": {
+      "handshake_id": null,
+      "passed": true,
+      "reply_digest": "0x2fbbb638d87c63aa2276d0c549bdd9920d2720de98b92e0bd65b6e9118d2fd24",
+      "rules": [
+       "auto.free_call@1",
+       "mcp.tools_call:get_agent_wallet_status"
+      ],
+      "status": "ready"
+     },
+     "class": "mcp.tool_call",
+     "created_at": "2026-11-08T15:37:52.989Z",
+     "edge_id": "edge_e01dbd6545e6f15a",
+     "id": "exchange:mcp.tool_call.e01dbd6545e6f15a",
+     "lambda": {
+      "acts": [],
+      "id": "lambda:exchange-taifoon-e01dbd6545e6f15a",
+      "vault": "vault:taifoon:loop"
+     },
+     "meter_row": {
+      "grid": true,
+      "id": "meter:exchange-taifoon-e01dbd6545e6f15a",
+      "legs": [
+       "seller_share",
+       "our_fee",
+       "reseller_markup"
+      ]
+     },
+     "pool": {
+      "address": null,
+      "factory": "0x317D55623C974197B6dd1C107Cb0cfc3EF04f1eB",
+      "line": "8453:taifoon",
+      "state": "planned",
+      "tx": null
+     },
+     "quote": {
+      "deposit": "0",
+      "line": "8453:taifoon",
+      "pool_id": null,
+      "premium": null,
+      "price": "1000",
+      "token": "USDC"
+     },
+     "schema": "taifoon.exchange.edge.v1",
+     "seller": {
+      "agent_id": "9975",
+      "chain_id": 42220,
+      "endpoint": "https://agentdiet-72343955726.us-central1.run.app/mcp",
+      "protocol": "mcp"
+     },
+     "state": "quoted",
+     "tenant": "taifoon",
+     "updated_at": "2026-11-08T15:37:52.989Z"
+    },
+    {
+     "agreement": {
+      "docs": [
+       "TSUL-1.1",
+       "TAT"
+      ],
+      "hash": "0xce76b3f5acba39eb1306c4ce18a71e42f1ce8918864c986866314d05edad590f",
+      "how": "eip712",
+      "id": "agr_ce76b3f5acba39eb",
+      "party": "onchain_seller",
+      "signature": null
+     },
+     "agreement_basis": "house_unsigned",
+     "auto": {
+      "agent": "5042:2539",
+      "at": "2026-11-08T15:37:26.798Z",
+      "card_url": "https://x402-broker-72343955726.us-central1.run.app/.well-known/agent-card.json",
+      "class_source": "door",
+      "door": "mcp",
+      "fit": {
+       "basis": "generic",
+       "class": "mcp.tool_call",
+       "ok": true,
+       "rule": "CLASS_FIT_v1",
+       "why": "mcp.tool_call is the door's own class: it sells the tool's answer as it is"
+      },
+      "free_call": {
+       "chars": 278,
+       "reply_digest": "0x1a026d6526cd0b2eb2bd508e8e64725fc3ea923deed60cd4f50082e14e933d7b"
+      },
+      "inferred": [
+       "class",
+       "price"
+      ],
+      "input_schema": {
+       "additionalProperties": false,
+       "examples": [
+        {
+         "agent_id": "example"
+        }
+       ],
+       "properties": {
+        "agent_id": {
+         "description": "Optional Agent ID or agd_pass_ session key to inspect. Omit to check the default wallet derived from your client IP.",
+         "maxLength": 256,
+         "minLength": 1,
+         "type": "string"
+        }
+       },
+       "type": "object"
+      },
+      "pay_to_basis": "card",
+      "pay_to_network": "eip155:8453",
+      "pay_to_source": "registered",
+      "price_source": "scheme_minimum",
+      "rule": "AUTO_ONBOARD_TAIFOON_v1",
+      "seller_payout": "not_wired",
+      "terms": "allows_resale",
+      "tool": "get_agent_wallet_status"
+     },
+     "chain_id": 8453,
+     "check": {
+      "handshake_id": null,
+      "passed": true,
+      "reply_digest": "0x1a026d6526cd0b2eb2bd508e8e64725fc3ea923deed60cd4f50082e14e933d7b",
+      "rules": [
+       "auto.free_call@1",
+       "mcp.tools_call:get_agent_wallet_status"
+      ],
+      "status": "ready"
+     },
+     "class": "mcp.tool_call",
+     "created_at": "2026-11-08T15:37:26.798Z",
+     "edge_id": "edge_db907564f37d3f87",
+     "id": "exchange:mcp.tool_call.db907564f37d3f87",
+     "lambda": {
+      "acts": [],
+      "id": "lambda:exchange-taifoon-db907564f37d3f87",
+      "vault": "vault:taifoon:loop"
+     },
+     "meter_row": {
+      "grid": true,
+      "id": "meter:exchange-taifoon-db907564f37d3f87",
+      "legs": [
+       "seller_share",
+       "our_fee",
+       "reseller_markup"
+      ]
+     },
+     "pool": {
+      "address": null,
+      "factory": "0x317D55623C974197B6dd1C107Cb0cfc3EF04f1eB",
+      "line": "8453:taifoon",
+      "state": "planned",
+      "tx": null
+     },
+     "quote": {
+      "deposit": "0",
+      "line": "8453:taifoon",
+      "pool_id": null,
+      "premium": null,
+      "price": "1000",
+      "token": "USDC"
+     },
+     "schema": "taifoon.exchange.edge.v1",
+     "seller": {
+      "agent_id": "2539",
+      "chain_id": 5042,
+      "endpoint": "https://x402-broker-72343955726.us-central1.run.app/mcp/x402-broker",
+      "protocol": "mcp"
+     },
+     "state": "quoted",
+     "tenant": "taifoon",
+     "updated_at": "2026-11-08T15:37:26.798Z"
+    },
+    {
+     "agreement": {
+      "docs": [
+       "TSUL-1.1",
+       "TAT"
+      ],
+      "hash": "0xcaea19012e21d9731810d224933e5fdd57c62a5ff0d4812addc8cc7bd42a43d7",
+      "how": "eip712",
+      "id": "agr_caea19012e21d973",
+      "party": "onchain_seller",
+      "signature": null
+     },
+     "agreement_basis": "house_unsigned",
+     "auto": {
+      "agent": "43114:1846",
+      "at": "2026-11-08T15:37:20.140Z",
+      "card_url": "https://x402-broker-72343955726.us-central1.run.app/.well-known/agent-card.json",
+      "class_source": "door",
+      "door": "mcp",
+      "fit": {
+       "basis": "generic",
+       "class": "mcp.tool_call",
+       "ok": true,
+       "rule": "CLASS_FIT_v1",
+       "why": "mcp.tool_call is the door's own class: it sells the tool's answer as it is"
+      },
+      "free_call": {
+       "chars": 278,
+       "reply_digest": "0x1a026d6526cd0b2eb2bd508e8e64725fc3ea923deed60cd4f50082e14e933d7b"
+      },
+      "inferred": [
+       "class",
+       "price"
+      ],
+      "input_schema": {
+       "additionalProperties": false,
+       "examples": [
+        {
+         "agent_id": "example"
+        }
+       ],
+       "properties": {
+        "agent_id": {
+         "description": "Optional Agent ID or agd_pass_ session key to inspect. Omit to check the default wallet derived from your client IP.",
+         "maxLength": 256,
+         "minLength": 1,
+         "type": "string"
+        }
+       },
+       "type": "object"
+      },
+      "pay_to_basis": "card",
+      "pay_to_network": "eip155:8453",
+      "pay_to_source": "registered",
+      "price_source": "scheme_minimum",
+      "rule": "AUTO_ONBOARD_TAIFOON_v1",
+      "seller_payout": "not_wired",
+      "terms": "allows_resale",
+      "tool": "get_agent_wallet_status"
+     },
+     "chain_id": 8453,
+     "check": {
+      "handshake_id": null,
+      "passed": true,
+      "reply_digest": "0x1a026d6526cd0b2eb2bd508e8e64725fc3ea923deed60cd4f50082e14e933d7b",
+      "rules": [
+       "auto.free_call@1",
+       "mcp.tools_call:get_agent_wallet_status"
+      ],
+      "status": "ready"
+     },
+     "class": "mcp.tool_call",
+     "created_at": "2026-11-08T15:37:20.140Z",
+     "edge_id": "edge_ba534912919bc881",
+     "id": "exchange:mcp.tool_call.ba534912919bc881",
+     "lambda": {
+      "acts": [],
+      "id": "lambda:exchange-taifoon-ba534912919bc881",
+      "vault": "vault:taifoon:loop"
+     },
+     "meter_row": {
+      "grid": true,
+      "id": "meter:exchange-taifoon-ba534912919bc881",
+      "legs": [
+       "seller_share",
+       "our_fee",
+       "reseller_markup"
+      ]
+     },
+     "pool": {
+      "address": null,
+      "factory": "0x317D55623C974197B6dd1C107Cb0cfc3EF04f1eB",
+      "line": "8453:taifoon",
+      "state": "planned",
+      "tx": null
+     },
+     "quote": {
+      "deposit": "0",
+      "line": "8453:taifoon",
+      "pool_id": null,
+      "premium": null,
+      "price": "1000",
+      "token": "USDC"
+     },
+     "schema": "taifoon.exchange.edge.v1",
+     "seller": {
+      "agent_id": "1846",
+      "chain_id": 43114,
+      "endpoint": "https://x402-broker-72343955726.us-central1.run.app/mcp/x402-broker",
+      "protocol": "mcp"
+     },
+     "state": "quoted",
+     "tenant": "taifoon",
+     "updated_at": "2026-11-08T15:37:20.140Z"
+    },
+    {
+     "agreement": {
+      "docs": [
+       "TSUL-1.1",
+       "TAT"
+      ],
+      "hash": "0x363d6e15fc35633fe243296b577742a9f9c9864182764245d69048e6fba6f526",
+      "how": "eip712",
+      "id": "agr_363d6e15fc35633f",
+      "party": "onchain_seller",
+      "signature": null
+     },
+     "agreement_basis": "house_unsigned",
+     "auto": {
+      "agent": "42161:1634",
+      "at": "2026-11-08T15:37:02.395Z",
+      "card_url": "https://x402-broker-72343955726.us-central1.run.app/.well-known/agent-card.json",
+      "class_source": "door",
+      "door": "mcp",
+      "fit": {
+       "basis": "generic",
+       "class": "mcp.tool_call",
+       "ok": true,
+       "rule": "CLASS_FIT_v1",
+       "why": "mcp.tool_call is the door's own class: it sells the tool's answer as it is"
+      },
+      "free_call": {
+       "chars": 278,
+       "reply_digest": "0x1a026d6526cd0b2eb2bd508e8e64725fc3ea923deed60cd4f50082e14e933d7b"
+      },
+      "inferred": [
+       "class",
+       "price"
+      ],
+      "input_schema": {
+       "additionalProperties": false,
+       "examples": [
+        {
+         "agent_id": "example"
+        }
+       ],
+       "properties": {
+        "agent_id": {
+         "description": "Optional Agent ID or agd_pass_ session key to inspect. Omit to check the default wallet derived from your client IP.",
+         "maxLength": 256,
+         "minLength": 1,
+         "type": "string"
+        }
+       },
+       "type": "object"
+      },
+      "pay_to_basis": "card",
+      "pay_to_network": "eip155:8453",
+      "pay_to_source": "registered",
+      "price_source": "scheme_minimum",
+      "rule": "AUTO_ONBOARD_TAIFOON_v1",
+      "seller_payout": "not_wired",
+      "terms": "allows_resale",
+      "tool": "get_agent_wallet_status"
+     },
+     "chain_id": 8453,
+     "check": {
+      "handshake_id": null,
+      "passed": true,
+      "reply_digest": "0x1a026d6526cd0b2eb2bd508e8e64725fc3ea923deed60cd4f50082e14e933d7b",
+      "rules": [
+       "auto.free_call@1",
+       "mcp.tools_call:get_agent_wallet_status"
+      ],
+      "status": "ready"
+     },
+     "class": "mcp.tool_call",
+     "created_at": "2026-11-08T15:37:02.395Z",
+     "edge_id": "edge_51a0a24a4da7f58d",
+     "id": "exchange:mcp.tool_call.51a0a24a4da7f58d",
+     "lambda": {
+      "acts": [],
+      "id": "lambda:exchange-taifoon-51a0a24a4da7f58d",
+      "vault": "vault:taifoon:loop"
+     },
+     "meter_row": {
+      "grid": true,
+      "id": "meter:exchange-taifoon-51a0a24a4da7f58d",
+      "legs": [
+       "seller_share",
+       "our_fee",
+       "reseller_markup"
+      ]
+     },
+     "pool": {
+      "address": null,
+      "factory": "0x317D55623C974197B6dd1C107Cb0cfc3EF04f1eB",
+      "line": "8453:taifoon",
+      "state": "planned",
+      "tx": null
+     },
+     "quote": {
+      "deposit": "0",
+      "line": "8453:taifoon",
+      "pool_id": null,
+      "premium": null,
+      "price": "1000",
+      "token": "USDC"
+     },
+     "schema": "taifoon.exchange.edge.v1",
+     "seller": {
+      "agent_id": "1634",
+      "chain_id": 42161,
+      "endpoint": "https://x402-broker-72343955726.us-central1.run.app/mcp/x402-broker",
+      "protocol": "mcp"
+     },
+     "state": "quoted",
+     "tenant": "taifoon",
+     "updated_at": "2026-11-08T15:37:02.395Z"
+    },
+    {
+     "agreement": {
+      "docs": [
+       "TSUL-1.1",
+       "TAT"
+      ],
+      "hash": "0xcf20f7740bb8bcad41c22f96ae62cd1814f27117325270eb80bfe00e4eedff98",
+      "how": "eip712",
+      "id": "agr_cf20f7740bb8bcad",
+      "party": "onchain_seller",
+      "signature": null
+     },
+     "agreement_basis": "house_unsigned",
+     "auto": {
+      "agent": "8453:19712",
+      "at": "2026-11-08T14:56:04.808Z",
+      "card_url": null,
+      "class_source": "door",
+      "door": "mcp",
+      "fit": {
+       "basis": "generic",
+       "class": "mcp.tool_call",
+       "ok": true,
+       "rule": "CLASS_FIT_v1",
+       "why": "mcp.tool_call is the door's own class: it sells the tool's answer as it is"
+      },
+      "free_call": {
+       "chars": 61,
+       "reply_digest": "0xde688a6f00b5e246ab004c9226b1c6720041ab10b193ebf54b9927cd27d1b7f1"
+      },
+      "inferred": [
+       "class",
+       "price"
+      ],
+      "input_schema": {
+       "properties": {},
+       "required": [],
+       "type": "object"
+      },
+      "pay_to_basis": "onchain_owner",
+      "pay_to_network": "eip155:8453",
+      "pay_to_source": "registered",
+      "price_source": "scheme_minimum",
+      "reach": {
+       "by": "harvester",
+       "probed_at": 1794133779,
+       "url": "https://clawdmint-api.vercel.app/mcp"
+      },
+      "rule": "AUTO_ONBOARD_TAIFOON_v1",
+      "seller_payout": "not_wired",
+      "terms": "none_published",
+      "tool": "get_time"
+     },
+     "chain_id": 8453,
+     "check": {
+      "handshake_id": null,
+      "passed": true,
+      "reply_digest": "0xde688a6f00b5e246ab004c9226b1c6720041ab10b193ebf54b9927cd27d1b7f1",
+      "rules": [
+       "auto.free_call@1",
+       "mcp.tools_call:get_time",
+       "payee.onchain_fallback:harvester"
+      ],
+      "status": "ready"
+     },
+     "class": "mcp.tool_call",
+     "created_at": "2026-11-08T14:56:04.808Z",
+     "edge_id": "edge_eaddbb095aabed08",
+     "id": "exchange:mcp.tool_call.eaddbb095aabed08",
+     "lambda": {
+      "acts": [],
+      "id": "lambda:exchange-taifoon-eaddbb095aabed08",
+      "vault": "vault:taifoon:loop"
+     },
+     "meter_row": {
+      "grid": true,
+      "id": "meter:exchange-taifoon-eaddbb095aabed08",
+      "legs": [
+       "seller_share",
+       "our_fee",
+       "reseller_markup"
+      ]
+     },
+     "pool": {
+      "address": null,
+      "factory": "0x317D55623C974197B6dd1C107Cb0cfc3EF04f1eB",
+      "line": "8453:taifoon",
+      "state": "planned",
+      "tx": null
+     },
+     "quote": {
+      "deposit": "0",
+      "line": "8453:taifoon",
+      "pool_id": null,
+      "premium": null,
+      "price": "1000",
+      "token": "USDC"
+     },
+     "schema": "taifoon.exchange.edge.v1",
+     "seller": {
+      "agent_id": "19712",
+      "chain_id": 8453,
+      "endpoint": "https://clawdmint-api.vercel.app/mcp",
+      "protocol": "mcp"
+     },
+     "state": "quoted",
+     "tenant": "taifoon",
+     "updated_at": "2026-11-08T14:56:04.808Z"
+    },
+    {
+     "agreement": {
+      "docs": [
+       "TSUL-1.1",
+       "TAT"
+      ],
+      "hash": "0x357f9e68ec1a861d8dcaf936472ec01c99ca52646edf1266a3a0d3da4c7250b1",
+      "how": "eip712",
+      "id": "agr_357f9e68ec1a861d",
+      "party": "onchain_seller",
+      "signature": null
+     },
+     "agreement_basis": "house_unsigned",
+     "auto": {
+      "agent": "143:10331",
+      "at": "2026-11-08T14:55:52.115Z",
+      "card_url": null,
+      "class_source": "door",
+      "door": "mcp",
+      "fit": {
+       "basis": "generic",
+       "class": "mcp.tool_call",
+       "ok": true,
+       "rule": "CLASS_FIT_v1",
+       "why": "mcp.tool_call is the door's own class: it sells the tool's answer as it is"
+      },
+      "free_call": {
+       "chars": 1929,
+       "reply_digest": "0x28f0dc821a6d580d4dd5048198ca72434b3dd843144f84dddc2d56ff7f0c7b3c"
+      },
+      "inferred": [
+       "class",
+       "price"
+      ],
+      "input_schema": {
+       "properties": {
+        "limit": {
+         "description": "Max agents to return (default 20)",
+         "type": "number"
+        }
+       },
+       "type": "object"
+      },
+      "pay_to_basis": "onchain_owner",
+      "pay_to_network": "eip155:143",
+      "pay_to_source": "registered",
+      "price_source": "scheme_minimum",
+      "reach": {
+       "by": "harvester",
+       "probed_at": 1794142744,
+       "url": "https://defigent.app/inbox"
+      },
+      "rule": "AUTO_ONBOARD_TAIFOON_v1",
+      "seller_payout": "not_wired",
+      "terms": "none_published",
+      "tool": "defigent_network_list"
+     },
+     "chain_id": 8453,
+     "check": {
+      "handshake_id": null,
+      "passed": true,
+      "reply_digest": "0x28f0dc821a6d580d4dd5048198ca72434b3dd843144f84dddc2d56ff7f0c7b3c",
+      "rules": [
+       "auto.free_call@1",
+       "mcp.tools_call:defigent_network_list",
+       "payee.onchain_fallback:harvester"
+      ],
+      "status": "ready"
+     },
+     "class": "mcp.tool_call",
+     "created_at": "2026-11-08T14:55:52.115Z",
+     "edge_id": "edge_ca6e4252e984df85",
+     "id": "exchange:mcp.tool_call.ca6e4252e984df85",
+     "lambda": {
+      "acts": [],
+      "id": "lambda:exchange-taifoon-ca6e4252e984df85",
+      "vault": "vault:taifoon:loop"
+     },
+     "meter_row": {
+      "grid": true,
+      "id": "meter:exchange-taifoon-ca6e4252e984df85",
+      "legs": [
+       "seller_share",
+       "our_fee",
+       "reseller_markup"
+      ]
+     },
+     "pool": {
+      "address": null,
+      "factory": "0x317D55623C974197B6dd1C107Cb0cfc3EF04f1eB",
+      "line": "8453:taifoon",
+      "state": "planned",
+      "tx": null
+     },
+     "quote": {
+      "deposit": "0",
+      "line": "8453:taifoon",
+      "pool_id": null,
+      "premium": null,
+      "price": "1000",
+      "token": "USDC"
+     },
+     "schema": "taifoon.exchange.edge.v1",
+     "seller": {
+      "agent_id": "10331",
+      "chain_id": 143,
+      "endpoint": "https://defigent.app/mcp",
+      "protocol": "mcp"
+     },
+     "state": "quoted",
+     "tenant": "taifoon",
+     "updated_at": "2026-11-08T14:55:52.115Z"
+    },
+    {
+     "agreement": {
+      "docs": [
+       "TSUL-1.1",
+       "TAT"
+      ],
+      "hash": "0x309eed40d57be2cc0e9e262d82b4b44d3576b2d8ae371bcb90cbf9914db3a498",
+      "how": "eip712",
+      "id": "agr_309eed40d57be2cc",
+      "party": "onchain_seller",
+      "signature": null
+     },
+     "agreement_basis": "house_unsigned",
+     "auto": {
+      "agent": "8453:273562",
+      "at": "2026-11-08T14:55:42.580Z",
+      "card_url": "https://x402broker.com/.well-known/agent-card.json",
+      "class_source": "door",
+      "door": "mcp",
+      "fit": {
+       "basis": "generic",
+       "class": "mcp.tool_call",
+       "ok": true,
+       "rule": "CLASS_FIT_v1",
+       "why": "mcp.tool_call is the door's own class: it sells the tool's answer as it is"
+      },
+      "free_call": {
+       "chars": 280,
+       "reply_digest": "0xac9bef03fd2a386249cb284bc0c0cd62a273d43c3344c37cfe5d27a8e2e02d71"
+      },
+      "inferred": [
+       "class",
+       "price"
+      ],
+      "input_schema": {
+       "additionalProperties": false,
+       "examples": [
+        {
+         "agent_id": "example"
+        }
+       ],
+       "properties": {
+        "agent_id": {
+         "description": "Optional Agent ID or agd_pass_ session key to inspect. Omit to check the default wallet derived from your client IP.",
+         "maxLength": 256,
+         "minLength": 1,
+         "type": "string"
+        }
+       },
+       "type": "object"
+      },
+      "pay_to_basis": "card",
+      "pay_to_network": "eip155:8453",
+      "pay_to_source": "registered",
+      "price_source": "scheme_minimum",
+      "rule": "AUTO_ONBOARD_TAIFOON_v1",
+      "seller_payout": "not_wired",
+      "terms": "allows_resale",
+      "tool": "get_agent_wallet_status"
+     },
+     "chain_id": 8453,
+     "check": {
+      "handshake_id": null,
+      "passed": true,
+      "reply_digest": "0xac9bef03fd2a386249cb284bc0c0cd62a273d43c3344c37cfe5d27a8e2e02d71",
+      "rules": [
+       "auto.free_call@1",
+       "mcp.tools_call:get_agent_wallet_status"
+      ],
+      "status": "ready"
+     },
+     "class": "mcp.tool_call",
+     "created_at": "2026-11-08T14:55:42.580Z",
+     "edge_id": "edge_12912914a97a08e8",
+     "id": "exchange:mcp.tool_call.12912914a97a08e8",
+     "lambda": {
+      "acts": [],
+      "id": "lambda:exchange-taifoon-12912914a97a08e8",
+      "vault": "vault:taifoon:loop"
+     },
+     "meter_row": {
+      "grid": true,
+      "id": "meter:exchange-taifoon-12912914a97a08e8",
+      "legs": [
+       "seller_share",
+       "our_fee",
+       "reseller_markup"
+      ]
+     },
+     "pool": {
+      "address": null,
+      "factory": "0x317D55623C974197B6dd1C107Cb0cfc3EF04f1eB",
+      "line": "8453:taifoon",
+      "state": "planned",
+      "tx": null
+     },
+     "quote": {
+      "deposit": "0",
+      "line": "8453:taifoon",
+      "pool_id": null,
+      "premium": null,
+      "price": "1000",
+      "token": "USDC"
+     },
+     "schema": "taifoon.exchange.edge.v1",
+     "seller": {
+      "agent_id": "273562",
+      "chain_id": 8453,
+      "endpoint": "https://x402broker.com/mcp/x402-broker",
+      "protocol": "mcp"
+     },
+     "state": "quoted",
+     "tenant": "taifoon",
+     "updated_at": "2026-11-08T14:55:42.580Z"
+    },
+    {
+     "agreement": {
+      "docs": [
+       "TSUL-1.1",
+       "TAT"
+      ],
+      "hash": "0x15da32bdb8d0a95e6a37fa58e43ad7c90836c4c5d5ad17bee8befe5d394b10b4",
+      "how": "eip712",
+      "id": "agr_15da32bdb8d0a95e",
+      "party": "onchain_seller",
+      "signature": null
+     },
+     "agreement_basis": "house_unsigned",
+     "auto": {
+      "agent": "8453:31596",
+      "at": "2026-11-08T14:55:37.373Z",
+      "card_url": null,
+      "class_source": "door",
+      "door": "mcp",
+      "fit": {
+       "basis": "generic",
+       "class": "mcp.tool_call",
+       "ok": true,
+       "rule": "CLASS_FIT_v1",
+       "why": "mcp.tool_call is the door's own class: it sells the tool's answer as it is"
+      },
+      "free_call": {
+       "chars": 2862,
+       "reply_digest": "0x670ee3863c7db80c90dfa531356148978ed9a8ccd49671083d81ca34ad633313"
+      },
+      "inferred": [
+       "class",
+       "price"
+      ],
+      "input_schema": {
+       "$schema": "http://json-schema.org/draft-07/schema#",
+       "additionalProperties": false,
+       "properties": {},
+       "type": "object"
+      },
+      "pay_to_basis": "onchain_owner",
+      "pay_to_network": "eip155:8453",
+      "pay_to_source": "registered",
+      "price_source": "scheme_minimum",
+      "reach": {
+       "by": "harvester",
+       "probed_at": 1794133731,
+       "url": "https://api.mentat.market/mcp"
+      },
+      "rule": "AUTO_ONBOARD_TAIFOON_v1",
+      "seller_payout": "not_wired",
+      "terms": "none_published",
+      "tool": "get_prices"
+     },
+     "chain_id": 8453,
+     "check": {
+      "handshake_id": null,
+      "passed": true,
+      "reply_digest": "0x670ee3863c7db80c90dfa531356148978ed9a8ccd49671083d81ca34ad633313",
+      "rules": [
+       "auto.free_call@1",
+       "mcp.tools_call:get_prices",
+       "payee.onchain_fallback:harvester"
+      ],
+      "status": "ready"
+     },
+     "class": "mcp.tool_call",
+     "created_at": "2026-11-08T14:55:37.373Z",
+     "edge_id": "edge_f0bbe0f1c9e8e37a",
+     "id": "exchange:mcp.tool_call.f0bbe0f1c9e8e37a",
+     "lambda": {
+      "acts": [],
+      "id": "lambda:exchange-taifoon-f0bbe0f1c9e8e37a",
+      "vault": "vault:taifoon:loop"
+     },
+     "meter_row": {
+      "grid": true,
+      "id": "meter:exchange-taifoon-f0bbe0f1c9e8e37a",
+      "legs": [
+       "seller_share",
+       "our_fee",
+       "reseller_markup"
+      ]
+     },
+     "pool": {
+      "address": null,
+      "factory": "0x317D55623C974197B6dd1C107Cb0cfc3EF04f1eB",
+      "line": "8453:taifoon",
+      "state": "planned",
+      "tx": null
+     },
+     "quote": {
+      "deposit": "0",
+      "line": "8453:taifoon",
+      "pool_id": null,
+      "premium": null,
+      "price": "1000",
+      "token": "USDC"
+     },
+     "schema": "taifoon.exchange.edge.v1",
+     "seller": {
+      "agent_id": "31596",
+      "chain_id": 8453,
+      "endpoint": "https://api.mentat.market/mcp",
+      "protocol": "mcp"
+     },
+     "state": "quoted",
+     "tenant": "taifoon",
+     "updated_at": "2026-11-08T14:55:37.373Z"
+    },
+    {
+     "agreement": {
+      "docs": [
+       "TSUL-1.1",
+       "TAT"
+      ],
+      "hash": "0x1ac577b608c68ac61b024cfca5ded3d281b811e54b226abdf8894d908ddee58d",
+      "how": "eip712",
+      "id": "agr_1ac577b608c68ac6",
+      "party": "onchain_seller",
+      "signature": null
+     },
+     "agreement_basis": "house_unsigned",
+     "auto": {
+      "agent": "137:91",
+      "at": "2026-11-05T16:11:18.069Z",
+      "card_url": null,
+      "class_source": "asked",
+      "door": "mcp",
+      "fit": {
+       "args": {
+        "token": "BTC"
+       },
+       "basis": "fit",
+       "checks": {
+        "input": true,
+        "reply": true,
+        "words": true
+       },
+       "class": "market.price",
+       "ok": true,
+       "reply_field": "price_usd",
+       "rule": "CLASS_FIT_v1",
+       "why": "the tool get_token_price fits market.price: it names price, was called with market.price's input, and answered price_usd",
+       "words": [
+        "price"
+       ]
+      },
+      "free_call": {
+       "chars": 137,
+       "reply_digest": "0x7e91f17da1e48b4a04e7a670a1746b8be69ec2f24b9610192ff36fe39f85af32"
+      },
+      "inferred": [
+       "class",
+       "price"
+      ],
+      "input_schema": {
+       "properties": {
+        "token": {
+         "description": "Token symbol (ETH, BTC, SOL, SEI, PEAQ...) or CoinGecko ID",
+         "type": "string"
+        }
+       },
+       "required": [
+        "token"
+       ],
+       "type": "object"
+      },
+      "pay_to_basis": "onchain_owner",
+      "pay_to_network": "eip155:137",
+      "pay_to_source": "registered",
+      "price_source": "scheme_minimum",
+      "reach": {
+       "by": "harvester",
+       "probed_at": 1793889810,
+       "url": "https://clawdmint-api.vercel.app/mcp"
+      },
+      "rule": "AUTO_ONBOARD_TAIFOON_v1",
+      "seller_payout": "not_wired",
+      "terms": "none_published",
+      "tool": "get_token_price"
+     },
+     "chain_id": 8453,
+     "check": {
+      "handshake_id": null,
+      "passed": true,
+      "reply_digest": "0x7e91f17da1e48b4a04e7a670a1746b8be69ec2f24b9610192ff36fe39f85af32",
+      "rules": [
+       "auto.free_call@1",
+       "mcp.tools_call:get_token_price",
+       "class_fit:market.price",
+       "payee.onchain_fallback:harvester"
+      ],
+      "status": "ready"
+     },
+     "class": "market.price",
+     "created_at": "2026-11-05T16:11:18.069Z",
+     "edge_id": "edge_520c49b84e146bc2",
+     "id": "exchange:market.price.520c49b84e146bc2",
+     "lambda": {
+      "acts": [],
+      "id": "lambda:exchange-taifoon-520c49b84e146bc2",
+      "vault": "vault:taifoon:loop"
+     },
+     "meter_row": {
+      "grid": true,
+      "id": "meter:exchange-taifoon-520c49b84e146bc2",
+      "legs": [
+       "seller_share",
+       "our_fee",
+       "reseller_markup"
+      ]
+     },
+     "pool": {
+      "address": null,
+      "factory": "0x317D55623C974197B6dd1C107Cb0cfc3EF04f1eB",
+      "line": "8453:taifoon",
+      "state": "planned",
+      "tx": null
+     },
+     "quote": {
+      "deposit": "0",
+      "line": "8453:taifoon",
+      "pool_id": null,
+      "premium": null,
+      "price": "1000",
+      "token": "USDC"
+     },
+     "schema": "taifoon.exchange.edge.v1",
+     "seller": {
+      "agent_id": "91",
+      "chain_id": 137,
+      "endpoint": "https://clawdmint-api.vercel.app/mcp",
+      "protocol": "mcp"
+     },
+     "state": "quoted",
+     "tenant": "taifoon",
+     "updated_at": "2026-11-05T16:11:18.069Z"
+    },
+    {
+     "agreement": {
+      "docs": [
+       "TSUL-1.1",
+       "TAT"
+      ],
+      "hash": "0x922c395a3a6428c25d9dda7116e5101689e3424fef2c05f2ea2eb350dec06e0f",
+      "how": "eip712",
+      "id": "agr_922c395a3a6428c2",
+      "party": "onchain_seller",
+      "signature": null
+     },
+     "agreement_basis": "house_unsigned",
+     "auto": {
+      "agent": "listing:ls_ce5d491d12f86e4f",
+      "at": "2026-10-29T11:35:01.052Z",
+      "card_url": "https://n8n.taifoon.dev/webhook/tfn-word-count-card",
+      "class_source": "class_probe",
+      "door": "n8n",
+      "fit": {
+       "basis": "class_probe",
+       "class": "chat.word_count",
+       "ok": true,
+       "rule": "CLASS_FIT_v1",
+       "why": "chat.word_count: the free call passed its code check (the class probe)"
+      },
+      "free_call": {
+       "chars": 146,
+       "class_probe": {
+        "class": "chat.word_count",
+        "ok": true,
+        "why": "chat.word_count: every decisive check passed (nonce_echo, task_bound, count_exact)"
+       },
+       "reply_digest": "0xde1e1a42d1298415cf34e228b61ca89e944d50287f7faa3410226a25e5d1833e"
+      },
+      "inferred": [],
+      "input_schema": null,
+      "n8n": {
+       "listing": "ls_ce5d491d12f86e4f",
+       "pass_streak": 163,
+       "probe_at": "2026-10-29T09:48:49.921Z",
+       "probe_fails": 0,
+       "task_example": "chat.word_count: Count the words in: \"taifoon class probe b9619773 counts these words\" (reply with the number of words)"
+      },
+      "pay_to_network": "eip155:8453",
+      "pay_to_source": "listing_payout",
+      "price_source": "listing_card",
+      "rule": "AUTO_ONBOARD_TAIFOON_v1",
+      "seller_payout": "not_wired",
+      "terms": "ours",
+      "tool": null
+     },
+     "chain_id": 36927,
+     "check": {
+      "handshake_id": null,
+      "passed": true,
+      "reply_digest": "0xde1e1a42d1298415cf34e228b61ca89e944d50287f7faa3410226a25e5d1833e",
+      "rules": [
+       "auto.class_probe@1",
+       "class_probe:chat.word_count",
+       "listing:ls_ce5d491d12f86e4f"
+      ],
+      "status": "ready"
+     },
+     "class": "chat.word_count",
+     "created_at": "2026-10-29T11:35:01.052Z",
+     "edge_id": "edge_bbc10deb7412575e",
+     "id": "exchange:chat.word_count.bbc10deb7412575e",
+     "lambda": {
+      "acts": [],
+      "id": "lambda:exchange-taifoon-bbc10deb7412575e",
+      "vault": "vault:taifoon:loop"
+     },
+     "meter_row": {
+      "grid": true,
+      "id": "meter:exchange-taifoon-bbc10deb7412575e",
+      "legs": [
+       "seller_share",
+       "our_fee",
+       "reseller_markup"
+      ]
+     },
+     "pool": {
+      "address": null,
+      "factory": "0x317D55623C974197B6dd1C107Cb0cfc3EF04f1eB",
+      "line": "36927:taifoon",
+      "state": "planned",
+      "tx": null
+     },
+     "quote": {
+      "deposit": "0",
+      "line": "36927:taifoon",
+      "pool_id": null,
+      "premium": null,
+      "price": "50000",
+      "token": "USDC"
+     },
+     "schema": "taifoon.exchange.edge.v1",
+     "seller": {
+      "agent_id": "n8n.ls_ce5d491d12f86e4f",
+      "chain_id": 8453,
+      "endpoint": "https://n8n.taifoon.dev/webhook/tfn-word-count",
+      "protocol": "n8n"
+     },
+     "state": "dry",
+     "tenant": "taifoon",
+     "updated_at": "2026-10-29T11:35:01.052Z"
+    },
+    {
+     "agreement": {
+      "docs": [
+       "TSUL-1.1",
+       "TAT"
+      ],
+      "hash": "0xf5de4894ab8a20018e9f1e9ba872cc546441532cacf842bf5d42f206dc9240df",
+      "how": "eip712",
+      "id": "agr_f5de4894ab8a2001",
+      "party": "onchain_seller",
+      "signature": null
+     },
+     "agreement_basis": "house_unsigned",
+     "auto": {
+      "agent": "listing:ls_b5378aa5f3033b29",
+      "at": "2026-10-29T11:35:00.667Z",
+      "card_url": "https://n8n.taifoon.dev/webhook/tfn-json-normalize-card",
+      "class_source": "class_probe",
+      "door": "n8n",
+      "fit": {
+       "basis": "class_probe",
+       "class": "a2a.json_normalize",
+       "ok": true,
+       "rule": "CLASS_FIT_v1",
+       "why": "a2a.json_normalize: the free call passed its code check (the class probe)"
+      },
+      "free_call": {
+       "chars": 214,
+       "class_probe": {
+        "class": "a2a.json_normalize",
+        "ok": true,
+        "why": "a2a.json_normalize: every decisive check passed (nonce_echo, task_bound, no_error, data_present, normalized_exact)"
+       },
+       "reply_digest": "0xa6bcfef85a13bddbae0558a2122045a9bd98425c32b8a95132eb4494d7237602"
+      },
+      "inferred": [],
+      "input_schema": null,
+      "n8n": {
+       "listing": "ls_b5378aa5f3033b29",
+       "pass_streak": 162,
+       "probe_at": "2026-10-29T09:48:47.742Z",
+       "probe_fails": 0,
+       "task_example": "a2a.json_normalize: return the JSON object {\"zeta\":\"00ce5c2c\",\"alpha\":{\"y\":[3,1,2],\"b\":\"probe\"},\"mid\":true} with its keys sorted at every depth, arrays kept in order."
+      },
+      "pay_to_network": "eip155:8453",
+      "pay_to_source": "listing_payout",
+      "price_source": "listing_card",
+      "rule": "AUTO_ONBOARD_TAIFOON_v1",
+      "seller_payout": "not_wired",
+      "terms": "ours",
+      "tool": null
+     },
+     "chain_id": 36927,
+     "check": {
+      "handshake_id": null,
+      "passed": true,
+      "reply_digest": "0xa6bcfef85a13bddbae0558a2122045a9bd98425c32b8a95132eb4494d7237602",
+      "rules": [
+       "auto.class_probe@1",
+       "class_probe:a2a.json_normalize",
+       "listing:ls_b5378aa5f3033b29"
+      ],
+      "status": "ready"
+     },
+     "class": "a2a.json_normalize",
+     "created_at": "2026-10-29T11:35:00.667Z",
+     "edge_id": "edge_2b5783e7231ec9b1",
+     "id": "exchange:a2a.json_normalize.2b5783e7231ec9b1",
+     "lambda": {
+      "acts": [],
+      "id": "lambda:exchange-taifoon-2b5783e7231ec9b1",
+      "vault": "vault:taifoon:loop"
+     },
+     "meter_row": {
+      "grid": true,
+      "id": "meter:exchange-taifoon-2b5783e7231ec9b1",
+      "legs": [
+       "seller_share",
+       "our_fee",
+       "reseller_markup"
+      ]
+     },
+     "pool": {
+      "address": null,
+      "factory": "0x317D55623C974197B6dd1C107Cb0cfc3EF04f1eB",
+      "line": "36927:taifoon",
+      "state": "planned",
+      "tx": null
+     },
+     "quote": {
+      "deposit": "0",
+      "line": "36927:taifoon",
+      "pool_id": null,
+      "premium": null,
+      "price": "50000",
+      "token": "USDC"
+     },
+     "schema": "taifoon.exchange.edge.v1",
+     "seller": {
+      "agent_id": "n8n.ls_b5378aa5f3033b29",
+      "chain_id": 8453,
+      "endpoint": "https://n8n.taifoon.dev/webhook/tfn-json-normalize",
+      "protocol": "n8n"
+     },
+     "state": "dry",
+     "tenant": "taifoon",
+     "updated_at": "2026-10-29T11:35:00.667Z"
+    }
+   ],
+   "count": 50,
+   "total": 90,
+   "rule": "AUTO_EXCHANGE_v1: one edge per seller (demand + a seller proven by a passed content check); each edge names its lambda on vault:taifoon:loop (acts [] until the vault policy arms it), its pool on vault:assurance:pools, its meter row and the one agreement (TSUL-1.1 + TAT). Records only: no money moves. Moonbeam pools on Base are closed by policy: a Moonbeam Base edge is a plan, never live. FIRST_SALE_LIVE_v1: a Base edge is live only after its first outside sale (a paid call whose payer is not ours); a writer sending live stores quoted. HOUSE_UNSIGNED_v1: a taifoon edge whose seller of record is our own vault takes calls on an unsigned agreement (agreement_basis house_unsigned); every other edge needs the seller of record's signature."
+  }
+ },
+ "coord_sha": "49dd07d6fbf91b0c0094984353289f5ce1c50630",
+ "read_at": "2026-11-21T00:09:15.928Z",
+ "notes": {
+  "dropped": [
+   "rows[].agreement.signer (a payee, requester, signer or treasury-like address field)",
+   "rows[].auto.pay_to (a payee, requester, signer or treasury-like address field)",
+   "rows[].seller.owner (the address a fee payee or payTo names)",
+   "rows[].seller_of_record (the address a fee payee or payTo names)"
+  ],
+  "trimmed": [
+   "get_key (the free-key offer every keyless answer carries)"
+  ]
+ }
+}

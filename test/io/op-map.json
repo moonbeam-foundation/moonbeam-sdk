@@ -84,7 +84,14 @@
     { "op": "POST pipe/send", "markets": "sale", "stage": "paid", "dir": "write", "gap": { "reason": "needs_owner_arm", "why": "the payout's sign request (devnet.payout): shadow in sign.json, absent from the served register, and the seller-payout case is not built (no devnet vault)" } },
     { "op": "POST pipe/settled", "markets": "sale", "stage": "paid", "dir": "write", "call": "reportSettled", "source": "contract", "why": "an outside settler reports the payout transaction it sent for a claimable envelope" },
 
-    { "op": null, "markets": ["erc8004"], "stage": ["bought", "delivered", "settled", "paid"], "dir": ["read", "write"], "gap": { "reason": "not_in_coord", "why": "an identity registry takes no hire, settles nothing and pays nothing (VENUES.erc8004 take/settle/paid n/a): coord has no ERC-8004 sale stage" } }
+    { "op": null, "markets": ["erc8004"], "stage": ["bought", "delivered", "settled", "paid"], "dir": ["read", "write"], "gap": { "reason": "not_in_coord", "why": "an identity registry takes no hire, settles nothing and pays nothing (VENUES.erc8004 take/settle/paid n/a): coord has no ERC-8004 sale stage" } },
+    {"op": "GET classes", "markets": ["x402-base"], "stage": "listed", "dir": "read", "call": "state", "source": "live", "why": "the classes of the catalogue: the read of the classify state (a seller is one class of it)"},
+    {"op": "GET exchanges", "markets": ["x402-base"], "stage": "listed", "dir": "read", "call": "state", "source": "live", "why": "the exchanges of the book: the read of the terms state"},
+    {"op": "GET exchanges/auto", "markets": ["x402-base"], "stage": "listed", "dir": "read", "call": "state", "source": "live", "why": "the automatcher's rule card: the read of the priced state and of the operator-side holds"},
+    {"op": "GET assurance/markets", "markets": ["x402-base"], "stage": "listed", "dir": "read", "call": "state", "source": "live", "why": "the cover markets: the read of the covered state"},
+    {"op": "GET resale/sales", "markets": ["x402-base"], "stage": "settled", "dir": "read", "call": "state", "source": "live", "why": "the sale run's list: the read of the booked state"},
+    {"op": "GET agents/payments", "markets": ["x402-base"], "stage": "paid", "dir": "read", "call": "state", "source": "live", "why": "what the agents were paid: the read of the paid state"},
+    {"op": "GET vault/receipts", "markets": ["x402-base"], "stage": "paid", "dir": "read", "call": "state", "source": "live", "why": "the vault's receipts: the read of the recorded state"}
   ],
   "ignore": [
     { "op": "GET grid/rank", "why": "a grid ranking across venues, no sale stage" },

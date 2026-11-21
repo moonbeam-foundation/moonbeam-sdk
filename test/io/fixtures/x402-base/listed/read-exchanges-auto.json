@@ -1,0 +1,51 @@
+{
+ "op": "GET exchanges/auto",
+ "market": "x402-base",
+ "stage": "listed",
+ "dir": "read",
+ "sdk": "market.readState",
+ "source": "live",
+ "request": {
+  "method": "GET",
+  "path": "/v1/exchanges/auto",
+  "query": {}
+ },
+ "response": {
+  "status": 200,
+  "body": {
+   "ok": true,
+   "rule": "AUTO_ONBOARD_TAIFOON_v1",
+   "tenant": "taifoon",
+   "chain_id": 8453,
+   "state": "quoted",
+   "agreement_basis": "house_unsigned",
+   "seller_payout": "owed_on_sale",
+   "cap": {
+    "per_day": 10,
+    "used_today": "—",
+    "day": "2026-11-21"
+   },
+   "requires": [
+    "a free call with real data (an MCP tool answers content, or an A2A agent answers a message / task result with content and no error; the class probe of the class asked passes when the layer has one)",
+    "a readable card and a payTo (an MCP seller: on Base; an A2A seller: its own address on its own chain), or with no card: its ERC-8004 agentWallet / owner and an endpoint of it probed answering",
+    "terms that do not forbid resale",
+    "the class fits the tool (CLASS_FIT_v1, the class-fit table): its code check passed, or it is the door class, or the tool names the class words, was called with the class input and answered a field of the class kind; else 422 class_mismatch",
+    "AUTO_ONBOARD_HTTP_v1 ({ resource, class, venue? }): a resource its seller published on a venue the pass reads, an EVM payTo there, ONE unpaid call with the class input answered with data that passes the class fit and the content gate; a 402 is x402_only (never paid: it needs an outside buyer's first paid call), a web page or no answer is refused"
+   ],
+   "infers": {
+    "class": {
+     "mcp": "mcp.tool_call",
+     "a2a": "wire.reply"
+    },
+    "price": "the seller's own accepts on Base, else its spec price, else 1000 micro-USDC (the scheme minimum)"
+   }
+  }
+ },
+ "coord_sha": "49dd07d6fbf91b0c0094984353289f5ce1c50630",
+ "read_at": "2026-11-21T00:09:17.029Z",
+ "notes": {
+  "trimmed": [
+   "get_key (the free-key offer every keyless answer carries)"
+  ]
+ }
+}

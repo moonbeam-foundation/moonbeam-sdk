@@ -202,6 +202,49 @@
       "path": "/a2a/registry/agent?id=879f2d3f-4e0e-47f4-8fec-77163a2a9577",
       "status": 402,
       "refused": true
+    },
+    {
+      "n": 33,
+      "at": "2026-11-21T00:09:14.218Z",
+      "path": "/classes",
+      "status": 200
+    },
+    {
+      "n": 34,
+      "at": "2026-11-21T00:09:15.928Z",
+      "path": "/exchanges",
+      "status": 200
+    },
+    {
+      "n": 35,
+      "at": "2026-11-21T00:09:17.029Z",
+      "path": "/exchanges/auto",
+      "status": 200
+    },
+    {
+      "n": 36,
+      "at": "2026-11-21T00:09:18.131Z",
+      "path": "/assurance/markets",
+      "status": 200
+    },
+    {
+      "n": 37,
+      "at": "2026-11-21T00:09:19.283Z",
+      "path": "/agents/payments",
+      "status": 200
+    },
+    {
+      "n": 38,
+      "at": "2026-11-21T00:09:20.384Z",
+      "path": "/vault/receipts",
+      "status": 400
+    },
+    {
+      "n": 39,
+      "at": "2026-11-21T00:09:25.937Z",
+      "path": "/resale/sales",
+      "status": 200,
+      "keyed": true
     }
   ]
 }

@@ -1,0 +1,26 @@
+{
+ "op": "GET resale/sales",
+ "market": "x402-base",
+ "stage": "settled",
+ "dir": "read",
+ "sdk": "market.readState",
+ "source": "live",
+ "request": {
+  "method": "GET",
+  "path": "/v1/resale/sales",
+  "query": {}
+ },
+ "response": {
+  "status": 200,
+  "body": {
+   "ok": true,
+   "rule": "RESALE_SALE_READ_v1",
+   "state": "owed",
+   "since": "2026-11-18T00:09:26.245Z",
+   "count": 0,
+   "sales": []
+  }
+ },
+ "coord_sha": "49dd07d6fbf91b0c0094984353289f5ce1c50630",
+ "read_at": "2026-11-21T00:09:25.937Z"
+}
