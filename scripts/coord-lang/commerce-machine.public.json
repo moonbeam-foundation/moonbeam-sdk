@@ -1,0 +1,528 @@
+{
+ "schema": "moonbeam.machine.public.v1",
+ "rule": "coord lang/emit/commerce-machine.mjs (public projection of lang/gen/commerce-machine.json): do not edit",
+ "steps": [
+  "read",
+  "list",
+  "take",
+  "hire",
+  "settle",
+  "payout"
+ ],
+ "states": [
+  {
+   "id": "offer_in",
+   "kind": "stage",
+   "step": "read",
+   "led": null,
+   "label": "offer in",
+   "move": "POST /v1/agent-listings",
+   "read": "GET /v1/agents/:chain/:agentId/readiness"
+  },
+  {
+   "id": "classify",
+   "kind": "stage",
+   "step": "read",
+   "led": null,
+   "label": "classify",
+   "move": "POST /v1/onboard/spec/check",
+   "read": "GET /v1/classes"
+  },
+  {
+   "id": "edge",
+   "kind": "stage",
+   "step": "list",
+   "led": null,
+   "label": "edge",
+   "move": "POST /v1/exchanges/edge",
+   "read": "GET /v1/exchanges/auto"
+  },
+  {
+   "id": "exchange",
+   "kind": "stage",
+   "step": "list",
+   "led": null,
+   "label": "exchange",
+   "move": "POST /v1/exchanges/auto",
+   "read": "GET /v1/exchanges"
+  },
+  {
+   "id": "covered",
+   "kind": "stage",
+   "step": "list",
+   "led": null,
+   "label": "covered",
+   "move": "POST /v1/pools/open",
+   "read": "GET /v1/assurance/markets"
+  },
+  {
+   "id": "listed",
+   "kind": "stage",
+   "step": "list",
+   "led": null,
+   "label": "listed",
+   "move": "POST /v1/listings/:id/venues",
+   "read": "GET /v1/listings/:id/venues"
+  },
+  {
+   "id": "maintained",
+   "kind": "stage",
+   "step": "list",
+   "led": null,
+   "label": "kept",
+   "move": null,
+   "read": "GET /v1/listings/:id"
+  },
+  {
+   "id": "hired",
+   "kind": "stage",
+   "step": "take",
+   "led": null,
+   "label": "hired",
+   "move": "POST /v1/exchanges/:edge_id/call",
+   "read": "GET /v1/exchanges/:edge_id/meter"
+  },
+  {
+   "id": "delivered",
+   "kind": "stage",
+   "step": "hire",
+   "led": null,
+   "label": "delivered",
+   "move": "POST /v1/handshake",
+   "read": "GET /v1/exchanges/:edge_id/meter"
+  },
+  {
+   "id": "graded",
+   "kind": "stage",
+   "step": "hire",
+   "led": null,
+   "label": "graded",
+   "move": "POST /v1/demands/:id/grade",
+   "read": "GET /v1/judge/decisions/:id"
+  },
+  {
+   "id": "settled",
+   "kind": "stage",
+   "step": "settle",
+   "led": null,
+   "label": "settled",
+   "move": "POST /v1/settle",
+   "read": "GET /v1/resale/sales/:id"
+  },
+  {
+   "id": "legs",
+   "kind": "stage",
+   "step": "settle",
+   "led": null,
+   "label": "legs written",
+   "move": null,
+   "read": "GET /v1/resale/sales/:id"
+  },
+  {
+   "id": "accrued",
+   "kind": "stage",
+   "step": "settle",
+   "led": null,
+   "label": "accrued",
+   "move": null,
+   "read": "GET /v1/resale/sales"
+  },
+  {
+   "id": "split",
+   "kind": "stage",
+   "step": "payout",
+   "led": null,
+   "label": "split",
+   "move": null,
+   "read": "GET /v1/resale/sales/:id"
+  },
+  {
+   "id": "paid",
+   "kind": "stage",
+   "step": "payout",
+   "led": null,
+   "label": "PAID",
+   "move": null,
+   "read": "GET /v1/resale/sales/:id"
+  },
+  {
+   "id": "recorded",
+   "kind": "stage",
+   "step": "payout",
+   "led": null,
+   "label": "recorded",
+   "move": "POST /v1/vault/receipt",
+   "read": "GET /v1/vault/receipts"
+  },
+  {
+   "id": "refused",
+   "kind": "side",
+   "step": "read",
+   "led": "off",
+   "label": "refused",
+   "move": null,
+   "read": "GET /v1/agents/:chain/:agentId/readiness"
+  },
+  {
+   "id": "held_entry",
+   "kind": "side",
+   "step": "list",
+   "led": "amber",
+   "label": "held: paid entry",
+   "move": null,
+   "read": "GET /v1/exchanges/auto"
+  },
+  {
+   "id": "held_owner",
+   "kind": "side",
+   "step": "list",
+   "led": "amber",
+   "label": "held: owner step",
+   "move": null,
+   "read": "GET /v1/exchanges/auto"
+  },
+  {
+   "id": "paused",
+   "kind": "side",
+   "step": "list",
+   "led": "amber",
+   "label": "paused",
+   "move": null,
+   "read": "GET /v1/listings/:id"
+  },
+  {
+   "id": "archived",
+   "kind": "side",
+   "step": "list",
+   "led": "off",
+   "label": "archived",
+   "move": null,
+   "read": "GET /v1/listings/:id"
+  },
+  {
+   "id": "unmatched",
+   "kind": "side",
+   "step": "take",
+   "led": "amber",
+   "label": "unmatched",
+   "move": null,
+   "read": "GET /v1/demands/:id"
+  },
+  {
+   "id": "ended",
+   "kind": "side",
+   "step": "take",
+   "led": "off",
+   "label": "ended unpaid",
+   "move": null,
+   "read": "GET /v1/jobs"
+  },
+  {
+   "id": "on_hold",
+   "kind": "side",
+   "step": "hire",
+   "led": "amber",
+   "label": "on hold",
+   "move": null,
+   "read": "GET /v1/jobs"
+  },
+  {
+   "id": "held_review",
+   "kind": "side",
+   "step": "hire",
+   "led": "amber",
+   "label": "held: review",
+   "move": null,
+   "read": "GET /v1/judge/decisions/:id"
+  },
+  {
+   "id": "failed_before_hire",
+   "kind": "side",
+   "step": "take",
+   "led": "red",
+   "label": "failed: not delivered",
+   "move": null,
+   "read": "GET /v1/demands/:id"
+  },
+  {
+   "id": "failed_hire",
+   "kind": "side",
+   "step": "hire",
+   "led": "red",
+   "label": "broken",
+   "move": null,
+   "read": "GET /v1/jobs"
+  },
+  {
+   "id": "refunded_on_reject",
+   "kind": "side",
+   "step": "settle",
+   "led": "red",
+   "label": "refunded: rejected",
+   "move": null,
+   "read": "GET /v1/resale/sales/:id"
+  },
+  {
+   "id": "refunded",
+   "kind": "side",
+   "step": "settle",
+   "led": "green",
+   "label": "refunded",
+   "move": null,
+   "read": "GET /v1/resale/sales/:id"
+  },
+  {
+   "id": "failed_settle",
+   "kind": "side",
+   "step": "settle",
+   "led": "red",
+   "label": "broken",
+   "move": null,
+   "read": "GET /v1/resale/sales/:id"
+  },
+  {
+   "id": "held_leg",
+   "kind": "side",
+   "step": "payout",
+   "led": "amber",
+   "label": "Held",
+   "move": null,
+   "read": "GET /v1/resale/sales/:id"
+  },
+  {
+   "id": "forfeited",
+   "kind": "side",
+   "step": "payout",
+   "led": "red",
+   "label": "forfeited",
+   "move": null,
+   "read": "GET /v1/resale/sales/:id"
+  }
+ ],
+ "moves": [
+  {
+   "from": "offer_in",
+   "to": "classify"
+  },
+  {
+   "from": "offer_in",
+   "to": "refused"
+  },
+  {
+   "from": "classify",
+   "to": "refused"
+  },
+  {
+   "from": "classify",
+   "to": "edge"
+  },
+  {
+   "from": "edge",
+   "to": "held_entry"
+  },
+  {
+   "from": "held_entry",
+   "to": "exchange"
+  },
+  {
+   "from": "edge",
+   "to": "held_owner"
+  },
+  {
+   "from": "held_owner",
+   "to": "exchange"
+  },
+  {
+   "from": "edge",
+   "to": "exchange"
+  },
+  {
+   "from": "exchange",
+   "to": "covered"
+  },
+  {
+   "from": "exchange",
+   "to": "listed"
+  },
+  {
+   "from": "covered",
+   "to": "listed"
+  },
+  {
+   "from": "listed",
+   "to": "maintained"
+  },
+  {
+   "from": "maintained",
+   "to": "paused"
+  },
+  {
+   "from": "paused",
+   "to": "maintained"
+  },
+  {
+   "from": "maintained",
+   "to": "archived"
+  },
+  {
+   "from": "paused",
+   "to": "archived"
+  },
+  {
+   "from": "listed",
+   "to": "hired"
+  },
+  {
+   "from": "maintained",
+   "to": "hired"
+  },
+  {
+   "from": "listed",
+   "to": "unmatched"
+  },
+  {
+   "from": "maintained",
+   "to": "unmatched"
+  },
+  {
+   "from": "unmatched",
+   "to": "hired"
+  },
+  {
+   "from": "hired",
+   "to": "ended"
+  },
+  {
+   "from": "hired",
+   "to": "failed_before_hire"
+  },
+  {
+   "from": "hired",
+   "to": "on_hold"
+  },
+  {
+   "from": "hired",
+   "to": "delivered"
+  },
+  {
+   "from": "on_hold",
+   "to": "delivered"
+  },
+  {
+   "from": "on_hold",
+   "to": "refunded"
+  },
+  {
+   "from": "on_hold",
+   "to": "refunded_on_reject"
+  },
+  {
+   "from": "delivered",
+   "to": "graded"
+  },
+  {
+   "from": "delivered",
+   "to": "settled"
+  },
+  {
+   "from": "delivered",
+   "to": "held_review"
+  },
+  {
+   "from": "delivered",
+   "to": "refunded"
+  },
+  {
+   "from": "delivered",
+   "to": "refunded_on_reject"
+  },
+  {
+   "from": "delivered",
+   "to": "failed_hire"
+  },
+  {
+   "from": "graded",
+   "to": "settled"
+  },
+  {
+   "from": "graded",
+   "to": "held_review"
+  },
+  {
+   "from": "graded",
+   "to": "refunded"
+  },
+  {
+   "from": "graded",
+   "to": "refunded_on_reject"
+  },
+  {
+   "from": "graded",
+   "to": "failed_hire"
+  },
+  {
+   "from": "held_review",
+   "to": "settled"
+  },
+  {
+   "from": "held_review",
+   "to": "refunded"
+  },
+  {
+   "from": "held_review",
+   "to": "refunded_on_reject"
+  },
+  {
+   "from": "held_review",
+   "to": "failed_hire"
+  },
+  {
+   "from": "settled",
+   "to": "legs"
+  },
+  {
+   "from": "settled",
+   "to": "failed_settle"
+  },
+  {
+   "from": "legs",
+   "to": "accrued"
+  },
+  {
+   "from": "accrued",
+   "to": "split"
+  },
+  {
+   "from": "accrued",
+   "to": "paid"
+  },
+  {
+   "from": "accrued",
+   "to": "held_leg"
+  },
+  {
+   "from": "split",
+   "to": "held_leg"
+  },
+  {
+   "from": "held_leg",
+   "to": "accrued"
+  },
+  {
+   "from": "held_leg",
+   "to": "forfeited"
+  },
+  {
+   "from": "split",
+   "to": "paid"
+  },
+  {
+   "from": "paid",
+   "to": "recorded"
+  },
+  {
+   "from": "refunded",
+   "to": "recorded"
+  }
+ ]
+}

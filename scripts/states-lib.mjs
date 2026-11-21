@@ -1,8 +1,8 @@
 // _STATE_TABLE_v1_: the typed state table of the commerce machine, pure parts. scripts/gen-states.mjs does the reading and writing.
-// The machine is vendored in scripts/coord-lang/commerce-machine.json (never edited here). The table keeps only a state's id, step,
+// The machine is vendored in scripts/coord-lang/commerce-machine.public.json (never edited here). The table keeps only a state's id, step,
 // kind, led, label, its one GET read and the legal moves; every text field of the machine stays out of the published package.
 export const RULE = '_STATE_TABLE_v1_';
-export const SOURCE = 'scripts/coord-lang/commerce-machine.json';
+export const SOURCE = 'scripts/coord-lang/commerce-machine.public.json';
 
 /** "GET /v1/listings/:id" -> { method: 'GET', path: '/v1/listings/:id' } */
 export function readOf(op) {
@@ -11,11 +11,11 @@ export function readOf(op) {
   return { method: m[1], path: m[2] };
 }
 
-/** the state table from the machine: stages then side states, in the machine's order */
+/** the state table from the machine's public projection: its states and moves, in its order */
 export function buildStates(machine) {
-  if (!Array.isArray(machine?.stages) || !Array.isArray(machine?.side) || !Array.isArray(machine?.moves)) throw new Error('not the commerce machine (stages, side, moves)');
-  const states = [...machine.stages, ...machine.side].map((s) => ({
-    id: s.id, step: s.step, kind: s.kind, led: s.led ?? null, label: s.label, read: readOf(s.reads?.op),
+  if (machine?.schema !== 'moonbeam.machine.public.v1' || !Array.isArray(machine?.states) || !Array.isArray(machine?.moves)) throw new Error('not the public commerce machine (moonbeam.machine.public.v1: states, moves)');
+  const states = machine.states.map((s) => ({
+    id: s.id, step: s.step, kind: s.kind, led: s.led ?? null, label: s.label, read: readOf(s.read),
   }));
   const ids = new Set(states.map((s) => s.id));
   if (ids.size !== states.length) throw new Error('duplicate state id in the machine');

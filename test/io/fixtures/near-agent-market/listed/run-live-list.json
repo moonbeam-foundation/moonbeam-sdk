@@ -16,14 +16,16 @@
   "listed"
  ],
  "ids": {},
- "needs": [],
+ "needs": [
+  "cohort"
+ ],
  "steps": [
   {
    "id": "listed",
    "leaves": "the market's record of the operator’s agent",
-   "read": "GET /v1/catalog?kind={venue}",
+   "read": "GET /v1/listed?market={venue}&cohort={cohort}",
    "party": null
   }
  ],
- "coord_sha": "d7af0f1634626fc01ddaf31a1bb6f350a24d134e"
+ "coord_sha": "9738fe3f9fd76db4257b8ccc5bf2e390a27e8643"
 }

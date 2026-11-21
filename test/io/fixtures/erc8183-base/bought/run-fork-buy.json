@@ -9,8 +9,8 @@
  ],
  "run": {
   "rung": "fork",
-  "on": "2026-11-07",
-  "ref": "fork:erc8183-base/buy@2026-11-07#54274006:7ec63a03"
+  "on": "2026-11-21",
+  "ref": "fork:erc8183-base/buy@2026-11-21#60327998:db3a8a25"
  },
  "steps": [
   {
@@ -38,5 +38,5 @@
    "party": null
   }
  ],
- "coord_sha": "d7af0f1634626fc01ddaf31a1bb6f350a24d134e"
+ "coord_sha": "9738fe3f9fd76db4257b8ccc5bf2e390a27e8643"
 }
