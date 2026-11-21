@@ -14,4 +14,8 @@ describe("a2a · bought", () => {
   describe("run-fork-sell.json (run, sell)", () => {
     it("machine: the steps are the path in order, each read a GET /v1 route", () => machineRun("test/io/fixtures/a2a/bought/run-fork-sell.json", "c83c42f37a63", {"op":"sell","steps":[{"id":"settled","read":"GET /v1/chain/tx?chain=8453&hashes={tx}"},{"id":"paid","read":"GET /v1/resale/sales/{sale}"}]}));
   });
+  describe("write-settle.json (POST settle, contract)", () => {
+    it("replay: the recorded request through the SDK call yields the recorded answer", () => replayFixture("test/io/fixtures/a2a/bought/write-settle.json", "e873b24ab83d"));
+    it("schema: the recorded answer keeps its keys and value types", () => schemaFixture("test/io/fixtures/a2a/bought/write-settle.json", "e873b24ab83d", {"status":200,"body":{"types":["object"],"keys":{"calls":{"types":["array"],"of":{"types":["object"],"keys":{"action":{"types":["string"]},"data":{"types":["string"]},"signer":{"types":["string"]},"to":{"types":["string"]}},"optional":[]}},"chainId":{"types":["number"]},"deadline":{"types":["number"]},"hook":{"types":["string"]},"jobId":{"types":["string"]},"ok":{"types":["boolean"]},"token":{"types":["string"]}},"optional":[]}}));
+  });
 });

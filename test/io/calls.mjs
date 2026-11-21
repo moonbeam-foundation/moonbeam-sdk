@@ -185,6 +185,25 @@ export const CALLS = {
       expect(result.agents[0]?.payTo.length).toBe(b.agents[0]?.payments.length); } },
   claimablePayouts: { fn: 'market.claimablePayouts', run: (s, t) => s.claimablePayouts(t, { chain: String(DEVNET), limit: 3 }),
     check: ({ result, x, expect }) => { expect(result.payouts.length).toBe(rowsLen(x.fx.response.body, 'envelopes')); expect(result.count).toBe(x.fx.response.body.count); } },
+  // the hire's unsigned plan (POST /v1/settle, coord api_bodies.SettlePlan): the devnet job's terms; the answer carries only the fields
+  // coord's answer types (ok, jobId, chainId, token, hook, deadline, calls[] action, signer, to, data)
+  hirePlan: { fn: 'market.hirePlan', key: true,
+    run: (s, t) => s.hirePlan(t, { chainId: DEVNET, buyer: A('b1'), seller: SELLER, price: '1000000', deadline: 1_800_000_660, evidence: H('33'), ref: { id: 'io-hire' } }),
+    contract: () => ({ status: 200, body: { ok: true, jobId: DEVNET_JOB, chainId: DEVNET, token: A('a4'), hook: A('a1'), deadline: 1_800_000_660, calls: [
+      { action: 'approve', signer: 'the buyer', to: A('a4'), data: '0x095ea7b3' },
+      { action: 'fundJob', signer: 'the buyer', to: A('a1'), data: '0x5d0a7e9b' },
+      { action: 'accept', signer: 'the seller of record', to: A('a1'), data: '0x19b05f49' } ] } }),
+    check: ({ result, x, expect }) => {
+      expect(result.calls.map((c) => c.signer)).toEqual(x.fx.response.body.calls.map((c) => c.signer));
+      expect(result.body.jobId).toBe(x.fx.response.body.jobId);
+    } },
+  // fund-job on the devnet job (POST /v1/assurance/call, coord api_bodies.AssuranceCall); the answer carries only coord's typed fields
+  jobCalls: { fn: 'market.jobCalls',
+    run: (s, t) => s.jobCalls(t, { chainId: DEVNET, action: { kind: 'fund-job', jobId: DEVNET_JOB, seller: SELLER, token: A('a4'), price: '1000000', deposit: '1111750' } }),
+    contract: () => ({ status: 200, body: { ok: true, note: 'Send these in order from the named signer.', calls: [
+      { chainId: DEVNET, action: 'approve', to: A('a4'), data: '0x095ea7b3', value: '0', effect: 'lets the hook take the price', signer: 'the buyer' },
+      { chainId: DEVNET, action: 'fund-job', to: A('a1'), data: '0x5d0a7e9b', value: '0', effect: 'funds the job', signer: 'the buyer' } ] } }),
+    check: ({ result, x, expect }) => expect(result.calls.map((c) => c.action)).toEqual(x.fx.response.body.calls.map((c) => c.action)) },
   reportSettled: { fn: 'market.reportSettled', key: true, run: (s, t) => s.reportSettled(t, { id: H('e3'), chain: DEVNET, tx: H('f4') }),
     contract: () => ({ status: 202, body: { outcome: 'recorded', id: H('e3'), tx: H('f4'), chain: String(DEVNET), state: 'claimable', reports: 1 } }),
     check: ({ result, expect }) => expect(result.outcome).toBe('recorded') },
