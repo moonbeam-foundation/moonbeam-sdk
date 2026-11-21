@@ -73,6 +73,47 @@ export async function replayFixture(file: string, sha: string): Promise<void> {
   else if (error) throw error;
 }
 
+/**
+ * _MAINNET_IO_v1_: one recorded read of a mainnet run. Its run file is beside the path's feature and names this run; the step is one
+ * the run covers; the request is that step's read with the run's own ids (and the market's id as {venue}), every other name given by
+ * hand at the recording. Where the fixture names an SDK call, that call over the recorded answer asks exactly the recorded request.
+ */
+export async function replayStep(file: string, sha: string, expected: { run: string; path: { op: string; step: string } }): Promise<void> {
+  const fx = pinned(file, sha) as Fx & { market: string; stage: string; op: string; rung: string; run: string; path: { op: string; step: string }; sdk?: string };
+  expect([fx.rung, fx.run, fx.path]).toEqual(['live', expected.run, expected.path]);
+  expect(fx.response.status, 'a mainnet read is kept only when it answered').toBe(200);
+  const row = paths.rows.find((r) => r.market === fx.market && r.op === fx.path.op) as undefined | { features?: Array<{ live?: { fixture: string; steps: string[]; ids: Record<string, string>; run: { ref: string } } | null }>; steps: Array<{ id: string; read?: string | null }> };
+  const live = row?.features?.map((f) => f.live).find((l) => l && l.run.ref === fx.run && l.steps.includes(fx.path.step));
+  expect(live, `no mainnet run ${fx.run} of ${fx.market} ${fx.path.op} covers ${fx.path.step}`).toBeTruthy();
+  const run = JSON.parse(text(live!.fixture)) as { run: { ref: string; rung: string }; covers: string[]; ids: Record<string, string> };
+  expect([run.run.rung, run.run.ref]).toEqual(['live', fx.run]);
+  expect(run.covers).toContain(fx.path.step);
+  // the request is the step's read: the same route, and each {name} the run's own id (a name the run does not hold was given by hand)
+  const read = row!.steps.find((st) => st.id === fx.path.step)!.read!;
+  const ids: Record<string, string> = { venue: fx.market, ...run.ids };
+  const [route, qs = ''] = read.replace(/^GET /, '').split('?');
+  const fill = (t: string, enc: boolean) => t.replace(/\{([A-Za-z_]+)\}/g, (m0, n: string) => (ids[n] === undefined ? m0 : enc ? encodeURIComponent(ids[n]!) : ids[n]!));
+  const hole = /\{[A-Za-z_]+\}/;
+  expect(fx.request.method).toBe('GET');
+  expect(fx.request.path).toMatch(new RegExp(`^${fill(route!, true).split(hole).map((p) => p.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('[^/]+')}$`));
+  for (const kv of qs.split('&').filter(Boolean)) {
+    const [k, v = ''] = kv.split('=');
+    if (hole.test(fill(v, false))) expect(fx.request.query[k!], `${k} was given at the recording`).toBeTruthy();
+    else expect(fx.request.query[k!]).toBe(fill(v, false));
+  }
+  if (!fx.sdk) return;
+  const def = Object.values(calls).find((d) => d.fn === fx.sdk && !d.key);
+  expect(def, `test/io/calls.mjs has no call for ${fx.sdk}`).toBeTruthy();
+  const { t, log } = transport([fx], false);
+  const x = { market: fx.market, stage: fx.stage, op: fx.op, fx, ...(fx.args ? { args: fx.args } : {}) };
+  let result: unknown = null, error: unknown = null;
+  try { result = await def!.run(s, t, x); } catch (e) { error = e; }
+  expect(log, `${fx.sdk} asks once`).toHaveLength(1);
+  expect(log[0]).toEqual(fx.request);
+  if (def!.check) def!.check({ result, error, x, expect, s });
+  else if (error) throw error;
+}
+
 /** the recorded answer keeps the status, keys and value types the fixture showed when the tests were generated */
 export function schemaFixture(file: string, sha: string, schema: { status: number; body: unknown }): void {
   const fx = pinned(file, sha);

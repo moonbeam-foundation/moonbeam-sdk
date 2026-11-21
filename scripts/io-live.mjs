@@ -3,6 +3,8 @@
 // good (logged as refused); nothing is retried and nothing is paid. No key, unless the recorder holds the owner-approved one
 // (_IO_RECORDER_KEY_v1_, scripts/io-key.mjs): then it goes as X-API-Key to coord only, redirects are refused, a route closed
 // without the key may be read once with it, and an answer that echoes the key is refused before anything is kept.
+// _MAINNET_IO_v1_: with o.daily (the mainnet-run recorder), a route a 401, 402 or 429 closed on an earlier UTC day may be asked once
+// more: the keyless free rate is counted per day. The same day it stays closed, and a new refusal closes it again.
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { assertNoSecret, recorderKey } from './io-key.mjs';
@@ -27,7 +29,8 @@ export async function liveGet(root, path, o = {}) {
   const L = liveLog(root);
   if (L.log.calls.length >= LIVE_MAX) throw new Error(`live budget spent: ${L.log.calls.length} of ${LIVE_MAX}`);
   const key = recorderKey();
-  const closed = L.log.calls.find((c) => STOPS.has(c.status) && routeOf(c.path) === routeOf(path) && !!c.keyed === !!key);
+  const today = new Date().toISOString().slice(0, 10);
+  const closed = L.log.calls.findLast((c) => STOPS.has(c.status) && routeOf(c.path) === routeOf(path) && !!c.keyed === !!key && !(o.daily && String(c.at).slice(0, 10) < today));
   if (closed) return { status: closed.status, body: null, refused: true, closedBy: closed.path };
   const last = L.log.calls.at(-1);
   const wait = last ? gapMs - (Date.now() - Date.parse(last.at)) : 0;

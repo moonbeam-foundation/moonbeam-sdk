@@ -26,14 +26,25 @@ describe('_ACCEPTANCE_TESTS_v1_ the generated tests are the fixtures\'', () => {
       expect(t, p).toMatch(/^\/\/ generated: do not edit\./);
       expect(t, p).toContain('test/io/fixtures/');
     }
-    for (const sk of skipped) expect(sk.why, sk.file).toMatch(/no row in op-map|names no SDK call|no path/);
+    for (const sk of skipped) expect(sk.why, sk.file).toMatch(/no row in op-map|names no SDK call|no path|no step/);
   });
 
   it('a run file becomes a machine test, a recorded call a replay and a schema test', () => {
     const { items } = plan(fixtureFiles(root), map, paths);
     const runs = items.filter((i: { kind: string }) => i.kind === 'run');
     expect(runs.length).toBe(fixtureFiles(root).size - [...fixtureFiles(root).keys()].filter((p) => !/\/run-[a-z]+-[a-z]+\.json$/.test(p)).length);
-    expect(testCount(items)).toBe(items.length + items.filter((i: { kind: string }) => i.kind === 'call').length);
+    expect(testCount(items)).toBe(items.length + items.filter((i: { kind: string }) => i.kind !== 'run').length);
+  });
+
+  it('_MAINNET_IO_v1_: every recorded read of a mainnet run is a replay and a schema test, and every mainnet run a machine test', () => {
+    const files = fixtureFiles(root);
+    const { items } = plan(files, map, paths);
+    const gen = [...generatedOnDisk(root).values()].join('\n');
+    const reads = [...files.keys()].filter((p) => /\.live-[a-z]+-[a-z_]+\.json$/.test(p));
+    expect(reads.length, 'a mainnet read is recorded').toBeGreaterThan(0);
+    expect(items.filter((i: { kind: string }) => i.kind === 'step').map((i: { file: string }) => i.file)).toEqual(reads);
+    for (const p of reads) { expect(gen, p).toContain(`replayStep(${JSON.stringify(p)}`); expect(gen, p).toContain(`schemaFixture(${JSON.stringify(p)}`); }
+    for (const p of [...files.keys()].filter((q) => /\/run-live-[a-z]+\.json$/.test(q))) expect(gen, p).toContain(`machineRun(${JSON.stringify(p)}`);
   });
 });
 
@@ -70,6 +81,17 @@ describe('_ACCEPTANCE_TESTS_v1_ plan and render', () => {
     expect(items.map((i: { file: string }) => i.file)).toEqual(['test/io/fixtures/m/listed/read-x-id.json', 'test/io/fixtures/m/listed/run-fork-sell.json']);
     expect(skipped.map((s: { file: string; why: string }) => `${s.file.split('/').pop()}: ${s.why}`)).toEqual([
       'read-z.json: no row in op-map.json, so no SDK call', 'run-fork-buy.json: no path m buy in venue-paths.json']);
+  });
+  it('_MAINNET_IO_v1_: a recorded read of a mainnet run is planned from the fixture and the path, never from the op-map', () => {
+    const read = (step: string) => JSON.stringify({ op: 'GET a', market: 'm', rung: 'live', run: 'live:m/sell@2026-11-06', path: { op: 'sell', step }, response: { status: 200, body: { ok: true } } });
+    const more = new Map([...files, ['test/io/fixtures/m/listed/read-a.live-sell-a.json', read('a')], ['test/io/fixtures/m/listed/read-a.live-sell-zz.json', read('zz')]]);
+    const { items, skipped } = plan(more, m, p);
+    const step = items.find((i: { kind: string }) => i.kind === 'step');
+    expect(step).toMatchObject({ file: 'test/io/fixtures/m/listed/read-a.live-sell-a.json', run: 'live:m/sell@2026-11-06', path: { op: 'sell', step: 'a' } });
+    expect(skipped.map((x: { why: string }) => x.why)).toContain('no step sell zz of m in venue-paths.json');
+    const t = renderFiles(items).get('test/io/generated/m/listed.test.ts')!;
+    expect(t).toMatch(/replayStep\("test\/io\/fixtures\/m\/listed\/read-a\.live-sell-a\.json"/);
+    expect(t).toMatch(/import \{ replayFixture, replayStep, schemaFixture, machineRun \}/);
   });
   it('renders one file per market and stage, with replay, schema and machine tests, and flags drift', () => {
     const out = renderFiles(plan(files, m, p).items);

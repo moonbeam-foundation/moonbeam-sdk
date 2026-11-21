@@ -6,6 +6,8 @@ const DROP = /^(fee_to|fee_payee|pay_?to|payTo|payee|payees|treasury|safe|deploy
 /** addresses served under a treasury-like key anywhere in this run's answers (a fee payee, an x402 payTo): dropped wherever they recur */
 export const TREASURY = new Set();
 const ADDR = /^0x[0-9a-fA-F]{40}$/;
+// _MAINNET_IO_v1_: a record's owner, when it is an address, is the wallet behind a listing: dropped like a signer
+const OWNER = /^(owner|owner_address|ownerAddress)$/;
 // _IO_OWN_KEYS_DROPPED_v1_: addresses listed in the file IO_MASK_FILE names (on the recorder's machine only) are dropped too.
 try {
   if (process.env.IO_MASK_FILE) for (const a of readFileSync(process.env.IO_MASK_FILE, 'utf8').match(/0x[0-9a-fA-F]{40}/g) ?? []) TREASURY.add(a.toLowerCase());
@@ -21,6 +23,7 @@ export function mask(v, path, notes) {
     for (const [k, x] of Object.entries(v)) {
       const p = path ? `${path}.${k}` : k;
       if (DROP.test(k)) { notes.dropped.push(`${p} (a payee, requester, signer or treasury-like address field)`); continue; }
+      if (OWNER.test(k) && typeof x === 'string' && ADDR.test(x)) { notes.dropped.push(`${p} (the address that owns the record)`); continue; }
       if (typeof x === 'string' && TREASURY.has(x.toLowerCase())) { notes.dropped.push(`${p} (the address a fee payee or payTo names)`); continue; }
       if (typeof x === 'string' && /\bkms\b|kms-|\bssm\b|\bMFA\b/i.test(x)) { notes.trimmed.push(`${p} (withheld)`); out[k] = '(withheld)'; continue; }
       if (k === 'get_key' && !path) { notes.trimmed.push('get_key (the free-key offer every keyless answer carries)'); continue; }

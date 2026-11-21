@@ -66,6 +66,25 @@ describe('copy: every shipped file, in Moonbeam\'s words', () => {
     }
     expect(bad).toEqual([]);
   }, 120_000);
+  // _MAINNET_IO_v1_ (owner 2026-11-21): a customer reads two words for a step, live and not yet. The finer words Moonbeam keeps for
+  // itself stay in the typed data: no shipped document prints one. The venue pages never use them at all; any other document may use
+  // the plain verb, never the word as a step's state (in a table cell, between dots, or in bold).
+  const FINER = /\bself-test(?:s|ed)?\b|\bpartial\b|\btested\b/gi;
+  const AS_STATE = /\bself-test(?:s|ed)?\b|\bpartial\b|(?:[|·]\s*|\*\*)tested(?:\s*[|·]|\*\*)/gi;
+  const VENUE_PAGES = ['README.md', 'docs/VENUES.md', 'docs/PATHS.md'];
+  const finer = (file: string, text: string): string[] => (text.match(VENUE_PAGES.includes(file) ? FINER : AS_STATE) ?? []).map((w) => `${file}: ${w.toLowerCase()}`);
+  it('no shipped document prints a finer state than live and not yet', () => {
+    const docs = packed().filter((f) => /\.(?:md|txt)$/.test(f));
+    expect(docs).toEqual(expect.arrayContaining(VENUE_PAGES));
+    expect(docs.flatMap((f) => finer(f, readFileSync(join(root, f), 'utf8')))).toEqual([]);
+  });
+  it('the two-word scan catches each finer word, and leaves the plain verb alone outside the venue pages', () => {
+    for (const cell of ['| x402 | live | tested · partial |', '- **tested**: Moonbeam ran it', 'live · self-test · not yet', 'a partial step'])
+      expect(finer('docs/OTHER.md', cell).length, cell).toBeGreaterThan(0);
+    expect(finer('docs/OTHER.md', 'your door tested on your own key')).toEqual([]);
+    expect(finer('README.md', 'your door tested on your own key')).toEqual(['README.md: tested']);
+    expect(finer('docs/VENUES.md', '| A | live | not yet | n/a |')).toEqual([]);
+  });
   it('the vendored modules ship without their comments', () => {
     for (const f of Object.keys(VENDORED)) expect(readFileSync(join(root, f), 'utf8'), f).not.toMatch(/^\s*(?:\/\/|\/\*|\*)/m);
   });

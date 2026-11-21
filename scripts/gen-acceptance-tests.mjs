@@ -17,8 +17,8 @@ const files = fixtureFiles(root);
 const { items, skipped } = plan(files, map, paths);
 const want = renderFiles(items);
 const off = drift(want, generatedOnDisk(root));
-const calls = items.filter((i) => i.kind === 'call').length;
-const summary = `${files.size} fixtures: ${calls} recorded calls and ${items.length - calls} runs became ${testCount(items)} tests in ${want.size} files; ${skipped.length} skipped (a gap, not a failure)`;
+const n = (k) => items.filter((i) => i.kind === k).length;
+const summary = `${files.size} fixtures: ${n('call')} recorded calls, ${n('run')} runs and ${n('step')} mainnet reads became ${testCount(items)} tests in ${want.size} files; ${skipped.length} skipped (a gap, not a failure)`;
 
 if (check) {
   if (off.length) {

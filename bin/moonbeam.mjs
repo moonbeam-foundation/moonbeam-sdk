@@ -2,7 +2,7 @@
 // moonbeam demo — Moonbeam's first covered hire on Base, replayed offline: the job, the grade, the settlement.
 //   npx moonbeam demo            (no key, no network, nothing signed)
 //   npx moonbeam workflows [id]  the Moonbeam Studio's agentic commerce workflows, step by step (offline)
-//   npx moonbeam venues          every venue with its state and SDK calls, and one sale stop by stop (offline)
+//   npx moonbeam venues          every venue with each step's word and SDK calls, and one sale stop by stop (offline)
 import { readFileSync } from 'node:fs';
 
 const [cmd, arg] = process.argv.slice(2);
@@ -14,17 +14,17 @@ if (cmd === 'workflows') {
   for (const w of pick ? [pick] : WORKFLOWS) console.log(`${diagramOf(w)}\n  picture: ${imageOf(w)}\n`);
   process.exit(0);
 }
-// moonbeam venues: every venue (list, take a job, settle, paid: each state as the market register reads it, and its SDK call),
-// then one sale stop by stop, each stop with its one SDK call
+// moonbeam venues: every market Moonbeam lists on (list, take a job, settle: each step's public word, live only on a mainnet run kept as
+// an I/O test, and its SDK call), then one sale stop by stop, each stop with its one SDK call
 if (cmd === 'venues') {
-  const { VENUES, VENUES_READ_ON, SALE_STOPS } = await import('../dist/market/index.js');
-  const cell = (s) => `${s.state}${s.call ? ` ${s.call}` : ''}`.padEnd(32);
-  console.log(`every venue: the register's proof for the operator's own listings, read on ${VENUES_READ_ON} (Moonbeam's own: below)`);
-  console.log(`${'venue'.padEnd(30)}${'list'.padEnd(32)}${'take a job'.padEnd(32)}${'settle'.padEnd(32)}paid`);
-  for (const v of VENUES) console.log(`${v.name.padEnd(30)}${cell(v.list)}${cell(v.take)}${cell(v.settle)}${v.paid.state}${v.paid.call ? ` ${v.paid.call}` : ''}`);
-  // _VENUE_TRUTH_v1_: each cohort's own list · take · settle
-  console.log('\neach cohort its own listing: list · take · settle');
-  for (const v of VENUES) console.log(`${v.name.padEnd(30)}${['moonbeam', 'operator'].map((c) => { const x = v.cohorts[c]; return `${c}: ${x.list.state} · ${x.take.state} · ${x.settle.state}`.padEnd(44); }).join('')}`);
+  const { VENUES, VENUES_READ_ON, SALE_STOPS, COHORT_STEPS, MAINNET_IO_OF, provenOnMainnet } = await import('../dist/market/index.js');
+  const kept = VENUES.filter((v) => v.moonbeamLists);
+  const cell = (v, k) => `${v.cohorts[MAINNET_IO_OF][k].publicState}${v[k].call ? ` ${v[k].call}` : ''}`.padEnd(32);
+  console.log(`every venue, read on ${VENUES_READ_ON}: a step is live when a mainnet run of it is kept as an I/O test`);
+  console.log(`${'venue'.padEnd(30)}${'list'.padEnd(32)}${'take a job'.padEnd(32)}settle`);
+  for (const v of kept.filter(provenOnMainnet)) console.log(`${v.name.padEnd(30)}${COHORT_STEPS.map((k) => cell(v, k)).join('').trimEnd()}`);
+  const open = kept.filter((v) => !provenOnMainnet(v));
+  if (open.length) console.log(`\nnot yet: ${open.map((v) => v.name).join(', ')}`);
   console.log('\none sale, stop by stop');
   for (const s of SALE_STOPS) console.log(`${String(s.order).padStart(2)} ${s.label.padEnd(20)} ${s.call.padEnd(26)} ${s.route ?? 'offline'}`);
   process.exit(0);
@@ -32,7 +32,7 @@ if (cmd === 'venues') {
 if (cmd !== 'demo') {
   console.log(['moonbeam demo              replay Moonbeam\'s first covered hire on Base: the job, the grade, the settlement',
     'moonbeam workflows [id]    the Studio\'s agentic commerce workflows, each step with the SDK call that runs it',
-    'moonbeam venues            every venue with its state and SDK calls, and one sale stop by stop'].join('\n'));
+    'moonbeam venues            every venue with each step\'s word and SDK calls, and one sale stop by stop'].join('\n'));
   process.exit(cmd ? 2 : 0);
 }
 

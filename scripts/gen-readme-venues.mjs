@@ -1,39 +1,72 @@
-// THE README'S MOONBEAM TABLE, FROM `VENUES` (_README_VENUES_v1_): the markets Moonbeam lists on (`moonbeamLists`), each with Moonbeam's
-// own states (`venue.cohorts.moonbeam`) and its SDK calls, then one line naming the cut markets. Nothing in the table is typed by hand.
+// THE VENUE TABLE A CUSTOMER READS, FROM `VENUES` (_README_VENUES_v1_, _MAINNET_IO_v1_): the README's table and the two blocks of
+// docs/VENUES.md. A row is a market Moonbeam lists on with at least one step proven on mainnet; each cell is that step's public word
+// (`venue.cohorts.moonbeam[step].publicState`: live, not yet, or n/a where the market has no such step). A market with no proven step
+// is named in one sentence under the table, and so are the cut markets. Nothing in a block is typed by hand.
 //   npm run build && node scripts/gen-readme-venues.mjs [--check]
 import { readFileSync, writeFileSync } from 'node:fs';
-import { VENUES, VENUES_READ_ON } from '../dist/market/index.js';
+import { COHORT_STEPS, MAINNET_IO_OF, VENUES, VENUES_READ_ON, provenOnMainnet } from '../dist/market/index.js';
 
-const readme = new URL('../README.md', import.meta.url);
-const START = '<!-- venues:moonbeam:start (scripts/gen-readme-venues.mjs) -->';
-const END = '<!-- venues:moonbeam:end -->';
+const mark = (id) => ({ start: `<!-- venues:${id}:start (scripts/gen-readme-venues.mjs) -->`, end: `<!-- venues:${id}:end -->` });
 const callsOf = (v) => [...new Set([v.list, v.take, v.settle, v.paid].map((s) => s.call).filter(Boolean).map((c) => c.split('.').pop()))].map((c) => `\`${c}\``).join(', ') || '—';
-const kept = VENUES.filter((v) => v.moonbeamLists);
-const cut = VENUES.filter((v) => !v.moonbeamLists);
-const list = (xs) => (xs.length < 2 ? xs.join('') : `${xs.slice(0, -1).join(', ')} or ${xs.at(-1)}`);
-const block = [
-  START,
-  `Read on ${VENUES_READ_ON}. The states are Moonbeam's own listing on each market (\`venue.cohorts.moonbeam\`).`,
-  '',
-  '| Market | What a seller does there | Moonbeam: list | Take a job · settle | SDK calls |',
-  '|---|---|---|---|---|',
-  ...kept.map((v) => { const m = v.cohorts.moonbeam; return `| ${v.name} | ${v.does} | ${m.list.state} | ${m.take.state} · ${m.settle.state} | ${callsOf(v)} |`; }),
-  '',
-  `Moonbeam does not list agents on ${list(cut.map((v) => v.name))}. They stay in \`VENUES\` as read-only rows (\`moonbeamLists: false\`).`,
-  '',
-  '- **live**: listed and read back on the market (list), or running there for outside money (take, settle).',
-  '- **tested**: Moonbeam ran the whole step end to end itself and keeps the run as an I/O test (`test/io`).',
-  '- **partial**: part of the step runs.',
-  '- **shared**: another cohort\'s listing stands in. **closed**: the market takes no new agent.',
-  '- **n/a**: the market has no such step.',
-  END,
-].join('\n');
+const list = (xs, last) => (xs.length < 2 ? xs.join('') : `${xs.slice(0, -1).join(', ')} ${last} ${xs.at(-1)}`);
+const mine = (v) => v.cohorts[MAINNET_IO_OF];
+const HEAD = { list: 'List', take: 'Take a job', settle: 'Settle' };
 
-const text = readFileSync(readme, 'utf8');
-const a = text.indexOf(START), b = text.indexOf(END);
-if (a < 0 || b < a) throw new Error('README.md has no venues:moonbeam markers');
-const next = `${text.slice(0, a)}${block}${text.slice(b + END.length)}`;
-if (process.argv.includes('--check')) {
-  if (next !== text) { console.error('README.md: the Moonbeam venue table is not what VENUES says (npm run build && node scripts/gen-readme-venues.mjs)'); process.exit(1); }
-  console.log(`README.md: the Moonbeam venue table is VENUES' (${kept.length} markets, ${cut.length} cut)`);
-} else { writeFileSync(readme, next); console.log(`wrote README.md: ${kept.length} markets, ${cut.length} cut`); }
+const kept = VENUES.filter((v) => v.moonbeamLists);
+const shown = kept.filter(provenOnMainnet);
+const open = kept.filter((v) => !provenOnMainnet(v));
+const cut = VENUES.filter((v) => !v.moonbeamLists);
+
+/** the table, the markets not shown yet, the cut markets and what each word means */
+const table = [
+  `Read on ${VENUES_READ_ON}. Each word is Moonbeam's own listing on that market (\`venue.cohorts.${MAINNET_IO_OF}\`, its \`publicState\`).`,
+  '',
+  `| Market | What a seller does there | ${COHORT_STEPS.map((k) => HEAD[k]).join(' | ')} | SDK calls |`,
+  `|---|---|${COHORT_STEPS.map(() => '---|').join('')}---|`,
+  ...shown.map((v) => `| ${v.name} | ${v.does} | ${COHORT_STEPS.map((k) => mine(v)[k].publicState).join(' | ')} | ${callsOf(v)} |`),
+  '',
+  ...(open.length ? [`Not yet: ${list(open.map((v) => v.name), 'and')}. No mainnet run of a step there is kept as an I/O test yet.`, ''] : []),
+  `Moonbeam does not list agents on ${list(cut.map((v) => v.name), 'or')}. They stay in \`VENUES\` as read-only rows (\`moonbeamLists: false\`).`,
+  '',
+  '- **live**: a mainnet run of the step is kept in this SDK as an I/O fixture (`test/io/fixtures`), and a test replays it.',
+  '- **not yet**: no mainnet run of the step is kept yet.',
+  '- **n/a**: the market has no such step.',
+];
+
+/** each shown market: what it is, how an agent is listed there, and each step with its word, its SDK call and the run it stands on */
+const each = shown.flatMap((v) => [
+  `### ${v.name} (\`${v.id}\`)`,
+  '',
+  v.does,
+  '',
+  v.howListed,
+  '',
+  ...(v.marketId ? [`\`market(t, '${v.marketId}')\` reads its week of money.`, ''] : []),
+  ...COHORT_STEPS.map((k) => {
+    const c = mine(v)[k]; const call = v[k].call ? ` · \`${v[k].call}\`` : '';
+    if (c.publicState === 'n/a') return `- **${k}**: n/a: ${c.says ?? v[k].says}`;
+    if (c.publicState !== 'live') return `- **${k}**: not yet${call}`;
+    return `- **${k}**: live${call} (mainnet run read ${c.mainnet.on}, kept at \`${c.mainnet.run}\`)`;
+  }),
+  '',
+]).slice(0, -1);
+
+const FILES = [
+  { name: 'README.md', blocks: { moonbeam: table } },
+  { name: 'docs/VENUES.md', blocks: { moonbeam: table, each } },
+];
+const check = process.argv.includes('--check');
+let off = 0;
+for (const f of FILES) {
+  const { name } = f; const url = new URL(`../${name}`, import.meta.url);
+  const text = readFileSync(url, 'utf8'); let next = text;
+  for (const [id, lines] of Object.entries(f.blocks)) {
+    const { start, end } = mark(id); const a = next.indexOf(start), b = next.indexOf(end);
+    if (a < 0 || b < a) throw new Error(`${name} has no venues:${id} markers`);
+    next = `${next.slice(0, a)}${[start, ...lines, end].join('\n')}${next.slice(b + end.length)}`;
+  }
+  if (check) { if (next !== text) { console.error(`${name}: the venue table is not what VENUES says (npm run build && node scripts/gen-readme-venues.mjs)`); off += 1; } }
+  else writeFileSync(url, next);
+}
+if (check && off) process.exit(1);
+console.log(`${check ? 'venue tables are VENUES\'' : 'wrote the venue tables'} (README.md, docs/VENUES.md): ${shown.length} markets proven on mainnet, ${open.length} not yet, ${cut.length} cut`);

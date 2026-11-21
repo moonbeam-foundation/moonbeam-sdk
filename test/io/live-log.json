@@ -245,6 +245,55 @@
       "path": "/resale/sales",
       "status": 200,
       "keyed": true
+    },
+    {
+      "n": 40,
+      "at": "2026-11-21T11:49:45.180Z",
+      "path": "/registry/agents/8453/1170141",
+      "status": 200
+    },
+    {
+      "n": 41,
+      "at": "2026-11-21T11:49:46.281Z",
+      "path": "/mcp/registry/server?name=network.moonbeam.next%2Fpaid-calls",
+      "status": 200
+    },
+    {
+      "n": 42,
+      "at": "2026-11-21T11:49:50.304Z",
+      "path": "/a2a/registry/agent?id=cf34994a-39a2-41c7-9ff5-53ba134fdc3d",
+      "status": 200
+    },
+    {
+      "n": 43,
+      "at": "2026-11-21T11:49:51.405Z",
+      "path": "/catalog?kind=near-agent-market",
+      "status": 200
+    },
+    {
+      "n": 44,
+      "at": "2026-11-21T11:49:58.217Z",
+      "path": "/olas/mechs",
+      "status": 200
+    },
+    {
+      "n": 45,
+      "at": "2026-11-21T11:50:09.152Z",
+      "path": "/x402/class/market.price",
+      "status": 402,
+      "refused": true
+    },
+    {
+      "n": 46,
+      "at": "2026-11-21T11:52:31.334Z",
+      "path": "/registry/agents/8453/1176098",
+      "status": 200
+    },
+    {
+      "n": 47,
+      "at": "2026-11-21T11:52:55.026Z",
+      "path": "/registry/agents/8453/1176098",
+      "status": 200
     }
   ]
 }

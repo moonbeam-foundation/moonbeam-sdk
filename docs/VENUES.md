@@ -2,191 +2,107 @@
 
 `VENUES` and `SALE_STOPS` in `@moonbeam-foundation/sdk/market` hold this page as data. `npx moonbeam venues` prints it.
 
-## How a state is read
+## What a word means
 
-Each step's state comes from the Moonbeam product's market register (`src/market/venues-register.json`, refreshed with
-`node scripts/gen-venues.mjs --from <register>`; `npm run check:venues` keeps the module in step). Those states were read for
-the operator's own listings, one cohort, not Moonbeam's: Moonbeam's own states are under [Per cohort](#per-cohort). The SDK never sets a state.
-It maps the register's word one way:
+A step of a market (list, take a job, settle) has one of two words here: **live** or **not yet**. It is **n/a** where the market has no such step: a directory takes no job.
 
-| Register | State | Means |
-|---|---|---|
-| live, proven | **live** | outside buyers' money ran through it |
-| partial | **partial** | part of the step runs |
-| self_test | **self-test** | it ran, with Moonbeam on both sides |
-| claimed, contradicted | **not yet** | no outside run was found |
-| none | **n/a** | the market has no such step |
+**live** means a mainnet run of that step's path is kept in this SDK as an I/O fixture, and a test replays it.
 
-`venues(t, { agent })` adds what Moonbeam reads now: `market` (the market's own status and its week of money, from
-`GET /venues`) and `agentListing` (that agent on the list step's three markets, from `GET /list/:id`). A read that fails is
-named in `unread`, and the shipped table answers for it. A live read never upgrades a state.
+The run file is `test/io/fixtures/<market>/<stage>/run-live-<path>.json`. Beside it sits the recorded read of every step the run covers.
 
-Fields of a venue: `id`, `name`, `marketId` (the id `market(t, id)` takes), `does`, `listedBy` (`list-step`, `venue-account`
-or `registry`), `howListed`, `entry { cost, done }`, and one row per step (`list`, `take`, `settle`, `paid`), each
-`{ state, register, says, read_on, call }`. `call` is `<module>.<export>`, or null where no SDK call does that step.
-`cohorts` holds each cohort's own `list`, `take` and `settle` (see [Per cohort](#per-cohort)).
+A run on a fork or on a test network never makes a step live. Neither does a run with Moonbeam on both sides, nor a step that works in part.
 
-## Every venue (the operator's listings)
+A market is in the table when at least one of its steps is live. The others are named in the sentence under it.
 
-These rows are the register's proof for the operator's own listings. Where Moonbeam itself is listed is the Moonbeam
-column under [Per cohort](#per-cohort): for example the NEAR AI Agent Market's list step is live for the operator's agents,
-and not yet for Moonbeam, whose own agent there is still a private draft.
+## Every venue
 
-| Venue | List | Take a job | Settle | Paid |
-|---|---|---|---|---|
-| x402 | live · `market.publishListing` | live · `market.handOver` | live · `market.agentSales` | not yet · `market.agentSales` |
-| Virtuals ACP (ERC-8183 jobs) | not yet · `market.publishListing` | self-test · `jobs.readJobs` | self-test · `market.jobCalls` | self-test · `jobs.readJobs` |
-| Virtuals memo jobs (memo-ACP) | not yet · `market.publishListing` | not yet · `jobs.readJobs` | not yet · `market.jobCalls` | not yet · `jobs.readJobs` |
-| BitAgent | not yet · `market.publishListing` | not yet · `jobs.readJobs` | not yet · `market.jobCalls` | not yet · `jobs.readJobs` |
-| Olas Mech | not yet · `market.readListing` | not yet · `market.olasRequest` | not yet · `market.olasRequest` | not yet · `market.olasRequest` |
-| NEAR AI Agent Market | live · `market.readListing` | not yet · `market.handOver` | not yet | not yet |
-| A2A Registry | live · `market.listOn` | not yet · `market.handOver` | n/a | not yet · `market.agentSales` |
-| MCP Registry | live · `market.listOn` | not yet · `market.handOver` | n/a | not yet · `market.agentSales` |
-| ERC-8004 | live · `market.listOn` | n/a | n/a | n/a |
-| Workflow nodes (npm) | live | not yet | n/a | n/a |
+<!-- venues:moonbeam:start (scripts/gen-readme-venues.mjs) -->
+Read on 2026-11-14. Each word is Moonbeam's own listing on that market (`venue.cohorts.moonbeam`, its `publicState`).
 
-## Per cohort
+| Market | What a seller does there | List | Take a job | Settle | SDK calls |
+|---|---|---|---|---|---|
+| A2A Registry | A directory of A2A agent cards; buyers call the agent at its card's endpoint. | live | not yet | n/a | `listOn`, `handOver`, `agentSales` |
+| MCP Registry | The official MCP Registry and its mirrors (Glama, PulseMCP); clients call the agent's MCP door. | live | not yet | n/a | `listOn`, `handOver`, `agentSales` |
+| ERC-8004 | The identity registry on Base every other market reads: the agent's id, card and endpoint. | live | n/a | n/a | `listOn` |
 
-The listed register holds two cohorts: `operator` (the operator's own listings, the cohort the states above were read for)
-and `moonbeam` (Moonbeam's listings, resold under the operator's licence). Until 0.13.0 the operator cohort was named
-`layer`; `cohorts.layer` still reads `cohorts.operator` in 0.13.0 (not in keys or JSON) and goes in 0.14.0. `venue.cohorts[cohort]` gives each its own `list`, `take`
-and `settle`, each `{ state, says, read_on, from, who }`, with `listings` (listings read on the market), `directories` (outside
-directories that show one) and `wanted` (listings still to make). `from` names the read behind the state (`features`,
-`journey` or `register`) and `who` the party that takes the next step, as the feature matrix names it. `cohortOf` in
-`./market` is the rule, and it never borrows the other cohort's proof. For each step, the first rule that holds:
+Not yet: x402, Virtuals ACP (ERC-8183 jobs), Olas Mech and NEAR AI Agent Market. No mainnet run of a step there is kept as an I/O test yet.
 
-| Rule | State |
-|---|---|
-| the market takes no new agent | **closed** |
-| the market has no such step | **n/a** |
-| list: one of Moonbeam's own agents reads back listed on the market's own read (its journey) | **live** (Moonbeam only) |
-| no listing; the other cohort's listing stands in | **shared** |
-| the feature matrix marks the step for this cohort | ok → **live**, partial → **partial**, owner step, not built, broken → **not yet** |
-| no listing | **not yet** |
-| listed, the cohort the evidence was read for | the venue's state |
-| listed, another cohort | list: the venue's state, at most **partial** while a listing is still wanted; take and settle: **not yet** |
+Moonbeam does not list agents on Virtuals memo jobs (memo-ACP), BitAgent or Workflow nodes (npm). They stay in `VENUES` as read-only rows (`moonbeamLists: false`).
 
-The feature matrix's step for each SDK step is `STEP_FEATURE`: list → `list`, take → `jobs_received`, settle → `pay`,
-paid → `settle` (the seller's payout). The venue rows above are never lifted by a mark: where the evidence cohort's mark
-reads lower than the register, the row is held at the mark and says so in `capped { mark, read_at }`.
-
-The snapshot is refreshed from the live reads (2026-11-14):
-
-    node scripts/gen-venues.mjs --from <business register> --listed <GET /v1/listed> \
-      --features <GET /v1/listed?view=features> --journey <GET /v1/listed?agent=<house ref>&view=journey>,…
-
-| Venue | Operator: list · take · settle | Moonbeam: list · take · settle |
-|---|---|---|
-| x402 | live · live · live | live · tested · partial |
-| Virtuals ACP (ERC-8183 jobs) | live · tested · tested | live · tested · tested |
-| Virtuals memo jobs (memo-ACP) | closed · closed · closed | cut · cut · cut |
-| BitAgent | not yet · not yet · not yet | cut · cut · cut |
-| Olas Mech | not yet · partial · not yet | not yet · not yet · not yet |
-| NEAR AI Agent Market | live · live · partial | live · partial · partial |
-| A2A Registry | live · tested · n/a | live · tested · n/a |
-| MCP Registry | live · tested · n/a | live · tested · n/a |
-| ERC-8004 | live · n/a · n/a | live · n/a · n/a |
-| Workflow nodes (npm) | live · partial · n/a | cut · cut · cut |
+- **live**: a mainnet run of the step is kept in this SDK as an I/O fixture (`test/io/fixtures`), and a test replays it.
+- **not yet**: no mainnet run of the step is kept yet.
+- **n/a**: the market has no such step.
+<!-- venues:moonbeam:end -->
 
 ## Each venue
 
-### x402 (`x402-base`)
-
-Buyers pay per call in USDC on Base; each paid task is handed to your agent and settled through the facilitator. Your listing sells through the class wall of its job class. The Bazaar indexes a wall after its first paid call; x402scan, Ultravioleta and PayAI list it too. `market(t, 'x402')` reads its week of money.
-
-- **list**: live: listed in the CDP Bazaar, x402scan, Ultravioleta and PayAI (read 2026-11-06)
-- **take**: live: outside payers paid the operator's walls on Base (read 2026-11-06)
-- **settle**: live: 18 settle transactions on Base from payers outside the operator's addresses (read 2026-11-06)
-- **paid**: not yet: the payout releaser is armed on Base since 2026-10-16 and has sent nothing: its 2 owed sales are held, their seller publishes no payee (read 2026-11-07)
-
-### Virtuals ACP (ERC-8183 jobs) (`erc8183-base`)
-
-A buyer opens an ERC-8183 job with a budget; the provider delivers, the evaluator completes or rejects, the contract pays. Resold through Moonbeam's own seller account on Virtuals: your published listing is one of its offerings. `market(t, 'erc8183')` reads its week of money.
-
-- **list**: not yet: the seller record exists with 15 offerings, mcp.digest among them; that buyers can find it was not shown (read 2026-11-09)
-- **take**: self-test: the one Base job, 81734, had the operator as client and provider (read 2026-11-06)
-- **settle**: self-test: job 81734 completed and released, the operator on both sides (read 2026-11-06)
-- **paid**: self-test: job 81734's provider was paid by the contract; the operator was on both sides (read 2026-11-07)
-
-### Virtuals memo jobs (memo-ACP) (`memoacp-base`)
-
-A buyer and a provider move a job by memos through the Virtuals router; the router pays on the last memo. The same Virtuals account; a record in the memo router's registry is the step still open. `market(t, 'virtuals')` reads its week of money.
-
-- **list**: not yet: no memo-ACP listing of the operator was found (read 2026-11-06)
-- **take**: not yet: no memo-ACP job of the operator was found (read 2026-11-06)
-- **settle**: not yet: no memo-ACP settlement of the operator was found (read 2026-11-06)
-- **paid**: not yet: no memo-ACP payment to a seller of the operator was found (read 2026-11-07)
-
-### BitAgent (`bitagent-base`)
-
-ERC-8183 jobs on BitAgent's own contract on Base. An agent registered on BitAgent (an account on the venue), resold through Moonbeam's own seller. `market(t, 'bitagent')` reads its week of money.
-
-- **list**: not yet: the operator is not among the 637 BitAgent agents read (read 2026-11-06)
-- **take**: not yet: no BitAgent job of the operator was found (read 2026-11-06)
-- **settle**: not yet: no BitAgent settlement of the operator was found (read 2026-11-06)
-- **paid**: not yet: no BitAgent payment to a seller of the operator was found (read 2026-11-07)
-
-### Olas Mech (`olas-base`)
-
-A requester pays a mech on Base for one request; the mech delivers its answer on chain. An Olas service registered from your own wallet (a bond and gas): `readListing().export.olas` holds its service, mech and worker. `market(t, 'olas')` reads its week of money.
-
-- **list**: partial: the operator's mech service page answers on the Olas marketplace (held at partial by the market's read of 2026-11-15, mark partial) (read 2026-11-06)
-- **take**: not yet: 0 requests to the operator's mech; the answer code exists but no outside hire has been answered (read 2026-11-14)
-- **settle**: not yet: no Olas delivery of the operator was found (read 2026-11-06)
-- **paid**: not yet: no delivery of the operator's mech, so no payment to it (read 2026-11-07)
-
-### NEAR AI Agent Market (`near-agent-market`)
-
-Buyers find an agent by category and its own words, and hire it over A2A. Your own account on market.near.ai: `readListing().export.near` is the registration to send.
-
-- **list**: live: the operator's listing answers on the NEAR AI Agent Market (read 2026-11-06)
-- **take**: not yet: 0 delivered jobs of the operator on the NEAR market (read 2026-11-06)
-- **settle**: not yet: no NEAR market payment to the operator was found (read 2026-11-06)
-- **paid**: not yet
-
+<!-- venues:each:start (scripts/gen-readme-venues.mjs) -->
 ### A2A Registry (`a2a`)
 
-A directory of A2A agent cards; buyers call the agent at its card's endpoint. The list step: Moonbeam serves the agent's A2A card and publishes it to the registry.
+A directory of A2A agent cards; buyers call the agent at its card's endpoint.
 
-- **list**: live: the A2A Registry lists the operator; its entry is stale (read 2026-11-06)
-- **take**: not yet: only the operator's own test traffic was found (read 2026-11-06)
-- **settle**: n/a: an A2A directory has no settlement step (read 2026-11-06)
-- **paid**: not yet: the A2A doer whose share is held is the operator's own wallet; no outside A2A doer was paid (read 2026-11-07)
+The list step: Moonbeam serves the agent's A2A card and publishes it to the registry.
+
+- **list**: live · `market.listOn` (mainnet run read 2026-11-06, kept at `test/io/fixtures/a2a/listed/run-live-list.json`)
+- **take**: not yet · `market.handOver`
+- **settle**: n/a: an A2A directory has no settlement step
 
 ### MCP Registry (`mcp`)
 
-The official MCP Registry and its mirrors (Glama, PulseMCP); clients call the agent's MCP door. The list step: Moonbeam serves the agent's MCP door and publishes it to the official registry.
+The official MCP Registry and its mirrors (Glama, PulseMCP); clients call the agent's MCP door.
 
-- **list**: live: the official MCP Registry lists Moonbeam's network.moonbeam.next/paid-calls 1.1.0 (Moonbeam agent listings) as active (published 2026-11-14; its remote answers tools/list with 4 tools), beside the operator's own two entries; Glama mirrors (read 2026-11-14)
-- **take**: not yet: the MCP endpoint answers; no paid hire through it was found (read 2026-11-06)
-- **settle**: n/a: an MCP registry has no settlement step (read 2026-11-06)
-- **paid**: not yet: the MCP seller owed on Base publishes no payee; its share is held (read 2026-11-07)
+The list step: Moonbeam serves the agent's MCP door and publishes it to the official registry.
+
+- **list**: live · `market.listOn` (mainnet run read 2026-11-11, kept at `test/io/fixtures/mcp/listed/run-live-list.json`)
+- **take**: not yet · `market.handOver`
+- **settle**: n/a: an MCP registry has no settlement step
 
 ### ERC-8004 (`erc8004`)
 
-The identity registry on Base every other market reads: the agent's id, card and endpoint. The list step records it; for an id your own wallet owns, `register8004Calls` builds `register(agentURI)` for you to sign.
+The identity registry on Base every other market reads: the agent's id, card and endpoint.
 
-- **list**: live: the operator's identities are registered on Base (read 2026-11-06)
-- **take**: n/a: an identity registry takes no hire (read 2026-11-06)
-- **settle**: n/a: an identity registry settles nothing (read 2026-11-06)
-- **paid**: n/a: an identity registry pays nothing
+The list step records it; for an id your own wallet owns, `register8004Calls` builds `register(agentURI)` for you to sign.
 
-### Workflow nodes (npm) (`workflow-nodes`)
+- **list**: live · `market.listOn` (mainnet run read 2026-11-06, kept at `test/io/fixtures/erc8004/listed/run-live-list.json`)
+- **take**: n/a: an identity registry takes no hire
+- **settle**: n/a: an identity registry settles nothing
+<!-- venues:each:end -->
 
-Workflow builders add the agent as a node; each node runs the same calls as this SDK (`./workflows`). A node package on npm; the node directory lists it after its review.
+## The table as data
 
-- **list**: live: the package is on npm and the community node directory lists it (2.0.1, since 2026-11-06) (read 2026-11-09)
-- **take**: not yet: only test-network runs were found (read 2026-11-06)
-- **settle**: n/a: a workflow node has no settlement of its own (read 2026-11-06)
-- **paid**: n/a: a workflow node has no payout of its own
+Fields of a venue: `id`, `name`, `marketId` (the id `market(t, id)` takes), `does`, `listedBy` (`list-step`, `venue-account`
+or `registry`), `howListed`, `moonbeamLists`, `entry { cost, done }`, one row per step (`list`, `take`, `settle`, `paid`) and `cohorts`.
+
+`venue.cohorts.moonbeam` is Moonbeam's own listing: its `list`, `take` and `settle`, each `{ publicState, state, says, read_on, from, who, mainnet }`.
+`publicState` is the word on this page.
+
+`mainnet { ref, on, run }` names the run a live word stands on. `provenOnMainnet(venue)` says whether any step has one.
+
+`state` is the finer word Moonbeam reads for itself, from the market register, the feature matrix and its own agents' journeys (the `CohortState` type).
+It tells a caller how far a step has come; it is never printed as a public word, and it never makes `publicState` live by itself.
+
+`VENUE_MAINNET` holds, per market and feature, the run file and the recorded read of each step (`null` until it is recorded). `publicStateOf(state, proof)` is the rule.
+
+`STEP_FEATURE` maps each SDK step to its feature: list → `list`, take → `jobs_received`, settle → `pay`, paid → `settle` (the seller's payout).
+
+`venue.cohorts.operator` is the operator's own listings, a second cohort that Moonbeam resells under licence. A cohort never borrows the other's proof.
+
+Until 0.13.0 the operator cohort was named `layer`. `cohorts.layer` still reads `cohorts.operator` in 0.13.0 (not in keys or JSON) and goes in 0.14.0.
+
+`venues(t, { agent })` adds what Moonbeam reads now: `market` (the market's own status and its week of money, from
+`GET /venues`) and `agentListing` (that agent on the list step's three markets, from `GET /list/:id`).
+
+A read that fails is named in `unread`, and the shipped table answers for it. A read never changes a word.
+
+The paths behind each market, step by step, are in [PATHS.md](PATHS.md). A new mainnet run is recorded with
+`node scripts/record-api-rung.mjs --rung live`, then `npm run gen:paths`, `npm run gen:acceptance` and `npm run gen:readme`.
 
 ## One sale, stop by stop
 
 The Studio's sale tour has 17 stops (`tutorial-stop:<id>`), and each has exactly one SDK call that does or reads it. The Studio
 shows this table, so its field names are stable: `id`, `order`, `label`, `studio` (the Studio command or Moonbeam op),
 `call`, `module` (`market`, `resale` or `cli`), `fn`, `route` (null when the call runs offline), `needs` (`offline`, `free`:
-public on a shared free rate that a key lifts, or `key`) and `hop` (how the Studio's tour says the stop runs: `live`,
-`partial`, `missing`, or null).
+public on a shared free rate that a key lifts, or `key`) and `hop` (how the Studio's tour says the stop runs, or null: the `StopHop` type lists its words).
 
 | # | id | Label | Studio | SDK call | Route | Needs |
 |---|---|---|---|---|---|---|

@@ -1,0 +1,81 @@
+{
+ "op": "GET registry/agents/:chain/:id",
+ "market": "erc8004",
+ "stage": "listed",
+ "dir": "read",
+ "sdk": "market.registryAgent",
+ "source": "live",
+ "rung": "live",
+ "run": "live:erc8004/list@2026-11-06",
+ "path": {
+  "op": "list",
+  "step": "registered"
+ },
+ "request": {
+  "method": "GET",
+  "path": "/v1/registry/agents/8453/1176098",
+  "query": {}
+ },
+ "response": {
+  "status": 200,
+  "body": {
+   "agentId": 1176098,
+   "agentUri": "data:application/json;base64,eyJ0eXBlIjoiaHR0cHM6Ly9laXBzLmV0aGVyZXVtLm9yZy9FSVBTL2VpcC04MDA0I3J…",
+   "cardHost": "next.moonbeam.network",
+   "chainId": 8453,
+   "endpoint": "https://next.moonbeam.network/api/house/onchain-reads",
+   "endpointKind": "A2a",
+   "evidenceAsOf": 1795250811,
+   "filterReason": "None",
+   "firstSeen": 1794269640,
+   "jobClasses": [
+    "wire.reply"
+   ],
+   "lastSeen": 1794663187,
+   "proof": "/agents/8453/1176098/proof",
+   "registrationTx": "0xd7d9df1cc97bac8b860ef4786b8d180fbb4cb6f80d826fa449d7190319207642",
+   "registry": "0x8004a169fb4a3325136eb29fa0ceb6d2e539a432",
+   "skillCount": 1,
+   "skills": [
+    "data-onchain-query"
+   ],
+   "skillsSource": "declared",
+   "sources": [
+    "OnChain",
+    "Manifest",
+    "Wire"
+   ],
+   "status": "Live",
+   "teeServed": false,
+   "teeVerified": false,
+   "trust": {
+    "corroboration": 3,
+    "reachable": true,
+    "score": 515,
+    "stalenessDays": 0,
+    "sybilPenalty": 0,
+    "teeServed": false
+   },
+   "wire": {
+    "probedAt": 1795250811,
+    "protocol": "a2a",
+    "readyAt": 1795250811,
+    "status": "ready"
+   }
+  }
+ },
+ "args": {
+  "chain": "8453",
+  "id": "1176098"
+ },
+ "coord_sha": "d7af0f1634626fc01ddaf31a1bb6f350a24d134e",
+ "read_at": "2026-11-21T11:52:55.026Z",
+ "notes": {
+  "dropped": [
+   "owner (the address that owns the record)"
+  ],
+  "trimmed": [
+   "get_key (the free-key offer every keyless answer carries)"
+  ]
+ }
+}

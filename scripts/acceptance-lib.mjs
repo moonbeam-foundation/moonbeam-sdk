@@ -2,13 +2,15 @@
 // and test/io/acceptance.test.ts (the pin). Every fixture under test/io/fixtures/<market>/<stage>/ becomes tests, never by hand:
 //   a recorded coord call  -> a replay test (the SDK call test/io/op-map.json pairs with it, over a fetch that answers the recorded
 //                             response) and a schema test (the keys and value types the fixture shows, derived from the fixture);
-//   a run file (run-<rung>-<op>.json) -> a machine test (its steps are the path's, in order, each read a GET /v1 route).
+//   a run file (run-<rung>-<op>.json) -> a machine test (its steps are the path's, in order, each read a GET /v1 route);
+//   a mainnet run's recorded read (read-<route>.live-<op>-<step>.json, _MAINNET_IO_v1_) -> a replay test (its request is the step's read
+//                             filled with the run's own ids; through the SDK call it names, the recorded answer comes back) and a schema test.
 // A recorded call whose op has no SDK call in the op-map is a gap: it is listed, not tested. Nothing here is typed by hand: the
 // markets, stages, ops and routes are read from the fixtures' folders, the op-map and src/market/venue-paths.json.
 import { createHash } from 'node:crypto';
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { join, relative } from 'node:path';
-import { isRunFile } from './paths-lib.mjs';
+import { isRunFile, isRungFile } from './paths-lib.mjs';
 import { expandRows } from './io-coverage-lib.mjs';
 
 export const RULE = '_ACCEPTANCE_TESTS_v1_';
@@ -88,6 +90,13 @@ export function plan(files, map, paths) {
       items.push({ kind: 'run', market, stage, file, sha: sha12(text), op: json.op, steps: row.steps.map((s) => ({ id: s.id, read: s.read ?? null })) });
       continue;
     }
+    if (isRungFile(name) && json.rung === 'live') {
+      const row = paths.rows.find((r) => r.market === json.market && r.op === json.path?.op);
+      const step = row?.steps.find((x) => x.id === json.path?.step);
+      if (!step) { skipped.push({ file, why: `no step ${json.path?.op} ${json.path?.step} of ${json.market} in venue-paths.json` }); continue; }
+      items.push({ kind: 'step', market, stage, file, sha: sha12(text), op: json.op, path: json.path, run: json.run, schema: schemaOf(json) });
+      continue;
+    }
     const row = byFixture.get(file);
     if (!row) { skipped.push({ file, why: 'no row in op-map.json, so no SDK call' }); continue; }
     if (!row.call) { skipped.push({ file, why: `op-map row ${row.op} names no SDK call` }); continue; }
@@ -97,24 +106,34 @@ export function plan(files, map, paths) {
 }
 
 /** tests per item: replay + schema for a call, machine for a run */
-export const testCount = (items) => items.reduce((n, i) => n + (i.kind === 'call' ? 2 : 1), 0);
+export const testCount = (items) => items.reduce((n, i) => n + (i.kind === 'run' ? 1 : 2), 0);
 
 // ── the files ─────────────────────────────────────────────────────────────────────────────────────────────────────────
-const q = (s) => JSON.stringify(s);
+// a value as source text of a generated test: JSON, with the characters that could end a script or a line escaped
+const UNSAFE = { '<': '\\u003C', '>': '\\u003E', '\u2028': '\\u2028', '\u2029': '\\u2029' };
+const q = (s) => JSON.stringify(s).replace(/[<>\u2028\u2029]/g, (c) => UNSAFE[c]);
 
 function renderItem(i) {
   const file = i.file.split('/').pop();
   if (i.kind === 'run') {
     return [
       `  describe(${q(`${file} (run, ${i.op})`)}, () => {`,
-      `    it(${q('machine: the steps are the path in order, each read a GET /v1 route')}, () => machineRun(${q(i.file)}, ${q(i.sha)}, ${JSON.stringify({ op: i.op, steps: i.steps })}));`,
+      `    it(${q('machine: the steps are the path in order, each read a GET /v1 route')}, () => machineRun(${q(i.file)}, ${q(i.sha)}, ${q({ op: i.op, steps: i.steps })}));`,
+      '  });',
+    ].join('\n');
+  }
+  if (i.kind === 'step') {
+    return [
+      `  describe(${q(`${file} (${i.op}, mainnet run ${i.run})`)}, () => {`,
+      `    it(${q('replay: the request is the step\'s read with the run\'s ids, and the recorded answer comes back through the SDK')}, () => replayStep(${q(i.file)}, ${q(i.sha)}, ${q({ run: i.run, path: i.path })}));`,
+      `    it(${q('schema: the recorded answer keeps its keys and value types')}, () => schemaFixture(${q(i.file)}, ${q(i.sha)}, ${q(i.schema)}));`,
       '  });',
     ].join('\n');
   }
   return [
     `  describe(${q(`${file} (${i.op}, ${i.source})`)}, () => {`,
     `    it(${q('replay: the recorded request through the SDK call yields the recorded answer')}, () => replayFixture(${q(i.file)}, ${q(i.sha)}));`,
-    `    it(${q('schema: the recorded answer keeps its keys and value types')}, () => schemaFixture(${q(i.file)}, ${q(i.sha)}, ${JSON.stringify(i.schema)}));`,
+    `    it(${q('schema: the recorded answer keeps its keys and value types')}, () => schemaFixture(${q(i.file)}, ${q(i.sha)}, ${q(i.schema)}));`,
     '  });',
   ].join('\n');
 }
@@ -126,7 +145,8 @@ export function renderFiles(items) {
   const out = new Map();
   for (const [k, list] of [...groups].sort(([a], [b]) => (a < b ? -1 : 1))) {
     const [market, stage] = k.split('/');
-    const used = [list.some((i) => i.kind === 'call') ? ['replayFixture', 'schemaFixture'] : [], list.some((i) => i.kind === 'run') ? ['machineRun'] : []].flat();
+    const has = (k) => list.some((i) => i.kind === k);
+    const used = [has('call') ? ['replayFixture'] : [], has('step') ? ['replayStep'] : [], has('call') || has('step') ? ['schemaFixture'] : [], has('run') ? ['machineRun'] : []].flat();
     out.set(`${OUT}/${k}.test.ts`, [
       `// generated: do not edit. ${RULE}: scripts/gen-acceptance-tests.mjs writes this from ${FIXTURES}/${k}/ (npm run gen:acceptance).`,
       `import { describe, it } from 'vitest';`,

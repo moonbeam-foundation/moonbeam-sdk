@@ -271,11 +271,12 @@ export { LIST_MARKETS, listIdOf, listOn, listStatus, pauseListing, resumeListing
 export type { ListMarket, ListRow, ListView, PlanOffer, Share, SaleRow, SaleSlice } from './journey.js';
 export { saleLedger, payoutQueues, vaultPolicy, claimablePayouts, saleRecord } from './sale.js';
 export type { QueueDepth, VaultRule, ClaimablePayout } from './sale.js';
-export { VENUES, VENUE_IDS, VENUE_STEPS, VENUES_READ_ON, VENUE_EVIDENCE_OF, MOONBEAM_LISTS_ON, listsOn, venueById, venues } from './venues.js';
+export { VENUES, VENUE_IDS, VENUE_STEPS, VENUES_READ_ON, VENUE_EVIDENCE_OF, MAINNET_IO_OF, MOONBEAM_LISTS_ON, listsOn, provenOnMainnet, venueById, venues } from './venues.js';
+export { VENUE_MAINNET } from './venue-mainnet-data.js';
 export type { Venue, VenueId, VenueLive, VenueState, VenueStep, VenueStepRow, ListedBy, SdkCall, RegisterWord, RegisterSnapshot, RegisterCohorts } from './venues.js';
 // _VENUE_TRUTH_v1_: each cohort's own list / take / settle on every venue
-export { COHORT_IDS, COHORT_ALIASES, COHORT_STEPS, cohortIdOf, cohortOf, cohortsOf, withAliases, capState, STEP_FEATURE, MARK_STATE, markOf } from './cohorts.js';
-export type { CohortId, DeprecatedCohortId, CohortRows, CohortState, CohortStep, CohortFacts, CohortStepRow, CohortSource, VenueCohort, FeatureId, FeatureMark, FeatureRead, JourneyRead } from './cohorts.js';
+export { COHORT_IDS, COHORT_ALIASES, COHORT_STEPS, PUBLIC_STATES, cohortIdOf, cohortOf, cohortsOf, withAliases, capState, publicStateOf, STEP_FEATURE, MARK_STATE, markOf } from './cohorts.js';
+export type { CohortId, DeprecatedCohortId, CohortRows, CohortState, CohortStep, CohortFacts, CohortStepRow, CohortSource, VenueCohort, PublicState, MainnetProof, MainnetProofs, FeatureId, FeatureMark, FeatureRead, JourneyRead } from './cohorts.js';
 export { SALE_STOPS, saleStop } from './sale-stops.js';
 export { STATES, MOVES, stateOf, statePath, readState } from './states.js';
 export type { State, StateId, StateKind, StateStep, StateRead, Move } from './states.js';

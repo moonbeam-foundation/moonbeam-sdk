@@ -20,6 +20,12 @@
 //      lists the Moonbeam cohort there (live), whatever an older register row says
 // The order, for each step: closed → n/a → (list) the journey's own read → not listed and shared → shared → the feature mark →
 // the rules above. The venue's own rows are never lifted by a mark: venues.ts caps them by the evidence cohort's marks.
+//
+// _MAINNET_IO_v1_ (owner 2026-11-21: "if we say we support a market it must be e2e tested with I/O tests for mainnet"): the words above
+// stay in the typed data for callers. What a customer reads is `publicState`, and it has two words: live and not yet (n/a where the
+// market has no such step). A step reads live only when its own state is live AND a mainnet run of its path is kept in this SDK as an
+// I/O fixture with the recorded read of every step it covers (venue-mainnet-data.ts, written by scripts/gen-paths.mjs from the
+// fixtures on disk). A fork run, a devnet run, a self-test or a part of a step is evidence for us, never a public word.
 import type { VenueState, VenueStep, VenueStepRow } from './venues.js';
 
 /** The cohorts the listed register holds: the operator's own listings, and Moonbeam's, resold under the operator's licence. */
@@ -87,7 +93,21 @@ export const markOf = (f: CohortFacts | undefined, k: VenueStep): (FeatureRead &
 
 /** Where a cohort's step was read: the feature matrix, a house agent's journey, or the listed register and the venue's rows. */
 export type CohortSource = 'features' | 'journey' | 'register';
-export type CohortStepRow = { state: CohortState; says: string | null; read_on: string | null; from?: CohortSource; who?: string | null };
+/** _MAINNET_IO_v1_: the word a customer reads for a step. */
+export type PublicState = 'live' | 'not yet' | 'n/a';
+export const PUBLIC_STATES: readonly PublicState[] = Object.freeze(['live', 'not yet', 'n/a']);
+/** A mainnet run of one feature's path, as this SDK keeps it: the run file, and the recorded read of each step it covers (null: not recorded yet). */
+export type MainnetProof = { op: string; ref: string; on: string; run: string; steps: Record<string, string | null>; proven: boolean };
+/** Per market, the mainnet run kept for each feature of the matrix (`STEP_FEATURE`). */
+export type MainnetProofs = Record<string, Record<string, MainnetProof>>;
+/** The public word of a step: live only on its own live state and a mainnet run kept whole; n/a stays; everything else is not yet. */
+export const publicStateOf = (state: CohortState | VenueState, proof?: MainnetProof | null): PublicState =>
+  (state === 'n/a' ? 'n/a' : state === 'live' && proof?.proven === true && Object.values(proof.steps).every(Boolean) ? 'live' : 'not yet');
+export type CohortStepRow = { state: CohortState; says: string | null; read_on: string | null; from?: CohortSource; who?: string | null;
+  /** _MAINNET_IO_v1_: what a customer reads: live, not yet or n/a. Tables, docs and pages print this, never `state`. */
+  publicState: PublicState;
+  /** the mainnet run a public live stands on: its ref, the date it was read and its run file under test/io */
+  mainnet?: { ref: string; on: string; run: string } };
 export type VenueCohort = { list: CohortStepRow; take: CohortStepRow; settle: CohortStepRow; listings: number; directories: string[]; wanted: number };
 
 export const STATE_RANK: Record<string, number> = { 'n/a': -1, 'not yet': 0, 'self-test': 1, partial: 2, tested: 3, live: 4 };
@@ -100,14 +120,21 @@ const NO_FACTS: CohortFacts = { listings: 0, directories: [], shared: null, clos
  * One cohort on one market: its list, take and settle, from the listed register's facts and the market's own steps (VENUES' rows,
  * read for `evidenceOf`). Missing facts read as a market the cohort is not on.
  */
-export function cohortOf(cohortIn: CohortId | DeprecatedCohortId, facts: CohortFacts | undefined, steps: Record<CohortStep, VenueStepRow>, evidenceOfIn: CohortId | DeprecatedCohortId): VenueCohort {
+export function cohortOf(cohortIn: CohortId | DeprecatedCohortId, facts: CohortFacts | undefined, steps: Record<CohortStep, VenueStepRow>, evidenceOfIn: CohortId | DeprecatedCohortId,
+  /** _MAINNET_IO_v1_: the mainnet runs kept for this cohort on this market, by feature; none kept means no public live */
+  mainnet: Record<string, MainnetProof> = {}): VenueCohort {
   const cohort = cohortIdOf(cohortIn); const evidenceOf = cohortIdOf(evidenceOfIn);
   const f = facts ?? NO_FACTS;
   const own = cohort === evidenceOf;
   const journey = cohort === 'moonbeam' ? f.journey ?? null : null;
   const onMarket = f.listings + f.directories.length > 0 || !!journey;
-  const row = (state: CohortState, says: string | null, read_on: string | null): CohortStepRow => ({ state, says, read_on });
+  type Read = Omit<CohortStepRow, 'publicState' | 'mainnet'>;
+  const row = (state: CohortState, says: string | null, read_on: string | null): Read => ({ state, says, read_on });
   const step = (k: CohortStep): CohortStepRow => {
+    const r = read(k); const proof = mainnet[STEP_FEATURE[k]]; const publicState = publicStateOf(r.state, proof);
+    return { ...r, publicState, ...(publicState === 'live' && proof ? { mainnet: { ref: proof.ref, on: proof.on, run: proof.run } } : {}) };
+  };
+  const read = (k: CohortStep): Read => {
     const v = steps[k];
     if (f.cut) return row('cut', f.cut, null);
     if (f.closed) return row('closed', f.closed, null);
@@ -125,11 +152,13 @@ export function cohortOf(cohortIn: CohortId | DeprecatedCohortId, facts: CohortF
 }
 
 /** Every cohort on one market. */
-export function cohortsOf(facts: Partial<Record<CohortId | DeprecatedCohortId, CohortFacts>> | undefined, steps: Record<CohortStep, VenueStepRow>, evidenceOf: CohortId | DeprecatedCohortId): CohortRows {
+export function cohortsOf(facts: Partial<Record<CohortId | DeprecatedCohortId, CohortFacts>> | undefined, steps: Record<CohortStep, VenueStepRow>, evidenceOf: CohortId | DeprecatedCohortId,
+  /** _MAINNET_IO_v1_: the mainnet runs kept on this market, per cohort: a cohort never borrows another's */
+  mainnet: Partial<Record<CohortId, Record<string, MainnetProof>>> = {}): CohortRows {
   // facts keyed by an old id (a 0.12 snapshot) still answer for the cohort it now names
   const old = (c: CohortId) => (Object.keys(COHORT_ALIASES) as DeprecatedCohortId[]).find((k) => COHORT_ALIASES[k] === c);
   const factsOf = (c: CohortId) => facts?.[c] ?? (old(c) ? facts?.[old(c)!] : undefined);
-  const rows = Object.fromEntries(COHORT_IDS.map((c) => [c, cohortOf(c, factsOf(c), steps, evidenceOf)])) as Record<CohortId, VenueCohort>;
+  const rows = Object.fromEntries(COHORT_IDS.map((c) => [c, cohortOf(c, factsOf(c), steps, evidenceOf, mainnet[c])])) as Record<CohortId, VenueCohort>;
   return withAliases(rows);
 }
 /** The rows with the deprecated ids as non-enumerable getters (not in keys or JSON), so code that read `cohorts.layer` keeps working. */
