@@ -145,10 +145,25 @@ describe('SALE_STOPS: one sale, stop by stop, paired 1:1 with the Studio', () =>
       studio: 'npx moonbeam workflows', 'offer-in': 'market.searchSellers', classify: 'market.checkAgent', listed: 'market.publishListing',
       quote: 'resale.quoteSale', edges: 'market.layerListings', hired: 'market.hirePlan', delivered: 'market.handOver', graded: 'market.composeGrade',
       settled: 'market.jobRecord', legs: 'resale.legsByName', accrued: 'market.saleLedger', split: 'market.payoutQueues', vault: 'market.vaultPolicy',
-      paid: 'market.claimablePayouts', recorded: 'market.saleRecord', usage: 'market.keyStanding',
+      paid: 'market.salePaid', recorded: 'market.saleRecord', usage: 'market.keyStanding',
     });
-    expect(saleStop('tutorial-stop:paid')?.route).toBe('GET /pipe/claimable');
+    expect(saleStop('tutorial-stop:paid')?.route).toBe('GET /resale/sales/:id');
     expect(saleStop('nope')).toBeNull();
+  });
+  it('salePaid reads the payout on the sale and leaves out who paid and to which wallet', async () => {
+    const SALE = 'rs_mi8x2k1a_0123456789';
+    const PAYTO = '0x' + 'ab'.repeat(20);
+    const { t, seen } = transport(() => [200, { ok: true, rule: 'RESALE_SALE_READ_v1', sale: { id: SALE, at: '2026-11-21T10:00:00.000Z',
+      payment: { tx: '0x' + '11'.repeat(32), pay_to: PAYTO, payer: PAYTO }, payout: { state: 'paid', why: 'released', network: 'eip155:8453' },
+      seller_payment: { units: '9000', tx: '0x' + '22'.repeat(32), network: 'eip155:8453' } }, delivery: null, listing: null }]);
+    const p = await market.salePaid(t, SALE);
+    expect(seen[0]!.url).toBe(`https://api.example/v1/resale/sales/${SALE}`);
+    expect(p).toEqual({ id: SALE, at: '2026-11-21T10:00:00.000Z', state: 'paid', why: 'released', network: 'eip155:8453', tx: '0x' + '22'.repeat(32), units: '9000' });
+    expect(JSON.stringify(p)).not.toContain(PAYTO.slice(2));
+    const owed = transport(() => [200, { ok: true, sale: { id: SALE, payout: { state: 'owed', why: 'waiting for the weekly release' } } }]);
+    expect(await market.salePaid(owed.t, SALE)).toMatchObject({ state: 'owed', tx: null, units: null });
+    const bad = transport(() => [400, { ok: false, code: 'bad_id' }]);
+    await expect(market.salePaid(bad.t, 'x')).rejects.toThrow();
   });
 });
 

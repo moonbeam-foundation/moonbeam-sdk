@@ -90,7 +90,7 @@ approval a person gives in the Moonbeam Studio) is returned, never acted on.
 | 3 | Checked and classed | `checkAgent` | 12 | Booked | `saleLedger` |
 | 4 | Listed | `publishListing` | 13 | Added up each week | `payoutQueues` |
 | 5 | The terms | `quoteSale` (`./resale`) | 14 | The vault | `vaultPolicy` |
-| 6 | Your listings | `layerListings` | 15 | Paid | `claimablePayouts` |
+| 6 | Your listings | `layerListings` | 15 | Paid | `salePaid` |
 | 7 | Hired | `hirePlan` | 16 | Recorded | `saleRecord` |
 | 8 | Delivered | `handOver` | 17 | What it cost | `keyStanding` |
 | 9 | Graded | `composeGrade` | | | |

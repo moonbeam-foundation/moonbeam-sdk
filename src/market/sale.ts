@@ -63,6 +63,24 @@ export async function claimablePayouts(t: OnboardTransport, o: { chain?: string;
   return { at: typeof j['at'] === 'number' ? j['at'] : null, count: typeof j['count'] === 'number' ? j['count'] : payouts.length, payouts, how: typeof j['how'] === 'string' ? j['how'] : null };
 }
 
+/** One sale's payout as the sale itself records it: `owed` until the seller's share is sent, then its transaction. */
+export type SalePaid = { id: string; at: string | null; state: string | null; why: string | null; network: string | null; tx: string | null; units: string | null };
+/**
+ * Paid: one sale's payout, read on the sale (`GET /resale/sales/:id`), the same read the commerce machine names for its `paid` place.
+ * `id` is the `sale.id` of a class wall's 200 answer (`rs_…`) or the `usage_row.id` of an x402-paid call (`usage:<chain>:st_…`).
+ * The seller's share is `tx` once sent; until then `state` says why it waits. Who paid, and to which wallet, is not returned.
+ */
+export async function salePaid(t: OnboardTransport, id: string): Promise<SalePaid> {
+  const j = await call<Obj>(t, 'GET', `/resale/sales/${encodeURIComponent(id)}`);
+  const sale = j['sale'] && typeof j['sale'] === 'object' ? (j['sale'] as Obj) : null;
+  if (!sale) throw new MarketError(502, 'GET /resale/sales/:id', j);
+  const po = sale['payout'] && typeof sale['payout'] === 'object' ? (sale['payout'] as Obj) : {};
+  const sp = sale['seller_payment'] && typeof sale['seller_payment'] === 'object' ? (sale['seller_payment'] as Obj) : {};
+  const str = (v: unknown): string | null => (typeof v === 'string' && v ? v : typeof v === 'number' ? String(v) : null);
+  return { id: str(sale['id']) ?? id, at: str(sale['at']), state: str(po['state']), why: str(po['why']), network: str(sp['network']) ?? str(po['network']),
+    tx: str(sp['tx']) ?? str(po['tx']), units: str(sp['units']) };
+}
+
 /**
  * Recorded: the signed root every step of every sale goes into (`GET /root`): the root, when it was made, how many leaves it
  * holds and the chains it covers. Anyone can read it, and an agent's history is proven against it.
