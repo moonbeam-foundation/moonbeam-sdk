@@ -1,5 +1,5 @@
 // _STATE_TABLE_v1_: the state table is the vendored machine's, read by one typed call per state. Nothing is typed here: counts, ids and
-// reads come from scripts/coord-lang/commerce-machine.json; a recorded answer comes from test/io/fixtures, or the mechanics are
+// reads come from scripts/coord-lang/commerce-machine.public.json; a recorded answer comes from test/io/fixtures, or the mechanics are
 // shown over an answer that carries no data.
 import { execFileSync } from 'node:child_process';
 import { cpSync, mkdtempSync, readFileSync, readdirSync, statSync, writeFileSync, mkdirSync } from 'node:fs';
@@ -12,7 +12,7 @@ import type { OnboardTransport } from '../src/onboard/index.js';
 import { buildStates, readOf } from '../scripts/states-lib.mjs';
 
 const root = join(__dirname, '..');
-const machine = JSON.parse(readFileSync(join(root, 'scripts/coord-lang/commerce-machine.json'), 'utf8')) as { stages: unknown[]; side: unknown[]; moves: unknown[] };
+const machine = JSON.parse(readFileSync(join(root, 'scripts/coord-lang/commerce-machine.public.json'), 'utf8')) as { states: unknown[]; moves: unknown[] };
 
 type Fx = { request: { method: string; path: string; query?: Record<string, string> }; response: { status: number; body: unknown } };
 const fixtures = (): Array<{ file: string; fx: Fx }> => {
@@ -37,7 +37,7 @@ const transport = (answer: (path: string) => [number, unknown]) => {
 
 describe('states: the table is the machine\'s', () => {
   it('has one state per machine state and one move per machine move', () => {
-    expect(STATES.length).toBe(machine.stages.length + machine.side.length);
+    expect(STATES.length).toBe(machine.states.length);
     expect(MOVES.length).toBe(machine.moves.length);
     expect(new Set(STATES.map((s) => s.id)).size).toBe(STATES.length);
     expect(STATES).toEqual(buildStates(machine).states);
@@ -78,7 +78,7 @@ describe('readState', () => {
     expect(seen[0]!.url).toBe(`https://coord.example${s.read.path}`);
   });
   it('answers a refusal as its status and body', async () => {
-    const s = STATES[0]!;
+    const s = STATES.find((x) => !x.read.path.includes(':'))!;
     const { t } = transport(() => [404, { ok: false, code: 'not_found', error: 'no' }]);
     const r = await readState(t, s.id);
     expect(r.status).toBe(404);

@@ -90,7 +90,7 @@
     {"op": "GET exchanges/auto", "markets": ["x402-base"], "stage": "listed", "dir": "read", "call": "state", "source": "live", "why": "the automatcher's rule card: the read of the priced state and of the operator-side holds"},
     {"op": "GET assurance/markets", "markets": ["x402-base"], "stage": "listed", "dir": "read", "call": "state", "source": "live", "why": "the cover markets: the read of the covered state"},
     {"op": "GET resale/sales", "markets": ["x402-base"], "stage": "settled", "dir": "read", "call": "state", "source": "live", "why": "the sale run's list: the read of the booked state"},
-    {"op": "GET agents/payments", "markets": ["x402-base"], "stage": "paid", "dir": "read", "call": "state", "source": "live", "why": "what the agents were paid: the read of the paid state"},
+    {"op": "GET agents/payments", "markets": ["x402-base"], "stage": "paid", "dir": "read", "call": "agentPayTo", "source": "live", "why": "where agents can be paid, as each published it (the paid state itself now reads the sale, GET resale/sales/:id)"},
     {"op": "GET vault/receipts", "markets": ["x402-base"], "stage": "paid", "dir": "read", "call": "state", "source": "live", "why": "the vault's receipts: the read of the recorded state"}
   ],
   "ignore": [

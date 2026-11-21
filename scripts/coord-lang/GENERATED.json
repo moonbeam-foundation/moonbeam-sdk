@@ -8,13 +8,13 @@
    "id": "commerce-machine-sdk",
    "files": [
     {
-     "file": "commerce-machine.json",
-     "from": "lang/gen/commerce-machine.json",
-     "sha256": "8ddb37751cffa75633cfdf2815d95c106a1701440199191a32a69aa43beac606"
+     "file": "commerce-machine.public.json",
+     "from": "lang/gen/commerce-machine.public.json",
+     "sha256": "eff21b8d3b708ca30207b8e59917d27603a94a84d1a3287a9dd7563d703f8dd7"
     }
    ],
-   "consumed_by": "moonbeam-sdk src/market/states (_RELEASE_ACCEPT_v1_): a generator reads the machine's states, their read routes and legal moves into the typed state table the SDK's CLI channel reads; the prose of the machine stays out of the published package"
+   "consumed_by": "moonbeam-sdk src/market/states (_RELEASE_ACCEPT_v1_): a generator reads the machine's public projection (places, light, routes, legal moves; no prose) into the typed state table the SDK's CLI channel reads"
   }
  ],
- "commit": "56ba875b6fc1544017e912680c792fb870721239"
+ "commit": "9738fe3f9fd76db4257b8ccc5bf2e390a27e8643"
 }

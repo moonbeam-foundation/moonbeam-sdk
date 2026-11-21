@@ -63,6 +63,26 @@ export async function claimablePayouts(t: OnboardTransport, o: { chain?: string;
   return { at: typeof j['at'] === 'number' ? j['at'] : null, count: typeof j['count'] === 'number' ? j['count'] : payouts.length, payouts, how: typeof j['how'] === 'string' ? j['how'] : null };
 }
 
+/** One way to pay one agent, as the agent published it: the network, the address, and the token and price where given. Never verified. */
+export type PayTo = { network: string; chainId: string | null; address: string; token: string | null; price: string | null };
+/**
+ * Where agents can be paid (`GET /agents/payments`): per agent, the payment addresses it published by network. Every address is
+ * what the agent says (`verified` is false): a read before a buy, not a proof that a payment would settle. `?network=` and `offset`
+ * page it.
+ */
+export async function agentPayTo(t: OnboardTransport, o: { network?: string; offset?: number } = {}): Promise<{ matching: number | null; offset: number; agents: { chainId: number | null; agentId: string; name: string | null; payTo: PayTo[] }[]; note: string | null }> {
+  const q = new URLSearchParams(); if (o.network) q.set('network', o.network); if (o.offset) q.set('offset', String(o.offset));
+  const j = await call<Obj>(t, 'GET', `/agents/payments${q.size ? `?${q}` : ''}`);
+  const s = (v: unknown): string | null => (typeof v === 'string' && v ? v : typeof v === 'number' ? String(v) : null);
+  return {
+    matching: typeof j['matching'] === 'number' ? j['matching'] : null,
+    offset: typeof j['offset'] === 'number' ? j['offset'] : 0,
+    agents: rows(j['agents']).map((a) => ({ chainId: typeof a['chainId'] === 'number' ? a['chainId'] : null, agentId: String(a['agentId'] ?? ''), name: s(a['name']),
+      payTo: rows(a['payments']).map((p) => ({ network: String(p['network'] ?? ''), chainId: s(p['chainId']), address: String(p['address'] ?? ''), token: s(p['token']), price: s(p['price']) })) })),
+    note: s(j['note']),
+  };
+}
+
 /** One sale's payout as the sale itself records it: `owed` until the seller's share is sent, then its transaction. */
 export type SalePaid = { id: string; at: string | null; state: string | null; why: string | null; network: string | null; tx: string | null; units: string | null };
 /**
