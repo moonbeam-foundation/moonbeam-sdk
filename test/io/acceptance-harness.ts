@@ -81,7 +81,10 @@ export async function replayFixture(file: string, sha: string): Promise<void> {
 export async function replayStep(file: string, sha: string, expected: { run: string; path: { op: string; step: string } }): Promise<void> {
   const fx = pinned(file, sha) as Fx & { market: string; stage: string; op: string; rung: string; run: string; path: { op: string; step: string }; sdk?: string };
   expect([fx.rung, fx.run, fx.path]).toEqual(['live', expected.run, expected.path]);
-  expect(fx.response.status, 'a mainnet read is kept only when it answered').toBe(200);
+  // a priced door's own 402 with its terms is that step's answer (recorded as a wall); every other read answered 200
+  const wall = (fx as { wall?: boolean }).wall === true;
+  expect(fx.response.status, 'a mainnet read is kept only when it answered').toBe(wall ? 402 : 200);
+  if (wall) { const b = fx.response.body as { accepts?: unknown[]; x402?: { accepts?: unknown[] } }; expect((b.accepts ?? b.x402?.accepts ?? []).length, 'a wall carries its terms').toBeGreaterThan(0); }
   const row = paths.rows.find((r) => r.market === fx.market && r.op === fx.path.op) as undefined | { features?: Array<{ live?: { fixture: string; steps: string[]; ids: Record<string, string>; run: { ref: string } } | null }>; steps: Array<{ id: string; read?: string | null }> };
   const live = row?.features?.map((f) => f.live).find((l) => l && l.run.ref === fx.run && l.steps.includes(fx.path.step));
   expect(live, `no mainnet run ${fx.run} of ${fx.market} ${fx.path.op} covers ${fx.path.step}`).toBeTruthy();

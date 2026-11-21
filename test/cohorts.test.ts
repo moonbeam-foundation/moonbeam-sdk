@@ -217,7 +217,7 @@ describe('publicState: live only on a mainnet run kept as an I/O fixture', () =>
     expect(MAINNET_IO_OF).toBe('moonbeam');
     for (const v of VENUES) for (const k of COHORT_STEPS) expect(['not yet', 'n/a'], `${v.id}.operator.${k}`).toContain(v.cohorts.operator[k].publicState);
   });
-  it('the shipped table: every public live has its run file and each recorded read on disk, read 200 on that very run', () => {
+  it('the shipped table: every public live has its run file and each recorded read on disk, read on that very run', () => {
     const at = (p: string) => JSON.parse(readFileSync(new URL(`../${p}`, import.meta.url), 'utf8'));
     let live = 0;
     for (const v of VENUES) for (const k of COHORT_STEPS) {
@@ -234,7 +234,8 @@ describe('publicState: live only on a mainnet run kept as an I/O fixture', () =>
       expect(Object.keys(p!.steps)).toEqual(run.covers);
       for (const [step, file] of Object.entries(p!.steps)) {
         const fx = at(file!);
-        expect([fx.market, fx.rung, fx.run, fx.path.step, fx.response.status], file!).toEqual([v.id, 'live', p!.ref, step, 200]);
+        // a priced door's own 402 with its terms is that step's answer; every other read answered 200
+        expect([fx.market, fx.rung, fx.run, fx.path.step, fx.response.status], file!).toEqual([v.id, 'live', p!.ref, step, fx.wall === true ? 402 : 200]);
       }
     }
     expect(live).toBeGreaterThan(0);

@@ -71,11 +71,12 @@ export function runFiles(paths) {
 
 /**
  * _MAINNET_IO_v1_: per market and feature, the mainnet run and the recorded read of each step it covers. `recorded` is every rung
- * fixture on disk by path (isRungFile). A step is kept only by a read of this very run that answered 200; `proven` needs every one.
+ * fixture on disk by path (isRungFile). A step is kept only by a read of this very run that answered 200 (a priced door: its 402 with terms); `proven` needs every one.
  */
 export function mainnetProofs(paths, recorded) {
   const out = {};
-  const reads = [...recorded].filter(([, fx]) => fx?.rung === 'live' && fx?.response?.status === 200);
+  // a step is proven by a read that answered 200, or by a priced door's own 402 with its terms (recorded as a wall)
+  const reads = [...recorded].filter(([, fx]) => fx?.rung === 'live' && (fx?.response?.status === 200 || (fx?.wall === true && fx?.response?.status === 402)));
   for (const r of paths.rows) for (const f of r.features ?? []) {
     if (!f.live) continue;
     const steps = Object.fromEntries(f.live.steps.map((id) => [id, reads.find(([, fx]) => fx.market === r.market && fx.run === f.live.run.ref && fx.path?.op === r.op && fx.path?.step === id)?.[0] ?? null]));

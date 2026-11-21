@@ -27,6 +27,9 @@ import { collect, mask } from './io-mask.mjs';
 const here = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 
 /** the read of a step with its {placeholders} filled: { method, path, query, missing: [names] } */
+/** a step whose read is a priced door (the class door of the pay-per-call market): its 402 with terms is the step's proof */
+const isWallStep = (path) => /^\/v1\/x402\/class\/.+$/.test(path);
+
 export function resolveRead(read, params = {}) {
   const m = /^(GET)\s+(\/v1\/[^\s?]*)(?:\?(\S*))?$/.exec(read ?? '');
   if (!m) throw new Error(`not a GET /v1 read: ${read}`);
@@ -98,7 +101,8 @@ export function sdkCallOf(s, calls, map) {
 
 /**
  * Walk a path and keep each answer. `fetchImpl` stands in for the network in tests. Returns { wrote: [paths], skipped: [why], stopped }.
- * The walk stops at the first 401, 402 or 429 (liveGet closes that route); a non-200 answer is reported, not kept.
+ * The walk stops at the first 401, 402 or 429 (liveGet closes that route); a non-200 answer is reported, not kept. One exception, for a
+ * mainnet run only: a step whose read is a priced door keeps the door's 402 with its terms, because that answer is what the step proves.
  */
 export async function recordApiRung({ root = here, paths, map, market, op, params = {}, fetchImpl, gapMs, force = false, now = () => new Date().toISOString(), rung = 'api', sdkCall = null }) {
   if (rung !== 'api' && rung !== 'live') throw new Error(`no rung ${rung}: api or live`);
@@ -110,9 +114,9 @@ export async function recordApiRung({ root = here, paths, map, market, op, param
   for (const w of steps) {
     if (w.missing.length) { skipped.push(`${w.step.id}: needs ${w.missing.map((n) => `--param ${n}=…`).join(' ')}`); continue; }
     const q = new URLSearchParams(w.query).toString();
-    const r = await liveGet(root, `${w.path.replace(/^\/v1/, '')}${q ? `?${q}` : ''}`, { fetchImpl, gapMs, ...(live ? { daily: true } : {}) });
+    const r = await liveGet(root, `${w.path.replace(/^\/v1/, '')}${q ? `?${q}` : ''}`, { fetchImpl, gapMs, ...(live ? { daily: true, wall: isWallStep(w.path) } : {}) });
     if (r.refused) { stopped = `${r.status} on ${w.path}: the walk stops`; break; }
-    if (r.status !== 200) { skipped.push(`${w.step.id}: answered ${r.status}, not kept`); continue; }
+    if (r.status !== 200 && !r.wall) { skipped.push(`${w.step.id}: answered ${r.status}, not kept`); continue; }
     collect(r.body);
     const notes = { dropped: [], trimmed: [] };
     const body = mask(r.body, '', notes);
@@ -127,7 +131,7 @@ export async function recordApiRung({ root = here, paths, map, market, op, param
     const fx = {
       op: opName, market, stage: w.stage, dir: 'read', ...(live ? (call ? { sdk: call.fn } : {}) : mapRow?.sdk ? { sdk: mapRow.sdk } : {}), source: 'live', rung,
       ...(live ? { run: live.run.ref, path: { op, step: w.step.id } } : {}),
-      request, response: { status: r.status, body },
+      request, response: { status: r.status, body }, ...(r.wall ? { wall: true } : {}),
       ...(call?.args ? { args: call.args } : {}),
       coord_sha: paths.coord.sha, read_at: r.read_at ?? now(),
       ...(notes.dropped.length || notes.trimmed.length ? { notes: { ...(notes.dropped.length ? { dropped: [...new Set(notes.dropped.map((d) => d.replace(/\[\d+\]/g, '[]')))] } : {}), ...(notes.trimmed.length ? { trimmed: notes.trimmed } : {}) } } : {}),

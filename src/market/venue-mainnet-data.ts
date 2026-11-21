@@ -9,10 +9,10 @@ export const VENUE_MAINNET: MainnetProofs = {
    "on": "2026-11-06",
    "run": "test/io/fixtures/x402-base/listed/run-live-list.json",
    "steps": {
-    "published": null,
-    "indexed": null
+    "published": "test/io/fixtures/x402-base/listed/read-x402-class-class.live-list-published.json",
+    "indexed": "test/io/fixtures/x402-base/listed/read-x402-bazaar.live-list-indexed.json"
    },
-   "proven": false
+   "proven": true
   },
   "jobs_received": {
    "op": "sell",

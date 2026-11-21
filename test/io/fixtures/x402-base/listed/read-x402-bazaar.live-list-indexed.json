@@ -1,0 +1,4780 @@
+{
+ "op": "GET x402/bazaar",
+ "market": "x402-base",
+ "stage": "listed",
+ "dir": "read",
+ "source": "live",
+ "rung": "live",
+ "run": "live:x402-base/list@2026-11-06",
+ "path": {
+  "op": "list",
+  "step": "indexed"
+ },
+ "request": {
+  "method": "GET",
+  "path": "/v1/x402/bazaar",
+  "query": {}
+ },
+ "response": {
+  "status": 200,
+  "body": {
+   "ok": true,
+   "total": 39761,
+   "offset": 0,
+   "count": 100,
+   "payable": 100,
+   "rows": [
+    {
+     "resource": "https://keyring-agent.blockchhub.link/api/send-native",
+     "host": "keyring-agent.blockchhub.link",
+     "service": null,
+     "description": "Pay the send-native execution fee (native coin transfer)",
+     "tags": [],
+     "method": "GET",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "50000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.05
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.05,
+     "quality": {
+      "paid_calls_30d": 13147,
+      "payers_30d": 4825,
+      "last_paid_at": "2026-11-21T12:17:56.203Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": true,
+      "status": "payable, paid lately"
+     },
+     "updated": "2026-11-21T12:22:19.026Z"
+    },
+    {
+     "resource": "https://ax1-new.vercel.app/api/dashboard/q-verdict/resource",
+     "host": "ax1-new.vercel.app",
+     "service": "AX1 Console",
+     "description": "Any agent can buy a Token Verdict over x402: AI grade, roast and live onchain metrics for any Base, Solana or Robinhood token. $0.02 in USDC, no account.\n\nCheck supported_token_chains in the quote for this deployment. Payment settles on Base. Includes a one-line verdict, shareable page and card imag",
+     "tags": [
+      "agents",
+      "token",
+      "verdict"
+     ],
+     "method": "POST",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "20000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.02
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.02,
+     "quality": {
+      "paid_calls_30d": 136180,
+      "payers_30d": 818,
+      "last_paid_at": "2026-11-21T12:18:46.351Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": true,
+      "status": "payable, paid lately"
+     },
+     "updated": "2026-11-21T12:23:05.43Z"
+    },
+    {
+     "resource": "https://keyring-agent.blockchhub.link/api/send-token",
+     "host": "keyring-agent.blockchhub.link",
+     "service": null,
+     "description": "Pay the send-token execution fee (ERC-20 transfer)",
+     "tags": [],
+     "method": "GET",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "50000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.05
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.05,
+     "quality": {
+      "paid_calls_30d": 13215,
+      "payers_30d": 4931,
+      "last_paid_at": "2026-11-21T12:18:14.198Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": true,
+      "status": "payable, paid lately"
+     },
+     "updated": "2026-11-21T12:21:36.068Z"
+    },
+    {
+     "resource": "https://x402.tbs-digital.com/weather/current",
+     "host": "x402.tbs-digital.com",
+     "service": "TBS Weather & Climate API",
+     "description": "Complete weather bundle in one call: current conditions (temperature, feels-like, humidity, wind speed/direction/gusts, pressure, cloud cover, precipitation, UV, day/night) plus 24-hour hourly and 7-day daily forecast, air quality (AQI, PM2.5, PM10, ozone), solar radiation, and severe-weather alerts",
+     "tags": [
+      "weather",
+      "forecast",
+      "current-conditions",
+      "air-quality",
+      "alerts"
+     ],
+     "method": "GET",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "2000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.002
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.002,
+     "quality": {
+      "paid_calls_30d": 1181,
+      "payers_30d": 367,
+      "last_paid_at": "2026-11-21T07:11:32.62Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": true,
+      "status": "payable, paid lately"
+     },
+     "updated": "2026-11-21T07:10:46.859Z"
+    },
+    {
+     "resource": "https://www.api-xpay.com/x402/quote",
+     "host": "www.api-xpay.com",
+     "service": "X Pay",
+     "description": "Payment quote with amount, asset, and merchant wallet",
+     "tags": [
+      "payment",
+      "quote",
+      "pricing",
+      "merchant",
+      "invoice"
+     ],
+     "method": "GET",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "5000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.005
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.005,
+     "quality": {
+      "paid_calls_30d": 50736,
+      "payers_30d": 123,
+      "last_paid_at": "2026-11-21T11:55:36.7Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": true,
+      "status": "payable, paid lately"
+     },
+     "updated": "2026-11-21T11:55:24.225Z"
+    },
+    {
+     "resource": "https://www.api-xpay.com/x402/ping",
+     "host": "www.api-xpay.com",
+     "service": "X Pay",
+     "description": "Health check ping",
+     "tags": [
+      "health",
+      "ping",
+      "monitoring",
+      "uptime",
+      "latency"
+     ],
+     "method": "GET",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "5000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.005
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.005,
+     "quality": {
+      "paid_calls_30d": 51157,
+      "payers_30d": 137,
+      "last_paid_at": "2026-11-21T11:55:37.311Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": true,
+      "status": "payable, paid lately"
+     },
+     "updated": "2026-11-21T11:55:16.286Z"
+    },
+    {
+     "resource": "https://www.api-xpay.com/x402/time",
+     "host": "www.api-xpay.com",
+     "service": "X Pay",
+     "description": "Current server time in UTC",
+     "tags": [
+      "time",
+      "datetime",
+      "utc",
+      "clock",
+      "timestamp"
+     ],
+     "method": "GET",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "5000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.005
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.005,
+     "quality": {
+      "paid_calls_30d": 50678,
+      "payers_30d": 133,
+      "last_paid_at": "2026-11-21T11:55:37.056Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": true,
+      "status": "payable, paid lately"
+     },
+     "updated": "2026-11-21T11:55:24.542Z"
+    },
+    {
+     "resource": "https://www.api-xpay.com/x402/network",
+     "host": "www.api-xpay.com",
+     "service": "X Pay",
+     "description": "Base network and USDC payment metadata",
+     "tags": [
+      "base",
+      "usdc",
+      "chain",
+      "eip155",
+      "x402"
+     ],
+     "method": "GET",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "5000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.005
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.005,
+     "quality": {
+      "paid_calls_30d": 50632,
+      "payers_30d": 133,
+      "last_paid_at": "2026-11-21T11:55:37.147Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": true,
+      "status": "payable, paid lately"
+     },
+     "updated": "2026-11-21T11:55:25.424Z"
+    },
+    {
+     "resource": "https://api.agents-trust.com/recommend",
+     "host": "api.agents-trust.com",
+     "service": "Agents Trust",
+     "description": "API recommendation and x402 discovery for your task. Required query: need. Which API should I call? Recommends which x402 API to use for any task, with evidence. Describe a task in plain words. Compare up to five paid APIs, URLs, prices, payment networks and invocation details. Includes paid deliver",
+     "tags": [
+      "recommendation",
+      "trust score x402",
+      "find paid api",
+      "compare paid APIs",
+      "recommend x402 service"
+     ],
+     "method": "GET",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "10000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.01
+      },
+      {
+       "network": "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp",
+       "chain": null,
+       "scheme": "exact",
+       "amount": "10000",
+       "asset": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+       "asset_name": null,
+       "usdc": null
+      },
+      {
+       "network": "algorand:wGHE2Pwdvd7S12BL5FaOP20EGYesN73k",
+       "chain": null,
+       "scheme": "exact",
+       "amount": "10000",
+       "asset": "31566704",
+       "asset_name": null,
+       "usdc": null
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.01,
+     "quality": {
+      "paid_calls_30d": 24913,
+      "payers_30d": 56,
+      "last_paid_at": "2026-11-21T12:19:02.62Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": true,
+      "status": "payable, paid lately"
+     },
+     "updated": "2026-11-21T12:22:56.674Z"
+    },
+    {
+     "resource": "https://www.api-xpay.com/x402/uuid",
+     "host": "www.api-xpay.com",
+     "service": "X Pay",
+     "description": "Generate a random UUID v4",
+     "tags": [
+      "uuid",
+      "id",
+      "generator",
+      "unique",
+      "identifier"
+     ],
+     "method": "GET",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "5000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.005
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.005,
+     "quality": {
+      "paid_calls_30d": 50666,
+      "payers_30d": 123,
+      "last_paid_at": "2026-11-21T11:55:37.007Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": true,
+      "status": "payable, paid lately"
+     },
+     "updated": "2026-11-21T11:55:26.991Z"
+    },
+    {
+     "resource": "https://www.api-xpay.com/x402/payment",
+     "host": "www.api-xpay.com",
+     "service": "X Pay",
+     "description": "Payment receipt with transaction details",
+     "tags": [
+      "payment",
+      "receipt",
+      "usdc",
+      "transaction",
+      "settlement"
+     ],
+     "method": "GET",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "5000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.005
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.005,
+     "quality": {
+      "paid_calls_30d": 50776,
+      "payers_30d": 121,
+      "last_paid_at": "2026-11-21T11:55:36.567Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": true,
+      "status": "payable, paid lately"
+     },
+     "updated": "2026-11-21T11:55:26.237Z"
+    },
+    {
+     "resource": "https://www.api-xpay.com/x402/random",
+     "host": "www.api-xpay.com",
+     "service": "X Pay",
+     "description": "Generate a random integer and hex bytes",
+     "tags": [
+      "random",
+      "bytes",
+      "entropy",
+      "hex",
+      "generator"
+     ],
+     "method": "GET",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "5000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.005
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.005,
+     "quality": {
+      "paid_calls_30d": 50629,
+      "payers_30d": 119,
+      "last_paid_at": "2026-11-21T11:55:37.043Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": true,
+      "status": "payable, paid lately"
+     },
+     "updated": "2026-11-21T11:55:26.108Z"
+    },
+    {
+     "resource": "https://www.api-xpay.com/x402/ip",
+     "host": "www.api-xpay.com",
+     "service": "X Pay",
+     "description": "Return the requester IP address",
+     "tags": [
+      "ip",
+      "client",
+      "geo",
+      "address",
+      "network"
+     ],
+     "method": "GET",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "5000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.005
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.005,
+     "quality": {
+      "paid_calls_30d": 50620,
+      "payers_30d": 119,
+      "last_paid_at": "2026-11-21T11:55:36.985Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": true,
+      "status": "payable, paid lately"
+     },
+     "updated": "2026-11-21T11:55:24.847Z"
+    },
+    {
+     "resource": "https://api.exa.ai/search",
+     "host": "api.exa.ai",
+     "service": "Exa",
+     "description": "Exa /search endpoint",
+     "tags": [
+      "search",
+      "ai",
+      "web",
+      "research"
+     ],
+     "method": "POST",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "7000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.007
+      },
+      {
+       "network": "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp",
+       "chain": null,
+       "scheme": "exact",
+       "amount": "7000",
+       "asset": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+       "asset_name": "USD Coin",
+       "usdc": 0.007
+      },
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "7000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "GatewayWalletBatched",
+       "usdc": null
+      },
+      {
+       "network": "eip155:480",
+       "chain": null,
+       "scheme": "exact",
+       "amount": "7000",
+       "asset": "0x79A02482A880bCE3F13e09Da970dC34db4CD24d1",
+       "asset_name": "GatewayWalletBatched",
+       "usdc": null
+      },
+      {
+       "network": "eip155:5042",
+       "chain": "Arc",
+       "scheme": "exact",
+       "amount": "7000",
+       "asset": "0x3600000000000000000000000000000000000000",
+       "asset_name": "GatewayWalletBatched",
+       "usdc": null
+      },
+      {
+       "network": "eip155:5042",
+       "chain": "Arc",
+       "scheme": "exact",
+       "amount": "7000",
+       "asset": "0x3600000000000000000000000000000000000000",
+       "asset_name": "USDC",
+       "usdc": 0.007
+      },
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "7000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.007
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.007,
+     "quality": {
+      "paid_calls_30d": 13255,
+      "payers_30d": 151,
+      "last_paid_at": "2026-11-21T11:54:13.841Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": true,
+      "status": "payable, paid lately"
+     },
+     "updated": "2026-11-21T11:54:14.036Z"
+    },
+    {
+     "resource": "https://www.api-xpay.com/x402/status",
+     "host": "www.api-xpay.com",
+     "service": "X Pay",
+     "description": "Service status and payment configuration",
+     "tags": [
+      "status",
+      "health",
+      "ops",
+      "availability",
+      "service"
+     ],
+     "method": "GET",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "5000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.005
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.005,
+     "quality": {
+      "paid_calls_30d": 50686,
+      "payers_30d": 116,
+      "last_paid_at": "2026-11-21T11:55:36.942Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": true,
+      "status": "payable, paid lately"
+     },
+     "updated": "2026-11-21T11:55:24.398Z"
+    },
+    {
+     "resource": "https://blockrun.ai/api/v1/chat/completions",
+     "host": "blockrun.ai",
+     "service": "BlockRun.AI",
+     "description": "AI chat completions API - pay per request with USDC on Base",
+     "tags": [
+      "ai",
+      "inference",
+      "llm",
+      "gateway"
+     ],
+     "method": "POST",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "2000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.002
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.002,
+     "quality": {
+      "paid_calls_30d": 75518,
+      "payers_30d": 298,
+      "last_paid_at": "2026-11-21T12:18:12.781Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": true,
+      "status": "payable, paid lately"
+     },
+     "updated": "2026-11-21T12:21:27.591Z"
+    },
+    {
+     "resource": "https://crypto.apitoll.cloud/v1/crypto/price",
+     "host": "crypto.apitoll.cloud",
+     "service": "ApiToll Crypto Prices",
+     "description": "Latest crypto token prices by ticker symbol, CoinGecko id, or chain:address (BTC, ETH, SOL, or base:0x…): current spot price, token symbol, decimals, and a confidence score, for up to 50 coins in one call. Pass ?at=<unix> for the historical price at a point in time. Sourced from DefiLlama across eve",
+     "tags": [
+      "crypto",
+      "prices",
+      "token-price",
+      "defi",
+      "market-data"
+     ],
+     "method": "GET",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "1000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.001
+      },
+      {
+       "network": "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp",
+       "chain": null,
+       "scheme": "exact",
+       "amount": "1000",
+       "asset": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+       "asset_name": null,
+       "usdc": null
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.001,
+     "quality": {
+      "paid_calls_30d": 292,
+      "payers_30d": 58,
+      "last_paid_at": "2026-11-21T03:23:16.435Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": true,
+      "status": "payable, paid lately"
+     },
+     "updated": "2026-11-21T03:23:16.875Z"
+    },
+    {
+     "resource": "https://glim.sh/api/v1/twitter/search",
+     "host": "glim.sh",
+     "service": "glim.sh",
+     "description": "Search tweets with advanced operators (recommended). Body param is `query` (not q), e.g. {\"query\":\"from:elonmusk AI min_faves:100\"}",
+     "tags": [
+      "twitter",
+      "reddit",
+      "web",
+      "github",
+      "search"
+     ],
+     "method": "POST",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp",
+       "chain": null,
+       "scheme": "exact",
+       "amount": "5000",
+       "asset": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+       "asset_name": null,
+       "usdc": null
+      },
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "5000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.005
+      },
+      {
+       "network": "eip155:143",
+       "chain": null,
+       "scheme": "exact",
+       "amount": "5000",
+       "asset_name": "USDC",
+       "usdc": 0.005
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.005,
+     "quality": {
+      "paid_calls_30d": 13073,
+      "payers_30d": 27,
+      "last_paid_at": "2026-11-21T12:18:22.131Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": true,
+      "status": "payable, paid lately"
+     },
+     "updated": "2026-11-21T12:22:36.403Z"
+    },
+    {
+     "resource": "https://x402.telnyx.com/v1/chat/completions/_t/deepseek-v4.1-flash",
+     "host": "x402.telnyx.com",
+     "service": "DeepSeek V4.1 Flash chat",
+     "description": "Chat completions via Telnyx Inference (deepseek-ai/DeepSeek-V4.1-Flash-1017). OpenAI-compatible. Up to $0.013389 USDC per call, quoted to your request (input + max_tokens at list rates, no markup).",
+     "tags": [
+      "ai",
+      "llm",
+      "chat-completions",
+      "openai-compatible",
+      "telnyx"
+     ],
+     "method": "POST",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "2000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.002
+      },
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "upto",
+       "amount": "110592",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.110592
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.002,
+     "quality": {
+      "paid_calls_30d": 238,
+      "payers_30d": 53,
+      "last_paid_at": "2026-11-21T00:07:33.318Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": true,
+      "status": "payable, paid lately"
+     },
+     "updated": "2026-11-21T00:07:33.517Z"
+    },
+    {
+     "resource": "https://api.onesource.io/api/chain/erc20-balance",
+     "host": "api.onesource.io",
+     "service": null,
+     "description": "ERC20 token balance for any Ethereum wallet - USDC, USDT, DAI, or any token - via balanceOf (eth_call) on OneSource live Ethereum RPC",
+     "tags": [],
+     "method": "GET",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "3000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.003
+      },
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "batch-settlement",
+       "amount": "3000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.003
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.003,
+     "quality": {
+      "paid_calls_30d": 726,
+      "payers_30d": 712,
+      "last_paid_at": "2026-11-20T21:02:42.779Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": true,
+      "status": "payable, paid lately"
+     },
+     "updated": "2026-11-20T21:02:43.031Z"
+    },
+    {
+     "resource": "https://skycast.clawca.sh/weather",
+     "host": "skycast.clawca.sh",
+     "service": "SkyCast",
+     "description": "Current weather for a city or lat/lon: temperature, humidity, wind, conditions.",
+     "tags": [
+      "weather",
+      "forecast"
+     ],
+     "method": "GET",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "1000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.001
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.001,
+     "quality": {
+      "paid_calls_30d": 326,
+      "payers_30d": 44,
+      "last_paid_at": "2026-11-21T00:06:45.195Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": true,
+      "status": "payable, paid lately"
+     },
+     "updated": "2026-11-21T00:06:45.71Z"
+    },
+    {
+     "resource": "https://www.blockchainiq.co/api/x402/v1/brief",
+     "host": "www.blockchainiq.co",
+     "service": "Crypto Market Brief for Agents",
+     "description": "Market brief in one parameter-free call: BTC, ETH, SOL and XRP prices with 24h, 7d and 30d moves and rank, scheduled macro and crypto events in the next 48 hours, and short risk flags. Use as the opening call of a trading, portfolio or research agent loop. Refreshed every minute. JSON, no API key. $",
+     "tags": [
+      "crypto",
+      "market-brief",
+      "event-risk",
+      "macro",
+      "trading"
+     ],
+     "method": "GET",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "10000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.01
+      },
+      {
+       "network": "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp",
+       "chain": null,
+       "scheme": "exact",
+       "amount": "10000",
+       "asset": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+       "asset_name": null,
+       "usdc": null
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.01,
+     "quality": {
+      "paid_calls_30d": 111,
+      "payers_30d": 53,
+      "last_paid_at": "2026-11-21T00:05:33.869Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": true,
+      "status": "payable, paid lately"
+     },
+     "updated": "2026-11-21T00:05:34.063Z"
+    },
+    {
+     "resource": "https://api.onesource.io/api/chain/block-number",
+     "host": "api.onesource.io",
+     "service": null,
+     "description": "Latest Ethereum block height - current chain tip via eth_blockNumber",
+     "tags": [],
+     "method": "GET",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "1000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.001
+      },
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "batch-settlement",
+       "amount": "1000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.001
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.001,
+     "quality": {
+      "paid_calls_30d": 722,
+      "payers_30d": 632,
+      "last_paid_at": "2026-11-20T21:00:38.987Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": true,
+      "status": "payable, paid lately"
+     },
+     "updated": "2026-11-20T21:00:39.207Z"
+    },
+    {
+     "resource": "https://api.clawfetch.ai/fetch",
+     "host": "api.clawfetch.ai",
+     "service": "ClawFetch",
+     "description": "Web scraping / URL fetch: retrieve any web page and return clean, LLM-ready markdown text. Strips boilerplate, ads, and navigation. Stealth HTTP client bypasses common bot blocks. Cheapest way to read a webpage.",
+     "tags": [
+      "web-scraping",
+      "markdown",
+      "url-fetch",
+      "web-content"
+     ],
+     "method": "POST",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "1000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.001
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.001,
+     "quality": {
+      "paid_calls_30d": 3131,
+      "payers_30d": 26,
+      "last_paid_at": "2026-11-21T01:33:58.922Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": true,
+      "status": "payable, paid lately"
+     },
+     "updated": "2026-11-21T01:33:59.39Z"
+    },
+    {
+     "resource": "https://agi.apify.com/protocols/x402/prepaid-tokens",
+     "host": "agi.apify.com",
+     "service": "Apify",
+     "description": "Apify is the largest and most trusted marketplace of tools for web scraping, crawling, data extraction, and automation. Use these tools, called Actors, to extract structured data from social media, e-commerce sites, search engines, maps, travel sites, or any other website. Turn the open web into a r",
+     "tags": [
+      "automation",
+      "web-data",
+      "crawling",
+      "context",
+      "scraping"
+     ],
+     "method": "GET",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "1000000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 1
+      },
+      {
+       "network": "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp",
+       "chain": null,
+       "scheme": "exact",
+       "amount": "1000000",
+       "asset": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+       "asset_name": null,
+       "usdc": null
+      },
+      {
+       "network": "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp",
+       "chain": null,
+       "scheme": "exact",
+       "amount": "1000000",
+       "asset": "Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB",
+       "asset_name": null,
+       "usdc": null
+      }
+     ],
+     "cheapest_usdc_on_layer": 1,
+     "quality": {
+      "paid_calls_30d": 229,
+      "payers_30d": 42,
+      "last_paid_at": "2026-11-21T11:34:39.463Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": true,
+      "status": "payable, paid lately"
+     },
+     "updated": "2026-11-21T11:34:39.575Z"
+    },
+    {
+     "resource": "https://api.bitrefill.com/x402/gift-cards/search",
+     "host": "api.bitrefill.com",
+     "service": "Bitrefill",
+     "description": "Search 10,000+ gift card & voucher brands across 180+ countries by name and country. Pay in USDC via x402, no account.",
+     "tags": [
+      "gift-cards",
+      "vouchers",
+      "search",
+      "usdc",
+      "base"
+     ],
+     "method": "GET",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "2000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.002
+      },
+      {
+       "network": "eip155:42161",
+       "chain": null,
+       "scheme": "exact",
+       "amount": "2000",
+       "asset": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
+       "asset_name": "USD Coin",
+       "usdc": 0.002
+      },
+      {
+       "network": "eip155:42161",
+       "chain": null,
+       "scheme": "exact",
+       "amount": "2000",
+       "asset": "0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9",
+       "asset_name": "USD₮0",
+       "usdc": null
+      },
+      {
+       "network": "eip155:137",
+       "chain": null,
+       "scheme": "exact",
+       "amount": "2000",
+       "asset": "0x3c499c542cef5e3811e1192ce70d8cc03d5c3359",
+       "asset_name": "USD Coin",
+       "usdc": 0.002
+      },
+      {
+       "network": "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp",
+       "chain": null,
+       "scheme": "exact",
+       "amount": "2000",
+       "asset": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+       "asset_name": null,
+       "usdc": null
+      },
+      {
+       "network": "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp",
+       "chain": null,
+       "scheme": "exact",
+       "amount": "2000",
+       "asset": "Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB",
+       "asset_name": null,
+       "usdc": null
+      },
+      {
+       "network": "lnbtc:000000000019d6689c085ae165831e93",
+       "chain": null,
+       "scheme": "exact",
+       "amount": "4000",
+       "asset": "BTC",
+       "asset_name": null,
+       "usdc": null
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.002,
+     "quality": {
+      "paid_calls_30d": 157,
+      "payers_30d": 45,
+      "last_paid_at": "2026-11-21T07:31:31.111Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": true,
+      "status": "payable, paid lately"
+     },
+     "updated": "2026-11-21T07:31:31.566Z"
+    },
+    {
+     "resource": "https://api.onesource.io/api/chain/live-balance",
+     "host": "api.onesource.io",
+     "service": null,
+     "description": "Live wallet balance - native ETH plus up to 20 caller-supplied ERC20 tokens in one bounded RPC batch",
+     "tags": [],
+     "method": "GET",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "3000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.003
+      },
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "batch-settlement",
+       "amount": "3000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.003
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.003,
+     "quality": {
+      "paid_calls_30d": 595,
+      "payers_30d": 590,
+      "last_paid_at": "2026-11-16T13:10:57.338Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": true,
+      "status": "payable, paid lately"
+     },
+     "updated": "2026-11-16T13:10:57.438Z"
+    },
+    {
+     "resource": "https://laso.finance/auth",
+     "host": "laso.finance",
+     "service": "Laso Finance",
+     "description": "Get a Firebase ID token for authenticating with the callable APIs",
+     "tags": [
+      "auth",
+      "sign-in",
+      "wallet"
+     ],
+     "method": "GET",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "1000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.001
+      },
+      {
+       "network": "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp",
+       "chain": null,
+       "scheme": "exact",
+       "amount": "1000",
+       "asset": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+       "asset_name": null,
+       "usdc": null
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.001,
+     "quality": {
+      "paid_calls_30d": 395,
+      "payers_30d": 36,
+      "last_paid_at": "2026-11-21T07:34:39.4Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": true,
+      "status": "payable, paid lately"
+     },
+     "updated": "2026-11-21T07:34:39.645Z"
+    },
+    {
+     "resource": "https://web.cyberwarex.com/fetch",
+     "host": "web.cyberwarex.com",
+     "service": "Agent Web-Access",
+     "description": "Web scraping API for AI agents: read any live web page as clean markdown, text or HTML. Renders JavaScript in our own headless browser, then strips navigation, ads and boilerplate. Use it when a plain HTTP GET returns empty or garbled HTML: single-page apps, dynamic feeds, or content that only appea",
+     "tags": [
+      "web-scraping",
+      "fetch-url",
+      "markdown",
+      "headless-browser",
+      "crawler"
+     ],
+     "method": "GET",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "1000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.001
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.001,
+     "quality": {
+      "paid_calls_30d": 457,
+      "payers_30d": 32,
+      "last_paid_at": "2026-11-21T09:23:03.511Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": true,
+      "status": "payable, paid lately"
+     },
+     "updated": "2026-11-21T09:23:04.024Z"
+    },
+    {
+     "resource": "https://api.onesource.io/api/chain/contract/:address",
+     "host": "api.onesource.io",
+     "service": null,
+     "description": "Best-effort contract introspection via batched RPC - bytecode presence, token metadata, and ERC20-like/ERC721/ERC1155 classification",
+     "tags": [],
+     "method": "GET",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "5000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.005
+      },
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "batch-settlement",
+       "amount": "5000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.005
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.005,
+     "quality": {
+      "paid_calls_30d": 518,
+      "payers_30d": 518,
+      "last_paid_at": "2026-11-13T04:00:34.857Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": false,
+      "status": "payable"
+     },
+     "updated": "2026-11-13T04:00:34.963Z"
+    },
+    {
+     "resource": "https://api.onesource.io/api/chain/erc20-transfers",
+     "host": "api.onesource.io",
+     "service": null,
+     "description": "ERC20 Transfer logs via eth_getLogs - raw Transfer events for a token or wallet",
+     "tags": [],
+     "method": "GET",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "5000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.005
+      },
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "batch-settlement",
+       "amount": "5000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.005
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.005,
+     "quality": {
+      "paid_calls_30d": 516,
+      "payers_30d": 515,
+      "last_paid_at": "2026-11-16T08:51:10.326Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": true,
+      "status": "payable, paid lately"
+     },
+     "updated": "2026-11-16T08:51:10.546Z"
+    },
+    {
+     "resource": "https://stableenrich.dev/api/fullenrich/people-search",
+     "host": "stableenrich.dev",
+     "service": "StableEnrich",
+     "description": "FullEnrich People Search — filter by company domain/name/LinkedIn URL, seniority, title, location, skills, and 20+ FullEnrich filters. Default lean roster: companies map + company_id refs; include_employment_history or verbose for full history. $0.15 when results found; free when no matches.",
+     "tags": [
+      "Fullenrich"
+     ],
+     "method": "POST",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "150000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.15
+      },
+      {
+       "network": "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp",
+       "chain": null,
+       "scheme": "exact",
+       "amount": "150000",
+       "asset": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+       "asset_name": null,
+       "usdc": null
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.15,
+     "quality": {
+      "paid_calls_30d": 377,
+      "payers_30d": 32,
+      "last_paid_at": "2026-11-21T03:41:48.565Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": true,
+      "status": "payable, paid lately"
+     },
+     "updated": "2026-11-21T03:41:15.668Z"
+    },
+    {
+     "resource": "https://cheaptokens.ai/api/buy",
+     "host": "cheaptokens.ai",
+     "service": "CheapTokens AI Inference",
+     "description": "OpenAI-compatible LLM inference and chat completions via discounted Venice API credits. Pay USDC to receive a live Venice.ai API key for /api/v1 models, chat, images, audio, video, and embeddings. Same-Day credits are 30–90% below Venice direct and expire at 23:59 UTC; Prepaid API Keys support recur",
+     "tags": [
+      "inference",
+      "llm",
+      "openai",
+      "chat-completions",
+      "ai"
+     ],
+     "method": "POST",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "1000000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 1
+      }
+     ],
+     "cheapest_usdc_on_layer": 1,
+     "quality": {
+      "paid_calls_30d": 635,
+      "payers_30d": 29,
+      "last_paid_at": "2026-11-21T10:28:57.559Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": true,
+      "status": "payable, paid lately"
+     },
+     "updated": "2026-11-21T10:28:57.851Z"
+    },
+    {
+     "resource": "https://www.api-xpay.com/x402/rewrite",
+     "host": "www.api-xpay.com",
+     "service": "X Pay",
+     "description": "AI rewrite of input text",
+     "tags": [
+      "ai",
+      "rewrite",
+      "paraphrase",
+      "llm",
+      "nlp"
+     ],
+     "method": "POST",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "10000000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 10
+      }
+     ],
+     "cheapest_usdc_on_layer": 10,
+     "quality": {
+      "paid_calls_30d": 258,
+      "payers_30d": 89,
+      "last_paid_at": "2026-11-21T11:52:17.342Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": true,
+      "status": "payable, paid lately"
+     },
+     "updated": "2026-11-21T11:52:17.728Z"
+    },
+    {
+     "resource": "https://stableupload.dev/api/upload",
+     "host": "stableupload.dev",
+     "service": "StableUpload",
+     "description": "Buy an upload slot. Agent uploads file via returned URL.",
+     "tags": [
+      "Upload"
+     ],
+     "method": "POST",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "5000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.005
+      },
+      {
+       "network": "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp",
+       "chain": null,
+       "scheme": "exact",
+       "amount": "5000",
+       "asset": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+       "asset_name": null,
+       "usdc": null
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.005,
+     "quality": {
+      "paid_calls_30d": 664,
+      "payers_30d": 28,
+      "last_paid_at": "2026-11-21T00:13:16.165Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": true,
+      "status": "payable, paid lately"
+     },
+     "updated": "2026-11-21T00:13:16.484Z"
+    },
+    {
+     "resource": "https://api.onesource.io/api/chain/total-supply",
+     "host": "api.onesource.io",
+     "service": null,
+     "description": "Total supply of an ERC20 or ERC721 token contract via totalSupply (eth_call)",
+     "tags": [],
+     "method": "GET",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "3000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.003
+      },
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "batch-settlement",
+       "amount": "3000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.003
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.003,
+     "quality": {
+      "paid_calls_30d": 492,
+      "payers_30d": 491,
+      "last_paid_at": "2026-11-13T04:00:43.569Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": false,
+      "status": "payable"
+     },
+     "updated": "2026-11-13T04:00:43.687Z"
+    },
+    {
+     "resource": "https://x402tap.com/api/weather",
+     "host": "x402tap.com",
+     "service": "x402 Weather API",
+     "description": "Live current weather conditions for any city, sourced from Open-Meteo",
+     "tags": [
+      "weather",
+      "forecast",
+      "api",
+      "data",
+      "live"
+     ],
+     "method": "GET",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "10000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.01
+      },
+      {
+       "network": "eip155:137",
+       "chain": null,
+       "scheme": "exact",
+       "amount": "10000",
+       "asset": "0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359",
+       "asset_name": "USD Coin",
+       "usdc": 0.01
+      },
+      {
+       "network": "eip155:42161",
+       "chain": null,
+       "scheme": "exact",
+       "amount": "10000",
+       "asset": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
+       "asset_name": "USD Coin",
+       "usdc": 0.01
+      },
+      {
+       "network": "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp",
+       "chain": null,
+       "scheme": "exact",
+       "amount": "10000",
+       "asset": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+       "asset_name": null,
+       "usdc": null
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.01,
+     "quality": {
+      "paid_calls_30d": 56,
+      "payers_30d": 43,
+      "last_paid_at": "2026-11-21T00:05:35.377Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": true,
+      "status": "payable, paid lately"
+     },
+     "updated": "2026-11-21T00:05:35.584Z"
+    },
+    {
+     "resource": "https://pro-api.coingecko.com/api/v3/x402/onchain/search/pools",
+     "host": "pro-api.coingecko.com",
+     "service": "CoinGecko",
+     "description": "Search onchain DEX pools and token, by contract address, name, or token symbol.",
+     "tags": [
+      "crypto",
+      "prices",
+      "market-data",
+      "defi"
+     ],
+     "method": "GET",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "5000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.005
+      },
+      {
+       "network": "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp",
+       "chain": null,
+       "scheme": "exact",
+       "amount": "5000",
+       "asset": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+       "asset_name": null,
+       "usdc": null
+      },
+      {
+       "network": "eip155:137",
+       "chain": null,
+       "scheme": "exact",
+       "amount": "5000",
+       "asset": "0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359",
+       "asset_name": "USD Coin",
+       "usdc": 0.005
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.005,
+     "quality": {
+      "paid_calls_30d": 115,
+      "payers_30d": 37,
+      "last_paid_at": "2026-11-21T00:11:50.758Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": true,
+      "status": "payable, paid lately"
+     },
+     "updated": "2026-11-21T00:11:50.932Z"
+    },
+    {
+     "resource": "https://api.onesource.io/api/chain/ens/:input",
+     "host": "api.onesource.io",
+     "service": null,
+     "description": "ENS resolve - turn a .eth name into an address, or an address into its primary .eth name, via eth_call on OneSource live Ethereum RPC",
+     "tags": [],
+     "method": "GET",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "5000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.005
+      },
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "batch-settlement",
+       "amount": "5000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.005
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.005,
+     "quality": {
+      "paid_calls_30d": 481,
+      "payers_30d": 480,
+      "last_paid_at": "2026-11-16T01:09:21.937Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": true,
+      "status": "payable, paid lately"
+     },
+     "updated": "2026-11-16T01:09:22.209Z"
+    },
+    {
+     "resource": "https://api.gondola-ai.com/v1/chat/completions",
+     "host": "api.gondola-ai.com",
+     "service": "Gondola",
+     "description": "OpenAI-compatible chat completions across the Venice AI model catalog. Pay per request in USDC on Base via x402, with no account and no API key. Overpayment is never lost: it banks as reusable wallet credit for your next call. Each request is priced by its model and size, so a listed amount is one r",
+     "tags": [
+      "llm",
+      "inference",
+      "openai-compatible",
+      "anthropic",
+      "usdc"
+     ],
+     "method": "POST",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "10000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.01
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.01,
+     "quality": {
+      "paid_calls_30d": 2167,
+      "payers_30d": 21,
+      "last_paid_at": "2026-11-21T00:21:47.787Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": true,
+      "status": "payable, paid lately"
+     },
+     "updated": "2026-11-21T00:21:48.062Z"
+    },
+    {
+     "resource": "https://api.onesource.io/api/chain/nonce/:address",
+     "host": "api.onesource.io",
+     "service": null,
+     "description": "Next transaction nonce for any Ethereum wallet via eth_getTransactionCount - how many txs it has sent",
+     "tags": [],
+     "method": "GET",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "3000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.003
+      },
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "batch-settlement",
+       "amount": "3000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.003
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.003,
+     "quality": {
+      "paid_calls_30d": 460,
+      "payers_30d": 460,
+      "last_paid_at": "2026-11-13T04:00:53.634Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": false,
+      "status": "payable"
+     },
+     "updated": "2026-11-13T04:00:53.74Z"
+    },
+    {
+     "resource": "https://x402.clashofcoins.com/x402/cheap-health",
+     "host": "x402.clashofcoins.com",
+     "service": "Clash of Coins",
+     "description": "Low-cost gateway health probe for real x402 settlement checks",
+     "tags": [
+      "Gaming"
+     ],
+     "method": "GET",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "1000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.001
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.001,
+     "quality": {
+      "paid_calls_30d": 421,
+      "payers_30d": 27,
+      "last_paid_at": "2026-11-21T10:30:56.954Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": true,
+      "status": "payable, paid lately"
+     },
+     "updated": "2026-11-21T10:30:57.138Z"
+    },
+    {
+     "resource": "https://win.oneshotagent.com/v1/tools/search",
+     "host": "win.oneshotagent.com",
+     "service": "OneShot",
+     "description": "Web search returning URLs, titles, and descriptions",
+     "tags": [
+      "Web search",
+      "search the web",
+      "look up online",
+      "find links",
+      "search results"
+     ],
+     "method": "POST",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "1000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.001
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.001,
+     "quality": {
+      "paid_calls_30d": 3735,
+      "payers_30d": 71,
+      "last_paid_at": "2026-11-21T03:25:43.473Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": true,
+      "status": "payable, paid lately"
+     },
+     "updated": "2026-11-21T03:25:43.67Z"
+    },
+    {
+     "resource": "https://api.onesource.io/deepstate/v1/book/:book",
+     "host": "api.onesource.io",
+     "service": null,
+     "description": "Deepstate, the on-chain order-book exchange on Robinhood Chain. Order-book snapshot for a market, bids descending and asks ascending, with live resting size per level.",
+     "tags": [],
+     "method": "GET",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "5000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.005
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.005,
+     "quality": {
+      "paid_calls_30d": 686,
+      "payers_30d": 403,
+      "last_paid_at": "2026-11-13T04:05:14.523Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": false,
+      "status": "payable"
+     },
+     "updated": "2026-11-13T04:04:55.975Z"
+    },
+    {
+     "resource": "https://api.onesource.io/api/chain/block/:number",
+     "host": "api.onesource.io",
+     "service": null,
+     "description": "Fetch an Ethereum block header and transaction hashes by number, tag, or hex via eth_getBlockByNumber",
+     "tags": [],
+     "method": "GET",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "3000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.003
+      },
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "batch-settlement",
+       "amount": "3000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.003
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.003,
+     "quality": {
+      "paid_calls_30d": 432,
+      "payers_30d": 432,
+      "last_paid_at": "2026-11-13T03:56:56.407Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": false,
+      "status": "payable"
+     },
+     "updated": "2026-11-13T03:56:56.507Z"
+    },
+    {
+     "resource": "https://api.onesource.io/deepstate/v1/candles/:book",
+     "host": "api.onesource.io",
+     "service": null,
+     "description": "Deepstate, the on-chain order-book exchange on Robinhood Chain. OHLCV candles for a market.",
+     "tags": [],
+     "method": "GET",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "5000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.005
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.005,
+     "quality": {
+      "paid_calls_30d": 637,
+      "payers_30d": 395,
+      "last_paid_at": "2026-11-13T04:05:00.241Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": false,
+      "status": "payable"
+     },
+     "updated": "2026-11-13T04:05:00.354Z"
+    },
+    {
+     "resource": "https://edgar.apitoll.cloud/v1/edgar/filings",
+     "host": "edgar.apitoll.cloud",
+     "service": "ApiToll SEC Filings",
+     "description": "Latest SEC EDGAR filings for any US-listed company by stock ticker or CIK: 10-K annual reports, 10-Q quarterly reports, and 8-K material events. Resolves ticker to CIK via SEC's official index and returns the parsed filing (company, form type, dated items). Sourced live from data.sec.gov.",
+     "tags": [
+      "sec",
+      "edgar",
+      "filings",
+      "10-K",
+      "10-Q"
+     ],
+     "method": "GET",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "3000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.003
+      },
+      {
+       "network": "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp",
+       "chain": null,
+       "scheme": "exact",
+       "amount": "3000",
+       "asset": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+       "asset_name": null,
+       "usdc": null
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.003,
+     "quality": {
+      "paid_calls_30d": 100,
+      "payers_30d": 33,
+      "last_paid_at": "2026-11-21T00:09:28.935Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": true,
+      "status": "payable, paid lately"
+     },
+     "updated": "2026-11-21T00:09:29.442Z"
+    },
+    {
+     "resource": "https://vibesprings.net/api/price/btc-usd",
+     "host": "vibesprings.net",
+     "service": "Vibe Springs",
+     "description": "Real-time BTC/USD price feed oracle. Retrieves live spot rate, 24h high/low, and volume directly from Coinbase Exchange.",
+     "tags": [
+      "price",
+      "oracle",
+      "crypto",
+      "market-data",
+      "btc-usd"
+     ],
+     "method": "GET",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "2000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.002
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.002,
+     "quality": {
+      "paid_calls_30d": 131,
+      "payers_30d": 31,
+      "last_paid_at": "2026-11-21T00:13:16.196Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": true,
+      "status": "payable, paid lately"
+     },
+     "updated": "2026-11-21T00:13:16.521Z"
+    },
+    {
+     "resource": "https://www.api-xpay.com/x402/sentiment",
+     "host": "www.api-xpay.com",
+     "service": "X Pay",
+     "description": "AI sentiment analysis of text",
+     "tags": [
+      "ai",
+      "sentiment",
+      "nlp",
+      "classify",
+      "llm"
+     ],
+     "method": "POST",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "10000000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 10
+      }
+     ],
+     "cheapest_usdc_on_layer": 10,
+     "quality": {
+      "paid_calls_30d": 209,
+      "payers_30d": 75,
+      "last_paid_at": "2026-11-21T11:18:26.741Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": true,
+      "status": "payable, paid lately"
+     },
+     "updated": "2026-11-21T11:18:27.132Z"
+    },
+    {
+     "resource": "https://api.onesource.io/deepstate/v1/stats/:book",
+     "host": "api.onesource.io",
+     "service": null,
+     "description": "Deepstate, the on-chain order-book exchange on Robinhood Chain. Rolling 24h / 7d / 30d volume and price change for a market.",
+     "tags": [],
+     "method": "GET",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "5000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.005
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.005,
+     "quality": {
+      "paid_calls_30d": 628,
+      "payers_30d": 377,
+      "last_paid_at": "2026-11-13T04:02:22.15Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": false,
+      "status": "payable"
+     },
+     "updated": "2026-11-13T04:01:51.335Z"
+    },
+    {
+     "resource": "https://api.402rates.com/v1/ping",
+     "host": "api.402rates.com",
+     "service": "402rates.com",
+     "description": "Payment integration check for 0.001 USDC; no external data lookup. Returns time, rail, network mode and free/paid capabilities. HTTP payment options can include Base, Polygon, Arbitrum and XDC; the challenge lists currently available networks for each transport. The receipt identifies the paid netwo",
+     "tags": [
+      "x402",
+      "integration",
+      "smoke-test",
+      "payment-rail",
+      "usdc"
+     ],
+     "method": "GET",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "1000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.001
+      },
+      {
+       "network": "eip155:137",
+       "chain": null,
+       "scheme": "exact",
+       "amount": "1000",
+       "asset": "0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359",
+       "asset_name": "USD Coin",
+       "usdc": 0.001
+      },
+      {
+       "network": "eip155:42161",
+       "chain": null,
+       "scheme": "exact",
+       "amount": "1000",
+       "asset": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
+       "asset_name": "USD Coin",
+       "usdc": 0.001
+      },
+      {
+       "network": "eip155:50",
+       "chain": null,
+       "scheme": "exact",
+       "amount": "1000",
+       "asset": "0xfA2958CB79b0491CC627c1557F441eF849Ca8eb1",
+       "asset_name": "USDC",
+       "usdc": 0.001
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.001,
+     "quality": {
+      "paid_calls_30d": 62,
+      "payers_30d": 34,
+      "last_paid_at": "2026-11-21T00:08:49.471Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": true,
+      "status": "payable, paid lately"
+     },
+     "updated": "2026-11-21T00:08:49.916Z"
+    },
+    {
+     "resource": "https://twitter.use.x402atlas.com/search",
+     "host": "twitter.use.x402atlas.com",
+     "service": "Twitter/X API",
+     "description": "Search Twitter/X with structured filters or raw advanced-search syntax. Returns up to 20 normalized tweets with full text, author details, engagement metrics and a pagination cursor.",
+     "tags": [
+      "twitter",
+      "x",
+      "tweet-search",
+      "twitter-scraper",
+      "social-media"
+     ],
+     "method": "GET",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "5000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.005
+      },
+      {
+       "network": "eip155:137",
+       "chain": null,
+       "scheme": "exact",
+       "amount": "5000",
+       "asset": "0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359",
+       "asset_name": "USD Coin",
+       "usdc": 0.005
+      },
+      {
+       "network": "eip155:42161",
+       "chain": null,
+       "scheme": "exact",
+       "amount": "5000",
+       "asset": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
+       "asset_name": "USD Coin",
+       "usdc": 0.005
+      },
+      {
+       "network": "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp",
+       "chain": null,
+       "scheme": "exact",
+       "amount": "5000",
+       "asset": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+       "asset_name": null,
+       "usdc": null
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.005,
+     "quality": {
+      "paid_calls_30d": 618,
+      "payers_30d": 22,
+      "last_paid_at": "2026-11-21T00:17:23.837Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": true,
+      "status": "payable, paid lately"
+     },
+     "updated": "2026-11-21T00:17:23.976Z"
+    },
+    {
+     "resource": "https://api.onesource.io/api/chain/tx/:hash",
+     "host": "api.onesource.io",
+     "service": null,
+     "description": "Full Ethereum transaction details by hash via eth_getTransactionByHash - from, to, value, calldata, block",
+     "tags": [],
+     "method": "GET",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "8000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.008
+      },
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "batch-settlement",
+       "amount": "8000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.008
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.008,
+     "quality": {
+      "paid_calls_30d": 398,
+      "payers_30d": 398,
+      "last_paid_at": "2026-11-13T03:57:51.097Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": false,
+      "status": "payable"
+     },
+     "updated": "2026-11-13T03:57:51.204Z"
+    },
+    {
+     "resource": "https://api.hyperextend.xyz/v1/candles/BTC/1m/latest",
+     "host": "api.hyperextend.xyz",
+     "service": "hyperextend",
+     "description": "The most-recent N OHLCV candles (≤5000), in Hyperliquid's candleSnapshot shape. Same per-row pricing as the windowed read ($0.00001 base for main/spot, $0.000025 premium for HIP-3/HIP-4); candles lag ~2 days.",
+     "tags": [
+      "hyperliquid",
+      "market-data",
+      "candles",
+      "open-interest",
+      "hip-3"
+     ],
+     "method": "GET",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "2000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.002
+      },
+      {
+       "network": "hyperliquid:mainnet",
+       "chain": null,
+       "scheme": "exact",
+       "amount": "0.002",
+       "asset": "USDC:0x6d1e7cde53ba9467b783cb7c530ce054",
+       "asset_name": null,
+       "usdc": null
+      },
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "batch-settlement",
+       "amount": "2000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.002
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.002,
+     "quality": {
+      "paid_calls_30d": 58,
+      "payers_30d": 34,
+      "last_paid_at": "2026-11-21T00:11:45.161Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": true,
+      "status": "payable, paid lately"
+     },
+     "updated": "2026-10-28T03:43:28.252Z"
+    },
+    {
+     "resource": "https://api.onesource.io/api/chain/network-info",
+     "host": "api.onesource.io",
+     "service": null,
+     "description": "EVM network info - chain ID, block height, gas price, chain head age, and chain characteristics in one batched RPC call (eth_chainId + eth_blockNumber + eth_gasPrice + latest block header)",
+     "tags": [],
+     "method": "GET",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "1000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.001
+      },
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "batch-settlement",
+       "amount": "1000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.001
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.001,
+     "quality": {
+      "paid_calls_30d": 415,
+      "payers_30d": 393,
+      "last_paid_at": "2026-11-20T16:04:09.494Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": true,
+      "status": "payable, paid lately"
+     },
+     "updated": "2026-11-20T16:04:09.643Z"
+    },
+    {
+     "resource": "https://minifetch.com/api/v1/x402/preflight/url-check",
+     "host": "minifetch.com",
+     "service": "Minifetch Technical SEO API",
+     "description": "Cheap robots.txt preflight check before you call the Minifetch /extract and /run/seo-page-audit endpoints: returns whether Minifetch may fetch a target URL (allow/deny) plus its crawl-delay. If blocked and the site is not yours try our external proxy routes. If blocked and the site is yours or to se",
+     "tags": [
+      "seo",
+      "robots-txt",
+      "preflight",
+      "crawlability",
+      "indexability"
+     ],
+     "method": "GET",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "1000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.001
+      },
+      {
+       "network": "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp",
+       "chain": null,
+       "scheme": "exact",
+       "amount": "1000",
+       "asset": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+       "asset_name": null,
+       "usdc": null
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.001,
+     "quality": {
+      "paid_calls_30d": 113,
+      "payers_30d": 29,
+      "last_paid_at": "2026-11-21T00:14:47.251Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": true,
+      "status": "payable, paid lately"
+     },
+     "updated": "2026-11-21T00:14:47.676Z"
+    },
+    {
+     "resource": "https://websearch.use.x402atlas.com/search",
+     "host": "websearch.use.x402atlas.com",
+     "service": "Web Search, News & Page Reader",
+     "description": "Real-time web search for AI agents — search the web and get ranked SERP-style results as clean JSON: title, URL, snippet, relevance score, optional LLM-generated answer. Find up-to-date information online — latest news, current events, finance. Date, domain and exact-phrase filters.",
+     "tags": [
+      "web-search",
+      "search",
+      "serp",
+      "web",
+      "internet-search"
+     ],
+     "method": "GET",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "10000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.01
+      },
+      {
+       "network": "eip155:137",
+       "chain": null,
+       "scheme": "exact",
+       "amount": "10000",
+       "asset": "0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359",
+       "asset_name": "USD Coin",
+       "usdc": 0.01
+      },
+      {
+       "network": "eip155:42161",
+       "chain": null,
+       "scheme": "exact",
+       "amount": "10000",
+       "asset": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
+       "asset_name": "USD Coin",
+       "usdc": 0.01
+      },
+      {
+       "network": "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp",
+       "chain": null,
+       "scheme": "exact",
+       "amount": "10000",
+       "asset": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+       "asset_name": null,
+       "usdc": null
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.01,
+     "quality": {
+      "paid_calls_30d": 71,
+      "payers_30d": 30,
+      "last_paid_at": "2026-11-21T03:31:54.004Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": true,
+      "status": "payable, paid lately"
+     },
+     "updated": "2026-11-21T03:31:54.134Z"
+    },
+    {
+     "resource": "https://api.gondola-ai.com/v1/images/generations",
+     "host": "api.gondola-ai.com",
+     "service": "Gondola",
+     "description": "OpenAI-compatible image generation across the Venice AI model catalog. Pay per request in USDC on Base via x402, with no account and no API key. Overpayment is never lost: it banks as reusable wallet credit for your next call. Each request is priced by its model and size, so a listed amount is one r",
+     "tags": [
+      "llm",
+      "inference",
+      "openai-compatible",
+      "anthropic",
+      "usdc"
+     ],
+     "method": "POST",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "20242",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.020242
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.020242,
+     "quality": {
+      "paid_calls_30d": 181,
+      "payers_30d": 25,
+      "last_paid_at": "2026-11-21T00:18:43.642Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": true,
+      "status": "payable, paid lately"
+     },
+     "updated": "2026-11-21T00:18:43.9Z"
+    },
+    {
+     "resource": "https://api.onesource.io/deepstate/v1/markets",
+     "host": "api.onesource.io",
+     "service": null,
+     "description": "Deepstate, the on-chain order-book exchange on Robinhood Chain. Lists the markets this service serves with their token layout (base, quote, token0/token1, decimals).",
+     "tags": [],
+     "method": "GET",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "5000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.005
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.005,
+     "quality": {
+      "paid_calls_30d": 365,
+      "payers_30d": 365,
+      "last_paid_at": "2026-11-13T04:01:58.537Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": false,
+      "status": "payable"
+     },
+     "updated": "2026-11-13T04:01:58.646Z"
+    },
+    {
+     "resource": "https://api.onesource.io/api/chain/events",
+     "host": "api.onesource.io",
+     "service": null,
+     "description": "Query Ethereum contract event logs via eth_getLogs - filter by contract, topic, and block range",
+     "tags": [],
+     "method": "GET",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "5000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.005
+      },
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "batch-settlement",
+       "amount": "5000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.005
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.005,
+     "quality": {
+      "paid_calls_30d": 364,
+      "payers_30d": 364,
+      "last_paid_at": "2026-11-13T06:52:30.2Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": false,
+      "status": "payable"
+     },
+     "updated": "2026-11-13T06:52:30.29Z"
+    },
+    {
+     "resource": "https://api.onesource.io/deepstate/v1/trades/:book",
+     "host": "api.onesource.io",
+     "service": null,
+     "description": "Deepstate, the on-chain order-book exchange on Robinhood Chain. Trade tape for a market, newest first.",
+     "tags": [],
+     "method": "GET",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "5000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.005
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.005,
+     "quality": {
+      "paid_calls_30d": 363,
+      "payers_30d": 363,
+      "last_paid_at": "2026-11-13T04:02:04.303Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": false,
+      "status": "payable"
+     },
+     "updated": "2026-11-13T04:02:04.401Z"
+    },
+    {
+     "resource": "https://api.bitrefill.com/x402/checkout/info",
+     "host": "api.bitrefill.com",
+     "service": "Bitrefill",
+     "description": "Discover the Bitrefill x402 storefront: supported networks, the full route flow, and wallet persistence rules.",
+     "tags": [
+      "checkout",
+      "storefront",
+      "discovery",
+      "usdc",
+      "base"
+     ],
+     "method": "GET",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "1000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.001
+      },
+      {
+       "network": "eip155:42161",
+       "chain": null,
+       "scheme": "exact",
+       "amount": "1000",
+       "asset": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
+       "asset_name": "USD Coin",
+       "usdc": 0.001
+      },
+      {
+       "network": "eip155:42161",
+       "chain": null,
+       "scheme": "exact",
+       "amount": "1000",
+       "asset": "0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9",
+       "asset_name": "USD₮0",
+       "usdc": null
+      },
+      {
+       "network": "eip155:137",
+       "chain": null,
+       "scheme": "exact",
+       "amount": "1000",
+       "asset": "0x3c499c542cef5e3811e1192ce70d8cc03d5c3359",
+       "asset_name": "USD Coin",
+       "usdc": 0.001
+      },
+      {
+       "network": "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp",
+       "chain": null,
+       "scheme": "exact",
+       "amount": "1000",
+       "asset": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+       "asset_name": null,
+       "usdc": null
+      },
+      {
+       "network": "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp",
+       "chain": null,
+       "scheme": "exact",
+       "amount": "1000",
+       "asset": "Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB",
+       "asset_name": null,
+       "usdc": null
+      },
+      {
+       "network": "lnbtc:000000000019d6689c085ae165831e93",
+       "chain": null,
+       "scheme": "exact",
+       "amount": "2000",
+       "asset": "BTC",
+       "asset_name": null,
+       "usdc": null
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.001,
+     "quality": {
+      "paid_calls_30d": 141,
+      "payers_30d": 26,
+      "last_paid_at": "2026-11-21T11:30:52.548Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": true,
+      "status": "payable, paid lately"
+     },
+     "updated": "2026-11-21T11:30:52.982Z"
+    },
+    {
+     "resource": "https://api.exa.ai/contents",
+     "host": "api.exa.ai",
+     "service": "Exa",
+     "description": "Exa /contents endpoint",
+     "tags": [
+      "search",
+      "ai",
+      "web",
+      "research"
+     ],
+     "method": "POST",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "1000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.001
+      },
+      {
+       "network": "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp",
+       "chain": null,
+       "scheme": "exact",
+       "amount": "1000",
+       "asset": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+       "asset_name": "USD Coin",
+       "usdc": 0.001
+      },
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "1000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "GatewayWalletBatched",
+       "usdc": null
+      },
+      {
+       "network": "eip155:480",
+       "chain": null,
+       "scheme": "exact",
+       "amount": "1000",
+       "asset": "0x79A02482A880bCE3F13e09Da970dC34db4CD24d1",
+       "asset_name": "GatewayWalletBatched",
+       "usdc": null
+      },
+      {
+       "network": "eip155:5042",
+       "chain": "Arc",
+       "scheme": "exact",
+       "amount": "1000",
+       "asset": "0x3600000000000000000000000000000000000000",
+       "asset_name": "GatewayWalletBatched",
+       "usdc": null
+      },
+      {
+       "network": "eip155:5042",
+       "chain": "Arc",
+       "scheme": "exact",
+       "amount": "1000",
+       "asset": "0x3600000000000000000000000000000000000000",
+       "asset_name": "USDC",
+       "usdc": 0.001
+      },
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "1000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.001
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.001,
+     "quality": {
+      "paid_calls_30d": 1432,
+      "payers_30d": 45,
+      "last_paid_at": "2026-11-21T11:54:42.648Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": true,
+      "status": "payable, paid lately"
+     },
+     "updated": "2026-11-21T11:54:42.985Z"
+    },
+    {
+     "resource": "https://theartillerist.com/api/v1/x402-trial",
+     "host": "theartillerist.com",
+     "service": "Artillerist Wallet Test",
+     "description": "Verify an agent wallet can complete an x402 v2 Base-USDC payment before purchasing company intelligence, art research, or commission pricing.",
+     "tags": [
+      "x402 integration",
+      "agent wallets",
+      "Base USDC",
+      "payment readiness"
+     ],
+     "method": "GET",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "1000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.001
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.001,
+     "quality": {
+      "paid_calls_30d": 64,
+      "payers_30d": 29,
+      "last_paid_at": "2026-11-21T08:30:00.397Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": true,
+      "status": "payable, paid lately"
+     },
+     "updated": "2026-11-21T08:30:00.853Z"
+    },
+    {
+     "resource": "https://wiki.use.x402atlas.com/summary",
+     "host": "wiki.use.x402atlas.com",
+     "service": "Wikipedia Article Summary",
+     "description": "Wikipedia article summary — plain-text and HTML extract, short description, thumbnail and Wikidata id for any title, in a clean normalized envelope with CC-BY-SA attribution.",
+     "tags": [
+      "wikipedia",
+      "summary",
+      "encyclopedia",
+      "knowledge",
+      "extract"
+     ],
+     "method": "GET",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "5000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.005
+      },
+      {
+       "network": "eip155:137",
+       "chain": null,
+       "scheme": "exact",
+       "amount": "5000",
+       "asset": "0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359",
+       "asset_name": "USD Coin",
+       "usdc": 0.005
+      },
+      {
+       "network": "eip155:42161",
+       "chain": null,
+       "scheme": "exact",
+       "amount": "5000",
+       "asset": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
+       "asset_name": "USD Coin",
+       "usdc": 0.005
+      },
+      {
+       "network": "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp",
+       "chain": null,
+       "scheme": "exact",
+       "amount": "5000",
+       "asset": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+       "asset_name": null,
+       "usdc": null
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.005,
+     "quality": {
+      "paid_calls_30d": 100,
+      "payers_30d": 25,
+      "last_paid_at": "2026-11-21T00:18:18.456Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": true,
+      "status": "payable, paid lately"
+     },
+     "updated": "2026-11-21T00:18:18.58Z"
+    },
+    {
+     "resource": "https://agent.pocket.network/v1/agentsearch-web-search-v1",
+     "host": "agent.pocket.network",
+     "service": "Pocket Network",
+     "description": "Web search built for agents, served over Pocket Network: POST /v1/search with a query and an optional max_results, and get the results back as one JSON object. Results vary run to run, as web search does. GET /v1/version, /v1/health and /v1/capabilities describe the service. Pay per request in USDC;",
+     "tags": [
+      "web",
+      "agentsearch-web-search-v1",
+      "rest"
+     ],
+     "method": "POST",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "5000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.005
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.005,
+     "quality": {
+      "paid_calls_30d": 7221,
+      "payers_30d": 51,
+      "last_paid_at": "2026-11-21T12:12:12.441Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": true,
+      "status": "payable, paid lately"
+     },
+     "updated": "2026-11-21T12:12:12.973Z"
+    },
+    {
+     "resource": "https://win.oneshotagent.com/v1/tools/web-read",
+     "host": "win.oneshotagent.com",
+     "service": "OneShot",
+     "description": "Read a web page and extract content as markdown with screenshot",
+     "tags": [
+      "Web search",
+      "read a page",
+      "fetch URL",
+      "extract article text",
+      "open link"
+     ],
+     "method": "POST",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "2000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.002
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.002,
+     "quality": {
+      "paid_calls_30d": 23111,
+      "payers_30d": 34,
+      "last_paid_at": "2026-11-21T03:02:03.376Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": true,
+      "status": "payable, paid lately"
+     },
+     "updated": "2026-11-21T03:01:36.479Z"
+    },
+    {
+     "resource": "https://rubric-protocol.com/v1/x402/hedera-facts/exchange-rate",
+     "host": "rubric-protocol.com",
+     "service": "TenPrint",
+     "description": "Attested Hedera network facts: HBAR exchange rate, gas fees, supply, node roster, throughput, topic state. Each response carries the ML-DSA-65 attestation ID of the served snapshot — tamper-evident reference data for agents that must prove what they knew when they acted.",
+     "tags": [
+      "hedera",
+      "oracle",
+      "data"
+     ],
+     "method": "GET",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "1000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.001
+      },
+      {
+       "network": "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp",
+       "chain": null,
+       "scheme": "exact",
+       "amount": "1000",
+       "asset": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+       "asset_name": null,
+       "usdc": null
+      },
+      {
+       "network": "algorand:wGHE2Pwdvd7S12BL5FaOP20EGYesN73ktiC1qzkkit8=",
+       "chain": null,
+       "scheme": "exact",
+       "amount": "1000",
+       "asset": "31566704",
+       "asset_name": null,
+       "usdc": null
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.001,
+     "quality": {
+      "paid_calls_30d": 50,
+      "payers_30d": 27,
+      "last_paid_at": "2026-11-21T05:31:16.36Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": true,
+      "status": "payable, paid lately"
+     },
+     "updated": "2026-10-28T14:16:05.614Z"
+    },
+    {
+     "resource": "https://api.onesource.io/api/chain/receipt/:hash",
+     "host": "api.onesource.io",
+     "service": null,
+     "description": "Transaction receipt via eth_getTransactionReceipt - status, gas, and event logs for a mined Ethereum transaction",
+     "tags": [],
+     "method": "GET",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "5000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.005
+      },
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "batch-settlement",
+       "amount": "5000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.005
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.005,
+     "quality": {
+      "paid_calls_30d": 302,
+      "payers_30d": 301,
+      "last_paid_at": "2026-11-13T03:57:32.215Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": false,
+      "status": "payable"
+     },
+     "updated": "2026-11-13T03:57:32.313Z"
+    },
+    {
+     "resource": "https://energy.halowerk.com/demo/paid-sample",
+     "host": "energy.halowerk.com",
+     "service": "HALOWERK Energy",
+     "description": "Cheapest end-to-end x402 purchase test. Always returns a 402 challenge without payment and the current full NegPrice decision after a valid USDC payment.",
+     "tags": [
+      "compute-scheduling",
+      "depin-workloads",
+      "carbon-aware-compute",
+      "battery-dispatch",
+      "power-trading"
+     ],
+     "method": "GET",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "1000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.001
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.001,
+     "quality": {
+      "paid_calls_30d": 105,
+      "payers_30d": 22,
+      "last_paid_at": "2026-11-21T01:13:41.298Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": true,
+      "status": "payable, paid lately"
+     },
+     "updated": "2026-11-21T01:13:41.943Z"
+    },
+    {
+     "resource": "https://headers.use.x402atlas.com/",
+     "host": "headers.use.x402atlas.com",
+     "service": "HTTP Security Headers Check",
+     "description": "Audit a URL's HTTP security headers over a single body-free (HEAD) request. Grades Strict-Transport-Security, Content-Security-Policy, X-Frame-Options, X-Content-Type-Options, Referrer-Policy and Permissions-Policy, flags information-leak headers (Server, X-Powered-By), and returns the parsed values",
+     "tags": [
+      "http",
+      "headers",
+      "security",
+      "hsts",
+      "csp"
+     ],
+     "method": "GET",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "10000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.01
+      },
+      {
+       "network": "eip155:137",
+       "chain": null,
+       "scheme": "exact",
+       "amount": "10000",
+       "asset": "0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359",
+       "asset_name": "USD Coin",
+       "usdc": 0.01
+      },
+      {
+       "network": "eip155:42161",
+       "chain": null,
+       "scheme": "exact",
+       "amount": "10000",
+       "asset": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
+       "asset_name": "USD Coin",
+       "usdc": 0.01
+      },
+      {
+       "network": "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp",
+       "chain": null,
+       "scheme": "exact",
+       "amount": "10000",
+       "asset": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+       "asset_name": null,
+       "usdc": null
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.01,
+     "quality": {
+      "paid_calls_30d": 293,
+      "payers_30d": 18,
+      "last_paid_at": "2026-11-21T00:24:40.418Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": true,
+      "status": "payable, paid lately"
+     },
+     "updated": "2026-11-21T00:24:40.54Z"
+    },
+    {
+     "resource": "https://search.cyberwarex.com/search",
+     "host": "search.cyberwarex.com",
+     "service": "x402 Web Search",
+     "description": "Live web results for your agent with no search API key, quota or monthly plan. Send a query, get up to 10 ranked results as JSON: title, link, snippet, source and date where known, for web, news or images. $0.00435 a search in USDC on Base; a query with no results is not charged. Example: q=base l2 ",
+     "tags": [
+      "web-search",
+      "serp",
+      "search-engine",
+      "news-search",
+      "research"
+     ],
+     "method": "GET",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "4350",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.00435
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.00435,
+     "quality": {
+      "paid_calls_30d": 74,
+      "payers_30d": 23,
+      "last_paid_at": "2026-11-21T00:20:30.638Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": true,
+      "status": "payable, paid lately"
+     },
+     "updated": "2026-11-21T00:20:31.319Z"
+    },
+    {
+     "resource": "https://api.arkm.com/x402/intelligence/address",
+     "host": "api.arkm.com",
+     "service": "Arkham x402",
+     "description": "Get Arkham intelligence for an address. $0.20 per call.",
+     "tags": [
+      "Intelligence"
+     ],
+     "method": "POST",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "200000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.2
+      },
+      {
+       "network": "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp",
+       "chain": null,
+       "scheme": "exact",
+       "amount": "200000",
+       "asset": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+       "asset_name": null,
+       "usdc": null
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.2,
+     "quality": {
+      "paid_calls_30d": 969,
+      "payers_30d": 14,
+      "last_paid_at": "2026-11-20T07:44:11.918Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": true,
+      "status": "payable, paid lately"
+     },
+     "updated": "2026-11-20T07:44:12.068Z"
+    },
+    {
+     "resource": "https://api.onesource.io/api/chain/erc721-tokens",
+     "host": "api.onesource.io",
+     "service": null,
+     "description": "List every ERC721 NFT token_id a wallet owns in a collection via tokenOfOwnerByIndex (eth_call)",
+     "tags": [],
+     "method": "GET",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "8000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.008
+      },
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "batch-settlement",
+       "amount": "8000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.008
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.008,
+     "quality": {
+      "paid_calls_30d": 291,
+      "payers_30d": 288,
+      "last_paid_at": "2026-11-18T04:15:35.028Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": true,
+      "status": "payable, paid lately"
+     },
+     "updated": "2026-11-18T04:15:35.257Z"
+    },
+    {
+     "resource": "https://stableenrich.dev/api/exa/search",
+     "host": "stableenrich.dev",
+     "service": "StableEnrich",
+     "description": "Exa Search - Neural search across the web",
+     "tags": [
+      "Exa"
+     ],
+     "method": "POST",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "10000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.01
+      },
+      {
+       "network": "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp",
+       "chain": null,
+       "scheme": "exact",
+       "amount": "10000",
+       "asset": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+       "asset_name": null,
+       "usdc": null
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.01,
+     "quality": {
+      "paid_calls_30d": 46481,
+      "payers_30d": 127,
+      "last_paid_at": "2026-11-21T10:51:11.264Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": true,
+      "status": "payable, paid lately"
+     },
+     "updated": "2026-11-21T10:51:11.409Z"
+    },
+    {
+     "resource": "https://scvd.store/api/buy/spot_check",
+     "host": "scvd.store",
+     "service": "SCVD General Store",
+     "description": "Spot Check. REQUIRES ?host= on the paid request — a signed request without it is refused before the gate and no money moves. Name a host and get what this observatory already holds on it, signed: corpus rounds and verdicts as recorded, when we last actually knocked, our coverage of the window since ",
+     "tags": [
+      "x402",
+      "signed-artifacts",
+      "verification",
+      "attestation",
+      "conformance"
+     ],
+     "method": "GET",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "1000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.001
+      },
+      {
+       "network": "eip155:137",
+       "chain": null,
+       "scheme": "exact",
+       "amount": "1000",
+       "asset": "0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359",
+       "asset_name": "USD Coin",
+       "usdc": 0.001
+      },
+      {
+       "network": "eip155:42161",
+       "chain": null,
+       "scheme": "exact",
+       "amount": "1000",
+       "asset": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
+       "asset_name": "USD Coin",
+       "usdc": 0.001
+      },
+      {
+       "network": "eip155:480",
+       "chain": null,
+       "scheme": "exact",
+       "amount": "1000",
+       "asset": "0x79a02482a880bce3f13e09da970dc34db4cd24d1",
+       "asset_name": "USDC",
+       "usdc": 0.001
+      },
+      {
+       "network": "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp",
+       "chain": null,
+       "scheme": "exact",
+       "amount": "1000",
+       "asset": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+       "asset_name": null,
+       "usdc": null
+      },
+      {
+       "network": "eip155:5042",
+       "chain": "Arc",
+       "scheme": "exact",
+       "amount": "1000",
+       "asset": "0x3600000000000000000000000000000000000000",
+       "asset_name": "GatewayWalletBatched",
+       "usdc": null
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.001,
+     "quality": {
+      "paid_calls_30d": 106,
+      "payers_30d": 21,
+      "last_paid_at": "2026-11-21T00:25:28.403Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": true,
+      "status": "payable, paid lately"
+     },
+     "updated": "2026-11-21T00:25:28.99Z"
+    },
+    {
+     "resource": "https://api.onesource.io/api/chain/code/:address",
+     "host": "api.onesource.io",
+     "service": null,
+     "description": "Check if an Ethereum address is a contract via eth_getCode - returns deployed bytecode",
+     "tags": [],
+     "method": "GET",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "3000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.003
+      },
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "batch-settlement",
+       "amount": "3000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.003
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.003,
+     "quality": {
+      "paid_calls_30d": 284,
+      "payers_30d": 284,
+      "last_paid_at": "2026-11-13T03:57:13.792Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": false,
+      "status": "payable"
+     },
+     "updated": "2026-11-13T03:57:13.896Z"
+    },
+    {
+     "resource": "https://api.onesource.io/api/chain/call",
+     "host": "api.onesource.io",
+     "service": null,
+     "description": "Simulate a read-only Ethereum contract call via eth_call - no transaction sent",
+     "tags": [],
+     "method": "POST",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "5000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.005
+      },
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "batch-settlement",
+       "amount": "5000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.005
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.005,
+     "quality": {
+      "paid_calls_30d": 285,
+      "payers_30d": 283,
+      "last_paid_at": "2026-11-19T16:18:58.582Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": true,
+      "status": "payable, paid lately"
+     },
+     "updated": "2026-11-19T16:18:58.82Z"
+    },
+    {
+     "resource": "https://api.onesource.io/api/chain/nft-metadata",
+     "host": "api.onesource.io",
+     "service": null,
+     "description": "NFT metadata for ERC721 or ERC1155 tokens via eth_call, with IPFS, Arweave, data URI, and public HTTP(S) resolution",
+     "tags": [],
+     "method": "GET",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "8000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.008
+      },
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "batch-settlement",
+       "amount": "8000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.008
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.008,
+     "quality": {
+      "paid_calls_30d": 283,
+      "payers_30d": 283,
+      "last_paid_at": "2026-11-13T03:57:41.424Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": false,
+      "status": "payable"
+     },
+     "updated": "2026-11-13T03:57:41.523Z"
+    },
+    {
+     "resource": "https://api.onesource.io/api/chain/chain-id",
+     "host": "api.onesource.io",
+     "service": null,
+     "description": "Ethereum chain ID (EIP-155) via eth_chainId - confirm which chain a network is on",
+     "tags": [],
+     "method": "GET",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "1000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.001
+      },
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "batch-settlement",
+       "amount": "1000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.001
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.001,
+     "quality": {
+      "paid_calls_30d": 294,
+      "payers_30d": 278,
+      "last_paid_at": "2026-11-14T02:05:29.661Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": false,
+      "status": "payable"
+     },
+     "updated": "2026-11-14T02:05:03.873Z"
+    },
+    {
+     "resource": "https://x402.asterpay.io/v2/x402/agent/trust-score/:address",
+     "host": "x402.asterpay.io",
+     "service": "AsterPay",
+     "description": "Quick KYA Trust Score for any AI agent wallet. Returns score (0-100), tier, and sanctions status. Paid via x402 USDC.",
+     "tags": [
+      "Payments",
+      "EUR",
+      "SEPA",
+      "KYA",
+      "Trust"
+     ],
+     "method": "GET",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "7500",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.0075
+      },
+      {
+       "network": "eip155:137",
+       "chain": null,
+       "scheme": "exact",
+       "amount": "7500",
+       "asset": "0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359",
+       "asset_name": "USD Coin",
+       "usdc": 0.0075
+      },
+      {
+       "network": "eip155:42161",
+       "chain": null,
+       "scheme": "exact",
+       "amount": "7500",
+       "asset": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
+       "asset_name": "USD Coin",
+       "usdc": 0.0075
+      },
+      {
+       "network": "eip155:10",
+       "chain": null,
+       "scheme": "exact",
+       "amount": "7500",
+       "asset": "0x0b2C639c533813f4Aa9D7837CAf62653d097Ff85",
+       "asset_name": "USD Coin",
+       "usdc": 0.0075
+      },
+      {
+       "network": "eip155:1",
+       "chain": null,
+       "scheme": "exact",
+       "amount": "7500",
+       "asset": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+       "asset_name": "USD Coin",
+       "usdc": 0.0075
+      },
+      {
+       "network": "eip155:1187947933",
+       "chain": null,
+       "scheme": "exact",
+       "amount": "7500",
+       "asset": "0x85889c8c714505E0c94b30fcfcF64fE3Ac8FCb20",
+       "asset_name": "USDC",
+       "usdc": 0.0075
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.0075,
+     "quality": {
+      "paid_calls_30d": 27,
+      "payers_30d": 26,
+      "last_paid_at": "2026-11-21T03:03:11.759Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": true,
+      "status": "payable, paid lately"
+     },
+     "updated": "2026-11-21T03:03:12.059Z"
+    },
+    {
+     "resource": "https://x402.asterpay.io/v1/agent/deep-analysis/:address",
+     "host": "x402.asterpay.io",
+     "service": "AsterPay",
+     "description": "Deep KYA Trust Score analysis for any AI agent or wallet. Returns 7-component trust score (0-100), risk tier, sanctions status, ERC-8004 identity, InsumerAPI attestations, and payment eligibility. The most comprehensive agent trust check available.",
+     "tags": [
+      "Payments",
+      "EUR",
+      "SEPA",
+      "KYA",
+      "Trust"
+     ],
+     "method": "GET",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "15000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.015
+      },
+      {
+       "network": "eip155:137",
+       "chain": null,
+       "scheme": "exact",
+       "amount": "15000",
+       "asset": "0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359",
+       "asset_name": "USD Coin",
+       "usdc": 0.015
+      },
+      {
+       "network": "eip155:42161",
+       "chain": null,
+       "scheme": "exact",
+       "amount": "15000",
+       "asset": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
+       "asset_name": "USD Coin",
+       "usdc": 0.015
+      },
+      {
+       "network": "eip155:10",
+       "chain": null,
+       "scheme": "exact",
+       "amount": "15000",
+       "asset": "0x0b2C639c533813f4Aa9D7837CAf62653d097Ff85",
+       "asset_name": "USD Coin",
+       "usdc": 0.015
+      },
+      {
+       "network": "eip155:1",
+       "chain": null,
+       "scheme": "exact",
+       "amount": "15000",
+       "asset": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+       "asset_name": "USD Coin",
+       "usdc": 0.015
+      },
+      {
+       "network": "eip155:1187947933",
+       "chain": null,
+       "scheme": "exact",
+       "amount": "15000",
+       "asset": "0x85889c8c714505E0c94b30fcfcF64fE3Ac8FCb20",
+       "asset_name": "USDC",
+       "usdc": 0.015
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.015,
+     "quality": {
+      "paid_calls_30d": 27,
+      "payers_30d": 26,
+      "last_paid_at": "2026-11-21T03:03:09.414Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": true,
+      "status": "payable, paid lately"
+     },
+     "updated": "2026-11-21T03:03:09.677Z"
+    },
+    {
+     "resource": "https://api.onesource.io/api/chain/allowance",
+     "host": "api.onesource.io",
+     "service": null,
+     "description": "ERC20 allowance via allowance (eth_call) - how much a spender is approved to move from an owner's wallet",
+     "tags": [],
+     "method": "GET",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "3000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.003
+      },
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "batch-settlement",
+       "amount": "3000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.003
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.003,
+     "quality": {
+      "paid_calls_30d": 278,
+      "payers_30d": 275,
+      "last_paid_at": "2026-11-18T06:01:47.41Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": true,
+      "status": "payable, paid lately"
+     },
+     "updated": "2026-11-18T06:01:47.687Z"
+    },
+    {
+     "resource": "https://api.onesource.io/deepstate/v1/analytics/makers",
+     "host": "api.onesource.io",
+     "service": null,
+     "description": "Deepstate, the on-chain order-book exchange on Robinhood Chain. Per-maker time-at-top, notional rested, fills, and maker rewards earned for a market (token varies by market; see /deepstate/v1/markets).",
+     "tags": [],
+     "method": "GET",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "20000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.02
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.02,
+     "quality": {
+      "paid_calls_30d": 274,
+      "payers_30d": 274,
+      "last_paid_at": "2026-11-13T08:52:47.303Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": false,
+      "status": "payable"
+     },
+     "updated": "2026-11-13T08:52:47.511Z"
+    },
+    {
+     "resource": "https://api.onesource.io/api/chain/estimate-gas",
+     "host": "api.onesource.io",
+     "service": null,
+     "description": "Estimate the gas a transaction will consume via eth_estimateGas before signing it",
+     "tags": [],
+     "method": "POST",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "4000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.004
+      },
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "batch-settlement",
+       "amount": "4000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.004
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.004,
+     "quality": {
+      "paid_calls_30d": 269,
+      "payers_30d": 269,
+      "last_paid_at": "2026-11-13T03:51:27.431Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": false,
+      "status": "payable"
+     },
+     "updated": "2026-11-13T03:51:27.535Z"
+    },
+    {
+     "resource": "https://api.bitrefill.com/x402/invoice/pay",
+     "host": "api.bitrefill.com",
+     "service": "Bitrefill",
+     "description": "Pay a Bitrefill invoice in USDC via x402 to buy gift cards, eSIMs & mobile top-ups across 180+ countries.",
+     "tags": [
+      "checkout",
+      "payment",
+      "gift-cards",
+      "esims",
+      "usdc"
+     ],
+     "method": "POST",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "upto",
+       "amount": "1000000000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 1000
+      },
+      {
+       "network": "eip155:42161",
+       "chain": null,
+       "scheme": "upto",
+       "amount": "1000000000",
+       "asset": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
+       "asset_name": "USD Coin",
+       "usdc": 1000
+      },
+      {
+       "network": "eip155:42161",
+       "chain": null,
+       "scheme": "upto",
+       "amount": "1000000000",
+       "asset": "0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9",
+       "asset_name": "USD₮0",
+       "usdc": null
+      },
+      {
+       "network": "eip155:137",
+       "chain": null,
+       "scheme": "upto",
+       "amount": "1000000000",
+       "asset": "0x3c499c542cef5e3811e1192ce70d8cc03d5c3359",
+       "asset_name": "USD Coin",
+       "usdc": 1000
+      },
+      {
+       "network": "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp",
+       "chain": null,
+       "scheme": "upto",
+       "amount": "1000000000",
+       "asset": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+       "asset_name": null,
+       "usdc": null
+      },
+      {
+       "network": "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp",
+       "chain": null,
+       "scheme": "upto",
+       "amount": "1000000000",
+       "asset": "Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB",
+       "asset_name": null,
+       "usdc": null
+      }
+     ],
+     "cheapest_usdc_on_layer": 1000,
+     "quality": {
+      "paid_calls_30d": 43,
+      "payers_30d": 23,
+      "last_paid_at": "2026-11-20T23:30:41.769Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": true,
+      "status": "payable, paid lately"
+     },
+     "updated": "2026-11-20T23:30:42.212Z"
+    },
+    {
+     "resource": "https://x402.asterpay.io/v1/crypto/wallet-score/:address",
+     "host": "x402.asterpay.io",
+     "service": "AsterPay",
+     "description": "Get reputation score for any blockchain wallet address",
+     "tags": [
+      "Payments",
+      "EUR",
+      "SEPA",
+      "KYA",
+      "Trust"
+     ],
+     "method": "GET",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "75000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.075
+      },
+      {
+       "network": "eip155:137",
+       "chain": null,
+       "scheme": "exact",
+       "amount": "75000",
+       "asset": "0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359",
+       "asset_name": "USD Coin",
+       "usdc": 0.075
+      },
+      {
+       "network": "eip155:42161",
+       "chain": null,
+       "scheme": "exact",
+       "amount": "75000",
+       "asset": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
+       "asset_name": "USD Coin",
+       "usdc": 0.075
+      },
+      {
+       "network": "eip155:10",
+       "chain": null,
+       "scheme": "exact",
+       "amount": "75000",
+       "asset": "0x0b2C639c533813f4Aa9D7837CAf62653d097Ff85",
+       "asset_name": "USD Coin",
+       "usdc": 0.075
+      },
+      {
+       "network": "eip155:1",
+       "chain": null,
+       "scheme": "exact",
+       "amount": "75000",
+       "asset": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+       "asset_name": "USD Coin",
+       "usdc": 0.075
+      },
+      {
+       "network": "eip155:1187947933",
+       "chain": null,
+       "scheme": "exact",
+       "amount": "75000",
+       "asset": "0x85889c8c714505E0c94b30fcfcF64fE3Ac8FCb20",
+       "asset_name": "USDC",
+       "usdc": 0.075
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.075,
+     "quality": {
+      "paid_calls_30d": 25,
+      "payers_30d": 25,
+      "last_paid_at": "2026-11-21T03:03:21.453Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": true,
+      "status": "payable, paid lately"
+     },
+     "updated": "2026-11-21T03:03:21.651Z"
+    },
+    {
+     "resource": "https://vibesprings.net/api/price/base-gas",
+     "host": "vibesprings.net",
+     "service": "Vibe Springs",
+     "description": "Base network real-time gas price oracle. Returns block base fee, current gas price in GWEI, and network block details.",
+     "tags": [
+      "price",
+      "oracle",
+      "crypto",
+      "market-data",
+      "base-gas"
+     ],
+     "method": "GET",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "1000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.001
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.001,
+     "quality": {
+      "paid_calls_30d": 35,
+      "payers_30d": 23,
+      "last_paid_at": "2026-11-21T00:19:25.592Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": true,
+      "status": "payable, paid lately"
+     },
+     "updated": "2026-11-21T00:19:25.916Z"
+    },
+    {
+     "resource": "https://api.onesource.io/deepstate/v1/analytics/depth-history",
+     "host": "api.onesource.io",
+     "service": null,
+     "description": "Deepstate, the on-chain order-book exchange on Robinhood Chain. Depth heatmap - resting order size by price level over time for a market.",
+     "tags": [],
+     "method": "GET",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "20000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.02
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.02,
+     "quality": {
+      "paid_calls_30d": 254,
+      "payers_30d": 254,
+      "last_paid_at": "2026-11-13T04:02:10.006Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": false,
+      "status": "payable"
+     },
+     "updated": "2026-11-13T04:02:10.114Z"
+    },
+    {
+     "resource": "https://rubric-protocol.com/v1/x402/hedera-facts/supply",
+     "host": "rubric-protocol.com",
+     "service": "TenPrint",
+     "description": "Attested Hedera network facts: HBAR exchange rate, gas fees, supply, node roster, throughput, topic state. Each response carries the ML-DSA-65 attestation ID of the served snapshot — tamper-evident reference data for agents that must prove what they knew when they acted.",
+     "tags": [
+      "hedera",
+      "oracle",
+      "data"
+     ],
+     "method": "GET",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "1000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.001
+      },
+      {
+       "network": "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp",
+       "chain": null,
+       "scheme": "exact",
+       "amount": "1000",
+       "asset": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+       "asset_name": null,
+       "usdc": null
+      },
+      {
+       "network": "algorand:wGHE2Pwdvd7S12BL5FaOP20EGYesN73ktiC1qzkkit8=",
+       "chain": null,
+       "scheme": "exact",
+       "amount": "1000",
+       "asset": "31566704",
+       "asset_name": null,
+       "usdc": null
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.001,
+     "quality": {
+      "paid_calls_30d": 36,
+      "payers_30d": 22,
+      "last_paid_at": "2026-11-21T00:21:18.009Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": true,
+      "status": "payable, paid lately"
+     },
+     "updated": "2026-10-26T00:12:25.557Z"
+    },
+    {
+     "resource": "https://api.onesource.io/deepstate/v1/analytics/cost-to-quote",
+     "host": "api.onesource.io",
+     "service": null,
+     "description": "Deepstate, the on-chain order-book exchange on Robinhood Chain. Gas spent resting and cancelling orders for a market.",
+     "tags": [],
+     "method": "GET",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "20000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.02
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.02,
+     "quality": {
+      "paid_calls_30d": 249,
+      "payers_30d": 249,
+      "last_paid_at": "2026-11-13T08:53:03.387Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": false,
+      "status": "payable"
+     },
+     "updated": "2026-11-13T08:53:03.558Z"
+    },
+    {
+     "resource": "https://search.cyberwarex.com/news",
+     "host": "search.cyberwarex.com",
+     "service": "x402 Web Search",
+     "description": "A dated news brief on any topic for your agent, refreshed every 15 minutes. Returns the most reported recent headlines, each with source, link, published time, age in minutes and an importance score from how many news engines carried it. No AI in the loop. $0.001 a brief in USDC on Base; no recent n",
+     "tags": [
+      "news",
+      "headlines",
+      "brief",
+      "monitoring",
+      "crypto-news"
+     ],
+     "method": "GET",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "1000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.001
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.001,
+     "quality": {
+      "paid_calls_30d": 59,
+      "payers_30d": 20,
+      "last_paid_at": "2026-11-21T00:24:17.588Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": true,
+      "status": "payable, paid lately"
+     },
+     "updated": "2026-11-21T00:24:18.131Z"
+    },
+    {
+     "resource": "https://agent.pocket.network/v1/dns-whois-rdap",
+     "host": "agent.pocket.network",
+     "service": "Pocket Network",
+     "description": "Domain intelligence: DNS records (A, AAAA, MX, TXT, NS, CNAME, SOA) plus RDAP registration data. POST /v1/dns with a {domain} and get the records and registration as one JSON object. Deterministic per lookup instant. Pay per request in USDC; no account, no API key.",
+     "tags": [
+      "web",
+      "dns-whois-rdap",
+      "rest"
+     ],
+     "method": "POST",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "5000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.005
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.005,
+     "quality": {
+      "paid_calls_30d": 2669,
+      "payers_30d": 44,
+      "last_paid_at": "2026-11-21T11:39:35.187Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": true,
+      "status": "payable, paid lately"
+     },
+     "updated": "2026-11-21T11:39:33.041Z"
+    },
+    {
+     "resource": "https://www.api-xpay.com/x402/keywords",
+     "host": "www.api-xpay.com",
+     "service": "X Pay",
+     "description": "AI keyword extraction from text",
+     "tags": [
+      "ai",
+      "keywords",
+      "extract",
+      "nlp",
+      "llm"
+     ],
+     "method": "POST",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "10000000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 10
+      }
+     ],
+     "cheapest_usdc_on_layer": 10,
+     "quality": {
+      "paid_calls_30d": 128,
+      "payers_30d": 46,
+      "last_paid_at": "2026-11-21T11:52:17.615Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": true,
+      "status": "payable, paid lately"
+     },
+     "updated": "2026-11-21T11:52:17.999Z"
+    },
+    {
+     "resource": "https://agent.pocket.network/v1/meadow",
+     "host": "agent.pocket.network",
+     "service": "Pocket Network",
+     "description": "An agent-only messaging network. Agents register with an Ed25519 key and talk in public rooms and end-to-end encrypted private rooms and DMs. POST /v2/lookup finds agents by id, handle, name or query; POST /v2/rooms searches the public room directory by name or topic, no identity needed; POST /v2/sy",
+     "tags": [
+      "communications",
+      "meadow",
+      "rest"
+     ],
+     "method": "POST",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "5000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.005
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.005,
+     "quality": {
+      "paid_calls_30d": 13602,
+      "payers_30d": 32,
+      "last_paid_at": "2026-11-21T12:17:27.616Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": true,
+      "status": "payable, paid lately"
+     },
+     "updated": "2026-11-21T12:19:36.152Z"
+    },
+    {
+     "resource": "https://hypernatt.com/api/m2m/liq-radar",
+     "host": "hypernatt.com",
+     "service": "HyperNatt Terminal",
+     "description": "Forced-order map. If cluster_grammar is present, read it before liq_radar. class=noise (<3%) is high-leverage bait - ignore. class=true (~7%+) is the low-leverage stack. Terrain, not a signal. Whitelist BTC ETH SOL BNB XRP HYPE ZEC (omit = BTC).",
+     "tags": [
+      "bitcoin",
+      "hyperliquid",
+      "trading",
+      "market maker",
+      "liquidations"
+     ],
+     "method": "GET",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "1000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.001
+      },
+      {
+       "network": "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp",
+       "chain": null,
+       "scheme": "exact",
+       "amount": "1000",
+       "asset": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+       "asset_name": null,
+       "usdc": null
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.001,
+     "quality": {
+      "paid_calls_30d": 41,
+      "payers_30d": 21,
+      "last_paid_at": "2026-11-21T00:22:16.877Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": true,
+      "status": "payable, paid lately"
+     },
+     "updated": "2026-11-21T00:22:17.302Z"
+    },
+    {
+     "resource": "https://quartermaster.surewhynot.app/v1/gas",
+     "host": "quartermaster.surewhynot.app",
+     "service": "Quartermaster Gas Prices",
+     "description": "Current Base gas prices and a simple-transfer cost estimate for transaction planning.",
+     "tags": [
+      "gas",
+      "fees",
+      "base",
+      "transaction",
+      "settlement"
+     ],
+     "method": "GET",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "1000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.001
+      },
+      {
+       "network": "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp",
+       "chain": null,
+       "scheme": "exact",
+       "amount": "1000",
+       "asset": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+       "asset_name": null,
+       "usdc": null
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.001,
+     "quality": {
+      "paid_calls_30d": 42,
+      "payers_30d": 20,
+      "last_paid_at": "2026-11-21T00:25:45.363Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": true,
+      "status": "payable, paid lately"
+     },
+     "updated": "2026-11-21T00:25:46.205Z"
+    },
+    {
+     "resource": "https://tolca.tonbot.ca/v1/web-search",
+     "host": "tolca.tonbot.ca",
+     "service": "Tolca",
+     "description": "Web search with page content: search the web and read the top pages in ONE call. Returns 10 results (title, url, snippet, date) plus the clean text of the best pages (read 1-5), with fetch time, sha256, publication and last-modified dates (each with its source) and canonical URL; a complete flag, an",
+     "tags": [
+      "search",
+      "web",
+      "scrape",
+      "markdown",
+      "research"
+     ],
+     "method": "POST",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "8000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.008
+      },
+      {
+       "network": "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp",
+       "chain": null,
+       "scheme": "exact",
+       "amount": "8000",
+       "asset": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+       "asset_name": null,
+       "usdc": null
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.008,
+     "quality": {
+      "paid_calls_30d": 127,
+      "payers_30d": 16,
+      "last_paid_at": "2026-11-21T00:32:22.049Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": true,
+      "status": "payable, paid lately"
+     },
+     "updated": "2026-11-21T00:32:22.277Z"
+    },
+    {
+     "resource": "https://api.flashpoint.ai/mcp",
+     "host": "api.flashpoint.ai",
+     "service": "Flashpoint.AI",
+     "description": "Your agent surveys real people, anywhere. Pay-per-call MCP server backed by Flashpoint.AI's panel network — demographics, synthetic respondents, full survey lifecycle, and AI-powered analysis. Per-call prices are listed in `tools` below; settlement on Base mainnet via x402.",
+     "tags": [
+      "mcp",
+      "ai-agent",
+      "surveys",
+      "research",
+      "panels"
+     ],
+     "method": "POST",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "50000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.05
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.05,
+     "quality": {
+      "paid_calls_30d": 320,
+      "payers_30d": 13,
+      "last_paid_at": "2026-11-21T08:21:13.468Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": true,
+      "status": "payable, paid lately"
+     },
+     "updated": "2026-11-21T08:20:46.981Z"
+    },
+    {
+     "resource": "https://hyperliquid-predict.use.x402atlas.com/outcomes",
+     "host": "hyperliquid-predict.use.x402atlas.com",
+     "service": "Hyperliquid Prediction Markets",
+     "description": "The catalog of Hyperliquid prediction-market outcomes and their metadata.",
+     "tags": [
+      "hyperliquid",
+      "crypto",
+      "prediction-market",
+      "outcomes",
+      "markets"
+     ],
+     "method": "GET",
+     "x402_version": 2,
+     "prices": [
+      {
+       "network": "eip155:8453",
+       "chain": "Base",
+       "scheme": "exact",
+       "amount": "5000",
+       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+       "asset_name": "USD Coin",
+       "usdc": 0.005
+      },
+      {
+       "network": "eip155:137",
+       "chain": null,
+       "scheme": "exact",
+       "amount": "5000",
+       "asset": "0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359",
+       "asset_name": "USD Coin",
+       "usdc": 0.005
+      },
+      {
+       "network": "eip155:42161",
+       "chain": null,
+       "scheme": "exact",
+       "amount": "5000",
+       "asset": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
+       "asset_name": "USD Coin",
+       "usdc": 0.005
+      },
+      {
+       "network": "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp",
+       "chain": null,
+       "scheme": "exact",
+       "amount": "5000",
+       "asset": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+       "asset_name": null,
+       "usdc": null
+      }
+     ],
+     "cheapest_usdc_on_layer": 0.005,
+     "quality": {
+      "paid_calls_30d": 32,
+      "payers_30d": 20,
+      "last_paid_at": "2026-11-21T00:21:37.518Z"
+     },
+     "readiness": {
+      "payable_on_layer_chain": true,
+      "input_described": true,
+      "paid_last_7d": true,
+      "status": "payable, paid lately"
+     },
+     "updated": "2026-11-21T00:21:37.64Z"
+    }
+   ],
+   "how_to_pay": "x402: request the resource, read its 402 (accepts: network, asset, amount, payTo), and repeat the request with an X-PAYMENT header your own wallet signs. Taifoon lists and never pays: discovery only.",
+   "readiness": "from the listing only: payable_on_layer_chain = a USDC price on Base (8453) or Arc (5042); input_described = the listing says how to call it; paid_last_7d = the facilitator saw a paid call in the last 7 days",
+   "source": "https://api.cdp.coinbase.com/platform/v2/x402/discovery/resources",
+   "cached": false,
+   "page_read": {
+    "state": "found",
+    "source": "live",
+    "age_s": 0,
+    "read_at": "2026-11-21T12:29:40.322Z"
+   }
+  }
+ },
+ "coord_sha": "d7af0f1634626fc01ddaf31a1bb6f350a24d134e",
+ "read_at": "2026-11-21T12:29:39.313Z",
+ "notes": {
+  "dropped": [
+   "rows[].prices[].pay_to (a payee, requester, signer or treasury-like address field)",
+   "rows[].prices[].asset (the address a fee payee or payTo names)"
+  ],
+  "trimmed": [
+   "get_key (the free-key offer every keyless answer carries)"
+  ]
+ }
+}

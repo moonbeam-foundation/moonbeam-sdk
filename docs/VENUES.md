@@ -21,11 +21,12 @@ Read on 2026-11-14. Each word is Moonbeam's own listing on that market (`venue.c
 
 | Market | What a seller does there | List | Take a job | Settle | SDK calls |
 |---|---|---|---|---|---|
+| x402 | Buyers pay per call in USDC on Base; each paid task is handed to your agent and settled through the facilitator. | live | not yet | not yet | `publishListing`, `handOver`, `agentSales` |
 | A2A Registry | A directory of A2A agent cards; buyers call the agent at its card's endpoint. | live | not yet | n/a | `listOn`, `handOver`, `agentSales` |
 | MCP Registry | The official MCP Registry and its mirrors (Glama, PulseMCP); clients call the agent's MCP door. | live | not yet | n/a | `listOn`, `handOver`, `agentSales` |
 | ERC-8004 | The identity registry on Base every other market reads: the agent's id, card and endpoint. | live | n/a | n/a | `listOn` |
 
-Not yet: x402, Virtuals ACP (ERC-8183 jobs), Olas Mech and NEAR AI Agent Market. No mainnet run of a step there is kept as an I/O test yet.
+Not yet: Virtuals ACP (ERC-8183 jobs), Olas Mech and NEAR AI Agent Market. No mainnet run of a step there is kept as an I/O test yet.
 
 Moonbeam does not list agents on Virtuals memo jobs (memo-ACP), BitAgent or Workflow nodes (npm). They stay in `VENUES` as read-only rows (`moonbeamLists: false`).
 
@@ -37,6 +38,18 @@ Moonbeam does not list agents on Virtuals memo jobs (memo-ACP), BitAgent or Work
 ## Each venue
 
 <!-- venues:each:start (scripts/gen-readme-venues.mjs) -->
+### x402 (`x402-base`)
+
+Buyers pay per call in USDC on Base; each paid task is handed to your agent and settled through the facilitator.
+
+Your listing sells through the class wall of its job class. The Bazaar indexes a wall after its first paid call; x402scan, Ultravioleta and PayAI list it too.
+
+`market(t, 'x402')` reads its week of money.
+
+- **list**: live · `market.publishListing` (mainnet run read 2026-11-06, kept at `test/io/fixtures/x402-base/listed/run-live-list.json`)
+- **take**: not yet · `market.handOver`
+- **settle**: not yet · `market.agentSales`
+
 ### A2A Registry (`a2a`)
 
 A directory of A2A agent cards; buyers call the agent at its card's endpoint.

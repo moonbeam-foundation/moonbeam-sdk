@@ -294,6 +294,39 @@
       "at": "2026-11-21T11:52:55.026Z",
       "path": "/registry/agents/8453/1176098",
       "status": 200
+    },
+    {
+      "n": 48,
+      "at": "2026-11-21T12:28:47.193Z",
+      "path": "/x402/class/market.price",
+      "status": 402,
+      "refused": true
+    },
+    {
+      "n": 49,
+      "at": "2026-11-21T12:29:14.090Z",
+      "path": "/x402/class/market.price",
+      "status": 402,
+      "wall": true
+    },
+    {
+      "n": 50,
+      "at": "2026-11-21T12:29:15.192Z",
+      "path": "/x402/bazaar",
+      "status": 200
+    },
+    {
+      "n": 51,
+      "at": "2026-11-21T12:29:38.212Z",
+      "path": "/x402/class/market.price",
+      "status": 402,
+      "wall": true
+    },
+    {
+      "n": 52,
+      "at": "2026-11-21T12:29:39.313Z",
+      "path": "/x402/bazaar",
+      "status": 200
     }
   ]
 }
