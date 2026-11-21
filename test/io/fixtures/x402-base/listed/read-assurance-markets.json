@@ -200,7 +200,6 @@
        "from_block": 53206898,
        "market": "0xf30601e57FC9c07910a2826e904c08dDe070be9A",
        "opens_rounds": true,
-       "owner": "0x14C4274110F1c183Eec6095F3E6547790A258fae",
        "positions": 0,
        "role": "current",
        "rounds": 0,
@@ -211,7 +210,6 @@
        "from_block": 52085401,
        "market": "0xAfc864dBb0B100581F9fcFF64969E57A0F063Ef3",
        "opens_rounds": false,
-       "owner": "0x14C4274110F1c183Eec6095F3E6547790A258fae",
        "positions": 1,
        "role": "earlier",
        "rounds": 1,
@@ -222,8 +220,6 @@
      "network": "8453",
      "note": "USDC on a network with value; new and small caps; no arbiter seat yet",
      "open_list": true,
-     "owner": "0x14C4274110F1c183Eec6095F3E6547790A258fae",
-     "owner_expected": "0x14C4274110F1c183Eec6095F3E6547790A258fae",
      "params": {
       "a0": "166600000000000000",
       "againstMultipleBps": "5000",
@@ -255,8 +251,7 @@
      "sellers": [
       {
        "last_block": 52086319,
-       "rounds": 1,
-       "seller": "0xDd9B2e8CEE41f66590f38214B6819B78eE8a0674"
+       "rounds": 1
       }
      ],
      "sides": {
@@ -331,7 +326,6 @@
        "from_block": 519142525,
        "market": "0xf2F7F4E06e7c8dE8D7F9F5eFdE83B030a7692672",
        "opens_rounds": true,
-       "owner": "0x9080B7053226a85130D3d8BC94a9C2066b41B33A",
        "positions": 0,
        "role": "current",
        "rounds": 0,
@@ -342,7 +336,6 @@
        "from_block": 511046690,
        "market": "0xAfc864dBb0B100581F9fcFF64969E57A0F063Ef3",
        "opens_rounds": false,
-       "owner": "0x9080B7053226a85130D3d8BC94a9C2066b41B33A",
        "positions": 1,
        "role": "earlier",
        "rounds": 1,
@@ -353,8 +346,6 @@
      "network": "42161",
      "note": "USDC on a network with value; new and small caps; no arbiter seat yet",
      "open_list": true,
-     "owner": "0x9080B7053226a85130D3d8BC94a9C2066b41B33A",
-     "owner_expected": "0x9080B7053226a85130D3d8BC94a9C2066b41B33A",
      "params": {
       "a0": "166600000000000000",
       "againstMultipleBps": "5000",
@@ -386,8 +377,7 @@
      "sellers": [
       {
        "last_block": 511054741,
-       "rounds": 1,
-       "seller": "0xDd9B2e8CEE41f66590f38214B6819B78eE8a0674"
+       "rounds": 1
       }
      ],
      "sides": {
@@ -462,7 +452,6 @@
        "from_block": 28457115,
        "market": "0x91c7EFbD5f0876afF43BC0a8CB063d0a79ACD307",
        "opens_rounds": true,
-       "owner": "0x14C4274110F1c183Eec6095F3E6547790A258fae",
        "positions": 0,
        "role": "current",
        "rounds": 0,
@@ -473,7 +462,6 @@
        "from_block": 23921173,
        "market": "0x29fEEc116e0CAbbaf38e9EBF2BBf65d82D672104",
        "opens_rounds": false,
-       "owner": "0x14C4274110F1c183Eec6095F3E6547790A258fae",
        "positions": 1,
        "role": "earlier",
        "rounds": 1,
@@ -484,8 +472,6 @@
      "network": "5042",
      "note": "USDC on a network with value; new and small caps; no arbiter seat yet",
      "open_list": true,
-     "owner": "0x14C4274110F1c183Eec6095F3E6547790A258fae",
-     "owner_expected": "0x14C4274110F1c183Eec6095F3E6547790A258fae",
      "params": {
       "a0": "166600000000000000",
       "againstMultipleBps": "5000",
@@ -517,8 +503,7 @@
      "sellers": [
       {
        "last_block": 23921724,
-       "rounds": 1,
-       "seller": "0xDd9B2e8CEE41f66590f38214B6819B78eE8a0674"
+       "rounds": 1
       }
      ],
      "sides": {
@@ -593,7 +578,6 @@
        "from_block": 100326815,
        "market": "0x9f5bfC720d2ea054993fB22c64f378479102C425",
        "opens_rounds": true,
-       "owner": "0x14C4274110F1c183Eec6095F3E6547790A258fae",
        "positions": 0,
        "role": "current",
        "rounds": 0,
@@ -604,7 +588,6 @@
        "from_block": 78462403,
        "market": "0x29fEEc116e0CAbbaf38e9EBF2BBf65d82D672104",
        "opens_rounds": false,
-       "owner": "0x14C4274110F1c183Eec6095F3E6547790A258fae",
        "positions": 1,
        "role": "earlier",
        "rounds": 0,
@@ -615,8 +598,6 @@
      "network": "4663",
      "note": "USDG on a network with value; new and small caps; no arbiter seat yet",
      "open_list": true,
-     "owner": "0x14C4274110F1c183Eec6095F3E6547790A258fae",
-     "owner_expected": "0x14C4274110F1c183Eec6095F3E6547790A258fae",
      "params": {
       "a0": "166600000000000000",
       "againstMultipleBps": "5000",
@@ -698,7 +679,6 @@
      "answer_log": null,
      "arbiter": null,
      "asset": {
-      "address": "0x754704Bc059F8C67012fEd69BC8A327a5aafb603",
       "decimals": 6,
       "symbol": "USDC"
      },
@@ -718,7 +698,6 @@
        "from_block": 117413459,
        "market": "0x83BC44BD6d4065B336DCCBE2fb82f4C984Ae20c9",
        "opens_rounds": true,
-       "owner": "0x14C4274110F1c183Eec6095F3E6547790A258fae",
        "positions": 0,
        "role": "current",
        "rounds": 0,
@@ -729,7 +708,6 @@
        "from_block": 109972315,
        "market": "0xAfc864dBb0B100581F9fcFF64969E57A0F063Ef3",
        "opens_rounds": false,
-       "owner": "0x14C4274110F1c183Eec6095F3E6547790A258fae",
        "positions": 1,
        "role": "earlier",
        "rounds": 1,
@@ -740,8 +718,6 @@
      "network": "143",
      "note": "USDC on a network with value; new and small caps; no arbiter seat yet",
      "open_list": true,
-     "owner": "0x14C4274110F1c183Eec6095F3E6547790A258fae",
-     "owner_expected": "0x14C4274110F1c183Eec6095F3E6547790A258fae",
      "params": {
       "a0": "166600000000000000",
       "againstMultipleBps": "5000",
@@ -773,8 +749,7 @@
      "sellers": [
       {
        "last_block": 109973978,
-       "rounds": 1,
-       "seller": "0xDd9B2e8CEE41f66590f38214B6819B78eE8a0674"
+       "rounds": 1
       }
      ],
      "sides": {
@@ -1284,6 +1259,13 @@
  "notes": {
   "trimmed": [
    "get_key (the free-key offer every keyless answer carries)"
+  ],
+  "dropped": [
+   "markets[].markets_of_line[].owner (the address a fee payee or payTo names)",
+   "markets[].owner (the address a fee payee or payTo names)",
+   "markets[].owner_expected (the address a fee payee or payTo names)",
+   "markets[].sellers[].seller (the address a fee payee or payTo names)",
+   "markets[].asset.address (the address a fee payee or payTo names)"
   ]
  }
 }
