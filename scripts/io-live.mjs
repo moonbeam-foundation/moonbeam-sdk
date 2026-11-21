@@ -13,6 +13,11 @@ export const LIVE_BASE = 'https://coord.taifoon.dev/v1';
 export const LIVE_MAX = 150;
 const GAP_MS = 1100;
 const STOPS = new Set([401, 402, 429]);
+/** _WALL_IS_THE_PROOF_v1_: a priced door answers 402 with its terms (an `accepts` list). For a step whose read IS that door, the 402
+ *  is the answer the step proves, not a refusal: with o.wall it is kept, logged as a wall, and never closes the route. The terms sit
+ *  at the top of the answer or under `x402`; a 402 with no terms (a spent free rate) stays a refusal. */
+const termsOf = (b) => (Array.isArray(b?.accepts) ? b.accepts : Array.isArray(b?.x402?.accepts) ? b.x402.accepts : []);
+export const isWallAnswer = (status, body) => status === 402 && !!body && typeof body === 'object' && termsOf(body).length > 0;
 
 export function liveLog(root) {
   const file = join(root, 'test/io/live-log.json');
@@ -30,7 +35,7 @@ export async function liveGet(root, path, o = {}) {
   if (L.log.calls.length >= LIVE_MAX) throw new Error(`live budget spent: ${L.log.calls.length} of ${LIVE_MAX}`);
   const key = recorderKey();
   const today = new Date().toISOString().slice(0, 10);
-  const closed = L.log.calls.findLast((c) => STOPS.has(c.status) && routeOf(c.path) === routeOf(path) && !!c.keyed === !!key && !(o.daily && String(c.at).slice(0, 10) < today));
+  const closed = L.log.calls.findLast((c) => STOPS.has(c.status) && !c.wall && !(o.wall && c.status === 402) && routeOf(c.path) === routeOf(path) && !!c.keyed === !!key && !(o.daily && String(c.at).slice(0, 10) < today));
   if (closed) return { status: closed.status, body: null, refused: true, closedBy: closed.path };
   const last = L.log.calls.at(-1);
   const wait = last ? gapMs - (Date.now() - Date.parse(last.at)) : 0;
@@ -46,8 +51,9 @@ export async function liveGet(root, path, o = {}) {
     assertNoSecret(text, `the answer to GET ${path}`);
     try { body = JSON.parse(text); } catch { body = { non_json: text.slice(0, 200) }; }
   } catch (e) { if (/^refused to write/.test(e?.message)) throw e; status = -1; body = { error: String(e?.message ?? e) }; }
-  L.log.calls.push({ n: L.log.calls.length + 1, at, path, status, ...(key ? { keyed: true } : {}), ...(STOPS.has(status) ? { refused: true } : {}) });
+  const wall = !!o.wall && isWallAnswer(status, body);
+  L.log.calls.push({ n: L.log.calls.length + 1, at, path, status, ...(key ? { keyed: true } : {}), ...(wall ? { wall: true } : STOPS.has(status) ? { refused: true } : {}) });
   assertNoSecret(JSON.stringify(L.log), 'test/io/live-log.json');
   L.save();
-  return { status, body, read_at: at, ...(STOPS.has(status) ? { refused: true } : {}) };
+  return { status, body, read_at: at, ...(wall ? { wall: true } : STOPS.has(status) ? { refused: true } : {}) };
 }

@@ -1,0 +1,516 @@
+{
+ "op": "GET x402/class/:class",
+ "market": "x402-base",
+ "stage": "listed",
+ "dir": "read",
+ "source": "live",
+ "rung": "live",
+ "run": "live:x402-base/list@2026-11-06",
+ "path": {
+  "op": "list",
+  "step": "published"
+ },
+ "request": {
+  "method": "GET",
+  "path": "/v1/x402/class/market.price",
+  "query": {}
+ },
+ "response": {
+  "status": 402,
+  "body": {
+   "ok": false,
+   "code": "payment_required",
+   "error": "one market.price answer is 0.001714 USDC, paid with x402 on Base. Note: send { symbol } (or ?symbol=)",
+   "x402": {
+    "x402Version": 2,
+    "error": "Payment Required",
+    "resource": {
+     "url": "https://coord.taifoon.dev/v1/x402/class/market.price",
+     "description": "Latest USD price of BTC, ETH, SOL, NQ, ES, YM from the Taifoon venue tape: the close of the last closed 1-minute bar, its time, age and sha256 digest, replayable with one GET. Only symbols the tape holds; a price older than 180 s is never served as current (nothing is charged). BTC, ETH, SOL are held to Chainlink on Base within 1 % when its feed is under 1 h old. 0.001714 USDC a call.",
+     "mimeType": "application/json",
+     "serviceName": "Crypto price: BTC, ETH, SOL",
+     "iconUrl": "https://www.taifoon.io/apple-touch-icon.png",
+     "tags": [
+      "price",
+      "crypto",
+      "btc",
+      "eth",
+      "sol"
+     ]
+    },
+    "accepts": [
+     {
+      "scheme": "exact",
+      "network": "eip155:8453",
+      "amount": "1714",
+      "maxAmountRequired": "1714",
+      "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+      "maxTimeoutSeconds": 300,
+      "resource": "https://coord.taifoon.dev/v1/x402/class/market.price",
+      "description": "Latest USD price of BTC, ETH, SOL, NQ, ES, YM from the Taifoon venue tape: the close of the last closed 1-minute bar, its time, age and sha256 digest, replayable with one GET. Only symbols the tape holds; a price older than 180 s is never served as current (nothing is charged). BTC, ETH, SOL are held to Chainlink on Base within 1 % when its feed is under 1 h old. 0.001714 USDC a call.",
+      "mimeType": "application/json",
+      "extra": {
+       "name": "USD Coin",
+       "version": "2"
+      }
+     },
+     {
+      "scheme": "exact",
+      "network": "eip155:42161",
+      "amount": "1714",
+      "maxAmountRequired": "1714",
+      "asset": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
+      "maxTimeoutSeconds": 300,
+      "resource": "https://coord.taifoon.dev/v1/x402/class/market.price",
+      "description": "Latest USD price of BTC, ETH, SOL, NQ, ES, YM from the Taifoon venue tape: the close of the last closed 1-minute bar, its time, age and sha256 digest, replayable with one GET. Only symbols the tape holds; a price older than 180 s is never served as current (nothing is charged). BTC, ETH, SOL are held to Chainlink on Base within 1 % when its feed is under 1 h old. 0.001714 USDC a call.",
+      "mimeType": "application/json",
+      "extra": {
+       "name": "USD Coin",
+       "version": "2"
+      }
+     },
+     {
+      "scheme": "exact",
+      "network": "eip155:5042",
+      "amount": "1714",
+      "maxAmountRequired": "1714",
+      "asset": "0x3600000000000000000000000000000000000000",
+      "maxTimeoutSeconds": 300,
+      "resource": "https://coord.taifoon.dev/v1/x402/class/market.price",
+      "description": "Latest USD price of BTC, ETH, SOL, NQ, ES, YM from the Taifoon venue tape: the close of the last closed 1-minute bar, its time, age and sha256 digest, replayable with one GET. Only symbols the tape holds; a price older than 180 s is never served as current (nothing is charged). BTC, ETH, SOL are held to Chainlink on Base within 1 % when its feed is under 1 h old. 0.001714 USDC a call.",
+      "mimeType": "application/json",
+      "extra": {
+       "name": "USDC",
+       "version": "2"
+      }
+     },
+     {
+      "scheme": "exact",
+      "network": "eip155:4663",
+      "amount": "1714",
+      "maxAmountRequired": "1714",
+      "asset": "0x5fc5360D0400a0Fd4f2af552ADD042D716F1d168",
+      "maxTimeoutSeconds": 300,
+      "resource": "https://coord.taifoon.dev/v1/x402/class/market.price",
+      "description": "Latest USD price of BTC, ETH, SOL, NQ, ES, YM from the Taifoon venue tape: the close of the last closed 1-minute bar, its time, age and sha256 digest, replayable with one GET. Only symbols the tape holds; a price older than 180 s is never served as current (nothing is charged). BTC, ETH, SOL are held to Chainlink on Base within 1 % when its feed is under 1 h old. 0.001714 USDC a call.",
+      "mimeType": "application/json",
+      "extra": {
+       "name": "Global Dollar",
+       "version": "1"
+      }
+     },
+     {
+      "scheme": "exact",
+      "network": "eip155:143",
+      "amount": "1714",
+      "maxAmountRequired": "1714",
+      "maxTimeoutSeconds": 300,
+      "resource": "https://coord.taifoon.dev/v1/x402/class/market.price",
+      "description": "Latest USD price of BTC, ETH, SOL, NQ, ES, YM from the Taifoon venue tape: the close of the last closed 1-minute bar, its time, age and sha256 digest, replayable with one GET. Only symbols the tape holds; a price older than 180 s is never served as current (nothing is charged). BTC, ETH, SOL are held to Chainlink on Base within 1 % when its feed is under 1 h old. 0.001714 USDC a call.",
+      "mimeType": "application/json",
+      "extra": {
+       "name": "USDC",
+       "version": "2"
+      }
+     },
+     {
+      "scheme": "exact",
+      "network": "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp",
+      "amount": "1714",
+      "maxAmountRequired": "1714",
+      "asset": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+      "maxTimeoutSeconds": 300,
+      "resource": "https://coord.taifoon.dev/v1/x402/class/market.price",
+      "description": "Latest USD price of BTC, ETH, SOL, NQ, ES, YM from the Taifoon venue tape: the close of the last closed 1-minute bar, its time, age and sha256 digest, replayable with one GET. Only symbols the tape holds; a price older than 180 s is never served as current (nothing is charged). BTC, ETH, SOL are held to Chainlink on Base within 1 % when its feed is under 1 h old. 0.001714 USDC a call.",
+      "mimeType": "application/json",
+      "extra": {
+       "feePayer": "CjNFTjvBhbJJd2B5ePPMHRLx1ELZpa8dwQgGL727eKww"
+      }
+     }
+    ],
+    "extensions": {
+     "bazaar": {
+      "info": {
+       "input": {
+        "type": "http",
+        "method": "GET",
+        "queryParams": {
+         "symbol": "ETH"
+        }
+       },
+       "output": {
+        "type": "json",
+        "example": {
+         "ok": true,
+         "class": "market.price",
+         "symbol": "ETH",
+         "price_usd": 2538.81,
+         "source": "the Taifoon venue tape (https://clob.taifoon.dev/tape/v1/candles/ETH/1m): the close of the last closed 1-minute bar",
+         "as_of": "2026-10-11T18:20:00.000Z",
+         "age_s": 41,
+         "fresh": true,
+         "bar": {
+          "tf": "1m",
+          "t": 1791742740,
+          "o": 2538.88,
+          "h": 2539.1,
+          "l": 2538.6,
+          "c": 2538.81,
+          "v": 12.4
+         },
+         "digest": "9f2c…",
+         "replay": "https://clob.taifoon.dev/tape/v1/candles/ETH/1m?from=1791742740&to=1791742799",
+         "reference": {
+          "usd": 2539.4,
+          "source": "Chainlink ETH / USD on Base",
+          "age_s": 600,
+          "off_pct": 0.02
+         }
+        }
+       }
+      },
+      "schema": {
+       "$schema": "https://json-schema.org/draft/2020-12/schema",
+       "type": "object",
+       "properties": {
+        "input": {
+         "type": "object",
+         "properties": {
+          "type": {
+           "type": "string",
+           "const": "http"
+          },
+          "method": {
+           "type": "string",
+           "enum": [
+            "GET",
+            "HEAD",
+            "DELETE"
+           ]
+          },
+          "queryParams": {
+           "type": "object",
+           "properties": {
+            "symbol": {
+             "type": "string",
+             "enum": [
+              "BTC",
+              "ETH",
+              "SOL",
+              "NQ",
+              "ES",
+              "YM"
+             ],
+             "description": "the symbol to price: one the Taifoon venue tape holds"
+            }
+           },
+           "required": [
+            "symbol"
+           ],
+           "additionalProperties": {
+            "type": "string"
+           }
+          },
+          "headers": {
+           "type": "object",
+           "additionalProperties": {
+            "type": "string"
+           }
+          }
+         },
+         "required": [
+          "type",
+          "method"
+         ],
+         "additionalProperties": false
+        },
+        "output": {
+         "type": "object",
+         "properties": {
+          "type": {
+           "type": "string"
+          },
+          "example": {
+           "type": "object",
+           "properties": {
+            "symbol": {
+             "type": "string",
+             "enum": [
+              "BTC",
+              "ETH",
+              "SOL",
+              "NQ",
+              "ES",
+              "YM"
+             ]
+            },
+            "price_usd": {
+             "type": "number"
+            },
+            "as_of": {
+             "type": "string",
+             "description": "when the bar closed (ISO 8601)"
+            },
+            "age_s": {
+             "type": "integer",
+             "description": "seconds since the bar closed; at most 180, else no price is served"
+            },
+            "digest": {
+             "type": "string",
+             "description": "sha256 over the bar’s \"t,o,h,l,c,v\" line (the market.candles digest)"
+            },
+            "replay": {
+             "type": "string",
+             "description": "the tape GET that returns the same bar"
+            }
+           },
+           "required": [
+            "symbol",
+            "price_usd",
+            "as_of",
+            "age_s",
+            "digest"
+           ]
+          }
+         },
+         "required": [
+          "type"
+         ]
+        }
+       },
+       "required": [
+        "input"
+       ]
+      }
+     }
+    },
+    "without_x402": {
+     "why": "x402 is settled on eip155:8453 (Base), eip155:42161 (Arbitrum One), eip155:5042 (Arc), eip155:4663 (Robinhood Chain), eip155:143 (Monad), solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp (Solana): pay the entry of the network you hold the dollar token on. A key with a balance is the other way to pay, the same price on any of them.",
+     "settles_x402": [
+      "eip155:8453",
+      "eip155:42161",
+      "eip155:5042",
+      "eip155:4663",
+      "eip155:143",
+      "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp"
+     ],
+     "direct": {
+      "chains": [
+       "eip155:8453 (Base, USDC)",
+       "eip155:42161 (Arbitrum One, USDC)",
+       "eip155:5042 (Arc, USDC)",
+       "eip155:4663 (Robinhood Chain, USDG)",
+       "eip155:143 (Monad, USDC)"
+      ],
+      "quote": "GET https://www.taifoon.io/v1/access/quote?usdc=1&chainId=<id> with X-API-Key (POST /v1/register for one), then POST /v1/access/topup { tx, signature, chainId }",
+      "for_a_person": "https://www.taifoon.io/plans",
+      "then": "send the same request with X-API-Key: it is paid from the balance at the same price"
+     }
+    }
+   },
+   "extensions": {
+    "bazaar": {
+     "info": {
+      "input": {
+       "type": "http",
+       "method": "GET",
+       "queryParams": {
+        "symbol": "ETH"
+       }
+      },
+      "output": {
+       "type": "json",
+       "example": {
+        "ok": true,
+        "class": "market.price",
+        "symbol": "ETH",
+        "price_usd": 2538.81,
+        "source": "the Taifoon venue tape (https://clob.taifoon.dev/tape/v1/candles/ETH/1m): the close of the last closed 1-minute bar",
+        "as_of": "2026-10-11T18:20:00.000Z",
+        "age_s": 41,
+        "fresh": true,
+        "bar": {
+         "tf": "1m",
+         "t": 1791742740,
+         "o": 2538.88,
+         "h": 2539.1,
+         "l": 2538.6,
+         "c": 2538.81,
+         "v": 12.4
+        },
+        "digest": "9f2c…",
+        "replay": "https://clob.taifoon.dev/tape/v1/candles/ETH/1m?from=1791742740&to=1791742799",
+        "reference": {
+         "usd": 2539.4,
+         "source": "Chainlink ETH / USD on Base",
+         "age_s": 600,
+         "off_pct": 0.02
+        }
+       }
+      }
+     },
+     "schema": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
+       "input": {
+        "type": "object",
+        "properties": {
+         "type": {
+          "type": "string",
+          "const": "http"
+         },
+         "method": {
+          "type": "string",
+          "enum": [
+           "GET",
+           "HEAD",
+           "DELETE"
+          ]
+         },
+         "queryParams": {
+          "type": "object",
+          "properties": {
+           "symbol": {
+            "type": "string",
+            "enum": [
+             "BTC",
+             "ETH",
+             "SOL",
+             "NQ",
+             "ES",
+             "YM"
+            ],
+            "description": "the symbol to price: one the Taifoon venue tape holds"
+           }
+          },
+          "required": [
+           "symbol"
+          ],
+          "additionalProperties": {
+           "type": "string"
+          }
+         },
+         "headers": {
+          "type": "object",
+          "additionalProperties": {
+           "type": "string"
+          }
+         }
+        },
+        "required": [
+         "type",
+         "method"
+        ],
+        "additionalProperties": false
+       },
+       "output": {
+        "type": "object",
+        "properties": {
+         "type": {
+          "type": "string"
+         },
+         "example": {
+          "type": "object",
+          "properties": {
+           "symbol": {
+            "type": "string",
+            "enum": [
+             "BTC",
+             "ETH",
+             "SOL",
+             "NQ",
+             "ES",
+             "YM"
+            ]
+           },
+           "price_usd": {
+            "type": "number"
+           },
+           "as_of": {
+            "type": "string",
+            "description": "when the bar closed (ISO 8601)"
+           },
+           "age_s": {
+            "type": "integer",
+            "description": "seconds since the bar closed; at most 180, else no price is served"
+           },
+           "digest": {
+            "type": "string",
+            "description": "sha256 over the bar’s \"t,o,h,l,c,v\" line (the market.candles digest)"
+           },
+           "replay": {
+            "type": "string",
+            "description": "the tape GET that returns the same bar"
+           }
+          },
+          "required": [
+           "symbol",
+           "price_usd",
+           "as_of",
+           "age_s",
+           "digest"
+          ]
+         }
+        },
+        "required": [
+         "type"
+        ]
+       }
+      },
+      "required": [
+       "input"
+      ]
+     }
+    }
+   },
+   "terms": {
+    "class": "market.price",
+    "served_by": "taifoon (the venue tape)",
+    "price_units": "1714",
+    "price_usdc": 0.001714,
+    "per": "call",
+    "symbols": [
+     "BTC",
+     "ETH",
+     "SOL",
+     "NQ",
+     "ES",
+     "YM"
+    ],
+    "fresh_max_age_s": 180,
+    "source": "the Taifoon venue tape (clob.taifoon.dev /tape/v1/candles, the market.candles source): the close of the last closed 1-minute bar; no other feed",
+    "basis": "the price is the one rule's (_UNDERCUT_v3_, owner 2026-11-14, packages/products/undercut.mjs; its answer is `priced`): 20 % under the cheapest seller with matching skills on the x402 venues, never under our cost (`cost_units`) × 1.2; with no matching seller, cost × 1.2. The one rule replaces market.candles' max(list, cost x 1.5) for this class (owner 2026-11-03)",
+    "not_advice": "Facts about past prices and past fills; not advice.",
+    "catalogue": "https://coord.taifoon.dev/v1/products (x402.per_call)"
+   },
+   "next_step": {
+    "action": "retry",
+    "why": "pay 0.001714 USDC with x402 and send the same request again with the PAYMENT-SIGNATURE (or X-PAYMENT) header; a stale price is never served and never charged",
+    "http": {
+     "method": "GET",
+     "url": "https://coord.taifoon.dev/v1/x402/class/market.price?symbol=ETH",
+     "header": "PAYMENT-SIGNATURE"
+    },
+    "price": {
+     "amount": "0.001714",
+     "currency": "USDC",
+     "per": "call",
+     "chain": 8453
+    },
+    "evaluator": "/v1/judge/evaluator"
+   },
+   "message": "one market.price answer is 0.001714 USDC, paid with x402 on Base. Note: send { symbol } (or ?symbol=)",
+   "hint": "pay 0.001714 USDC with x402 and send the same request again with the PAYMENT-SIGNATURE (or X-PAYMENT) header; a stale price is never served and never charged"
+  }
+ },
+ "wall": true,
+ "coord_sha": "d7af0f1634626fc01ddaf31a1bb6f350a24d134e",
+ "read_at": "2026-11-21T12:29:38.212Z",
+ "notes": {
+  "dropped": [
+   "x402.accepts[].payTo (a payee, requester, signer or treasury-like address field)",
+   "x402.accepts[].asset (the address a fee payee or payTo names)"
+  ]
+ }
+}

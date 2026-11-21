@@ -12,7 +12,7 @@ A fork or devnet run is Moonbeam's own evidence of the code, and never a public 
 
 | Path | What it does | Steps | Proved by | Transactions | Run file | Mainnet reads kept |
 |---|---|---|---|---|---|---|
-| list | the operator’s class walls in the x402 directories buyers search | published → indexed | mainnet | — | `x402-base/listed/run-live-list.json` | list: 0 of 2 reads |
+| list | the operator’s class walls in the x402 directories buyers search | published → indexed | mainnet | — | `x402-base/listed/run-live-list.json` | list: 2 of 2 reads |
 | buy | the operator pays an outside 402 seller for the answer it resells | hired → paid → delivered | not yet | — | — | — |
 | sell | an outside buyer pays the operator’s wall; the seller whose answer it was is paid its share | settled → delivered → legs → paid | fork, mainnet | 21 on Base | `x402-base/bought/run-fork-sell.json`<br>`x402-base/bought/run-live-sell.json`<br>`x402-base/delivered/run-fork-sell.json`<br>`x402-base/delivered/run-live-sell.json`<br>`x402-base/paid/run-fork-sell.json` | jobs_received: 0 of 3 reads<br>deliver: 0 of 3 reads |
 

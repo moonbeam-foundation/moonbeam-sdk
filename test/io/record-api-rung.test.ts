@@ -1,11 +1,13 @@
 // _ACCEPTANCE_TESTS_v1_: the api-rung recorder (scripts/record-api-rung.mjs), over an injected fetch only: no network, no key of ours.
 import { execFileSync } from 'node:child_process';
-import { existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
+import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 // @ts-expect-error: a plain ES module
 import { liveRunOf, liveWalks, planLive, planWalk, recordApiRung, resolveRead, sdkCallOf, stageOf } from '../../scripts/record-api-rung.mjs';
+// @ts-expect-error: a plain ES module shared with the recorder
+import { isWallAnswer } from '../../scripts/io-live.mjs';
 // @ts-expect-error: a plain ES module
 import { mask } from '../../scripts/io-mask.mjs';
 // @ts-expect-error: a plain ES module
@@ -169,6 +171,29 @@ describe('_MAINNET_IO_v1_ mainnet-run recorder', () => {
     writeFileSync(log, JSON.stringify(l));
     const api = await recordApiRung({ root, paths: livePaths(), map: liveMap, market: 'm', op: 'list', params: { name: 'a.b/c-d' }, fetchImpl: ok.fetchImpl, gapMs: 0 });
     expect(api.stopped).toMatch(/^402 on /);
+  });
+
+  it('_WALL_IS_THE_PROOF_v1_: a priced door keeps its 402 with terms as the step, a bare 402 there still stops, and the wall never closes the route', async () => {
+    const doorPaths = () => { const p = livePaths(); p.rows[0]!.steps = [{ id: 'listed', leaves: 'a priced door', read: 'GET /v1/x402/class/{name}' }, { id: 'shown', leaves: 'a page', read: 'GET /v1/catalog?kind={venue}' }]; return p; };
+    const terms = { ok: false, code: 'payment_required', accepts: [{ scheme: 'exact', network: 'eip155:8453', maxAmountRequired: '1714' }] };
+    const door = fakeFetch((u: URL) => (String(u).includes('/x402/class/') ? { status: 402, body: terms } : { status: 200, body: { ok: true } }));
+    const r = await recordApiRung({ root, paths: doorPaths(), map: liveMap, market: 'm', op: 'list', rung: 'live', fetchImpl: door.fetchImpl, gapMs: 0 });
+    expect(r.stopped).toBeNull(); expect(r.wrote).toHaveLength(2);
+    const fx = JSON.parse(readFileSync(join(root, r.wrote[0]), 'utf8'));
+    expect(fx.response.status).toBe(402); expect(fx.response.body.accepts).toHaveLength(1); expect(fx.path).toEqual({ op: 'list', step: 'listed' });
+    const log = JSON.parse(readFileSync(join(root, 'test/io/live-log.json'), 'utf8'));
+    expect(log.calls[0]).toMatchObject({ status: 402, wall: true }); expect(log.calls[0].refused).toBeUndefined();
+    // the same door asked again is not closed by its own wall
+    const again = await recordApiRung({ root, paths: doorPaths(), map: liveMap, market: 'm', op: 'list', rung: 'live', force: true, fetchImpl: door.fetchImpl, gapMs: 0 });
+    expect(again.stopped).toBeNull();
+    // the terms may sit under x402, as the door serves them
+    expect(isWallAnswer(402, { code: 'payment_required', x402: { accepts: [{ scheme: 'exact' }] } })).toBe(true);
+    expect(isWallAnswer(402, { reason: 'past_free_rate' })).toBe(false); expect(isWallAnswer(200, terms)).toBe(false);
+    // a 402 with no terms is a refusal, at a door too
+    const bare = fakeFetch(() => ({ status: 402, body: { ok: false, reason: 'past_free_rate' } }));
+    const root2 = mkdtempSync(join(tmpdir(), 'io-wall-')); cpSync(root, root2, { recursive: true }); writeFileSync(join(root2, 'test/io/live-log.json'), JSON.stringify({ calls: [] }));
+    const refused = await recordApiRung({ root: root2, paths: doorPaths(), map: liveMap, market: 'm', op: 'list', rung: 'live', force: true, fetchImpl: bare.fetchImpl, gapMs: 0 });
+    expect(refused.stopped).toMatch(/^402 on /); expect(refused.wrote).toEqual([]);
   });
 
   it('refuses a rung it does not know', async () => {
