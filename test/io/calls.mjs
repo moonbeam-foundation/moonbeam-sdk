@@ -180,6 +180,9 @@ export const CALLS = {
       expect(result.purposes.length).toBe(rowsLen(x.fx.response.body, 'purposes'));
       expect(result.purposes.find((p) => p.id === 'devnet.payout'), 'devnet.payout is not in the served register').toBeUndefined();
     } },
+  agentPayTo: { fn: 'market.agentPayTo', run: (s, t) => s.agentPayTo(t),
+    check: ({ result, x, expect }) => { const b = x.fx.response.body; expect(result.matching).toBe(b.matching); expect(result.agents.length).toBe(b.agents.length);
+      expect(result.agents[0]?.payTo.length).toBe(b.agents[0]?.payments.length); } },
   claimablePayouts: { fn: 'market.claimablePayouts', run: (s, t) => s.claimablePayouts(t, { chain: String(DEVNET), limit: 3 }),
     check: ({ result, x, expect }) => { expect(result.payouts.length).toBe(rowsLen(x.fx.response.body, 'envelopes')); expect(result.count).toBe(x.fx.response.body.count); } },
   // the hire's unsigned plan (POST /v1/settle, coord api_bodies.SettlePlan): the devnet job's terms; the answer carries only the fields

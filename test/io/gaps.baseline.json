@@ -1,6 +1,6 @@
 {
  "rule": "_COORD_IO_COVERAGE_v1_: the gap count may only go down; lower it here when a gap closes",
- "coord_sha": "9b4c6c382862727e655a3f06ecb7ed33d7a88905",
+ "coord_sha": "70934269235ab28b149e2dd60dc2588edde87a73",
  "total": 28,
  "by": {
   "needs_key": 1,

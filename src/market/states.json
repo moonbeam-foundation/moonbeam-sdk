@@ -9,7 +9,7 @@
    "label": "offer in",
    "read": {
     "method": "GET",
-    "path": "/v1/harvest"
+    "path": "/v1/agents/:chain/:agentId/readiness"
    }
   },
   {
@@ -163,7 +163,7 @@
    "label": "PAID",
    "read": {
     "method": "GET",
-    "path": "/v1/agents/payments"
+    "path": "/v1/resale/sales/:id"
    }
   },
   {
@@ -180,18 +180,18 @@
   {
    "id": "refused",
    "step": "read",
-   "kind": "terminal",
+   "kind": "side",
    "led": "off",
    "label": "refused",
    "read": {
     "method": "GET",
-    "path": "/v1/harvest"
+    "path": "/v1/agents/:chain/:agentId/readiness"
    }
   },
   {
    "id": "held_entry",
    "step": "list",
-   "kind": "held",
+   "kind": "side",
    "led": "amber",
    "label": "held: paid entry",
    "read": {
@@ -202,7 +202,7 @@
   {
    "id": "held_owner",
    "step": "list",
-   "kind": "held",
+   "kind": "side",
    "led": "amber",
    "label": "held: owner step",
    "read": {
@@ -213,7 +213,7 @@
   {
    "id": "paused",
    "step": "list",
-   "kind": "held",
+   "kind": "side",
    "led": "amber",
    "label": "paused",
    "read": {
@@ -224,7 +224,7 @@
   {
    "id": "archived",
    "step": "list",
-   "kind": "terminal",
+   "kind": "side",
    "led": "off",
    "label": "archived",
    "read": {
@@ -235,7 +235,7 @@
   {
    "id": "unmatched",
    "step": "take",
-   "kind": "held",
+   "kind": "side",
    "led": "amber",
    "label": "unmatched",
    "read": {
@@ -246,29 +246,29 @@
   {
    "id": "ended",
    "step": "take",
-   "kind": "terminal",
+   "kind": "side",
    "led": "off",
    "label": "ended unpaid",
    "read": {
     "method": "GET",
-    "path": "/v1/explorer/jobs/:id"
+    "path": "/v1/jobs"
    }
   },
   {
    "id": "on_hold",
    "step": "hire",
-   "kind": "held",
+   "kind": "side",
    "led": "amber",
    "label": "on hold",
    "read": {
     "method": "GET",
-    "path": "/v1/explorer/jobs/:id"
+    "path": "/v1/jobs"
    }
   },
   {
    "id": "held_review",
    "step": "hire",
-   "kind": "held",
+   "kind": "side",
    "led": "amber",
    "label": "held: review",
    "read": {
@@ -279,7 +279,7 @@
   {
    "id": "failed_before_hire",
    "step": "take",
-   "kind": "terminal",
+   "kind": "side",
    "led": "red",
    "label": "failed: not delivered",
    "read": {
@@ -290,18 +290,18 @@
   {
    "id": "failed_hire",
    "step": "hire",
-   "kind": "terminal",
+   "kind": "side",
    "led": "red",
    "label": "broken",
    "read": {
     "method": "GET",
-    "path": "/v1/explorer/jobs/:id"
+    "path": "/v1/jobs"
    }
   },
   {
    "id": "refunded_on_reject",
    "step": "settle",
-   "kind": "terminal",
+   "kind": "side",
    "led": "red",
    "label": "refunded: rejected",
    "read": {
@@ -312,7 +312,7 @@
   {
    "id": "refunded",
    "step": "settle",
-   "kind": "held",
+   "kind": "side",
    "led": "green",
    "label": "refunded",
    "read": {
@@ -323,7 +323,7 @@
   {
    "id": "failed_settle",
    "step": "settle",
-   "kind": "terminal",
+   "kind": "side",
    "led": "red",
    "label": "broken",
    "read": {
@@ -334,7 +334,7 @@
   {
    "id": "held_leg",
    "step": "payout",
-   "kind": "held",
+   "kind": "side",
    "led": "amber",
    "label": "Held",
    "read": {
@@ -345,7 +345,7 @@
   {
    "id": "forfeited",
    "step": "payout",
-   "kind": "terminal",
+   "kind": "side",
    "led": "red",
    "label": "forfeited",
    "read": {
