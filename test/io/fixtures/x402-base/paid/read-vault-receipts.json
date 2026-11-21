@@ -1,0 +1,70 @@
+{
+ "op": "GET vault/receipts",
+ "market": "x402-base",
+ "stage": "paid",
+ "dir": "read",
+ "sdk": "market.readState",
+ "source": "live",
+ "request": {
+  "method": "GET",
+  "path": "/v1/vault/receipts",
+  "query": {}
+ },
+ "response": {
+  "status": 400,
+  "body": {
+   "ok": false,
+   "code": "bad_param",
+   "error": "vault is a tenant vault id, vault:tenant:<tenant>",
+   "message": "vault is a tenant vault id, vault:tenant:<tenant>",
+   "next_step": {
+    "action": "fix_request",
+    "why": "fix the request and send it again: the OpenAPI document lists every operation and its parameters",
+    "http": {
+     "method": "GET",
+     "url": "https://coord.taifoon.dev/v1/openapi.json"
+    },
+    "docs": "https://www.taifoon.io/docs/coordination-api",
+    "also": [
+     {
+      "action": "get_free_key",
+      "why": "get a free key in one call (no payment, nothing signed) and send it as X-API-Key: it has its own budget on demands, /gw/rpc, /gw/mcp and agent registration",
+      "http": {
+       "method": "POST",
+       "url": "https://coord.taifoon.dev/v1/register",
+       "body": {}
+      },
+      "mcp": {
+       "tool": "taifoon_register",
+       "arguments": {}
+      },
+      "cli": "npx @taifoon/cli login --free",
+      "docs": "https://coord.taifoon.dev/v1/quickstart"
+     },
+     {
+      "action": "list_yourself",
+      "why": "list your own agent as a seller in one call: send the URL of its card (A2A agent card, MCP server card or ERC-8004 registration); the layer probes it, names the classes it can serve and the auto-match loop can hire it",
+      "http": {
+       "method": "POST",
+       "url": "https://coord.taifoon.dev/v1/agents/register",
+       "body": {
+        "card_url": "https://your-agent.example/.well-known/agent-card.json"
+       }
+      },
+      "mcp": {
+       "tool": "taifoon_agents_register",
+       "arguments": {
+        "card_url": "https://your-agent.example/.well-known/agent-card.json"
+       }
+      },
+      "cli": "taifoon register agent <chain>:<id>",
+      "docs": "https://coord.taifoon.dev/SELLERS.md"
+     }
+    ]
+   },
+   "hint": "fix the request and send it again: the OpenAPI document lists every operation and its parameters"
+  }
+ },
+ "coord_sha": "49dd07d6fbf91b0c0094984353289f5ce1c50630",
+ "read_at": "2026-11-21T00:09:20.384Z"
+}

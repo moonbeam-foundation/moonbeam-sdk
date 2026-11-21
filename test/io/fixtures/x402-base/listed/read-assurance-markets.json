@@ -1,0 +1,1289 @@
+{
+ "op": "GET assurance/markets",
+ "market": "x402-base",
+ "stage": "listed",
+ "dir": "read",
+ "sdk": "market.readState",
+ "source": "live",
+ "request": {
+  "method": "GET",
+  "path": "/v1/assurance/markets",
+  "query": {}
+ },
+ "response": {
+  "status": 200,
+  "body": {
+   "hidden": 0,
+   "markets": [
+    {
+     "answer_log": "0xD8c1d8188Fc8EE388792f6EB3B3dbd4f341Ba8e3",
+     "arbiter": "0xB22795697B94617F4C695e0175bc3Aa787E8e9c4",
+     "asset": {
+      "address": "0x31854D915F31A1FBe57c2b06B5b60cbbD7D42D5b",
+      "decimals": 6,
+      "symbol": "dUSDC"
+     },
+     "chain_id": 36927,
+     "evaluator": "0x3e51dE80257D152356AD4250dEfFf974fCf24537",
+     "explorer": "https://www.taifoon.io/scan/36927",
+     "from_block": 2452024,
+     "hook": "0x9DE1E23445685a4fcF18CfF491ADad76A806c54d",
+     "links": {
+      "machine": "https://github.com/taifoon-io/[internal]/blob/master/schemas/assurance/machine.json",
+      "market": "https://www.taifoon.io/scan/36927/address/0xf8277ACD2a1ae7618DbbCc4879f3685c6e5382E7"
+     },
+     "market": "0xf8277ACD2a1ae7618DbbCc4879f3685c6e5382E7",
+     "markets_of_line": [
+      {
+       "anyone_lists": true,
+       "from_block": 2452024,
+       "market": "0xf8277ACD2a1ae7618DbbCc4879f3685c6e5382E7",
+       "opens_rounds": true,
+       "owner": "0x9d8df21DDf6Ad1E47C29b91077B71D2Dde8d08aA",
+       "positions": 0,
+       "role": "current",
+       "rounds": 0,
+       "state": "Active"
+      },
+      {
+       "anyone_lists": false,
+       "from_block": 1306300,
+       "market": "0xAD81f2535ef4Fd839d1eF7267B1cb72E890C013B",
+       "opens_rounds": false,
+       "owner": "0x9d8df21DDf6Ad1E47C29b91077B71D2Dde8d08aA",
+       "positions": 23,
+       "role": "earlier",
+       "rounds": 14,
+       "state": "Active"
+      }
+     ],
+     "name": "Taifoon devnet · V4 dUSDC line",
+     "network": "36927",
+     "note": "devnet test tokens (dUSDC mints freely); not a network with value",
+     "open_list": true,
+     "owner": "0x9d8df21DDf6Ad1E47C29b91077B71D2Dde8d08aA",
+     "owner_expected": "0x9d8df21DDf6Ad1E47C29b91077B71D2Dde8d08aA",
+     "params": {
+      "a0": "166600000000000000",
+      "againstMultipleBps": "10000",
+      "b0": "929700000000000000",
+      "coverMultipleBps": "10000",
+      "feeBps": "49",
+      "lambda": "2000000000000000000",
+      "lockCutoffS": "30",
+      "lpYield": "100000000000000000",
+      "maxRatio": "300000000000000000",
+      "minDistinctBuyers": "3",
+      "minFee": "1000",
+      "pMin": "5000000000000000",
+      "perBuyerCap": "3",
+      "seniorPerRound": "200000",
+      "utilization": "250000000000000000",
+      "voidGraceS": "120"
+     },
+     "positions": 23,
+     "prior": [
+      {
+       "from_block": 1306300,
+       "market": "0xAD81f2535ef4Fd839d1eF7267B1cb72E890C013B"
+      }
+     ],
+     "public": true,
+     "rounds": 14,
+     "runtime": "evm",
+     "sellers": [
+      {
+       "last_block": 1380231,
+       "rounds": 1,
+       "seller": "0x5FcD3380d4936Ac69658833144C1ec4300D24FE4"
+      },
+      {
+       "last_block": 1352187,
+       "rounds": 1,
+       "seller": "0xdC093920D42905c07751E1B479b3c5f876A585c2"
+      },
+      {
+       "last_block": 1350520,
+       "rounds": 1,
+       "seller": "0x994CD37A5BE63aB152E3FBd60E2d439B2b4525D6"
+      },
+      {
+       "last_block": 1350372,
+       "rounds": 1,
+       "seller": "0xE7dc8af9B65Ba0F5bd6F0f891EF01a80FDf54B9a"
+      },
+      {
+       "last_block": 1350313,
+       "rounds": 1,
+       "seller": "0xD57C9db3e4985A40eF78e3Cd68f53EC4608D5DdB"
+      },
+      {
+       "last_block": 1348969,
+       "rounds": 5,
+       "seller": "0x273a669f47aFfC206e0F0982A237076d4d48ccd9"
+      },
+      {
+       "last_block": 1306820,
+       "rounds": 4,
+       "seller": "0x76277f0Ef8310BddA8d876b4Aaa8909ecFbd643f"
+      }
+     ],
+     "sides": {
+      "AGAINST": {
+       "ours": {
+        "active": 0,
+        "owners": 1,
+        "positions": 2,
+        "stake": "0.1"
+       },
+       "outside": {
+        "active": 0,
+        "owners": 0,
+        "positions": 0,
+        "stake": "0"
+       }
+      },
+      "COVER": {
+       "ours": {
+        "active": 1,
+        "owners": 3,
+        "positions": 3,
+        "stake": "0.3"
+       },
+       "outside": {
+        "active": 0,
+        "owners": 0,
+        "positions": 0,
+        "stake": "0"
+       }
+      },
+      "FOR": {
+       "ours": {
+        "active": 4,
+        "owners": 8,
+        "positions": 18,
+        "stake": "7.76"
+       },
+       "outside": {
+        "active": 0,
+        "owners": 0,
+        "positions": 0,
+        "stake": "0"
+       }
+      }
+     },
+     "source": "0x7Cb7f1E83917bd8B1f58C9B44c34af4aDB4855A4",
+     "state": "Active",
+     "status": "live"
+    },
+    {
+     "answer_log": null,
+     "arbiter": null,
+     "asset": {
+      "address": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+      "decimals": 6,
+      "symbol": "USDC"
+     },
+     "chain_id": 8453,
+     "evaluator": "0x5242dE388a846d16641744dEB095eD63990E7be8",
+     "explorer": "https://basescan.org",
+     "from_block": 53206898,
+     "hook": "0x93122A47d1824afFA3bAa5751aacf4919F67eb25",
+     "links": {
+      "machine": "https://github.com/taifoon-io/[internal]/blob/master/schemas/assurance/machine.json",
+      "market": "https://basescan.org/address/0xf30601e57FC9c07910a2826e904c08dDe070be9A"
+     },
+     "market": "0xf30601e57FC9c07910a2826e904c08dDe070be9A",
+     "markets_of_line": [
+      {
+       "anyone_lists": true,
+       "from_block": 53206898,
+       "market": "0xf30601e57FC9c07910a2826e904c08dDe070be9A",
+       "opens_rounds": true,
+       "owner": "0x14C4274110F1c183Eec6095F3E6547790A258fae",
+       "positions": 0,
+       "role": "current",
+       "rounds": 0,
+       "state": "Active"
+      },
+      {
+       "anyone_lists": false,
+       "from_block": 52085401,
+       "market": "0xAfc864dBb0B100581F9fcFF64969E57A0F063Ef3",
+       "opens_rounds": false,
+       "owner": "0x14C4274110F1c183Eec6095F3E6547790A258fae",
+       "positions": 1,
+       "role": "earlier",
+       "rounds": 1,
+       "state": "Active"
+      }
+     ],
+     "name": "Base · V4 USDC line",
+     "network": "8453",
+     "note": "USDC on a network with value; new and small caps; no arbiter seat yet",
+     "open_list": true,
+     "owner": "0x14C4274110F1c183Eec6095F3E6547790A258fae",
+     "owner_expected": "0x14C4274110F1c183Eec6095F3E6547790A258fae",
+     "params": {
+      "a0": "166600000000000000",
+      "againstMultipleBps": "5000",
+      "b0": "929700000000000000",
+      "coverMultipleBps": "10000",
+      "feeBps": "49",
+      "lambda": "2000000000000000000",
+      "lockCutoffS": "600",
+      "lpYield": "100000000000000000",
+      "maxRatio": "300000000000000000",
+      "minDistinctBuyers": "5",
+      "minFee": "20000",
+      "pMin": "5000000000000000",
+      "perBuyerCap": "3",
+      "seniorPerRound": "20000",
+      "utilization": "250000000000000000",
+      "voidGraceS": "604800"
+     },
+     "positions": 1,
+     "prior": [
+      {
+       "from_block": 52085401,
+       "market": "0xAfc864dBb0B100581F9fcFF64969E57A0F063Ef3"
+      }
+     ],
+     "public": true,
+     "rounds": 1,
+     "runtime": "evm",
+     "sellers": [
+      {
+       "last_block": 52086319,
+       "rounds": 1,
+       "seller": "0xDd9B2e8CEE41f66590f38214B6819B78eE8a0674"
+      }
+     ],
+     "sides": {
+      "AGAINST": {
+       "ours": {
+        "active": 0,
+        "owners": 0,
+        "positions": 0,
+        "stake": "0"
+       },
+       "outside": {
+        "active": 0,
+        "owners": 0,
+        "positions": 0,
+        "stake": "0"
+       }
+      },
+      "COVER": {
+       "ours": {
+        "active": 0,
+        "owners": 0,
+        "positions": 0,
+        "stake": "0"
+       },
+       "outside": {
+        "active": 0,
+        "owners": 0,
+        "positions": 0,
+        "stake": "0"
+       }
+      },
+      "FOR": {
+       "ours": {
+        "active": 0,
+        "owners": 1,
+        "positions": 1,
+        "stake": "0.05"
+       },
+       "outside": {
+        "active": 0,
+        "owners": 0,
+        "positions": 0,
+        "stake": "0"
+       }
+      }
+     },
+     "source": "0x47F48A3C9188547c988eeCE1052a022bA843E6a7",
+     "state": "Active",
+     "status": "live"
+    },
+    {
+     "answer_log": null,
+     "arbiter": null,
+     "asset": {
+      "address": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
+      "decimals": 6,
+      "symbol": "USDC"
+     },
+     "chain_id": 42161,
+     "evaluator": "0x0F2700f7F4E68412d0f451243dCbB57cc5C33851",
+     "explorer": "https://arbiscan.io",
+     "from_block": 519142525,
+     "hook": "0x6423B2250d41Cf0F786F5e4F8b962b03c8483A0B",
+     "links": {
+      "machine": "https://github.com/taifoon-io/[internal]/blob/master/schemas/assurance/machine.json",
+      "market": "https://arbiscan.io/address/0xf2F7F4E06e7c8dE8D7F9F5eFdE83B030a7692672"
+     },
+     "market": "0xf2F7F4E06e7c8dE8D7F9F5eFdE83B030a7692672",
+     "markets_of_line": [
+      {
+       "anyone_lists": true,
+       "from_block": 519142525,
+       "market": "0xf2F7F4E06e7c8dE8D7F9F5eFdE83B030a7692672",
+       "opens_rounds": true,
+       "owner": "0x9080B7053226a85130D3d8BC94a9C2066b41B33A",
+       "positions": 0,
+       "role": "current",
+       "rounds": 0,
+       "state": "Active"
+      },
+      {
+       "anyone_lists": false,
+       "from_block": 511046690,
+       "market": "0xAfc864dBb0B100581F9fcFF64969E57A0F063Ef3",
+       "opens_rounds": false,
+       "owner": "0x9080B7053226a85130D3d8BC94a9C2066b41B33A",
+       "positions": 1,
+       "role": "earlier",
+       "rounds": 1,
+       "state": "Active"
+      }
+     ],
+     "name": "Arbitrum One · V4 USDC line",
+     "network": "42161",
+     "note": "USDC on a network with value; new and small caps; no arbiter seat yet",
+     "open_list": true,
+     "owner": "0x9080B7053226a85130D3d8BC94a9C2066b41B33A",
+     "owner_expected": "0x9080B7053226a85130D3d8BC94a9C2066b41B33A",
+     "params": {
+      "a0": "166600000000000000",
+      "againstMultipleBps": "5000",
+      "b0": "929700000000000000",
+      "coverMultipleBps": "10000",
+      "feeBps": "49",
+      "lambda": "2000000000000000000",
+      "lockCutoffS": "600",
+      "lpYield": "100000000000000000",
+      "maxRatio": "300000000000000000",
+      "minDistinctBuyers": "5",
+      "minFee": "20000",
+      "pMin": "5000000000000000",
+      "perBuyerCap": "3",
+      "seniorPerRound": "20000",
+      "utilization": "250000000000000000",
+      "voidGraceS": "604800"
+     },
+     "positions": 1,
+     "prior": [
+      {
+       "from_block": 511046690,
+       "market": "0xAfc864dBb0B100581F9fcFF64969E57A0F063Ef3"
+      }
+     ],
+     "public": true,
+     "rounds": 1,
+     "runtime": "evm",
+     "sellers": [
+      {
+       "last_block": 511054741,
+       "rounds": 1,
+       "seller": "0xDd9B2e8CEE41f66590f38214B6819B78eE8a0674"
+      }
+     ],
+     "sides": {
+      "AGAINST": {
+       "ours": {
+        "active": 0,
+        "owners": 0,
+        "positions": 0,
+        "stake": "0"
+       },
+       "outside": {
+        "active": 0,
+        "owners": 0,
+        "positions": 0,
+        "stake": "0"
+       }
+      },
+      "COVER": {
+       "ours": {
+        "active": 0,
+        "owners": 0,
+        "positions": 0,
+        "stake": "0"
+       },
+       "outside": {
+        "active": 0,
+        "owners": 0,
+        "positions": 0,
+        "stake": "0"
+       }
+      },
+      "FOR": {
+       "ours": {
+        "active": 0,
+        "owners": 1,
+        "positions": 1,
+        "stake": "0.05"
+       },
+       "outside": {
+        "active": 0,
+        "owners": 0,
+        "positions": 0,
+        "stake": "0"
+       }
+      }
+     },
+     "source": "0x47F48A3C9188547c988eeCE1052a022bA843E6a7",
+     "state": "Active",
+     "status": "live"
+    },
+    {
+     "answer_log": null,
+     "arbiter": null,
+     "asset": {
+      "address": "0x3600000000000000000000000000000000000000",
+      "decimals": 6,
+      "symbol": "USDC"
+     },
+     "chain_id": 5042,
+     "evaluator": "0x8dd1b8978328443E53f8FcEbA2d835eb09321C0a",
+     "explorer": "https://arc.etherscan.io",
+     "from_block": 28457115,
+     "hook": "0x1c7c44e1A43d661675A7f1E583d351adfD48F872",
+     "links": {
+      "machine": "https://github.com/taifoon-io/[internal]/blob/master/schemas/assurance/machine.json",
+      "market": "https://arc.etherscan.io/address/0x91c7EFbD5f0876afF43BC0a8CB063d0a79ACD307"
+     },
+     "market": "0x91c7EFbD5f0876afF43BC0a8CB063d0a79ACD307",
+     "markets_of_line": [
+      {
+       "anyone_lists": true,
+       "from_block": 28457115,
+       "market": "0x91c7EFbD5f0876afF43BC0a8CB063d0a79ACD307",
+       "opens_rounds": true,
+       "owner": "0x14C4274110F1c183Eec6095F3E6547790A258fae",
+       "positions": 0,
+       "role": "current",
+       "rounds": 0,
+       "state": "Active"
+      },
+      {
+       "anyone_lists": false,
+       "from_block": 23921173,
+       "market": "0x29fEEc116e0CAbbaf38e9EBF2BBf65d82D672104",
+       "opens_rounds": false,
+       "owner": "0x14C4274110F1c183Eec6095F3E6547790A258fae",
+       "positions": 1,
+       "role": "earlier",
+       "rounds": 1,
+       "state": "Active"
+      }
+     ],
+     "name": "Arc · V4 USDC line",
+     "network": "5042",
+     "note": "USDC on a network with value; new and small caps; no arbiter seat yet",
+     "open_list": true,
+     "owner": "0x14C4274110F1c183Eec6095F3E6547790A258fae",
+     "owner_expected": "0x14C4274110F1c183Eec6095F3E6547790A258fae",
+     "params": {
+      "a0": "166600000000000000",
+      "againstMultipleBps": "5000",
+      "b0": "929700000000000000",
+      "coverMultipleBps": "10000",
+      "feeBps": "49",
+      "lambda": "2000000000000000000",
+      "lockCutoffS": "600",
+      "lpYield": "100000000000000000",
+      "maxRatio": "300000000000000000",
+      "minDistinctBuyers": "5",
+      "minFee": "20000",
+      "pMin": "5000000000000000",
+      "perBuyerCap": "3",
+      "seniorPerRound": "20000",
+      "utilization": "250000000000000000",
+      "voidGraceS": "604800"
+     },
+     "positions": 1,
+     "prior": [
+      {
+       "from_block": 23921173,
+       "market": "0x29fEEc116e0CAbbaf38e9EBF2BBf65d82D672104"
+      }
+     ],
+     "public": true,
+     "rounds": 1,
+     "runtime": "evm",
+     "sellers": [
+      {
+       "last_block": 23921724,
+       "rounds": 1,
+       "seller": "0xDd9B2e8CEE41f66590f38214B6819B78eE8a0674"
+      }
+     ],
+     "sides": {
+      "AGAINST": {
+       "ours": {
+        "active": 0,
+        "owners": 0,
+        "positions": 0,
+        "stake": "0"
+       },
+       "outside": {
+        "active": 0,
+        "owners": 0,
+        "positions": 0,
+        "stake": "0"
+       }
+      },
+      "COVER": {
+       "ours": {
+        "active": 0,
+        "owners": 0,
+        "positions": 0,
+        "stake": "0"
+       },
+       "outside": {
+        "active": 0,
+        "owners": 0,
+        "positions": 0,
+        "stake": "0"
+       }
+      },
+      "FOR": {
+       "ours": {
+        "active": 0,
+        "owners": 1,
+        "positions": 1,
+        "stake": "0.05"
+       },
+       "outside": {
+        "active": 0,
+        "owners": 0,
+        "positions": 0,
+        "stake": "0"
+       }
+      }
+     },
+     "source": "0x9CCef4d57c32E9AFA04949e9C3c06DCc1895B0Bc",
+     "state": "Active",
+     "status": "live"
+    },
+    {
+     "answer_log": null,
+     "arbiter": null,
+     "asset": {
+      "address": "0x5fc5360D0400a0Fd4f2af552ADD042D716F1d168",
+      "decimals": 6,
+      "symbol": "USDG"
+     },
+     "chain_id": 4663,
+     "evaluator": "0x75940b85cA942Bb592A9eB60973e0d05ce3985D2",
+     "explorer": "https://robinhoodchain.blockscout.com",
+     "from_block": 100326815,
+     "hook": "0xBf4283b791d5a5541F01BC93ef5DD9B9dC8f334c",
+     "links": {
+      "machine": "https://github.com/taifoon-io/[internal]/blob/master/schemas/assurance/machine.json",
+      "market": "https://robinhoodchain.blockscout.com/address/0x9f5bfC720d2ea054993fB22c64f378479102C425"
+     },
+     "market": "0x9f5bfC720d2ea054993fB22c64f378479102C425",
+     "markets_of_line": [
+      {
+       "anyone_lists": true,
+       "from_block": 100326815,
+       "market": "0x9f5bfC720d2ea054993fB22c64f378479102C425",
+       "opens_rounds": true,
+       "owner": "0x14C4274110F1c183Eec6095F3E6547790A258fae",
+       "positions": 0,
+       "role": "current",
+       "rounds": 0,
+       "state": "Active"
+      },
+      {
+       "anyone_lists": false,
+       "from_block": 78462403,
+       "market": "0x29fEEc116e0CAbbaf38e9EBF2BBf65d82D672104",
+       "opens_rounds": false,
+       "owner": "0x14C4274110F1c183Eec6095F3E6547790A258fae",
+       "positions": 1,
+       "role": "earlier",
+       "rounds": 0,
+       "state": "Active"
+      }
+     ],
+     "name": "Robinhood Chain · V4 USDG line",
+     "network": "4663",
+     "note": "USDG on a network with value; new and small caps; no arbiter seat yet",
+     "open_list": true,
+     "owner": "0x14C4274110F1c183Eec6095F3E6547790A258fae",
+     "owner_expected": "0x14C4274110F1c183Eec6095F3E6547790A258fae",
+     "params": {
+      "a0": "166600000000000000",
+      "againstMultipleBps": "5000",
+      "b0": "929700000000000000",
+      "coverMultipleBps": "10000",
+      "feeBps": "49",
+      "lambda": "2000000000000000000",
+      "lockCutoffS": "600",
+      "lpYield": "100000000000000000",
+      "maxRatio": "300000000000000000",
+      "minDistinctBuyers": "5",
+      "minFee": "20000",
+      "pMin": "5000000000000000",
+      "perBuyerCap": "3",
+      "seniorPerRound": "20000",
+      "utilization": "250000000000000000",
+      "voidGraceS": "604800"
+     },
+     "positions": 1,
+     "prior": [
+      {
+       "from_block": 78462403,
+       "market": "0x29fEEc116e0CAbbaf38e9EBF2BBf65d82D672104"
+      }
+     ],
+     "public": true,
+     "rounds": 0,
+     "runtime": "evm",
+     "sellers": [],
+     "sides": {
+      "AGAINST": {
+       "ours": {
+        "active": 0,
+        "owners": 0,
+        "positions": 0,
+        "stake": "0"
+       },
+       "outside": {
+        "active": 0,
+        "owners": 0,
+        "positions": 0,
+        "stake": "0"
+       }
+      },
+      "COVER": {
+       "ours": {
+        "active": 0,
+        "owners": 0,
+        "positions": 0,
+        "stake": "0"
+       },
+       "outside": {
+        "active": 0,
+        "owners": 0,
+        "positions": 0,
+        "stake": "0"
+       }
+      },
+      "FOR": {
+       "ours": {
+        "active": 0,
+        "owners": 1,
+        "positions": 1,
+        "stake": "0.05"
+       },
+       "outside": {
+        "active": 0,
+        "owners": 0,
+        "positions": 0,
+        "stake": "0"
+       }
+      }
+     },
+     "source": "0x9CCef4d57c32E9AFA04949e9C3c06DCc1895B0Bc",
+     "state": "Active",
+     "status": "live"
+    },
+    {
+     "answer_log": null,
+     "arbiter": null,
+     "asset": {
+      "address": "0x754704Bc059F8C67012fEd69BC8A327a5aafb603",
+      "decimals": 6,
+      "symbol": "USDC"
+     },
+     "chain_id": 143,
+     "evaluator": "0x75940b85cA942Bb592A9eB60973e0d05ce3985D2",
+     "explorer": "https://monadscan.com",
+     "from_block": 117413459,
+     "hook": "0xBf4283b791d5a5541F01BC93ef5DD9B9dC8f334c",
+     "links": {
+      "machine": "https://github.com/taifoon-io/[internal]/blob/master/schemas/assurance/machine.json",
+      "market": "https://monadscan.com/address/0x83BC44BD6d4065B336DCCBE2fb82f4C984Ae20c9"
+     },
+     "market": "0x83BC44BD6d4065B336DCCBE2fb82f4C984Ae20c9",
+     "markets_of_line": [
+      {
+       "anyone_lists": true,
+       "from_block": 117413459,
+       "market": "0x83BC44BD6d4065B336DCCBE2fb82f4C984Ae20c9",
+       "opens_rounds": true,
+       "owner": "0x14C4274110F1c183Eec6095F3E6547790A258fae",
+       "positions": 0,
+       "role": "current",
+       "rounds": 0,
+       "state": "Active"
+      },
+      {
+       "anyone_lists": false,
+       "from_block": 109972315,
+       "market": "0xAfc864dBb0B100581F9fcFF64969E57A0F063Ef3",
+       "opens_rounds": false,
+       "owner": "0x14C4274110F1c183Eec6095F3E6547790A258fae",
+       "positions": 1,
+       "role": "earlier",
+       "rounds": 1,
+       "state": "Active"
+      }
+     ],
+     "name": "Monad · V4 USDC line",
+     "network": "143",
+     "note": "USDC on a network with value; new and small caps; no arbiter seat yet",
+     "open_list": true,
+     "owner": "0x14C4274110F1c183Eec6095F3E6547790A258fae",
+     "owner_expected": "0x14C4274110F1c183Eec6095F3E6547790A258fae",
+     "params": {
+      "a0": "166600000000000000",
+      "againstMultipleBps": "5000",
+      "b0": "929700000000000000",
+      "coverMultipleBps": "10000",
+      "feeBps": "49",
+      "lambda": "2000000000000000000",
+      "lockCutoffS": "600",
+      "lpYield": "100000000000000000",
+      "maxRatio": "300000000000000000",
+      "minDistinctBuyers": "5",
+      "minFee": "20000",
+      "pMin": "5000000000000000",
+      "perBuyerCap": "3",
+      "seniorPerRound": "20000",
+      "utilization": "250000000000000000",
+      "voidGraceS": "604800"
+     },
+     "positions": 1,
+     "prior": [
+      {
+       "from_block": 109972315,
+       "market": "0xAfc864dBb0B100581F9fcFF64969E57A0F063Ef3"
+      }
+     ],
+     "public": true,
+     "rounds": 1,
+     "runtime": "evm",
+     "sellers": [
+      {
+       "last_block": 109973978,
+       "rounds": 1,
+       "seller": "0xDd9B2e8CEE41f66590f38214B6819B78eE8a0674"
+      }
+     ],
+     "sides": {
+      "AGAINST": {
+       "ours": {
+        "active": 0,
+        "owners": 0,
+        "positions": 0,
+        "stake": "0"
+       },
+       "outside": {
+        "active": 0,
+        "owners": 0,
+        "positions": 0,
+        "stake": "0"
+       }
+      },
+      "COVER": {
+       "ours": {
+        "active": 0,
+        "owners": 0,
+        "positions": 0,
+        "stake": "0"
+       },
+       "outside": {
+        "active": 0,
+        "owners": 0,
+        "positions": 0,
+        "stake": "0"
+       }
+      },
+      "FOR": {
+       "ours": {
+        "active": 0,
+        "owners": 1,
+        "positions": 1,
+        "stake": "0.0499"
+       },
+       "outside": {
+        "active": 0,
+        "owners": 0,
+        "positions": 0,
+        "stake": "0"
+       }
+      }
+     },
+     "source": "0x47F48A3C9188547c988eeCE1052a022bA843E6a7",
+     "state": "Active",
+     "status": "live"
+    },
+    {
+     "arbiter": "2GKACaEBxaTV59oDuDEzou9pAC8YrWFLDfMMHd7eHFrU",
+     "asset": {
+      "address": "Cv7XjYsrLvuN2gXmUfsVigZ2jCASuZrjfrZ6zcsdXo9P",
+      "decimals": 6,
+      "symbol": "tUSDC"
+     },
+     "chain_id": null,
+     "cluster": "devnet",
+     "config": "Ew6kCD1EhVv3FcGCMVQKZf3vjFXbHRrZZnvc6biXS8zZ",
+     "evaluator": "DyGVPXW58Kpw1GBvTQLMWAWKKw3KrDvFnJxuJLHBUW71",
+     "instance": "taifoon:solana-devnet",
+     "jobs": "6t5SxRniKs5utTPSxZwh17PGBckHhLRCdmkbFDHAD2MJ",
+     "links": {},
+     "market": "CbEoANTGEUqESD2HaESvQLhvE5AaKnKREaz9qfrpsMN3",
+     "name": "Solana devnet · tUSDC test line",
+     "network": "solana-devnet",
+     "note": "Solana devnet; tUSDC is our own test mint (not USDC); every key on it is a devnet test key we control",
+     "owner": null,
+     "params": {
+      "a0": "166600000000000000",
+      "againstMultipleBps": "10000",
+      "b0": "929700000000000000",
+      "coverMultipleBps": "10000",
+      "feeBps": "49",
+      "lambda": "2000000000000000000",
+      "lockCutoffS": "30",
+      "lpYield": "100000000000000000",
+      "maxRatio": "300000000000000000",
+      "minDistinctBuyers": "3",
+      "minFee": "1000",
+      "pMin": "5000000000000000",
+      "perBuyerCap": "3",
+      "seniorPerRound": "200000",
+      "utilization": "250000000000000000",
+      "voidGraceS": "120"
+     },
+     "positions": null,
+     "public": true,
+     "rounds": 0,
+     "rpc": "https://api.devnet.solana.com",
+     "runtime": "solana",
+     "sellers": [],
+     "state": "unread",
+     "status": "live"
+    }
+   ],
+   "ok": true,
+   "rollup": [
+    {
+     "active": 4,
+     "chain_id": 36927,
+     "network": "36927",
+     "owners": 8,
+     "positions": 18,
+     "side": "FOR",
+     "stake": "7.76",
+     "symbol": "dUSDC",
+     "whose": "ours"
+    },
+    {
+     "active": 0,
+     "chain_id": 36927,
+     "network": "36927",
+     "owners": 0,
+     "positions": 0,
+     "side": "FOR",
+     "stake": "0",
+     "symbol": "dUSDC",
+     "whose": "outside"
+    },
+    {
+     "active": 0,
+     "chain_id": 36927,
+     "network": "36927",
+     "owners": 1,
+     "positions": 2,
+     "side": "AGAINST",
+     "stake": "0.1",
+     "symbol": "dUSDC",
+     "whose": "ours"
+    },
+    {
+     "active": 0,
+     "chain_id": 36927,
+     "network": "36927",
+     "owners": 0,
+     "positions": 0,
+     "side": "AGAINST",
+     "stake": "0",
+     "symbol": "dUSDC",
+     "whose": "outside"
+    },
+    {
+     "active": 1,
+     "chain_id": 36927,
+     "network": "36927",
+     "owners": 3,
+     "positions": 3,
+     "side": "COVER",
+     "stake": "0.3",
+     "symbol": "dUSDC",
+     "whose": "ours"
+    },
+    {
+     "active": 0,
+     "chain_id": 36927,
+     "network": "36927",
+     "owners": 0,
+     "positions": 0,
+     "side": "COVER",
+     "stake": "0",
+     "symbol": "dUSDC",
+     "whose": "outside"
+    },
+    {
+     "active": 0,
+     "chain_id": 8453,
+     "network": "8453",
+     "owners": 1,
+     "positions": 1,
+     "side": "FOR",
+     "stake": "0.05",
+     "symbol": "USDC",
+     "whose": "ours"
+    },
+    {
+     "active": 0,
+     "chain_id": 8453,
+     "network": "8453",
+     "owners": 0,
+     "positions": 0,
+     "side": "FOR",
+     "stake": "0",
+     "symbol": "USDC",
+     "whose": "outside"
+    },
+    {
+     "active": 0,
+     "chain_id": 8453,
+     "network": "8453",
+     "owners": 0,
+     "positions": 0,
+     "side": "AGAINST",
+     "stake": "0",
+     "symbol": "USDC",
+     "whose": "ours"
+    },
+    {
+     "active": 0,
+     "chain_id": 8453,
+     "network": "8453",
+     "owners": 0,
+     "positions": 0,
+     "side": "AGAINST",
+     "stake": "0",
+     "symbol": "USDC",
+     "whose": "outside"
+    },
+    {
+     "active": 0,
+     "chain_id": 8453,
+     "network": "8453",
+     "owners": 0,
+     "positions": 0,
+     "side": "COVER",
+     "stake": "0",
+     "symbol": "USDC",
+     "whose": "ours"
+    },
+    {
+     "active": 0,
+     "chain_id": 8453,
+     "network": "8453",
+     "owners": 0,
+     "positions": 0,
+     "side": "COVER",
+     "stake": "0",
+     "symbol": "USDC",
+     "whose": "outside"
+    },
+    {
+     "active": 0,
+     "chain_id": 42161,
+     "network": "42161",
+     "owners": 1,
+     "positions": 1,
+     "side": "FOR",
+     "stake": "0.05",
+     "symbol": "USDC",
+     "whose": "ours"
+    },
+    {
+     "active": 0,
+     "chain_id": 42161,
+     "network": "42161",
+     "owners": 0,
+     "positions": 0,
+     "side": "FOR",
+     "stake": "0",
+     "symbol": "USDC",
+     "whose": "outside"
+    },
+    {
+     "active": 0,
+     "chain_id": 42161,
+     "network": "42161",
+     "owners": 0,
+     "positions": 0,
+     "side": "AGAINST",
+     "stake": "0",
+     "symbol": "USDC",
+     "whose": "ours"
+    },
+    {
+     "active": 0,
+     "chain_id": 42161,
+     "network": "42161",
+     "owners": 0,
+     "positions": 0,
+     "side": "AGAINST",
+     "stake": "0",
+     "symbol": "USDC",
+     "whose": "outside"
+    },
+    {
+     "active": 0,
+     "chain_id": 42161,
+     "network": "42161",
+     "owners": 0,
+     "positions": 0,
+     "side": "COVER",
+     "stake": "0",
+     "symbol": "USDC",
+     "whose": "ours"
+    },
+    {
+     "active": 0,
+     "chain_id": 42161,
+     "network": "42161",
+     "owners": 0,
+     "positions": 0,
+     "side": "COVER",
+     "stake": "0",
+     "symbol": "USDC",
+     "whose": "outside"
+    },
+    {
+     "active": 0,
+     "chain_id": 5042,
+     "network": "5042",
+     "owners": 1,
+     "positions": 1,
+     "side": "FOR",
+     "stake": "0.05",
+     "symbol": "USDC",
+     "whose": "ours"
+    },
+    {
+     "active": 0,
+     "chain_id": 5042,
+     "network": "5042",
+     "owners": 0,
+     "positions": 0,
+     "side": "FOR",
+     "stake": "0",
+     "symbol": "USDC",
+     "whose": "outside"
+    },
+    {
+     "active": 0,
+     "chain_id": 5042,
+     "network": "5042",
+     "owners": 0,
+     "positions": 0,
+     "side": "AGAINST",
+     "stake": "0",
+     "symbol": "USDC",
+     "whose": "ours"
+    },
+    {
+     "active": 0,
+     "chain_id": 5042,
+     "network": "5042",
+     "owners": 0,
+     "positions": 0,
+     "side": "AGAINST",
+     "stake": "0",
+     "symbol": "USDC",
+     "whose": "outside"
+    },
+    {
+     "active": 0,
+     "chain_id": 5042,
+     "network": "5042",
+     "owners": 0,
+     "positions": 0,
+     "side": "COVER",
+     "stake": "0",
+     "symbol": "USDC",
+     "whose": "ours"
+    },
+    {
+     "active": 0,
+     "chain_id": 5042,
+     "network": "5042",
+     "owners": 0,
+     "positions": 0,
+     "side": "COVER",
+     "stake": "0",
+     "symbol": "USDC",
+     "whose": "outside"
+    },
+    {
+     "active": 0,
+     "chain_id": 4663,
+     "network": "4663",
+     "owners": 1,
+     "positions": 1,
+     "side": "FOR",
+     "stake": "0.05",
+     "symbol": "USDG",
+     "whose": "ours"
+    },
+    {
+     "active": 0,
+     "chain_id": 4663,
+     "network": "4663",
+     "owners": 0,
+     "positions": 0,
+     "side": "FOR",
+     "stake": "0",
+     "symbol": "USDG",
+     "whose": "outside"
+    },
+    {
+     "active": 0,
+     "chain_id": 4663,
+     "network": "4663",
+     "owners": 0,
+     "positions": 0,
+     "side": "AGAINST",
+     "stake": "0",
+     "symbol": "USDG",
+     "whose": "ours"
+    },
+    {
+     "active": 0,
+     "chain_id": 4663,
+     "network": "4663",
+     "owners": 0,
+     "positions": 0,
+     "side": "AGAINST",
+     "stake": "0",
+     "symbol": "USDG",
+     "whose": "outside"
+    },
+    {
+     "active": 0,
+     "chain_id": 4663,
+     "network": "4663",
+     "owners": 0,
+     "positions": 0,
+     "side": "COVER",
+     "stake": "0",
+     "symbol": "USDG",
+     "whose": "ours"
+    },
+    {
+     "active": 0,
+     "chain_id": 4663,
+     "network": "4663",
+     "owners": 0,
+     "positions": 0,
+     "side": "COVER",
+     "stake": "0",
+     "symbol": "USDG",
+     "whose": "outside"
+    },
+    {
+     "active": 0,
+     "chain_id": 143,
+     "network": "143",
+     "owners": 1,
+     "positions": 1,
+     "side": "FOR",
+     "stake": "0.0499",
+     "symbol": "USDC",
+     "whose": "ours"
+    },
+    {
+     "active": 0,
+     "chain_id": 143,
+     "network": "143",
+     "owners": 0,
+     "positions": 0,
+     "side": "FOR",
+     "stake": "0",
+     "symbol": "USDC",
+     "whose": "outside"
+    },
+    {
+     "active": 0,
+     "chain_id": 143,
+     "network": "143",
+     "owners": 0,
+     "positions": 0,
+     "side": "AGAINST",
+     "stake": "0",
+     "symbol": "USDC",
+     "whose": "ours"
+    },
+    {
+     "active": 0,
+     "chain_id": 143,
+     "network": "143",
+     "owners": 0,
+     "positions": 0,
+     "side": "AGAINST",
+     "stake": "0",
+     "symbol": "USDC",
+     "whose": "outside"
+    },
+    {
+     "active": 0,
+     "chain_id": 143,
+     "network": "143",
+     "owners": 0,
+     "positions": 0,
+     "side": "COVER",
+     "stake": "0",
+     "symbol": "USDC",
+     "whose": "ours"
+    },
+    {
+     "active": 0,
+     "chain_id": 143,
+     "network": "143",
+     "owners": 0,
+     "positions": 0,
+     "side": "COVER",
+     "stake": "0",
+     "symbol": "USDC",
+     "whose": "outside"
+    }
+   ],
+   "schema": "taifoon.assurance.markets.v1",
+   "sides_rule": "FOR backs the seller, AGAINST and COVER are paid if the job fails; ours = a wallet of the layer’s own (and every devnet wallet: devnet keys are public test keys), outside = anyone else; stake in whole tokens of the line’s asset",
+   "sides_unread": [
+    "solana-devnet"
+   ],
+   "what": "Two-sided job assurance: FOR backs a seller to deliver a job, AGAINST and COVER pay out if it fails. One round per job; the price follows the seller’s record in the market; the job’s own ending settles it."
+  }
+ },
+ "coord_sha": "49dd07d6fbf91b0c0094984353289f5ce1c50630",
+ "read_at": "2026-11-21T00:09:18.131Z",
+ "notes": {
+  "trimmed": [
+   "get_key (the free-key offer every keyless answer carries)"
+  ]
+ }
+}

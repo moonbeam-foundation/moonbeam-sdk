@@ -39,8 +39,15 @@ export function devnetRun(s, market, txs) {
 
 const rowsLen = (b, k) => (Array.isArray(b?.[k]) ? b[k].length : 0);
 
+/** the machine state a coord read belongs to: the first state of the table whose read is the op (nothing typed: the table is derived from coord's machine) */
+const stateOfOp = (s, op) => s.STATES.find((st) => `${st.read.method} ${st.read.path.replace(/^\/v1\//, '')}` === op);
+
 export const CALLS = {
   // ── listed ──────────────────────────────────────────────────────────────────────────────────────────────────────────
+  // the machine's state reads (src/market/states.ts): the SDK reads the state's route and answers its status and body as served
+  state: { fn: 'market.readState',
+    run: (s, t, x) => s.readState(t, stateOfOp(s, x.op).id, x.params ?? {}),
+    check: ({ result, x, expect }) => { expect(result.status).toBe(x.fx.response.status); expect(result.body).toEqual(x.fx.response.body); } },
   journey: { fn: 'market.journey', run: (s, t) => s.journey(t, AGENT),
     check: ({ result, x, expect, s }) => {
       const v = result.venues[x.market];
