@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.13.1 (2026-11-21)
+
+- **A typed state table: `STATES`, `MOVES`, `stateOf`, `readState` in `@moonbeam-foundation/sdk/market`.** Every state of a sale has one read; the table is generated, and a refusal comes back as its status and body.
+- **Unit tests are generated from every recorded call** (replay, schema) and from every run file (the steps in the order of the path).
+- **The venue table follows the current reads:** Olas Mech lists as "not yet"; the examples carry no payee address.
+
 - **The playground: `@moonbeam-foundation/sdk/playground`, one switch between the devnet (36927) and Base (8453).** `NETS` is
   one frozen table per network: chain id, token (dUSDC / USDC, 6 decimals), windows (devnet review 60 s, dispute 60 s,
   arbitration 120 s; Base reads them from the hook) and who signs each role (`wallet:test` / `wallet:user` for the user's roles,
