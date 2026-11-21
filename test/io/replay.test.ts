@@ -11,6 +11,7 @@ import { describe, expect, it } from 'vitest';
 import * as market from '../../src/market/index.js';
 import * as playground from '../../src/playground/index.js';
 import * as jobs from '../../src/jobs/index.js';
+import * as proof from '../../src/proof/index.js';
 // @ts-expect-error: a plain ES module shared with the recorder
 import { CALLS, sdkOf } from './calls.mjs';
 // @ts-expect-error: a plain ES module shared with the generator
@@ -27,7 +28,7 @@ const map = JSON.parse(readFileSync(join(root, 'test/io/op-map.json'), 'utf8'));
 const rows: Row[] = expandRows(map);
 const fixtures: Map<string, Fx> = fixturesOnDisk(root);
 const calls = CALLS as Record<string, CallDef>;
-const s = sdkOf([market, playground, jobs]) as Record<string, unknown>;
+const s = sdkOf([market, playground, jobs, proof]) as Record<string, unknown>;
 const BASE = 'https://coord.example/v1';
 
 /** a transport that answers only the fixtures given, and logs every request the SDK makes */

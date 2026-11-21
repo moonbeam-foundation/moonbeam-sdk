@@ -1,0 +1,126 @@
+{
+ "op": "GET chain/:chain/tx/:hash",
+ "market": "x402-base",
+ "stage": "delivered",
+ "dir": "read",
+ "sdk": "market.chainTx",
+ "source": "live",
+ "request": {
+  "method": "GET",
+  "path": "/v1/chain/36927/tx/0xb13879351ac7c61d293a780de5bcab0993bd7385e6f2b42cc4705ed7f83748e7",
+  "query": {}
+ },
+ "response": {
+  "status": 200,
+  "body": {
+   "ok": true,
+   "chain_id": 36927,
+   "source": "fetched",
+   "final": true,
+   "head": 3323805,
+   "tx": {
+    "chain_id": 36927,
+    "hash": "0xb13879351ac7c61d293a780de5bcab0993bd7385e6f2b42cc4705ed7f83748e7",
+    "status": "success",
+    "block_number": 1482295,
+    "block_hash": "0xb93a157d6b1a1bb922f2bd63d8c1132de9f99bc867f446715198166d550566bf",
+    "block_time": 1791305974,
+    "tx_index": 0,
+    "to": "0xe7e7660f51c221f3223ea58b42738037cdf048b3",
+    "to_label": null,
+    "value_wei": "0",
+    "nonce": 32,
+    "type": 2,
+    "method": "0x6e318242",
+    "input": "0x6e318242a6d6f649a7b8d06168f30af1078115e86b2bf9dd8b495a448ba11ceef3d1168a0137808b7134b1c085d9734585ae05c3f8922272cb1e2e3485ef10921961a9a40000000000000000000000000000000000000000000000000000000000000060000000000000000000000000000000000000000000000000000000000000002a68747470733a2f2f636f6f72642e746169666f6f6e2e6465762f76312f6578706c6f7265722f6a6f627300000000000000000000000000000000000000000000",
+    "input_bytes": 196,
+    "gas_limit": "68517",
+    "gas_used": "49606",
+    "effective_gas_price": "26623333405",
+    "fee_wei": "1320677076888430",
+    "contract_created": null,
+    "events": [
+     {
+      "log_index": 0,
+      "address": "0xe7e7660f51c221f3223ea58b42738037cdf048b3",
+      "label": null,
+      "topic0": "0xa2f32e666157494cac7b795a43a2914dcb77efd9515b47db67dd15d332234f97",
+      "event": "Submitted",
+      "family": "hook",
+      "args": {
+       "jobId": "0xa6d6f649a7b8d06168f30af1078115e86b2bf9dd8b495a448ba11ceef3d1168a",
+       "evidenceDigest": "0x0137808b7134b1c085d9734585ae05c3f8922272cb1e2e3485ef10921961a9a4"
+      }
+     },
+     {
+      "log_index": 1,
+      "address": "0xe7e7660f51c221f3223ea58b42738037cdf048b3",
+      "label": null,
+      "topic0": "0x2ab9594c0e9b411159b9c672ebe1faea1ccdebd82e6af1bbc60fd37a31f74650",
+      "event": "DeliveryPublished",
+      "family": "hook-v4",
+      "args": {
+       "jobId": "0xa6d6f649a7b8d06168f30af1078115e86b2bf9dd8b495a448ba11ceef3d1168a",
+       "evidenceDigest": "0x0137808b7134b1c085d9734585ae05c3f8922272cb1e2e3485ef10921961a9a4",
+       "deliveryURI": "https://coord.taifoon.dev/v1/explorer/jobs"
+      }
+     }
+    ],
+    "explorer": "https://www.taifoon.io/scan/36927/tx/0xb13879351ac7c61d293a780de5bcab0993bd7385e6f2b42cc4705ed7f83748e7"
+   },
+   "proof": {
+    "kind": "block_tree",
+    "chain_id": 36927,
+    "urls": {
+     "blocks": "https://coord.taifoon.dev/v1/proof/blocks/36927?blocks=1482295",
+     "tx": "https://coord.taifoon.dev/v1/proof/tx/36927/0xb13879351ac7c61d293a780de5bcab0993bd7385e6f2b42cc4705ed7f83748e7",
+     "logs": [
+      "https://coord.taifoon.dev/v1/proof/log/36927/0xb13879351ac7c61d293a780de5bcab0993bd7385e6f2b42cc4705ed7f83748e7?log_index=0",
+      "https://coord.taifoon.dev/v1/proof/log/36927/0xb13879351ac7c61d293a780de5bcab0993bd7385e6f2b42cc4705ed7f83748e7?log_index=1"
+     ]
+    },
+    "verify": "TaifoonMerkle.multiRoot(multiproof) == anchor.chain_root (each block hash is the leaf at index = block number); keccak256(chainId, tip_block, tip_hash, chain_root, twig_count) folds with l3_siblings at chain_index to superroot",
+    "status": "proven",
+    "verified": true,
+    "blocks": [
+     {
+      "number": 1482295,
+      "hash": "0xb93a157d6b1a1bb922f2bd63d8c1132de9f99bc867f446715198166d550566bf",
+      "in_tree": true
+     }
+    ],
+    "checks": {
+     "blocks_in_tree": true,
+     "chain_in_superroot": true,
+     "block_hash_matches": true,
+     "finalized": true
+    },
+    "anchor": {
+     "chain_root": "0x787f8f3af7b7d6e9870866e0598665198e54c4986fde36b5f07f436b4715aed6",
+     "tip_block": 3323800,
+     "tip_hash": "0x519c7b9adfc1ca0997dd858403adf35ecf757f3b08b5c12f61fac38ebf6659d6",
+     "twig_count": 2335264,
+     "chain_index": 25,
+     "superroot": "0x8e496259bfa62fa94a03c6580f2f85ba110f7f329ec49cb564a5cda4780b462a",
+     "batch_id": 1795290816
+    }
+   },
+   "cost": {
+    "rpc_requests": 2,
+    "rpc_calls": 4,
+    "headers_checked": 0,
+    "candidates": 0,
+    "blocks_read": 0,
+    "kept_hits": 0
+   },
+   "how": "source indexed: served from what this layer keeps (no RPC); fetched: read once from the chain’s rotation and kept once final. proof binds the block hash in the transaction’s own receipt to the leaf of the chain’s block tree, and the tree to the superroot (recomputed here); proof.urls.logs prove each log inside the receipt."
+  }
+ },
+ "coord_sha": "9b4c6c382862727e655a3f06ecb7ed33d7a88905",
+ "read_at": "2026-11-21T19:53:42.329Z",
+ "notes": {
+  "dropped": [
+   "tx.from (the address a fee payee or payTo names)"
+  ]
+ }
+}

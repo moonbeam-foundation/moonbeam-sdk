@@ -7,6 +7,7 @@ import { expect } from 'vitest';
 import * as market from '../../src/market/index.js';
 import * as playground from '../../src/playground/index.js';
 import * as jobs from '../../src/jobs/index.js';
+import * as proof from '../../src/proof/index.js';
 // @ts-expect-error: a plain ES module shared with the recorder
 import { CALLS, sdkOf } from './calls.mjs';
 // @ts-expect-error: a plain ES module shared with the generator
@@ -25,7 +26,7 @@ const text = (p: string) => readFileSync(join(root, p), 'utf8');
 const rows: Row[] = expandRows(JSON.parse(text('test/io/op-map.json')));
 const paths = JSON.parse(text('src/market/venue-paths.json')) as { rows: Array<{ market: string; op: string; steps: Array<{ id: string; read?: string | null }> }> };
 const calls = CALLS as Record<string, Def>;
-const s = sdkOf([market, playground, jobs]) as Record<string, unknown>;
+const s = sdkOf([market, playground, jobs, proof]) as Record<string, unknown>;
 const BASE = 'https://coord.example/v1';
 
 /** the fixture, once its hash is the one the tests were generated from */

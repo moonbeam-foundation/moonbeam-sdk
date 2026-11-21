@@ -10,15 +10,15 @@ Sources: **live** (a public read, recorded), **devnet-ledger** (built from the d
 
 | Market | Cells | With a fixture | Rows | live | devnet-ledger | contract | Gaps |
 |---|---|---|---|---|---|---|---|
-| x402 | 10 | 9 | 35 | 17 | 2 | 8 | payment 5, owner arm 1, no devnet twin 1, not in coord 1 |
-| MCP Registry | 10 | 9 | 25 | 11 | 2 | 7 | payment 3, owner arm 1, not in coord 1 |
-| A2A Registry | 10 | 9 | 25 | 11 | 2 | 7 | payment 3, owner arm 1, not in coord 1 |
+| x402 | 10 | 9 | 35 | 19 | 2 | 8 | payment 3, owner arm 1, no devnet twin 1, not in coord 1 |
+| MCP Registry | 10 | 9 | 25 | 13 | 2 | 7 | payment 1, owner arm 1, not in coord 1 |
+| A2A Registry | 10 | 9 | 25 | 13 | 2 | 7 | payment 1, owner arm 1, not in coord 1 |
 | ERC-8004 | 10 | 2 | 13 | 4 | 0 | 1 | not in coord 8 |
-| NEAR AI Agent Market | 10 | 9 | 23 | 8 | 2 | 7 | payment 3, owner arm 1, no devnet twin 1, not in coord 1 |
-| Virtuals ACP | 10 | 8 | 30 | 13 | 2 | 7 | key 1, payment 3, owner arm 1, not in coord 3 |
-| Olas Mech | 10 | 9 | 29 | 13 | 2 | 7 | payment 3, owner arm 1, not in coord 3 |
+| NEAR AI Agent Market | 10 | 9 | 23 | 10 | 2 | 7 | payment 1, owner arm 1, no devnet twin 1, not in coord 1 |
+| Virtuals ACP | 10 | 8 | 30 | 15 | 2 | 7 | key 1, payment 1, owner arm 1, not in coord 3 |
+| Olas Mech | 10 | 9 | 29 | 15 | 2 | 7 | payment 1, owner arm 1, not in coord 3 |
 
-Gaps in all: 47 (needs_key 1, needs_payment 20, needs_owner_arm 6, no_devnet_twin 2, not_in_coord 18). The count may only go down (`test/io/gaps.baseline.json`).
+Gaps in all: 35 (needs_key 1, needs_payment 8, needs_owner_arm 6, no_devnet_twin 2, not_in_coord 18). The count may only go down (`test/io/gaps.baseline.json`).
 
 ## Every cell
 
@@ -86,12 +86,12 @@ Gaps in all: 47 (needs_key 1, needs_payment 20, needs_owner_arm 6, no_devnet_twi
 | NEAR AI Agent Market | delivered | read | `GET settle/:id` | 36927 | live |
 | Virtuals ACP | delivered | read | `GET settle/:id` | 36927 | live |
 | Olas Mech | delivered | read | `GET settle/:id` | 36927 | live |
-| x402 | delivered | read | `GET chain/:chain/tx/:hash` | 36927 | gap: needs_payment |
-| MCP Registry | delivered | read | `GET chain/:chain/tx/:hash` | 36927 | gap: needs_payment |
-| A2A Registry | delivered | read | `GET chain/:chain/tx/:hash` | 36927 | gap: needs_payment |
-| NEAR AI Agent Market | delivered | read | `GET chain/:chain/tx/:hash` | 36927 | gap: needs_payment |
-| Virtuals ACP | delivered | read | `GET chain/:chain/tx/:hash` | 36927 | gap: needs_payment |
-| Olas Mech | delivered | read | `GET chain/:chain/tx/:hash` | 36927 | gap: needs_payment |
+| x402 | delivered | read | `GET chain/:chain/tx/:hash` | 36927 | live |
+| MCP Registry | delivered | read | `GET chain/:chain/tx/:hash` | 36927 | live |
+| A2A Registry | delivered | read | `GET chain/:chain/tx/:hash` | 36927 | live |
+| NEAR AI Agent Market | delivered | read | `GET chain/:chain/tx/:hash` | 36927 | live |
+| Virtuals ACP | delivered | read | `GET chain/:chain/tx/:hash` | 36927 | live |
+| Olas Mech | delivered | read | `GET chain/:chain/tx/:hash` | 36927 | live |
 | Olas Mech | delivered | read | `GET mech/results/:chain/:requestId` | 36927 | live |
 | Olas Mech | delivered | read | `GET judge/evidence/olas/:requestId` | 8453 | gap: not_in_coord |
 | Virtuals ACP | delivered | read | `GET jobs` | 36927 | live |
@@ -113,12 +113,12 @@ Gaps in all: 47 (needs_key 1, needs_payment 20, needs_owner_arm 6, no_devnet_twi
 | NEAR AI Agent Market | settled | read | `GET chain/:chain/tx/:hash` | 36927 | devnet-ledger |
 | Virtuals ACP | settled | read | `GET chain/:chain/tx/:hash` | 36927 | devnet-ledger |
 | Olas Mech | settled | read | `GET chain/:chain/tx/:hash` | 36927 | devnet-ledger |
-| x402 | settled | read | `GET proof/tx/:chain/:tx` | 36927 | gap: needs_payment |
-| MCP Registry | settled | read | `GET proof/tx/:chain/:tx` | 36927 | gap: needs_payment |
-| A2A Registry | settled | read | `GET proof/tx/:chain/:tx` | 36927 | gap: needs_payment |
-| NEAR AI Agent Market | settled | read | `GET proof/tx/:chain/:tx` | 36927 | gap: needs_payment |
-| Virtuals ACP | settled | read | `GET proof/tx/:chain/:tx` | 36927 | gap: needs_payment |
-| Olas Mech | settled | read | `GET proof/tx/:chain/:tx` | 36927 | gap: needs_payment |
+| x402 | settled | read | `GET proof/tx/:chain/:tx` | 36927 | live |
+| MCP Registry | settled | read | `GET proof/tx/:chain/:tx` | 36927 | live |
+| A2A Registry | settled | read | `GET proof/tx/:chain/:tx` | 36927 | live |
+| NEAR AI Agent Market | settled | read | `GET proof/tx/:chain/:tx` | 36927 | live |
+| Virtuals ACP | settled | read | `GET proof/tx/:chain/:tx` | 36927 | live |
+| Olas Mech | settled | read | `GET proof/tx/:chain/:tx` | 36927 | live |
 | x402 | settled | read | `GET sign/status` | 36927 | live |
 | MCP Registry | settled | read | `GET sign/status` | 36927 | live |
 | A2A Registry | settled | read | `GET sign/status` | 36927 | live |

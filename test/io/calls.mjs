@@ -11,6 +11,8 @@ export const DEVNET_JOB = '0xa6d6f649a7b8d06168f30af1078115e86b2bf9dd8b495a448ba
 export const LEDGER_TX = {
   bought: '0xd2ee48b70a006828063144be635327d24df14231d70df1ca54e264d70af01bfd',
   settled: '0x79d3221cbd512ab749867800e339415f12991642a895212d0e3989d852d7517e',
+  /** the job's submit (delivery) transaction, as its settle record names it (each market's delivered/read-settle-id.json) */
+  delivered: '0xb13879351ac7c61d293a780de5bcab0993bd7385e6f2b42cc4705ed7f83748e7',
 };
 /** a devnet JudgeAdapter the devnet.evaluate purpose may call (coord lang/gen/sign.json purposes.devnet.evaluate.devnet.calls) */
 export const DEVNET_ADAPTER = '0x8474c7b165243e49a44a86b6f303c58924778928';
@@ -119,6 +121,9 @@ export const CALLS = {
       if (stage === 'paid') expect(acks.paid, 'the devnet job records no payout transaction: paid stays off').toBeUndefined();
       else expect(acks[stage]).toBe(want[stage]);
     } },
+  // the proof of the job's ending transaction on the devnet: what coordStream reads before it trusts any event
+  readProof: { fn: 'proof.readProof', run: (s, t, x) => s.readProof(t, LEDGER_TX[x.stage], { chain: DEVNET }),
+    check: ({ result, x, expect }) => { expect(result.tx.toLowerCase()).toBe(LEDGER_TX[x.stage]); expect(result.proven).toBe(Object.values(x.fx.response.body.checks ?? {}).length > 0 && Object.values(x.fx.response.body.checks).every(Boolean) && x.fx.response.body.blob !== null); } },
   chainTx: { fn: 'market.chainTx', run: (s, t, x) => s.chainTx(t, DEVNET, LEDGER_TX[x.stage]),
     check: ({ result, x, expect }) => {
       expect(result.events.map((e) => e.name)).toEqual(x.fx.response.body.tx.events.map((e) => e.event));

@@ -37,13 +37,13 @@
    "rows": 35,
    "cells_with_fixture": 9,
    "fixtures": {
-    "live": 17,
+    "live": 19,
     "devnet-ledger": 2,
     "contract": 8
    },
    "gaps": {
     "needs_key": 0,
-    "needs_payment": 5,
+    "needs_payment": 3,
     "needs_owner_arm": 1,
     "no_devnet_twin": 1,
     "not_in_coord": 1
@@ -54,13 +54,13 @@
    "rows": 25,
    "cells_with_fixture": 9,
    "fixtures": {
-    "live": 11,
+    "live": 13,
     "devnet-ledger": 2,
     "contract": 7
    },
    "gaps": {
     "needs_key": 0,
-    "needs_payment": 3,
+    "needs_payment": 1,
     "needs_owner_arm": 1,
     "no_devnet_twin": 0,
     "not_in_coord": 1
@@ -71,13 +71,13 @@
    "rows": 25,
    "cells_with_fixture": 9,
    "fixtures": {
-    "live": 11,
+    "live": 13,
     "devnet-ledger": 2,
     "contract": 7
    },
    "gaps": {
     "needs_key": 0,
-    "needs_payment": 3,
+    "needs_payment": 1,
     "needs_owner_arm": 1,
     "no_devnet_twin": 0,
     "not_in_coord": 1
@@ -105,13 +105,13 @@
    "rows": 23,
    "cells_with_fixture": 9,
    "fixtures": {
-    "live": 8,
+    "live": 10,
     "devnet-ledger": 2,
     "contract": 7
    },
    "gaps": {
     "needs_key": 0,
-    "needs_payment": 3,
+    "needs_payment": 1,
     "needs_owner_arm": 1,
     "no_devnet_twin": 1,
     "not_in_coord": 1
@@ -122,13 +122,13 @@
    "rows": 30,
    "cells_with_fixture": 8,
    "fixtures": {
-    "live": 13,
+    "live": 15,
     "devnet-ledger": 2,
     "contract": 7
    },
    "gaps": {
     "needs_key": 1,
-    "needs_payment": 3,
+    "needs_payment": 1,
     "needs_owner_arm": 1,
     "no_devnet_twin": 0,
     "not_in_coord": 3
@@ -139,13 +139,13 @@
    "rows": 29,
    "cells_with_fixture": 9,
    "fixtures": {
-    "live": 13,
+    "live": 15,
     "devnet-ledger": 2,
     "contract": 7
    },
    "gaps": {
     "needs_key": 0,
-    "needs_payment": 3,
+    "needs_payment": 1,
     "needs_owner_arm": 1,
     "no_devnet_twin": 0,
     "not_in_coord": 3
@@ -987,10 +987,10 @@
    "chain": 36927,
    "cite": "lang/cue/api-operations.cue:618",
    "auth": "open",
-   "gap": {
-    "reason": "needs_payment",
-    "why": "the submit transaction's Submitted event: GET /v1/chain/36927/tx/:hash answered 402 past the keyless free rate (600 a day), and the devnet ledger fixture carries no Submitted event to build it from"
-   }
+   "call": "chainTx",
+   "fixture": "test/io/fixtures/x402-base/delivered/read-chain-chain-tx-hash.json",
+   "source": "live",
+   "read_at": "2026-11-21T19:53:42.329Z"
   },
   {
    "market": "mcp",
@@ -1000,10 +1000,10 @@
    "chain": 36927,
    "cite": "lang/cue/api-operations.cue:618",
    "auth": "open",
-   "gap": {
-    "reason": "needs_payment",
-    "why": "the submit transaction's Submitted event: GET /v1/chain/36927/tx/:hash answered 402 past the keyless free rate (600 a day), and the devnet ledger fixture carries no Submitted event to build it from"
-   }
+   "call": "chainTx",
+   "fixture": "test/io/fixtures/mcp/delivered/read-chain-chain-tx-hash.json",
+   "source": "live",
+   "read_at": "2026-11-21T19:53:42.329Z"
   },
   {
    "market": "a2a",
@@ -1013,10 +1013,10 @@
    "chain": 36927,
    "cite": "lang/cue/api-operations.cue:618",
    "auth": "open",
-   "gap": {
-    "reason": "needs_payment",
-    "why": "the submit transaction's Submitted event: GET /v1/chain/36927/tx/:hash answered 402 past the keyless free rate (600 a day), and the devnet ledger fixture carries no Submitted event to build it from"
-   }
+   "call": "chainTx",
+   "fixture": "test/io/fixtures/a2a/delivered/read-chain-chain-tx-hash.json",
+   "source": "live",
+   "read_at": "2026-11-21T19:53:42.329Z"
   },
   {
    "market": "near-agent-market",
@@ -1026,10 +1026,10 @@
    "chain": 36927,
    "cite": "lang/cue/api-operations.cue:618",
    "auth": "open",
-   "gap": {
-    "reason": "needs_payment",
-    "why": "the submit transaction's Submitted event: GET /v1/chain/36927/tx/:hash answered 402 past the keyless free rate (600 a day), and the devnet ledger fixture carries no Submitted event to build it from"
-   }
+   "call": "chainTx",
+   "fixture": "test/io/fixtures/near-agent-market/delivered/read-chain-chain-tx-hash.json",
+   "source": "live",
+   "read_at": "2026-11-21T19:53:42.329Z"
   },
   {
    "market": "erc8183-base",
@@ -1039,10 +1039,10 @@
    "chain": 36927,
    "cite": "lang/cue/api-operations.cue:618",
    "auth": "open",
-   "gap": {
-    "reason": "needs_payment",
-    "why": "the submit transaction's Submitted event: GET /v1/chain/36927/tx/:hash answered 402 past the keyless free rate (600 a day), and the devnet ledger fixture carries no Submitted event to build it from"
-   }
+   "call": "chainTx",
+   "fixture": "test/io/fixtures/erc8183-base/delivered/read-chain-chain-tx-hash.json",
+   "source": "live",
+   "read_at": "2026-11-21T19:53:42.329Z"
   },
   {
    "market": "olas-base",
@@ -1052,10 +1052,10 @@
    "chain": 36927,
    "cite": "lang/cue/api-operations.cue:618",
    "auth": "open",
-   "gap": {
-    "reason": "needs_payment",
-    "why": "the submit transaction's Submitted event: GET /v1/chain/36927/tx/:hash answered 402 past the keyless free rate (600 a day), and the devnet ledger fixture carries no Submitted event to build it from"
-   }
+   "call": "chainTx",
+   "fixture": "test/io/fixtures/olas-base/delivered/read-chain-chain-tx-hash.json",
+   "source": "live",
+   "read_at": "2026-11-21T19:53:42.329Z"
   },
   {
    "market": "olas-base",
@@ -1336,10 +1336,10 @@
    "chain": 36927,
    "cite": "lang/cue/api-operations.cue:88",
    "auth": "open",
-   "gap": {
-    "reason": "needs_payment",
-    "why": "GET /v1/proof/tx/36927/:tx answered 402 past the keyless free rate (600 a day); coordStream reads it before any event"
-   }
+   "call": "readProof",
+   "fixture": "test/io/fixtures/x402-base/settled/read-proof-tx-chain-tx.json",
+   "source": "live",
+   "read_at": "2026-11-21T19:53:44.046Z"
   },
   {
    "market": "mcp",
@@ -1349,10 +1349,10 @@
    "chain": 36927,
    "cite": "lang/cue/api-operations.cue:88",
    "auth": "open",
-   "gap": {
-    "reason": "needs_payment",
-    "why": "GET /v1/proof/tx/36927/:tx answered 402 past the keyless free rate (600 a day); coordStream reads it before any event"
-   }
+   "call": "readProof",
+   "fixture": "test/io/fixtures/mcp/settled/read-proof-tx-chain-tx.json",
+   "source": "live",
+   "read_at": "2026-11-21T19:53:44.046Z"
   },
   {
    "market": "a2a",
@@ -1362,10 +1362,10 @@
    "chain": 36927,
    "cite": "lang/cue/api-operations.cue:88",
    "auth": "open",
-   "gap": {
-    "reason": "needs_payment",
-    "why": "GET /v1/proof/tx/36927/:tx answered 402 past the keyless free rate (600 a day); coordStream reads it before any event"
-   }
+   "call": "readProof",
+   "fixture": "test/io/fixtures/a2a/settled/read-proof-tx-chain-tx.json",
+   "source": "live",
+   "read_at": "2026-11-21T19:53:44.046Z"
   },
   {
    "market": "near-agent-market",
@@ -1375,10 +1375,10 @@
    "chain": 36927,
    "cite": "lang/cue/api-operations.cue:88",
    "auth": "open",
-   "gap": {
-    "reason": "needs_payment",
-    "why": "GET /v1/proof/tx/36927/:tx answered 402 past the keyless free rate (600 a day); coordStream reads it before any event"
-   }
+   "call": "readProof",
+   "fixture": "test/io/fixtures/near-agent-market/settled/read-proof-tx-chain-tx.json",
+   "source": "live",
+   "read_at": "2026-11-21T19:53:44.046Z"
   },
   {
    "market": "erc8183-base",
@@ -1388,10 +1388,10 @@
    "chain": 36927,
    "cite": "lang/cue/api-operations.cue:88",
    "auth": "open",
-   "gap": {
-    "reason": "needs_payment",
-    "why": "GET /v1/proof/tx/36927/:tx answered 402 past the keyless free rate (600 a day); coordStream reads it before any event"
-   }
+   "call": "readProof",
+   "fixture": "test/io/fixtures/erc8183-base/settled/read-proof-tx-chain-tx.json",
+   "source": "live",
+   "read_at": "2026-11-21T19:53:44.046Z"
   },
   {
    "market": "olas-base",
@@ -1401,10 +1401,10 @@
    "chain": 36927,
    "cite": "lang/cue/api-operations.cue:88",
    "auth": "open",
-   "gap": {
-    "reason": "needs_payment",
-    "why": "GET /v1/proof/tx/36927/:tx answered 402 past the keyless free rate (600 a day); coordStream reads it before any event"
-   }
+   "call": "readProof",
+   "fixture": "test/io/fixtures/olas-base/settled/read-proof-tx-chain-tx.json",
+   "source": "live",
+   "read_at": "2026-11-21T19:53:44.046Z"
   },
   {
    "market": "x402-base",

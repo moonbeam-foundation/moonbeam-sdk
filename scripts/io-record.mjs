@@ -26,7 +26,7 @@ const c = loadCoord(resolve(coordPath), { sha: arg('--sha') });
 const map = JSON.parse(readFileSync(join(root, 'test/io/op-map.json'), 'utf8'));
 const { CALLS, sdkOf } = await import(pathToFileURL(join(root, 'test/io/calls.mjs')).href);
 const dist = (p) => import(pathToFileURL(join(root, 'dist', p)).href);
-const s = sdkOf([await dist('market/index.js'), await dist('playground/index.js'), await dist('jobs/index.js')]);
+const s = sdkOf([await dist('market/index.js'), await dist('playground/index.js'), await dist('jobs/index.js'), await dist('proof/index.js')]);
 const ledger = JSON.parse(readFileSync(join(root, 'test/fixtures/economy/36927-v5.1-economy.ledger.json'), 'utf8'));
 const LIVE_BASE = 'https://coord.taifoon.dev/v1';
 

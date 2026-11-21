@@ -383,6 +383,20 @@
       "path": "/a2a/registry/agent?id=380d2255-09eb-4c70-9a13-b596ce0a2745",
       "status": 200,
       "keyed": true
+    },
+    {
+      "n": 61,
+      "at": "2026-11-21T19:53:42.329Z",
+      "path": "/chain/36927/tx/0xb13879351ac7c61d293a780de5bcab0993bd7385e6f2b42cc4705ed7f83748e7",
+      "status": 200,
+      "keyed": true
+    },
+    {
+      "n": 62,
+      "at": "2026-11-21T19:53:44.046Z",
+      "path": "/proof/tx/36927/0x79d3221cbd512ab749867800e339415f12991642a895212d0e3989d852d7517e",
+      "status": 200,
+      "keyed": true
     }
   ]
 }
