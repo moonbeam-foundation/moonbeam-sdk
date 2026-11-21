@@ -1,7 +1,7 @@
 // _VENUE_TRUTH_v1_: each cohort's own list / take / settle, from the listed register's facts and the venue's evidence-backed steps.
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { COHORT_ALIASES, COHORT_IDS, COHORT_STEPS, MOONBEAM_LISTS_ON, cohortIdOf, MARK_STATE, STEP_FEATURE, VENUES, VENUE_EVIDENCE_OF, capState, cohortOf, cohortsOf, markOf, type CohortFacts, type FeatureMark, type VenueStepRow } from '../src/market/index.js';
+import { COHORT_ALIASES, COHORT_IDS, COHORT_STEPS, MAINNET_IO_OF, MOONBEAM_LISTS_ON, PUBLIC_STATES, VENUE_MAINNET, provenOnMainnet, publicStateOf, cohortIdOf, MARK_STATE, STEP_FEATURE, VENUES, VENUE_EVIDENCE_OF, capState, cohortOf, cohortsOf, markOf, type CohortFacts, type FeatureMark, type MainnetProof, type VenueStepRow } from '../src/market/index.js';
 import { STATE_RANK } from '../src/market/cohorts.js';
 import { VENUE_REGISTER } from '../src/market/venues-data.js';
 
@@ -13,12 +13,13 @@ describe('cohortOf: one cohort on one market', () => {
   it('the cohort the evidence was read for takes the venue\'s own rows once it is listed', () => {
     const c = cohortOf('operator', f({ listings: 1, since: '2026-11-11' }), steps('live', 'live', 'self-test'), 'operator');
     expect(COHORT_STEPS.map((k) => c[k].state)).toEqual(['live', 'live', 'self-test']);
-    expect(c.list).toEqual({ state: 'live', says: 'live read', read_on: '2026-11-06' });
+    // no mainnet run is kept for this cohort here, so the public word is not yet
+    expect(c.list).toEqual({ state: 'live', says: 'live read', read_on: '2026-11-06', publicState: 'not yet' });
   });
   it('another cohort: listed is at most partial while a listing is still wanted; take and settle have no read of their own', () => {
     const wanted = cohortOf('moonbeam', f({ listings: 1, directories: ['x402scan'], wanted: 2, since: '2026-11-11' }), steps('live', 'live', 'live'), 'operator');
     expect(COHORT_STEPS.map((k) => wanted[k].state)).toEqual(['partial', 'not yet', 'not yet']);
-    expect(wanted.list).toEqual({ state: 'partial', says: null, read_on: '2026-11-11' });
+    expect(wanted.list).toEqual({ state: 'partial', says: null, read_on: '2026-11-11', publicState: 'not yet' });
     expect(wanted.directories).toEqual(['x402scan']);
     const done = cohortOf('moonbeam', f({ listings: 1, since: '2026-11-11' }), steps('live', 'live', 'live'), 'operator');
     expect(done.list.state).toBe('live');
@@ -31,19 +32,20 @@ describe('cohortOf: one cohort on one market', () => {
   it('not on the market: not yet on every step, the evidence never borrowed', () => {
     for (const c of COHORT_IDS) {
       const x = cohortOf(c, f({ wanted: 1 }), steps('live', 'live', 'live'), 'operator');
-      expect(COHORT_STEPS.map((k) => x[k])).toEqual(COHORT_STEPS.map(() => ({ state: 'not yet', says: null, read_on: null })));
+      expect(COHORT_STEPS.map((k) => x[k])).toEqual(COHORT_STEPS.map(() => ({ state: 'not yet', says: null, read_on: null, publicState: 'not yet' })));
     }
     expect(cohortOf('moonbeam', undefined, steps('live', 'live', 'live'), 'operator').list.state).toBe('not yet');
   });
   it('a shared listing is said as shared, with its reason, and n/a steps stay n/a', () => {
     const x = cohortOf('moonbeam', f({ shared: 'the other cohort\'s agent, until this one registers its own', since: '2026-11-11' }), steps('live', 'n/a', 'live'), 'operator');
-    expect(x.list).toEqual({ state: 'shared', says: 'the other cohort\'s agent, until this one registers its own', read_on: '2026-11-11' });
+    expect(x.list).toEqual({ state: 'shared', says: 'the other cohort\'s agent, until this one registers its own', read_on: '2026-11-11', publicState: 'not yet' });
+    expect(x.take.publicState).toBe('n/a');
     expect(x.take.state).toBe('n/a');
     expect(x.settle.state).toBe('shared');
   });
   it('a closed market is closed on every step, even for the evidence cohort', () => {
     const x = cohortOf('operator', f({ closed: 'closed to new providers', listings: 1 }), steps('live', 'n/a', 'live'), 'operator');
-    expect(COHORT_STEPS.map((k) => x[k])).toEqual(COHORT_STEPS.map(() => ({ state: 'closed', says: 'closed to new providers', read_on: null })));
+    expect(COHORT_STEPS.map((k) => x[k])).toEqual(COHORT_STEPS.map(() => ({ state: 'closed', says: 'closed to new providers', read_on: null, publicState: 'not yet' })));
   });
   it('n/a where the venue has no such step, with its reason', () => {
     const x = cohortOf('operator', f({ listings: 1 }), { list: r('live'), take: r('n/a', 'no hire here'), settle: r('n/a', 'nothing settles') }, 'operator');
@@ -153,7 +155,7 @@ describe('VENUES[].cohorts: the shipped table, per cohort', () => {
     }
     const steps = { list: r('not yet'), take: r('live'), settle: r('live') };
     const j = { standing: 'listed_by_moonbeam' as const, ref: '8453:1', proof: 'virtuals.agent', says: 'shown', read_at: '2026-11-15T00:00:00Z' };
-    expect(cohortOf('moonbeam', f({ wanted: 1, journey: j }), steps, 'operator').list).toEqual({ state: 'live', says: 'shown', read_on: '2026-11-15T00:00:00Z', from: 'journey', who: null });
+    expect(cohortOf('moonbeam', f({ wanted: 1, journey: j }), steps, 'operator').list).toEqual({ state: 'live', says: 'shown', read_on: '2026-11-15T00:00:00Z', from: 'journey', who: null, publicState: 'not yet' });
     expect(cohortOf('operator', f({ journey: j }), steps, 'operator').list.state).toBe('not yet');
     // a closed market stays closed, whatever a journey says
     expect(cohortOf('moonbeam', f({ closed: 'closed to new providers', journey: j }), steps, 'operator').list.state).toBe('closed');
@@ -161,19 +163,81 @@ describe('VENUES[].cohorts: the shipped table, per cohort', () => {
   it('_VENUE_TRUTH_v2_: a mark says the state, its words and who moves it; owner steps and builds are not yet', () => {
     const feat = (mark: FeatureMark) => f({ listings: 1, features: { list: { mark, who: 'owner', says: 'w', read_at: '2026-11-14T23:00:00Z' } } });
     const steps = { list: r('live'), take: r('live'), settle: r('live') };
-    expect(cohortOf('moonbeam', feat('ok'), steps, 'operator').list).toEqual({ state: 'live', says: 'w', read_on: '2026-11-14T23:00:00Z', from: 'features', who: 'owner' });
+    expect(cohortOf('moonbeam', feat('ok'), steps, 'operator').list).toEqual({ state: 'live', says: 'w', read_on: '2026-11-14T23:00:00Z', from: 'features', who: 'owner', publicState: 'not yet' });
     for (const [mark, state] of [['partial', 'partial'], ['owner step', 'not yet'], ['not built', 'not yet'], ['broken', 'not yet']] as const)
       expect(cohortOf('moonbeam', feat(mark), steps, 'operator').list.state, mark).toBe(state);
     // a step with no mark falls back to the rules
     expect(cohortOf('moonbeam', feat('ok'), steps, 'operator').take.state).toBe('not yet');
   });
-  it('docs/VENUES.md says the same per-cohort states as the table', () => {
+  it('docs/VENUES.md prints each shown market with Moonbeam\'s public words, and no row for a market with no proven step', () => {
     const doc = readFileSync(new URL('../docs/VENUES.md', import.meta.url), 'utf8');
-    const cell = (id: string, c: 'operator' | 'moonbeam') => states(id, c).join(' · ');
-    for (const v of VENUES) expect(doc, v.id).toContain(`| ${v.name} | ${cell(v.id, 'operator')} | ${cell(v.id, 'moonbeam')} |`);
+    for (const v of VENUES) {
+      const row = `| ${v.name} | ${v.does} | ${COHORT_STEPS.map((k) => v.cohorts.moonbeam[k].publicState).join(' | ')} |`;
+      if (v.moonbeamLists && provenOnMainnet(v)) expect(doc, v.id).toContain(row);
+      else expect(doc, v.id).not.toContain(`| ${v.name} |`);
+    }
   });
   it('public text: no internal host, no workflow-tool name, no address', () => {
     expect(JSON.stringify(VENUES.map((v) => v.cohorts))).not.toMatch(/taifoon|\bn8n\b|0x[0-9a-f]{40}/i);
     expect(readFileSync(new URL('../src/market/venues-data.ts', import.meta.url), 'utf8')).not.toMatch(/taifoon|\bn8n\b|0x[0-9a-f]{40}/i);
+  });
+});
+
+// _MAINNET_IO_v1_ (owner 2026-11-21): a customer reads two words. live needs the step's own live state AND a mainnet run kept whole.
+describe('publicState: live only on a mainnet run kept as an I/O fixture', () => {
+  const proof = (o: Partial<MainnetProof> = {}): MainnetProof => ({ op: 'list', ref: 'live:m/list@2026-11-06', on: '2026-11-06', run: 'test/io/fixtures/m/listed/run-live-list.json', steps: { listed: 'test/io/fixtures/m/listed/read-x.live-list-listed.json' }, proven: true, ...o });
+  const steps = { list: r('live'), take: r('live'), settle: r('n/a', 'nothing settles') };
+  const listed = f({ listings: 1, features: { list: { mark: 'ok', who: null, says: 'w', read_at: '2026-11-14T23:00:00Z' }, jobs_received: { mark: 'tested', who: null, says: 'w', read_at: '2026-11-14T23:00:00Z', fixture: 'test/io/fixtures/m/bought/run-fork-sell.json' } } });
+  it('the public words are live, not yet and n/a, and nothing else', () => {
+    expect([...PUBLIC_STATES]).toEqual(['live', 'not yet', 'n/a']);
+    for (const s of Object.keys(STATE_RANK)) expect(PUBLIC_STATES, s).toContain(publicStateOf(s as VenueStepRow['state'], proof()));
+    for (const s of ['cut', 'closed', 'shared'] as const) expect(publicStateOf(s, proof())).toBe('not yet');
+  });
+  it('a live state with its mainnet run and every recorded read is live, and names the run it stands on', () => {
+    const c = cohortOf('moonbeam', listed, steps, 'operator', { list: proof() });
+    expect(c.list).toMatchObject({ state: 'live', publicState: 'live', mainnet: { ref: 'live:m/list@2026-11-06', on: '2026-11-06', run: 'test/io/fixtures/m/listed/run-live-list.json' } });
+    expect(c.settle.publicState).toBe('n/a');
+  });
+  it('a live state without its mainnet fixture is not yet: no run, a read still missing, or a run not kept whole', () => {
+    expect(cohortOf('moonbeam', listed, steps, 'operator').list).toMatchObject({ state: 'live', publicState: 'not yet' });
+    expect(cohortOf('moonbeam', listed, steps, 'operator', { list: proof({ steps: { listed: null }, proven: false }) }).list.publicState).toBe('not yet');
+    expect(cohortOf('moonbeam', listed, steps, 'operator', { list: proof({ steps: { listed: null }, proven: true }) }).list.publicState, 'the reads decide, not the flag').toBe('not yet');
+    expect(cohortOf('moonbeam', listed, steps, 'operator', { list: proof({ proven: false }) }).list.publicState).toBe('not yet');
+    expect(cohortOf('moonbeam', listed, steps, 'operator', { list: proof() }).list.mainnet).toBeDefined();
+    expect(cohortOf('moonbeam', listed, steps, 'operator', { list: proof({ proven: false }) }).list.mainnet).toBeUndefined();
+  });
+  it('a mainnet run never lifts a step whose own state is not live: a run of ours on a fork stays our evidence', () => {
+    const c = cohortOf('moonbeam', listed, steps, 'operator', { list: proof(), jobs_received: proof({ op: 'sell' }) });
+    expect(c.take).toMatchObject({ state: 'tested', publicState: 'not yet' });
+    expect(cohortOf('moonbeam', f({ listings: 1, features: { list: { mark: 'partial', who: null, says: null, read_at: null } } }), steps, 'operator', { list: proof() }).list.publicState).toBe('not yet');
+  });
+  it('a cohort never borrows another cohort\'s mainnet run', () => {
+    const all = cohortsOf({ operator: listed, moonbeam: listed }, steps, 'operator', { moonbeam: { list: proof() } });
+    expect(all.moonbeam.list.publicState).toBe('live'); expect(all.operator.list.publicState).toBe('not yet');
+    expect(MAINNET_IO_OF).toBe('moonbeam');
+    for (const v of VENUES) for (const k of COHORT_STEPS) expect(['not yet', 'n/a'], `${v.id}.operator.${k}`).toContain(v.cohorts.operator[k].publicState);
+  });
+  it('the shipped table: every public live has its run file and each recorded read on disk, read 200 on that very run', () => {
+    const at = (p: string) => JSON.parse(readFileSync(new URL(`../${p}`, import.meta.url), 'utf8'));
+    let live = 0;
+    for (const v of VENUES) for (const k of COHORT_STEPS) {
+      const c = v.cohorts.moonbeam[k];
+      expect(PUBLIC_STATES, `${v.id}.${k}`).toContain(c.publicState);
+      const p = VENUE_MAINNET[v.id]?.[STEP_FEATURE[k]];
+      expect(c.publicState, `${v.id}.${k}`).toBe(publicStateOf(c.state, p));
+      if (c.publicState !== 'live') { expect(c.mainnet, `${v.id}.${k}`).toBeUndefined(); continue; }
+      live += 1;
+      expect(c.state).toBe('live'); expect(v.moonbeamLists).toBe(true);
+      const run = at(p!.run);
+      expect([run.market, run.run.rung, run.run.ref]).toEqual([v.id, 'live', p!.ref]);
+      expect(run.features).toContain(STEP_FEATURE[k]);
+      expect(Object.keys(p!.steps)).toEqual(run.covers);
+      for (const [step, file] of Object.entries(p!.steps)) {
+        const fx = at(file!);
+        expect([fx.market, fx.rung, fx.run, fx.path.step, fx.response.status], file!).toEqual([v.id, 'live', p!.ref, step, 200]);
+      }
+    }
+    expect(live).toBeGreaterThan(0);
+    for (const v of VENUES) expect(provenOnMainnet(v), v.id).toBe(COHORT_STEPS.some((k) => v.cohorts.moonbeam[k].publicState === 'live'));
   });
 });

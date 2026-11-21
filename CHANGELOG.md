@@ -2,6 +2,17 @@
 
 ## Unreleased
 
+- **The venue table has two words: live and not yet.** A step of a market reads **live** only when a mainnet run of its path is kept
+  in this SDK as an I/O fixture that a test replays; everything else reads **not yet**, and **n/a** stays where a market has no such step.
+- **`publicState` on every cohort step** (`venue.cohorts.moonbeam.list.publicState`), with `mainnet { ref, on, run }` on a live one.
+  The finer `state` is unchanged for callers, and no table or document prints it.
+- **New in `./market`:** `PUBLIC_STATES`, `publicStateOf`, `provenOnMainnet`, `VENUE_MAINNET` and `MAINNET_IO_OF`.
+- **A market is in the README and docs/VENUES.md table only with a step proven on mainnet.** Today that is the list step of the A2A
+  Registry, the MCP Registry and ERC-8004; x402, Virtuals ACP, Olas Mech and the NEAR AI Agent Market are named as not yet under the table.
+- **`npx moonbeam venues` and `examples/70-every-venue.mjs` print the same words.** docs/VENUES.md no longer prints the operator's own rows.
+- **Recording a mainnet run:** `node scripts/record-api-rung.mjs --rung live` reads each covered step with the run's own public ids, without
+  a key by default, and keeps the answers masked. The generated I/O tests replay each one through its SDK call and check its shape.
+
 ## 0.13.1 (2026-11-21)
 
 - **A typed state table: `STATES`, `MOVES`, `stateOf`, `readState` in `@moonbeam-foundation/sdk/market`.** Every state of a sale has one read; the table is generated, and a refusal comes back as its status and body.

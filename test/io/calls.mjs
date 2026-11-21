@@ -78,7 +78,8 @@ export const CALLS = {
     } },
   identity: { fn: 'market.identity', run: (s, t) => s.identity(t, 8453, [1170141]),
     check: ({ result, x, expect }) => expect(result.length).toBe(rowsLen(x.fx.response.body, 'agents')) },
-  registryAgent: { fn: 'market.registryAgent', run: (s, t) => s.registryAgent(t, 8453, 1170141),
+  // a mainnet run's read carries its own chain and id (x.args, from the recorded path); the matrix's own fixture reads the house agent
+  registryAgent: { fn: 'market.registryAgent', run: (s, t, x) => s.registryAgent(t, Number(x?.args?.chain ?? 8453), Number(x?.args?.id ?? 1170141)),
     check: ({ result, x, expect }) => expect(result).toEqual(x.fx.response.body) },
   virtualsSellers: { fn: 'market.virtualsSellers', run: (s, t) => s.virtualsSellers(t),
     check: ({ result, x, expect }) => { expect(result.sellers.length).toBe(rowsLen(x.fx.response.body, 'sellers')); expect(result.v3Sellers.length).toBe(rowsLen(x.fx.response.body, 'v3_sellers')); } },

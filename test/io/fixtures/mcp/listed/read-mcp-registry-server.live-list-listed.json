@@ -1,0 +1,114 @@
+{
+ "op": "GET mcp/registry/server",
+ "market": "mcp",
+ "stage": "listed",
+ "dir": "read",
+ "sdk": "market.mcpServer",
+ "source": "live",
+ "rung": "live",
+ "run": "live:mcp/list@2026-11-11",
+ "path": {
+  "op": "list",
+  "step": "listed"
+ },
+ "request": {
+  "method": "GET",
+  "path": "/v1/mcp/registry/server",
+  "query": {
+   "name": "network.moonbeam.next/paid-calls"
+  }
+ },
+ "response": {
+  "status": 200,
+  "body": {
+   "ok": true,
+   "name": "network.moonbeam.next/paid-calls",
+   "title": "Moonbeam agent listings",
+   "description": "Where an agent stands on ERC-8004, the MCP Registry and A2A, free to check. Listing runs on a plan.",
+   "version": "1.1.0",
+   "website": "https://next.moonbeam.network/acp/plans",
+   "repository": null,
+   "status": "active",
+   "published_at": "2026-11-14T23:22:05.262303Z",
+   "updated_at": "2026-11-14T23:22:05.262303Z",
+   "remotes": [
+    {
+     "type": "streamable-http",
+     "url": "https://next.moonbeam.network/api/acp/x402/mcp",
+     "open": true,
+     "why": "streamable-http, https, no header required"
+    }
+   ],
+   "packages": 0,
+   "open_remote": "https://next.moonbeam.network/api/acp/x402/mcp",
+   "free": true,
+   "access": "open: a streamable-http endpoint that needs nothing from the caller",
+   "erc8004": [
+    {
+     "chain_id": 8453,
+     "agent_id": "1176098",
+     "name": "Moonbeam On-chain Reads",
+     "url": "https://next.moonbeam.network/api/house/onchain-reads",
+     "protocol": "a2a",
+     "match": "host"
+    }
+   ],
+   "record": "https://registry.modelcontextprotocol.io/v0.1/servers/network.moonbeam.next%2Fpaid-calls/versions/latest",
+   "probe": {
+    "status": "ready",
+    "reachable": true,
+    "free": true,
+    "priced": false,
+    "latency_ms": 57,
+    "server": "moonbeam-agent-listings",
+    "tool_count": 6,
+    "tools": [
+     {
+      "name": "moonbeam_where_listed",
+      "description": "Where an ERC-8004 agent on Base stands on the markets Moonbeam lists agents on: ERC-8004, the MCP Registry and the A2A Registry, each listed, queued, held or no"
+     },
+     {
+      "name": "market_price",
+      "description": "One market.price answer, bought through Moonbeam and paid with x402 on Base. One call is 0.001714 USDC, paid with x402 on Base."
+     },
+     {
+      "name": "data_onchain_query",
+      "description": "One data.onchain_query answer, bought through Moonbeam and paid with x402 on Base. One call is 0.013714 USDC, paid with x402 on Base."
+     },
+     {
+      "name": "risk_address",
+      "description": "One risk.address answer, bought through Moonbeam and paid with x402 on Base. One call is 0.0012 USDC, paid with x402 on Base."
+     },
+     {
+      "name": "plan_steps",
+      "description": "One plan.steps answer, bought through Moonbeam and paid with x402 on Base. One call is 0.0012 USDC, paid with x402 on Base."
+     },
+     {
+      "name": "mcp_digest",
+      "description": "One mcp.digest answer, bought through Moonbeam and paid with x402 on Base. One call is 0.0012 USDC, paid with x402 on Base."
+     }
+    ],
+    "reason": null,
+    "probed_at": "2026-11-21T11:49:47.157Z"
+   },
+   "classes": [],
+   "how": "POST /v1/handshake { candidate: { address: \"network.moonbeam.next/paid-calls\", kind: \"mcp-registry\" }, task, tool, args, dispatch: true }",
+   "record_read": {
+    "state": "found",
+    "source": "live",
+    "age_s": 0,
+    "read_at": "2026-11-21T11:49:47.050Z"
+   }
+  }
+ },
+ "args": {
+  "name": "network.moonbeam.next/paid-calls"
+ },
+ "coord_sha": "168977714ab49159873149003fb2b1a9d0fd8b2b",
+ "read_at": "2026-11-21T11:49:46.281Z",
+ "notes": {
+  "trimmed": [
+   "get_key (the free-key offer every keyless answer carries)"
+  ]
+ }
+}

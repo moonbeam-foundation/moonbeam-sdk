@@ -4,9 +4,10 @@
 //   live → live · tested → tested · partial → partial · self_test → self-test · claimed, contradicted → not yet · none (the market has no such step) → n/a
 import type { OnboardTransport } from '../onboard/index.js';
 import { VENUE_REGISTER } from './venues-data.js';
+import { VENUE_MAINNET } from './venue-mainnet-data.js';
 import { listStatus, type ListMarket, type ListRow } from './journey.js';
 import { markets } from './index.js';
-import { capState, cohortIdOf, cohortsOf, markOf, type CohortFacts, type CohortId, type CohortRows, type DeprecatedCohortId, type FeatureMark } from './cohorts.js';
+import { COHORT_STEPS, capState, cohortIdOf, cohortsOf, markOf, type CohortFacts, type CohortId, type CohortRows, type DeprecatedCohortId, type FeatureMark } from './cohorts.js';
 
 /** A step's state, said plainly: it runs for outside money (live), Moonbeam ran it end to end itself and keeps the run as an I/O test
  *  (tested, _VENUE_TESTED_v1_), in part, only with Moonbeam on both sides (self-test), not yet, or the market has no such step (n/a). */
@@ -114,6 +115,8 @@ const S: Record<VenueId, Static> = {
     calls: { list: null, take: null, settle: null, paid: null }, na: { settle: 'a workflow node has no settlement of its own', paid: 'a workflow node has no payout of its own' } },
 };
 
+/** _MAINNET_IO_v1_: the cohort whose mainnet runs this SDK keeps as I/O fixtures (its own ids fill the reads): Moonbeam's own listings. */
+export const MAINNET_IO_OF: CohortId = 'moonbeam';
 /** _VENUE_TRUTH_v1_: the cohort the register's evidence (each venue's list / take / settle / paid) was read for. */
 export const VENUE_EVIDENCE_OF: CohortId = cohortIdOf(VENUE_REGISTER.cohorts?.evidence_of ?? 'operator');
 
@@ -134,8 +137,10 @@ function venueOf(s: Static, r: RegisterMarket): Venue {
   };
   const { calls: _c, na: _n, ...v } = s;
   const steps = { list: row('list'), take: row('take'), settle: row('settle'), paid: row('paid') };
-  return { ...v, moonbeamLists: listsOn(v.id), entry: { cost: r.entry.cost, done: r.entry.done }, ...steps, cohorts: cohortsOf(r.cohorts, steps, VENUE_EVIDENCE_OF) };
+  return { ...v, moonbeamLists: listsOn(v.id), entry: { cost: r.entry.cost, done: r.entry.done }, ...steps, cohorts: cohortsOf(r.cohorts, steps, VENUE_EVIDENCE_OF, { [MAINNET_IO_OF]: VENUE_MAINNET[v.id] ?? {} }) };
 }
+/** _MAINNET_IO_v1_: whether Moonbeam shows this market as supported: at least one step whose public word is live. */
+export const provenOnMainnet = (v: Venue): boolean => COHORT_STEPS.some((k) => v.cohorts[MAINNET_IO_OF][k].publicState === 'live');
 
 /** Every venue, as shipped: the register's states and the date it was read (`VENUES_READ_ON`). */
 export const VENUES: readonly Venue[] = Object.freeze(VENUE_IDS.map((id) => {

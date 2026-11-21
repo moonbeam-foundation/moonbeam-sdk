@@ -73,24 +73,26 @@ describe('VENUES: every venue, one table', () => {
     expect(JSON.stringify(VENUES)).not.toMatch(/taifoon|\bn8n\b|0x[0-9a-f]{40}|36927/i);
     expect(readFileSync(new URL('../src/market/venues-register.json', import.meta.url), 'utf8')).not.toMatch(/taifoon|\bn8n\b|0x[0-9a-f]{40}/i);
   });
-  it('docs/VENUES.md and the README say the same states as the table', () => {
+  it('docs/VENUES.md and the README print the same table: Moonbeam\'s public words, a row only for a market proven on mainnet', () => {
     const doc = readFileSync(new URL('../docs/VENUES.md', import.meta.url), 'utf8');
     const readme = readFileSync(new URL('../README.md', import.meta.url), 'utf8');
-    const c = (s: market.VenueStepRow) => s.state + (s.call ? ` · \`${s.call}\`` : '');
+    const { COHORT_STEPS, provenOnMainnet } = market;
+    const open: string[] = [];
     for (const v of VENUES) {
-      expect(doc, v.id).toContain(`| ${v.name} | ${c(v.list)} | ${c(v.take)} | ${c(v.settle)} | ${c(v.paid)} |`);
-      // the README speaks for Moonbeam's own listings: its cohort, never the operator's states
-      // _README_VENUES_v1_: a row for each market Moonbeam lists on; a cut market is named once, never given a row
+      // _MAINNET_IO_v1_: a cell is the step's public word (live, not yet, n/a), never the finer state
       const m = v.cohorts.moonbeam;
-      if (v.moonbeamLists) expect(readme, v.id).toContain(`| ${v.name} | ${v.does} | ${m.list.state} | ${m.take.state} · ${m.settle.state} |`);
-      else { expect(readme, v.id).not.toContain(`| ${v.name} |`); expect(readme.match(/Moonbeam does not list agents on [^\n]+/)?.[0], v.id).toContain(v.name); }
+      const row = `| ${v.name} | ${v.does} | ${COHORT_STEPS.map((k) => m[k].publicState).join(' | ')} |`;
+      for (const [name, text] of [['README.md', readme], ['docs/VENUES.md', doc]] as const) {
+        if (v.moonbeamLists && provenOnMainnet(v)) expect(text, `${name} ${v.id}`).toContain(row);
+        else expect(text, `${name} ${v.id}`).not.toContain(`| ${v.name} |`);
+        // _README_VENUES_v1_: a cut market is named once, never given a row
+        if (!v.moonbeamLists) expect(text.match(/Moonbeam does not list agents on [^\n]+/)?.[0], `${name} ${v.id}`).toContain(v.name);
+      }
+      if (v.moonbeamLists && !provenOnMainnet(v)) open.push(v.name);
     }
+    // a market Moonbeam lists on with no step proven on mainnet is named in the sentence under the table
+    for (const text of [readme, doc]) for (const name of open) expect(text.match(/^Not yet: [^\n]+/m)?.[0] ?? '', name).toContain(name);
     for (const s of SALE_STOPS) expect(doc, s.id).toContain(`| ${s.order} | \`${s.id}\` | ${s.label} |`);
-    // NEAR (journey read 2026-11-15: @moonbeam listed by Moonbeam and read back; coord's feature matrix 2026-11-19: its jobs partial)
-    const near = VENUES.find((v) => v.id === 'near-agent-market')!;
-    expect(near.list.state).toBe('live'); expect(near.cohorts.moonbeam.list.state).toBe('live');
-    expect(readme).toMatch(/\| NEAR AI Agent Market \| [^|\n]+ \| live \| partial · partial \|/);
-    expect(doc).toMatch(/## Every venue \(the operator's listings\)/);
     expect(`${doc}\n${readme}`).not.toMatch(/taifoon|\bn8n\b|0x[0-9a-f]{40}|36927/i);
   });
   it('venues() answers the shipped table without a transport', async () => {

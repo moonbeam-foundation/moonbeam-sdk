@@ -1,0 +1,122 @@
+{
+ "op": "GET a2a/registry/agent",
+ "market": "a2a",
+ "stage": "listed",
+ "dir": "read",
+ "sdk": "market.a2aAgent",
+ "source": "live",
+ "rung": "live",
+ "run": "live:a2a/list@2026-11-06",
+ "path": {
+  "op": "list",
+  "step": "listed"
+ },
+ "request": {
+  "method": "GET",
+  "path": "/v1/a2a/registry/agent",
+  "query": {
+   "id": "cf34994a-39a2-41c7-9ff5-53ba134fdc3d"
+  }
+ },
+ "response": {
+  "status": 200,
+  "body": {
+   "ok": true,
+   "id": "cf34994a-39a2-41c7-9ff5-53ba134fdc3d",
+   "name": "Moonbeam agent listings",
+   "description": "Moonbeam lists agents on ERC-8004, the MCP Registry and A2A; listing runs on a plan (https://next.moonbeam.network/acp/plans). Each skill here answers one call, priced in USDC on Base mainnet and paid with x402, and states its price before you sign the payment.",
+   "provider": "Moonbeam",
+   "url": "https://next.moonbeam.network/api/acp/x402/a2a",
+   "card": "https://next.moonbeam.network/api/acp/x402/a2a/.well-known/agent-card.json",
+   "protocol_version": "0.3.0",
+   "dialect": "0.3",
+   "skills": [
+    {
+     "id": "market_price",
+     "name": "Market price",
+     "description": "One market.price answer, bought through Moonbeam and paid with x402 on Base. One call is 0.001714 USDC, paid with x402 on Base."
+    },
+    {
+     "id": "data_onchain_query",
+     "name": "Data onchain query",
+     "description": "One data.onchain_query answer, bought through Moonbeam and paid with x402 on Base. One call is 0.013714 USDC, paid with x402 on Base."
+    },
+    {
+     "id": "risk_address",
+     "name": "Risk address",
+     "description": "One risk.address answer, bought through Moonbeam and paid with x402 on Base. One call is 0.0012 USDC, paid with x402 on Base."
+    },
+    {
+     "id": "plan_steps",
+     "name": "Plan steps",
+     "description": "One plan.steps answer, bought through Moonbeam and paid with x402 on Base. One call is 0.0012 USDC, paid with x402 on Base."
+    },
+    {
+     "id": "mcp_digest",
+     "name": "MCP digest",
+     "description": "One mcp.digest answer, bought through Moonbeam and paid with x402 on Base. One call is 0.0012 USDC, paid with x402 on Base."
+    }
+   ],
+   "open": true,
+   "free": true,
+   "access": "open: an https URL and no security scheme in its card",
+   "registry_health": {
+    "healthy": true,
+    "uptime_percentage": 97.82608695652173,
+    "avg_response_time_ms": 2599,
+    "last_check": "2026-11-21T11:45:11.456453Z",
+    "task_conformance": "WORKING",
+    "task_passed": true
+   },
+   "hidden": false,
+   "flags": 0,
+   "erc8004": [
+    {
+     "chain_id": 8453,
+     "agent_id": "1176098",
+     "name": "Moonbeam On-chain Reads",
+     "url": "https://next.moonbeam.network/api/house/onchain-reads",
+     "protocol": "a2a",
+     "match": "host"
+    }
+   ],
+   "record": "https://a2aregistry.org/api/agents/cf34994a-39a2-41c7-9ff5-53ba134fdc3d",
+   "probe": {
+    "reachable": true,
+    "status": 200,
+    "latency_ms": 17,
+    "card_url": "https://next.moonbeam.network/api/acp/x402/a2a",
+    "url_matches": true,
+    "protocol_version": "0.3.0",
+    "dialect": "0.3",
+    "skills": [
+     "market_price",
+     "data_onchain_query",
+     "risk_address",
+     "plan_steps",
+     "mcp_digest"
+    ],
+    "reason": null,
+    "probed_at": "2026-11-21T11:49:50.683Z"
+   },
+   "classes": [],
+   "how": "POST /v1/handshake { candidate: { address: \"cf34994a-39a2-41c7-9ff5-53ba134fdc3d\", kind: \"a2a-registry\" }, task, args?: <the A2A data part>, dispatch: true }",
+   "record_read": {
+    "state": "found",
+    "source": "live",
+    "age_s": 0,
+    "read_at": "2026-11-21T11:49:50.634Z"
+   }
+  }
+ },
+ "args": {
+  "id": "cf34994a-39a2-41c7-9ff5-53ba134fdc3d"
+ },
+ "coord_sha": "168977714ab49159873149003fb2b1a9d0fd8b2b",
+ "read_at": "2026-11-21T11:49:50.304Z",
+ "notes": {
+  "trimmed": [
+   "get_key (the free-key offer every keyless answer carries)"
+  ]
+ }
+}

@@ -1,6 +1,6 @@
 // generated: do not edit. _ACCEPTANCE_TESTS_v1_: scripts/gen-acceptance-tests.mjs writes this from test/io/fixtures/olas-base/listed/ (npm run gen:acceptance).
 import { describe, it } from 'vitest';
-import { replayFixture, schemaFixture } from '../../acceptance-harness';
+import { replayFixture, schemaFixture, machineRun } from '../../acceptance-harness';
 
 describe("olas-base · listed", () => {
   describe("read-listed.json (GET listed, live)", () => {
@@ -10,6 +10,9 @@ describe("olas-base · listed", () => {
   describe("read-mech.json (GET mech, live)", () => {
     it("replay: the recorded request through the SDK call yields the recorded answer", () => replayFixture("test/io/fixtures/olas-base/listed/read-mech.json", "37b4013af259"));
     it("schema: the recorded answer keeps its keys and value types", () => schemaFixture("test/io/fixtures/olas-base/listed/read-mech.json", "37b4013af259", {"status":200,"body":{"types":["object"],"keys":{"decline":{"types":["string"]},"deliver":{"types":["string"]},"deployments":{"types":["array"],"of":{"types":["object"],"keys":{"address":{"types":["string"]},"block":{"types":["number"]},"chainId":{"types":["number"]},"maxTimeout":{"types":["number"]},"minTimeout":{"types":["number"]},"prices":{"types":["object"],"keys":{"agent":{"types":["object"],"keys":{"amount":{"types":["number"]},"symbol":{"types":["string"]},"units":{"types":["string"]}},"optional":[]},"grade":{"types":["object"],"keys":{"amount":{"types":["number"]},"symbol":{"types":["string"]},"units":{"types":["string"]}},"optional":[]},"proof":{"types":["object"],"keys":{"amount":{"types":["number"]},"symbol":{"types":["string"]},"units":{"types":["string"]}},"optional":[]}},"optional":[]},"record":{"types":["string"]},"status":{"types":["string"]},"token":{"types":["object"],"keys":{"address":{"types":["string"]},"decimals":{"types":["number"]},"symbol":{"types":["string"]}},"optional":[]},"totals":{"types":["object"],"keys":{"declined":{"types":["string"]},"delivered":{"types":["string"]},"escrowed_units":{"types":["string"]},"refunded":{"types":["string"]},"requests":{"types":["string"]}},"optional":[]}},"optional":[]}},"docs":{"types":["string"]},"ok":{"types":["boolean"]},"products":{"types":["array"],"of":{"types":["object"],"keys":{"id":{"types":["number"]},"name":{"types":["string"]},"task":{"types":["string"]},"what":{"types":["string"]}},"optional":[]}},"reads":{"types":["object"],"keys":{"list":{"types":["string"]},"one":{"types":["string"]},"result":{"types":["string"]}},"optional":[]},"refund":{"types":["string"]},"request":{"types":["object"],"keys":{"how":{"types":["string"]},"record":{"types":["string"]},"task":{"types":["string"]},"who":{"types":["string"]}},"optional":[]},"trust":{"types":["string"]},"what":{"types":["string"]}},"optional":[]}}));
+  });
+  describe("run-live-list.json (run, list)", () => {
+    it("machine: the steps are the path in order, each read a GET /v1 route", () => machineRun("test/io/fixtures/olas-base/listed/run-live-list.json", "d1ca9a60f5a7", {"op":"list","steps":[{"id":"listed","read":"GET /v1/olas/mechs"}]}));
   });
   describe("write-agent-listings.json (POST agent-listings, contract)", () => {
     it("replay: the recorded request through the SDK call yields the recorded answer", () => replayFixture("test/io/fixtures/olas-base/listed/write-agent-listings.json", "6fe46d8d5b95"));
