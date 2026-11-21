@@ -1,0 +1,131 @@
+{
+ "op": "GET mcp/registry/server",
+ "market": "mcp",
+ "stage": "listed",
+ "dir": "read",
+ "sdk": "market.mcpServer",
+ "source": "live",
+ "request": {
+  "method": "GET",
+  "path": "/v1/mcp/registry/server",
+  "query": {
+   "name": "io.github.zvmzaretsky/utility-belt"
+  }
+ },
+ "response": {
+  "status": 200,
+  "body": {
+   "ok": true,
+   "name": "io.github.zvmzaretsky/utility-belt",
+   "title": "FabTally Utility Belt",
+   "description": "13 deterministic agent utilities: timezone, cron, RRULE, currency, regex, diff, hashing & more.",
+   "version": "1.0.0",
+   "website": "https://belt.fabtally.com",
+   "repository": "https://github.com/zvmzaretsky/fabtally-belt-mcp",
+   "status": "active",
+   "published_at": "2026-08-01T03:33:46.781852Z",
+   "updated_at": "2026-08-01T03:33:46.781852Z",
+   "remotes": [
+    {
+     "type": "streamable-http",
+     "url": "https://belt.fabtally.com/mcp",
+     "open": true,
+     "why": "streamable-http, https, no header required"
+    }
+   ],
+   "packages": 0,
+   "open_remote": "https://belt.fabtally.com/mcp",
+   "free": true,
+   "access": "open: a streamable-http endpoint that needs nothing from the caller",
+   "erc8004": [],
+   "record": "https://registry.modelcontextprotocol.io/v0.1/servers/io.github.zvmzaretsky%2Futility-belt/versions/latest",
+   "probe": {
+    "status": "ready",
+    "reachable": true,
+    "free": true,
+    "priced": false,
+    "latency_ms": 91,
+    "server": "fabtally-belt",
+    "tool_count": 13,
+    "tools": [
+     {
+      "name": "convert",
+      "description": "FREE. Convert a value between units in the same dimension: length, mass, temperature, volume, data, time, area, speed, angle, pressure, energy. Deterministic. A"
+     },
+     {
+      "name": "text",
+      "description": "FREE. Text transforms. op='slugify' -> URL slug; op is one of camel|pascal|snake|kebab|constant|dot|path|title|sentence|upper|lower for case conversion; op='tem"
+     },
+     {
+      "name": "hash",
+      "description": "FREE. Compute a cryptographic digest: sha256, sha512, sha384, sha1, md5, sha3-256, keccak256, ripemd160. Optional HMAC via hmac_key. Output hex (default), base6"
+     },
+     {
+      "name": "encode",
+      "description": "FREE. Encode or decode text. op is one of base64-encode|base64-decode|base64url-encode|base64url-decode|hex-encode|hex-decode|url-encode|url-decode|html-encode|"
+     },
+     {
+      "name": "id",
+      "description": "FREE. Generate identifiers. kind is one of uuidv4|uuidv7|ulid|nanoid|hex|base64url|int. count up to 1000. nanoid takes `size`; hex/base64url take `bytes`. Uses "
+     },
+     {
+      "name": "regex",
+      "description": "FREE. Run a regular expression against input with catastrophic-backtracking protection (it runs in a killable worker with a hard timeout, so a pathological patt"
+     },
+     {
+      "name": "timezone",
+      "description": "PAID $0.001 (x402, USDC on Base). Convert an instant between IANA time zones with historically-correct DST. Returns converted datetime, UTC offsets, tz abbrevia"
+     },
+     {
+      "name": "cron",
+      "description": "PAID $0.001. Parse a 5- or 6-field cron expression and return the next N run times plus a plain-English description. Args: expression, timezone (IANA, default U"
+     },
+     {
+      "name": "rrule",
+      "description": "PAID $0.001. Expand an iCal RRULE (RFC 5545) recurrence into its next N occurrences. Args: rrule (e.g. 'FREQ=WEEKLY;BYDAY=MO,WE;COUNT=10'), after (ISO, default "
+     },
+     {
+      "name": "currency",
+      "description": "PAID $0.001. Convert an amount between currencies at reference/mid-market rates from a keyless public central-bank feed (ECB), cached. Informational, not a deal"
+     },
+     {
+      "name": "diff",
+      "description": "PAID $0.001. Diff two texts: a unified patch, a structured op-list (add/remove/equal), and add/remove/hunk stats. Args: a, b, mode (lines|words|chars, default l"
+     },
+     {
+      "name": "jsonschema",
+      "description": "PAID $0.001. Validate a value against a JSON Schema (draft 2020-12) and explain every error in plain English (which property, what was wrong, allowed values). A"
+     },
+     {
+      "name": "datemath",
+      "description": "PAID $0.001. Calendar date math. op='add'/'subtract' an ISO-8601 duration (P1Y2M10DT2H30M) to a date; op='diff' two datetimes into chosen units; op='business-ad"
+     }
+    ],
+    "reason": null,
+    "probed_at": "2026-11-21T19:42:28.744Z"
+   },
+   "classes": [
+    {
+     "id": "mcp.digest",
+     "title": "The digest of a text, from an MCP server in the official MCP registry",
+     "status": "LIVE",
+     "tool": "hash",
+     "only": null,
+     "det": "the call carried the task’s text and algorithm (task_bound) && the tool reported no error (no_tool_error) && the reply holds the digest code recomputes from the task’s text (digest_exact)"
+    }
+   ],
+   "how": "POST /v1/handshake { candidate: { address: \"io.github.zvmzaretsky/utility-belt\", kind: \"mcp-registry\" }, task, tool, args, dispatch: true }",
+   "record_read": {
+    "state": "found",
+    "source": "live",
+    "age_s": 0,
+    "read_at": "2026-11-21T19:42:28.589Z"
+   }
+  }
+ },
+ "coord_sha": "9b4c6c382862727e655a3f06ecb7ed33d7a88905",
+ "read_at": "2026-11-21T19:42:28.301Z",
+ "args": {
+  "name": "io.github.zvmzaretsky/utility-belt"
+ }
+}

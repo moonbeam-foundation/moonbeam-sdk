@@ -61,13 +61,14 @@ export const CALLS = {
     check: ({ result, x, expect }) => expect(result.rows.length).toBe(rowsLen(x.fx.response.body, 'rows')) },
   mcpRegistry: { fn: 'market.mcpRegistry', run: (s, t) => s.mcpRegistry(t, { limit: 3 }),
     check: ({ result, x, expect }) => expect(result.rows.length).toBe(rowsLen(x.fx.response.body, 'rows')) },
-  // the name and the id are coord's own examples (api-operations.cue query[].example): the registry lists answered 402
+  // the name is coord's own example (api-operations.cue query[].example)
   mcpServer: { fn: 'market.mcpServer', args: () => ({ name: 'io.github.zvmzaretsky/utility-belt' }),
     run: (s, t, x) => s.mcpServer(t, x.args.name),
     check: ({ result, x, expect }) => expect(result.name).toBe(x.args.name) },
   a2aRegistry: { fn: 'market.a2aRegistry', run: (s, t) => s.a2aRegistry(t, { limit: 3 }),
     check: ({ result, x, expect }) => expect(result.rows.length).toBe(rowsLen(x.fx.response.body, 'rows')) },
-  a2aAgent: { fn: 'market.a2aAgent', args: () => ({ id: '879f2d3f-4e0e-47f4-8fec-77163a2a9577' }),
+  // the id is the first agent of the recorded registry read: coord's own example id is no longer in the registry (404 on 2026-11-21)
+  a2aAgent: { fn: 'market.a2aAgent', needs: 'a2aRegistry', args: (dep) => ({ id: dep.response.body.rows?.[0]?.id }),
     run: (s, t, x) => s.a2aAgent(t, x.args.id),
     check: ({ result, x, expect }) => expect(result.id).toBe(x.args.id) },
   listStatus: { fn: 'market.listStatus', run: (s, t) => s.listStatus(t, AGENT),

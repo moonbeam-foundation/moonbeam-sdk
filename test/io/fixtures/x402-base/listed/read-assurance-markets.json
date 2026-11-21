@@ -39,7 +39,6 @@
        "from_block": 2452024,
        "market": "0xf8277ACD2a1ae7618DbbCc4879f3685c6e5382E7",
        "opens_rounds": true,
-       "owner": "0x9d8df21DDf6Ad1E47C29b91077B71D2Dde8d08aA",
        "positions": 0,
        "role": "current",
        "rounds": 0,
@@ -50,7 +49,6 @@
        "from_block": 1306300,
        "market": "0xAD81f2535ef4Fd839d1eF7267B1cb72E890C013B",
        "opens_rounds": false,
-       "owner": "0x9d8df21DDf6Ad1E47C29b91077B71D2Dde8d08aA",
        "positions": 23,
        "role": "earlier",
        "rounds": 14,
@@ -61,7 +59,6 @@
      "network": "36927",
      "note": "devnet test tokens (dUSDC mints freely); not a network with value",
      "open_list": true,
-     "owner": "0x9d8df21DDf6Ad1E47C29b91077B71D2Dde8d08aA",
      "owner_expected": "0x9d8df21DDf6Ad1E47C29b91077B71D2Dde8d08aA",
      "params": {
       "a0": "166600000000000000",
@@ -1265,7 +1262,9 @@
    "markets[].owner (the address a fee payee or payTo names)",
    "markets[].owner_expected (the address a fee payee or payTo names)",
    "markets[].sellers[].seller (the address a fee payee or payTo names)",
-   "markets[].asset.address (the address a fee payee or payTo names)"
+   "markets[].asset.address (the address a fee payee or payTo names)",
+   "markets[].markets_of_line[].owner (the address that owns the record)",
+   "markets[].owner (the address that owns the record)"
   ]
  }
 }

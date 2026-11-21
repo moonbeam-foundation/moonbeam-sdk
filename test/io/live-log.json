@@ -327,6 +327,62 @@
       "at": "2026-11-21T12:29:39.313Z",
       "path": "/x402/bazaar",
       "status": 200
+    },
+    {
+      "n": 53,
+      "at": "2026-11-21T19:42:22.008Z",
+      "path": "/x402/bazaar?limit=3",
+      "status": 200,
+      "keyed": true
+    },
+    {
+      "n": 54,
+      "at": "2026-11-21T19:42:25.595Z",
+      "path": "/mcp/registry?limit=3",
+      "status": 200,
+      "keyed": true
+    },
+    {
+      "n": 55,
+      "at": "2026-11-21T19:42:28.301Z",
+      "path": "/mcp/registry/server?name=io.github.zvmzaretsky%2Futility-belt",
+      "status": 200,
+      "keyed": true
+    },
+    {
+      "n": 56,
+      "at": "2026-11-21T19:42:29.662Z",
+      "path": "/a2a/registry?limit=3",
+      "status": 200,
+      "keyed": true
+    },
+    {
+      "n": 57,
+      "at": "2026-11-21T19:42:31.246Z",
+      "path": "/a2a/registry/agent?id=879f2d3f-4e0e-47f4-8fec-77163a2a9577",
+      "status": 404,
+      "keyed": true
+    },
+    {
+      "n": 58,
+      "at": "2026-11-21T19:42:32.582Z",
+      "path": "/virtuals/sellers",
+      "status": 200,
+      "keyed": true
+    },
+    {
+      "n": 59,
+      "at": "2026-11-21T19:42:34.545Z",
+      "path": "/olas/mechs?chain=8453",
+      "status": 200,
+      "keyed": true
+    },
+    {
+      "n": 60,
+      "at": "2026-11-21T19:43:44.760Z",
+      "path": "/a2a/registry/agent?id=380d2255-09eb-4c70-9a13-b596ce0a2745",
+      "status": 200,
+      "keyed": true
     }
   ]
 }
