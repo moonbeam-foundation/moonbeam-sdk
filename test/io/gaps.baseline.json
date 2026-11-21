@@ -1,14 +1,15 @@
 {
  "rule": "_COORD_IO_COVERAGE_v1_: the gap count may only go down; lower it here when a gap closes",
  "coord_sha": "9b4c6c382862727e655a3f06ecb7ed33d7a88905",
- "total": 35,
+ "total": 29,
  "by": {
   "needs_key": 1,
   "needs_payment": 8,
   "needs_owner_arm": 6,
   "no_devnet_twin": 2,
-  "not_in_coord": 18
+  "not_in_coord": 12
  },
  "note_2026_11_21": "seven listed reads recorded with the recorder key (needs_payment 28 to 20 with the row below); the Olas Base request read moved from needs_payment to not_in_coord (coord lists no Olas Base request id), so not_in_coord 17 to 18 is that row, not a new gap; total 54 to 47",
- "note_2026_11_21b": "the devnet job's submit transaction (chain/tx, delivered) and its ending proof (proof/tx, settled) recorded with the recorder key on all six sale markets: needs_payment 20 to 8, total 47 to 35"
+ "note_2026_11_21b": "the devnet job's submit transaction (chain/tx, delivered) and its ending proof (proof/tx, settled) recorded with the recorder key on all six sale markets: needs_payment 20 to 8, total 47 to 35",
+ "note_2026_11_21c": "POST settle typed in coord (api_bodies.SettlePlan, coord #1930): its six sale-market cells carry the hire plan as a contract fixture; not_in_coord 18 to 12, total 35 to 29"
 }

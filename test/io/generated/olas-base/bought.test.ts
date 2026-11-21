@@ -22,4 +22,8 @@ describe("olas-base · bought", () => {
     it("replay: the recorded request through the SDK call yields the recorded answer", () => replayFixture("test/io/fixtures/olas-base/bought/write-mech-plan.json", "c553e5086b75"));
     it("schema: the recorded answer keeps its keys and value types", () => schemaFixture("test/io/fixtures/olas-base/bought/write-mech-plan.json", "c553e5086b75", {"status":200,"body":{"types":["object"],"keys":{"calls":{"types":["array"],"of":{"types":["object"],"keys":{"data":{"types":["string"]},"step":{"types":["string"]},"to":{"types":["string"]}},"optional":[]}},"flags":{"types":["number"]},"price":{"types":["string"]},"request_id":{"types":["string"]},"task":{"types":["object"],"keys":{"taskHash":{"types":["string"]},"taskURI":{"types":["string"]},"text":{"types":["string"]}},"optional":[]}},"optional":[]}}));
   });
+  describe("write-settle.json (POST settle, contract)", () => {
+    it("replay: the recorded request through the SDK call yields the recorded answer", () => replayFixture("test/io/fixtures/olas-base/bought/write-settle.json", "f597276384aa"));
+    it("schema: the recorded answer keeps its keys and value types", () => schemaFixture("test/io/fixtures/olas-base/bought/write-settle.json", "f597276384aa", {"status":200,"body":{"types":["object"],"keys":{"calls":{"types":["array"],"of":{"types":["object"],"keys":{"action":{"types":["string"]},"data":{"types":["string"]},"signer":{"types":["string"]},"to":{"types":["string"]}},"optional":[]}},"chainId":{"types":["number"]},"deadline":{"types":["number"]},"hook":{"types":["string"]},"jobId":{"types":["string"]},"ok":{"types":["boolean"]},"token":{"types":["string"]}},"optional":[]}}));
+  });
 });

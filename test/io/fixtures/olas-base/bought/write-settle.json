@@ -1,0 +1,58 @@
+{
+ "op": "POST settle",
+ "market": "olas-base",
+ "stage": "bought",
+ "dir": "write",
+ "sdk": "market.hirePlan",
+ "source": "contract",
+ "request": {
+  "method": "POST",
+  "path": "/v1/settle",
+  "query": {},
+  "body": {
+   "kind": "agent",
+   "chainId": 36927,
+   "buyer": "0xb1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1",
+   "seller": "0x00000000000000000000000000000000000000b2",
+   "price": "1000000",
+   "deadline": 1800000660,
+   "evidence": "0x3333333333333333333333333333333333333333333333333333333333333333",
+   "ref": {
+    "id": "io-hire"
+   }
+  }
+ },
+ "response": {
+  "status": 200,
+  "body": {
+   "ok": true,
+   "jobId": "0xa6d6f649a7b8d06168f30af1078115e86b2bf9dd8b495a448ba11ceef3d1168a",
+   "chainId": 36927,
+   "token": "0xa4a4a4a4a4a4a4a4a4a4a4a4a4a4a4a4a4a4a4a4",
+   "hook": "0xa1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1",
+   "deadline": 1800000660,
+   "calls": [
+    {
+     "action": "approve",
+     "signer": "the buyer",
+     "to": "0xa4a4a4a4a4a4a4a4a4a4a4a4a4a4a4a4a4a4a4a4",
+     "data": "0x095ea7b3"
+    },
+    {
+     "action": "fundJob",
+     "signer": "the buyer",
+     "to": "0xa1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1",
+     "data": "0x5d0a7e9b"
+    },
+    {
+     "action": "accept",
+     "signer": "the seller of record",
+     "to": "0xa1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1",
+     "data": "0x19b05f49"
+    }
+   ]
+  }
+ },
+ "coord_sha": "eea05074e48eca9cb0b0a6eaa910274349ffa406",
+ "read_at": "2026-11-21T20:09:43.778Z"
+}

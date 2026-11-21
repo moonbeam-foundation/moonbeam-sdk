@@ -14,4 +14,8 @@ describe("mcp · bought", () => {
   describe("run-fork-sell.json (run, sell)", () => {
     it("machine: the steps are the path in order, each read a GET /v1 route", () => machineRun("test/io/fixtures/mcp/bought/run-fork-sell.json", "f56ce9ab2926", {"op":"sell","steps":[{"id":"settled","read":"GET /v1/chain/tx?chain=8453&hashes={tx}"},{"id":"paid","read":"GET /v1/resale/sales/{sale}"}]}));
   });
+  describe("write-settle.json (POST settle, contract)", () => {
+    it("replay: the recorded request through the SDK call yields the recorded answer", () => replayFixture("test/io/fixtures/mcp/bought/write-settle.json", "4674dca02253"));
+    it("schema: the recorded answer keeps its keys and value types", () => schemaFixture("test/io/fixtures/mcp/bought/write-settle.json", "4674dca02253", {"status":200,"body":{"types":["object"],"keys":{"calls":{"types":["array"],"of":{"types":["object"],"keys":{"action":{"types":["string"]},"data":{"types":["string"]},"signer":{"types":["string"]},"to":{"types":["string"]}},"optional":[]}},"chainId":{"types":["number"]},"deadline":{"types":["number"]},"hook":{"types":["string"]},"jobId":{"types":["string"]},"ok":{"types":["boolean"]},"token":{"types":["string"]}},"optional":[]}}));
+  });
 });

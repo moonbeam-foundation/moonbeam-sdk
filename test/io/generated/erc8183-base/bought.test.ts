@@ -21,4 +21,8 @@ describe("erc8183-base · bought", () => {
   describe("run-fork-sell.json (run, sell)", () => {
     it("machine: the steps are the path in order, each read a GET /v1 route", () => machineRun("test/io/fixtures/erc8183-base/bought/run-fork-sell.json", "82f3c7f3f32b", {"op":"sell","steps":[{"id":"opened","read":"GET /v1/jobs?ids={job}"},{"id":"funded","read":"GET /v1/jobs?ids={job}"},{"id":"delivered","read":"GET /v1/jobs?ids={job}"},{"id":"settled","read":"GET /v1/jobs?ids={job}"}]}));
   });
+  describe("write-settle.json (POST settle, contract)", () => {
+    it("replay: the recorded request through the SDK call yields the recorded answer", () => replayFixture("test/io/fixtures/erc8183-base/bought/write-settle.json", "ebbc1511ccb1"));
+    it("schema: the recorded answer keeps its keys and value types", () => schemaFixture("test/io/fixtures/erc8183-base/bought/write-settle.json", "ebbc1511ccb1", {"status":200,"body":{"types":["object"],"keys":{"calls":{"types":["array"],"of":{"types":["object"],"keys":{"action":{"types":["string"]},"data":{"types":["string"]},"signer":{"types":["string"]},"to":{"types":["string"]}},"optional":[]}},"chainId":{"types":["number"]},"deadline":{"types":["number"]},"hook":{"types":["string"]},"jobId":{"types":["string"]},"ok":{"types":["boolean"]},"token":{"types":["string"]}},"optional":[]}}));
+  });
 });
