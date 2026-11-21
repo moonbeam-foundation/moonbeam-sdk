@@ -109,29 +109,31 @@ export function plan(files, map, paths) {
 export const testCount = (items) => items.reduce((n, i) => n + (i.kind === 'run' ? 1 : 2), 0);
 
 // ── the files ─────────────────────────────────────────────────────────────────────────────────────────────────────────
-const q = (s) => JSON.stringify(s);
+// a value as source text of a generated test: JSON, with the characters that could end a script or a line escaped
+const UNSAFE = { '<': '\\u003C', '>': '\\u003E', '\u2028': '\\u2028', '\u2029': '\\u2029' };
+const q = (s) => JSON.stringify(s).replace(/[<>\u2028\u2029]/g, (c) => UNSAFE[c]);
 
 function renderItem(i) {
   const file = i.file.split('/').pop();
   if (i.kind === 'run') {
     return [
       `  describe(${q(`${file} (run, ${i.op})`)}, () => {`,
-      `    it(${q('machine: the steps are the path in order, each read a GET /v1 route')}, () => machineRun(${q(i.file)}, ${q(i.sha)}, ${JSON.stringify({ op: i.op, steps: i.steps })}));`,
+      `    it(${q('machine: the steps are the path in order, each read a GET /v1 route')}, () => machineRun(${q(i.file)}, ${q(i.sha)}, ${q({ op: i.op, steps: i.steps })}));`,
       '  });',
     ].join('\n');
   }
   if (i.kind === 'step') {
     return [
       `  describe(${q(`${file} (${i.op}, mainnet run ${i.run})`)}, () => {`,
-      `    it(${q('replay: the request is the step\'s read with the run\'s ids, and the recorded answer comes back through the SDK')}, () => replayStep(${q(i.file)}, ${q(i.sha)}, ${JSON.stringify({ run: i.run, path: i.path })}));`,
-      `    it(${q('schema: the recorded answer keeps its keys and value types')}, () => schemaFixture(${q(i.file)}, ${q(i.sha)}, ${JSON.stringify(i.schema)}));`,
+      `    it(${q('replay: the request is the step\'s read with the run\'s ids, and the recorded answer comes back through the SDK')}, () => replayStep(${q(i.file)}, ${q(i.sha)}, ${q({ run: i.run, path: i.path })}));`,
+      `    it(${q('schema: the recorded answer keeps its keys and value types')}, () => schemaFixture(${q(i.file)}, ${q(i.sha)}, ${q(i.schema)}));`,
       '  });',
     ].join('\n');
   }
   return [
     `  describe(${q(`${file} (${i.op}, ${i.source})`)}, () => {`,
     `    it(${q('replay: the recorded request through the SDK call yields the recorded answer')}, () => replayFixture(${q(i.file)}, ${q(i.sha)}));`,
-    `    it(${q('schema: the recorded answer keeps its keys and value types')}, () => schemaFixture(${q(i.file)}, ${q(i.sha)}, ${JSON.stringify(i.schema)}));`,
+    `    it(${q('schema: the recorded answer keeps its keys and value types')}, () => schemaFixture(${q(i.file)}, ${q(i.sha)}, ${q(i.schema)}));`,
     '  });',
   ].join('\n');
 }

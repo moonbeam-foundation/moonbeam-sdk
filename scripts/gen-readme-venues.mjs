@@ -52,13 +52,13 @@ const each = shown.flatMap((v) => [
 ]).slice(0, -1);
 
 const FILES = [
-  { file: '../README.md', blocks: { moonbeam: table } },
-  { file: '../docs/VENUES.md', blocks: { moonbeam: table, each } },
+  { name: 'README.md', blocks: { moonbeam: table } },
+  { name: 'docs/VENUES.md', blocks: { moonbeam: table, each } },
 ];
 const check = process.argv.includes('--check');
 let off = 0;
 for (const f of FILES) {
-  const url = new URL(f.file, import.meta.url); const name = f.file.replace('../', '');
+  const { name } = f; const url = new URL(`../${name}`, import.meta.url);
   const text = readFileSync(url, 'utf8'); let next = text;
   for (const [id, lines] of Object.entries(f.blocks)) {
     const { start, end } = mark(id); const a = next.indexOf(start), b = next.indexOf(end);
