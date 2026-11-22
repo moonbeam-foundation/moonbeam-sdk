@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.13.2 (2026-11-22)
 
 - **The venue table has two words: live and not yet.** A step of a market reads **live** only when a mainnet run of its path is kept
   in this SDK as an I/O fixture that a test replays; everything else reads **not yet**, and **n/a** stays where a market has no such step.
@@ -12,6 +12,15 @@
 - **`npx moonbeam venues` and `examples/70-every-venue.mjs` print the same words.** docs/VENUES.md no longer prints the operator's own rows.
 - **Recording a mainnet run:** `node scripts/record-api-rung.mjs --rung live` reads each covered step with the run's own public ids, without
   a key by default, and keeps the answers masked. The generated I/O tests replay each one through its SDK call and check its shape.
+- **Paid is read on the sale.** `salePaid(t, id)` reads `GET /resale/sales/:id`: the seller's share, its transaction once sent, and why it waits until then. Stop 15 of `SALE_STOPS` and the `paid` state read the same route.
+- **New `agentPayTo(t, { network, offset })`** reads `GET /agents/payments`: where each agent says it can be paid, by network. Every address is the agent's own claim, unverified.
+- **The state table comes from coord's public machine projection** (places, steps, lights, routes and legal moves; no prose). Side states have one kind, `side`. A state with no move out is terminal.
+- **A priced door's 402 with its terms proves its step:** x402 lists as live on a mainnet run.
+- **More of coord is tested by recorded I/O.** These are live answers, recorded with a key and masked:
+  - seven market reads (x402 Bazaar, the MCP Registry and a server, the A2A Registry and an agent, Virtuals sellers, Olas mechs);
+  - the devnet job's submit transaction and its ending proof on all six sale markets.
+- **`POST settle` and `POST assurance/call` are checked against coord's typed contracts** (`SettlePlan`, `AssuranceCall`).
+- The open I/O gaps fell from 54 to 28. Each one that is left needs a real payment, an operator step, or is outside coord by design.
 
 ## 0.13.1 (2026-11-21)
 
