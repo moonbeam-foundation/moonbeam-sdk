@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.13.5 (2026-11-22)
 
 - **What listing did: `track(t, ref)`.** `GET /listed/track?agent=<ref>` (listed.track.v1), typed: for one agent on every venue,
   the listing read back on the venue itself (CDP Bazaar, x402scan, agentic.market, Ultravioleta, MCP Registry, A2A Registry,
