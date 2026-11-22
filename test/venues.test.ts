@@ -185,6 +185,33 @@ describe('the journey as calls', () => {
     await expect(market.listOn(none.t, REF)).rejects.toMatchObject({ status: 401, code: 'key_required' });
     expect(none.seen).toHaveLength(0);
   });
+  it('_LIST_MARKET_v1_: the list markets are coord\'s venue rows; Virtuals ACP lists an outside seller by its board row, its approval read back', async () => {
+    // derived from the snapshot (venues-register.json list_markets), never typed: the directories by default, the market venue when named
+    expect(market.LIST_MARKETS).toEqual(['a2a_registry', 'erc8004', 'mcp_registry']);
+    const virtuals = market.LIST_MARKET_OF['erc8183-base']!;
+    expect(market.LIST_ALL_MARKETS).toContain(virtuals);
+    expect(market.LIST_MARKETS).not.toContain(virtuals);
+    const BOARD = 'x402:6571678d37f0';
+    const link = 'https://app.virtuals.io/acp/agents/00000000-0000-4000-8000-000000000001/signer?requestId=r1';
+    const row: market.ListRow = { state: 'held', why: 'the signer waits on its approval', url: 'https://app.virtuals.io/acp/agents/00000000-0000-4000-8000-000000000001', tx: null,
+      owner_step: '1. Approve Moonbeam\'s signer for this agent on Virtuals (the link lasts five minutes)', approval: { url: link, expires_at: '2026-11-22T11:00:00.000Z', kind: 'add-signer' } };
+    const held: market.ListView = { id: lst(BOARD), agent: { ref: BOARD, name: 'ax1.vc', class: null, offer_usdc: '0.012' }, markets: { [virtuals]: row } };
+    const { t, seen } = transport((_u, m) => (m === 'POST' ? [202, { list: { ...held, markets: { [virtuals]: { state: 'queued', why: null, url: null, tx: null } } } }] : [200, { list: held }]));
+    const custom = { name: 'ax1.vc', offerings: [{ name: 'Market verdict', priceUsdc: 0.012 }] };
+    expect((await market.listOn(t, BOARD, [virtuals], { custom })).markets[virtuals]?.state).toBe('queued');
+    expect(seen[0]).toMatchObject({ method: 'POST', url: 'https://api.example/v1/list', body: { agent: BOARD, markets: [virtuals], custom } });
+    expect(await market.listIdOf(BOARD)).toBe(lst(BOARD));
+    const v = await market.listStatus(t, BOARD);
+    expect(seen[1]!.url).toBe(`https://api.example/v1/list/${lst(BOARD)}`);
+    expect(market.listApproval(v, 'erc8183-base')).toEqual({ step: row.owner_step, url: link, expires_at: '2026-11-22T11:00:00.000Z' });
+    expect(market.listApproval({ ...v!, markets: { [virtuals]: { ...row, state: 'listed' } } }, 'erc8183-base')).toBeNull();
+    expect(market.listApproval(v, 'mcp')).toBeNull();
+    // a board row lists on a market venue alone; a directory lists an agent by its ERC-8004 id
+    await expect(market.listOn(t, BOARD)).rejects.toThrow(/board row/);
+    await expect(market.listOn(t, BOARD, ['erc8004', virtuals])).rejects.toThrow(RangeError);
+    await expect(market.listOn(t, BOARD, [virtuals], { custom: { offerings: [{ name: 'x', priceUsdc: -1 }] } })).rejects.toThrow(/positive/);
+    expect(seen).toHaveLength(2);
+  });
   it('pause, go live again, delist (for good, confirmed)', async () => {
     const { t, seen } = transport((u, _m, b) => [200, { ok: true, listing: { id: AL, status: u.endsWith('/publish') ? 'live' : (b as { status: string }).status }, ...(u.endsWith('/publish') ? { probe: [] } : {}) }]);
     expect((await market.pauseListing(t, AL)).listing.status).toBe('paused');

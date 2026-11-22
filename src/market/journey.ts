@@ -6,49 +6,95 @@ import { jsonOf } from '../errors/index.js';
 import { MarketError, call, needKey, query, seg } from './http.js';
 import { jobCalls, publishListing, readListing, type Listing, type ListingView, type PlannedCall } from './index.js';
 import { keyedFetch } from '../core/keyed.js';
+import { VENUE_REGISTER } from './venues-data.js';
+import type { ListMarketRow } from './venues.js';
 
 // ── list ──────────────────────────────────────────────────────────────────────────────────────────────────────────────
 
-/** The markets the list step lists on: the agent's ERC-8004 record on Base, the official MCP Registry and the A2A Registry. */
-export const LIST_MARKETS = Object.freeze(['erc8004', 'mcp_registry', 'a2a_registry'] as const);
-export type ListMarket = (typeof LIST_MARKETS)[number];
-/** One market of a list step: queued (publishing, within about ten minutes), listed (with the market's own url), held or failed (with why). */
-export type ListRow = { state: 'queued' | 'listed' | 'held' | 'failed'; why: string | null; url: string | null; tx: string | null; at?: string; read_at?: string };
+// _LIST_MARKET_v1_ (2026-11-22): the list step's markets are coord's venue rows that carry list_market (lang/cue/venues-registry.cue),
+// snapshotted in venues-register.json; nothing here types them. A directory row (ERC-8004, MCP Registry, A2A Registry) is listed by
+// default; a market row (Virtuals ACP) when it is named, and it also lists an outside seller by its board row.
+const LIST_ROWS: Readonly<Record<string, ListMarketRow>> = VENUE_REGISTER.list_markets ?? {};
+/** Every market the list step lists on, by the venue it lists on (`LIST_MARKET_OF['erc8183-base']` is Virtuals ACP's). */
+export const LIST_MARKET_OF: Readonly<Record<string, string>> = Object.freeze(Object.fromEntries(Object.entries(LIST_ROWS).map(([venue, r]) => [venue, r.market])));
+/** The markets the list step lists on when none is named: the directories, where agents are found (ERC-8004 on Base, MCP, A2A). */
+export const LIST_MARKETS: readonly string[] = Object.freeze(Object.values(LIST_ROWS).filter((r) => r.directory).map((r) => r.market));
+/** Every market the list step takes, the directories and the markets (Virtuals ACP). */
+export const LIST_ALL_MARKETS: readonly string[] = Object.freeze(Object.values(LIST_ROWS).map((r) => r.market));
+/** A market of the list step, as coord's venue rows name it. */
+export type ListMarket = string;
+/** The approval a person opens on the venue (Virtuals ACP): the account holder's one click, a link that lasts minutes. */
+export type ListApproval = { url: string; expires_at: string | null; kind: string };
+/** One market of a list step: queued (publishing, within about ten minutes), listed (with the market's own url), held or failed (with why).
+ *  On Virtuals ACP a row held on an approval carries the link (`approval`) and the one step a person takes (`owner_step`). */
+export type ListRow = { state: 'queued' | 'listed' | 'held' | 'failed' | 'withdrawn'; why: string | null; url: string | null; tx: string | null; at?: string; read_at?: string;
+  owner_step?: string | null; approval?: ListApproval | null; virtuals?: { agent_id: string; erc8004_agent_id: number | null; offerings_shown: number } };
 /** A list step as Moonbeam keeps it. Moonbeam's own fields ride along. */
-export type ListView = { [k: string]: unknown; id: string; agent: { ref: string; name: string; class: string; offer_usdc: string | null }; markets: Partial<Record<ListMarket, ListRow>>; fee?: { usdc: string } };
+export type ListView = { [k: string]: unknown; id: string; agent: { ref: string; name: string; class: string | null; offer_usdc: string | null }; markets: Partial<Record<ListMarket, ListRow>>; fee?: { usdc: string } };
+/** What a Virtuals ACP listing sets: the agent's name and description, and per offering its description and price (the `list` plan's ListCustom). */
+export type ListStepCustom = { name?: string; description?: string; offerings?: { name: string; description?: string; priceUsdc?: number }[] };
 const AGENT_REF = /^8453:\d{1,12}$/;
-const agentRef = (ref: string) => { const r = String(ref ?? '').trim(); if (!AGENT_REF.test(r)) throw new RangeError(`an agent is 8453:<its ERC-8004 id>: ${ref}`); return r; };
+/** An outside seller's board row (`x402:<12 hex>`, `x402:host:<host>`): the markets that are no directory list an agent by it. */
+const BOARD_REF = /^(?:x402:(?:host:[a-z0-9.-]{3,120}|[0-9a-f]{12})|(?:virtuals|bitagent|near|olas):[0-9a-f]{12})$/;
+const agentRef = (ref: string, markets: readonly string[] = LIST_MARKETS) => {
+  const r = String(ref ?? '').trim();
+  const lower = r.toLowerCase();
+  if (AGENT_REF.test(r)) return r;
+  if (BOARD_REF.test(lower) && markets.length > 0 && markets.every((m) => !LIST_MARKETS.includes(m))) return lower;
+  throw new RangeError(`an agent is 8453:<its ERC-8004 id>${LIST_ALL_MARKETS.some((m) => !LIST_MARKETS.includes(m)) ? `, or its board row (x402:<12 hex>, x402:host:<host>) on ${LIST_ALL_MARKETS.filter((m) => !LIST_MARKETS.includes(m)).join(', ')} alone` : ''}: ${ref}`);
+};
 const listOf = (j: { list?: ListView }, what: string): ListView => {
   if (!j.list || typeof j.list.id !== 'string' || !j.list.markets) throw new MarketError(502, what, j);
   return j.list;
 };
+const checkStepCustom = (c: ListStepCustom | undefined): ListStepCustom | undefined => {
+  if (!c) return undefined;
+  const line = (v: unknown, max: number, what: string) => { if (v !== undefined && (typeof v !== 'string' || !v.trim() || v.length > max)) throw new RangeError(`${what} is 1 to ${max} characters`); };
+  line(c.name, 80, 'custom.name'); line(c.description, 1000, 'custom.description');
+  for (const o of c.offerings ?? []) {
+    line(o.name, 80, 'an offering name'); line(o.description, 1000, `${o.name}: its description`);
+    if (o.priceUsdc !== undefined && !(Number.isFinite(o.priceUsdc) && o.priceUsdc > 0)) throw new RangeError(`${o.name}: priceUsdc is a positive number of USDC`);
+  }
+  return c;
+};
 
 /** The list step's id of an agent, derived the way Moonbeam derives it: `lst_` + the first 16 hex of sha256("list:<ref>"). */
 export async function listIdOf(ref: string): Promise<string> {
-  const d = await globalThis.crypto.subtle.digest('SHA-256', new TextEncoder().encode(`list:${agentRef(ref)}`));
+  const r = String(ref ?? '').trim();
+  const id = AGENT_REF.test(r) ? r : BOARD_REF.test(r.toLowerCase()) ? r.toLowerCase() : agentRef(r);
+  const d = await globalThis.crypto.subtle.digest('SHA-256', new TextEncoder().encode(`list:${id}`));
   return `lst_${[...new Uint8Array(d)].map((b) => b.toString(16).padStart(2, '0')).join('').slice(0, 16)}`;
 }
 
 /**
- * List an agent on the markets where agents are found (`POST /list`): its ERC-8004 record on Base, the MCP Registry and the
- * A2A Registry, all three unless named. Runs on a plan key and is part of the plan (no per-listing price is set). Moonbeam serves the agent's MCP door and A2A
- * card and publishes each market; asking again returns the same record, read anew. `ref` is the agent's ERC-8004 id on Base,
- * whose card names the class it sells.
+ * List an agent (`POST /list`). With no market named: the markets where agents are found, its ERC-8004 record on Base, the MCP Registry
+ * and the A2A Registry. Named, also a market venue: `LIST_MARKET_OF['erc8183-base']` lists it on Virtuals ACP, where Moonbeam makes the
+ * agent in its own Virtuals account with its name and words (`o.custom` sets them and its offerings' prices) and the account holder
+ * approves its signer once (the row's `approval` and `owner_step`). Runs on a plan key and is part of the plan (no per-listing price is
+ * set). Asking again returns the same record, read anew. `ref` is the agent's ERC-8004 id on Base, or, on a market venue alone, the
+ * outside seller's board row (`x402:<12 hex>`, `x402:host:<host>`).
  */
-export async function listOn(t: OnboardTransport, ref: string, markets: readonly ListMarket[] = LIST_MARKETS): Promise<ListView> {
-  const agent = agentRef(ref);
-  const bad = markets.filter((m) => !(LIST_MARKETS as readonly string[]).includes(m));
-  if (!markets.length || bad.length) throw new RangeError(`the list step lists on ${LIST_MARKETS.join(', ')}${bad.length ? `, not ${bad.join(', ')}` : ''}`);
+export async function listOn(t: OnboardTransport, ref: string, markets: readonly ListMarket[] = LIST_MARKETS, o: { custom?: ListStepCustom } = {}): Promise<ListView> {
+  const bad = markets.filter((m) => !LIST_ALL_MARKETS.includes(m));
+  if (!markets.length || bad.length) throw new RangeError(`the list step lists on ${LIST_ALL_MARKETS.join(', ')}${bad.length ? `, not ${bad.join(', ')}` : ''}`);
+  const agent = agentRef(ref, markets);
+  const custom = checkStepCustom(o.custom);
   needKey(t, 'POST /list');
-  return listOf(await call(t, 'POST', '/list', { agent, markets: [...new Set(markets)] }), 'POST /list');
+  return listOf(await call(t, 'POST', '/list', { agent, markets: [...new Set(markets)], ...(custom ? { custom } : {}) }), 'POST /list');
 }
-/** Where an agent stands on each of the three markets (`GET /list/:id`), or null when it was never listed. Public. */
+/** Where an agent stands on each market of its list step (`GET /list/:id`), or null when it was never listed. Public. */
 export async function listStatus(t: OnboardTransport, ref: string): Promise<ListView | null> {
   const id = await listIdOf(ref);
   try { return listOf(await call(t, 'GET', `/list/${seg(id)}`), 'GET /list/:id'); } catch (e) {
     if (e instanceof MarketError && e.status === 404) return null;
     throw e;
   }
+}
+/** The one step a person takes on a venue's listing now (the account holder's approval), or null: its words, its link and when it ends. Pure. */
+export function listApproval(view: ListView | null, venue: string): { step: string; url: string; expires_at: string | null } | null {
+  const row = view?.markets?.[LIST_MARKET_OF[venue] ?? ''];
+  if (!row || row.state === 'listed' || !row.approval?.url || !/^https:\/\//.test(row.approval.url)) return null;
+  return { step: row.owner_step ?? 'Approve the listing on the venue', url: row.approval.url, expires_at: row.approval.expires_at ?? null };
 }
 
 // ── manage ────────────────────────────────────────────────────────────────────────────────────────────────────────────

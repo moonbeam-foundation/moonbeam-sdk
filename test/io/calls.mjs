@@ -3,6 +3,8 @@
 // inputs it is called with, the coord answer a contract fixture carries (only fields coord's CUE declares: io-coverage.mjs checks
 // them), and what the SDK must make of the answer. `s` is the SDK's modules merged; `x` is { market, stage, op, fx, fixtures }.
 
+import { readFileSync } from 'node:fs';
+
 export const AGENT = '8453:1170141';
 export const DEVNET = 36927;
 export const REQUESTER = 'moonbeam-playground';
@@ -22,8 +24,12 @@ export const SELLER = '0x00000000000000000000000000000000000000b2';
 
 /** the market ids GET /venues/:id names */
 const VENUE_MARKET = { 'x402-base': 'x402', 'erc8183-base': 'erc8183' };
-/** the list step's market for each discovery market */
-const LIST_MARKET = { mcp: 'mcp_registry', a2a: 'a2a_registry', erc8004: 'erc8004' };
+/** the list step's market for each venue, from coord's venue rows (_LIST_MARKET_v1_: venues-register.json list_markets), never typed here */
+const LIST_ROWS = JSON.parse(readFileSync(new URL('../../src/market/venues-register.json', import.meta.url), 'utf8')).list_markets;
+const LIST_MARKET = Object.fromEntries(Object.entries(LIST_ROWS).map(([venue, r]) => [venue, r.market]));
+/** the agent a market lists: the house agent's ERC-8004 id on a directory; an outside seller's board row on a market venue (ax1.vc, the first cohort) */
+export const BOARD_AGENT = 'x402:6571678d37f0';
+const LIST_AGENT = (market) => (LIST_ROWS[market]?.directory ? AGENT : BOARD_AGENT);
 /** the protocol a hire hands the task over in, per market (NEAR hires over A2A) */
 const HIRE_KIND = { 'x402-base': 'x402', mcp: 'mcp', a2a: 'a2a', 'near-agent-market': 'a2a' };
 
@@ -73,7 +79,7 @@ export const CALLS = {
   a2aAgent: { fn: 'market.a2aAgent', needs: 'a2aRegistry', args: (dep) => ({ id: dep.response.body.rows?.[0]?.id }),
     run: (s, t, x) => s.a2aAgent(t, x.args.id),
     check: ({ result, x, expect }) => expect(result.id).toBe(x.args.id) },
-  listStatus: { fn: 'market.listStatus', run: (s, t) => s.listStatus(t, AGENT),
+  listStatus: { fn: 'market.listStatus', run: (s, t, x) => s.listStatus(t, LIST_AGENT(x.market)),
     check: ({ result, x, expect }) => {
       if (x.fx.response.status === 404) return expect(result).toBeNull();
       expect(result.id).toMatch(/^lst_[0-9a-f]{16}$/);
@@ -91,7 +97,7 @@ export const CALLS = {
   mechDeployments: { fn: 'market.mechDeployments', run: (s, t) => s.mechDeployments(t),
     check: ({ result, x, expect }) => { expect(result.deployments.length).toBe(rowsLen(x.fx.response.body, 'deployments')); expect(result.deployments.some((d) => d.chainId === DEVNET)).toBe(true); } },
 
-  listOn: { fn: 'market.listOn', key: true, run: (s, t, x) => s.listOn(t, AGENT, [LIST_MARKET[x.market]]),
+  listOn: { fn: 'market.listOn', key: true, run: (s, t, x) => s.listOn(t, LIST_AGENT(x.market), [LIST_MARKET[x.market]]),
     contract: (x) => ({ status: 202, body: { list: { id: 'lst_0123456789abcdef', status: 'live', markets: { [LIST_MARKET[x.market]]: { state: 'queued', op: 'publish', why: null, url: null } } } } }),
     check: ({ result, x, expect }) => expect(result.markets[LIST_MARKET[x.market]].state).toBe('queued') },
   createListing: { fn: 'market.createListing', key: true,

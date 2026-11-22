@@ -9,6 +9,8 @@
 //   node scripts/gen-venues.mjs --market-read <read.json>      a market's own read that is newer than a broken mark of the matrix and
 //                                                               shows its fault gone (Virtuals ACP: every shown offering carries a name
 //                                                               the cohort's seller answers to): the mark becomes partial, with its proof
+//   node scripts/gen-venues.mjs --registry <venues-registry.json> the list step's markets, from coord's venue rows (lang/gen/venues-registry.json,
+//                                                               their list_market, _LIST_MARKET_v1_): which market id lists an agent on which venue
 //   node scripts/gen-venues.mjs                                  write src/market/venues-data.ts from the snapshot
 //   node scripts/gen-venues.mjs --check                          fail when the module is not the snapshot's
 // The snapshot keeps, per market, the register's list/take/settle state, the proof behind each with its words and read date, and the
@@ -43,6 +45,7 @@ const listedPath = arg('--listed');
 const featuresPath = arg('--features');
 const journeyPaths = arg('--journey')?.split(',').filter(Boolean) ?? null;
 const marketReadPath = arg('--market-read');
+const registryPath = arg('--registry');
 // _VENUE_TRUTH_v2_: the feature matrix's features each SDK step reads (src/market/cohorts.ts STEP_FEATURE holds the same mapping;
 // test/cohorts.test.ts fails when the snapshot lacks one), and its marks as they are written
 const FEATURES = ['list', 'jobs_received', 'pay', 'settle'];
@@ -52,7 +55,7 @@ const OWN_READ = (kind) => typeof kind === 'string' && kind !== 'register_row';
 // the stricter words of public text written by this generator from the feature matrix and the journeys
 const PLAIN = /taifoon|\bn8n\b|0x[0-9a-fA-F]{40}|the layer|genie|\[internal\]|markup|checked before you pay/i;
 const plain = (t) => (typeof t === 'string' && !PLAIN.test(t) ? t : null);
-if (from || listedPath || featuresPath || journeyPaths || marketReadPath) {
+if (from || listedPath || featuresPath || journeyPaths || marketReadPath || registryPath) {
   let markets = prior?.markets ?? [];
   let source = prior?.source ?? null;
   if (from) {
@@ -180,8 +183,19 @@ if (from || listedPath || featuresPath || journeyPaths || marketReadPath) {
     });
     console.log(`market read ${mr.venue}/${cohort}: ${healed ? `${shown.length} shown, every one named: a broken mark read before ${mr.read_at} is partial` : 'the fault still shows: the marks stand'}`);
   }
+  // _LIST_MARKET_v1_ (2026-11-22): the list step's markets are coord's venue rows that carry list_market; a directory (a protocol row:
+  // ERC-8004, MCP, A2A) is listed by default, a market venue (Virtuals ACP) when named, and it also takes an outside seller's board row
+  let listMarkets = prior?.list_markets ?? null;
+  if (registryPath) {
+    const reg = JSON.parse(readFileSync(registryPath, 'utf8'));
+    if (reg.schema !== 'taifoon.venues.registry.v1' || !reg.venues) throw new Error(`${registryPath} is not coord's venues registry`);
+    const rows = Object.entries(reg.venues).filter(([, v]) => typeof v.list_market === 'string').map(([id, v]) => [RENAME[id] ?? id, { market: v.list_market, directory: v.kind === 'protocol' }]);
+    if (!rows.length) throw new Error(`${registryPath} names no list_market: regenerate it from coord lang/cue/venues-registry.cue`);
+    listMarkets = Object.fromEntries(rows);
+    console.log(`list markets: ${rows.map(([id, r]) => `${id}=${r.market}`).join(', ')}`);
+  }
   const dates = markets.flatMap((m) => [...STEPS.map((s) => m[s].read_on), m.paid?.read_on]).filter(Boolean).sort();
-  const data = { source, read_on: dates.at(-1) ?? null, ...(cohorts ? { cohorts } : {}), markets };
+  const data = { source, read_on: dates.at(-1) ?? null, ...(cohorts ? { cohorts } : {}), ...(listMarkets ? { list_markets: listMarkets } : {}), markets };
   const text = scrubbed(data, 'snapshot');
   writeFileSync(snap, `${text}\n`);
   console.log(`wrote src/market/venues-register.json: ${markets.length} markets, read on ${data.read_on} (${data.source}${cohorts ? `, cohorts from ${cohorts.source}` : ''})`);

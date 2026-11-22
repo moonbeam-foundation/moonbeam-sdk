@@ -1,0 +1,77 @@
+{
+ "op": "GET list/:id",
+ "market": "erc8183-base",
+ "stage": "listed",
+ "dir": "read",
+ "sdk": "market.listStatus",
+ "source": "live",
+ "request": {
+  "method": "GET",
+  "path": "/v1/list/lst_37f9a1a251d3af46",
+  "query": {}
+ },
+ "response": {
+  "status": 404,
+  "body": {
+   "ok": false,
+   "code": "not_found",
+   "error": "no list step lst_37f9a1a251d3af46",
+   "message": "no list step lst_37f9a1a251d3af46",
+   "next_step": {
+    "action": "read",
+    "why": "no list step by that id: a list step id is the `id` that POST /v1/list answered when the step was made (lst_ and 16 hex); a listing itself is read with GET /v1/listings/:id",
+    "http": {
+     "method": "GET",
+     "url": "https://coord.taifoon.dev/v1/listings"
+    },
+    "also": [
+     {
+      "action": "fix_request",
+      "why": "make a list step: POST /v1/list with a key on a running plan",
+      "http": {
+       "method": "POST",
+       "url": "https://coord.taifoon.dev/v1/list"
+      }
+     },
+     {
+      "action": "get_free_key",
+      "why": "get a free key in one call (no payment, nothing signed) and send it as X-API-Key: it has its own budget on demands, /gw/rpc, /gw/mcp and agent registration",
+      "http": {
+       "method": "POST",
+       "url": "https://coord.taifoon.dev/v1/register",
+       "body": {}
+      },
+      "mcp": {
+       "tool": "taifoon_register",
+       "arguments": {}
+      },
+      "cli": "npx @taifoon/cli login --free",
+      "docs": "https://coord.taifoon.dev/v1/quickstart"
+     },
+     {
+      "action": "list_yourself",
+      "why": "list your own agent as a seller in one call: send the URL of its card (A2A agent card, MCP server card or ERC-8004 registration); the layer probes it, names the classes it can serve and the auto-match loop can hire it",
+      "http": {
+       "method": "POST",
+       "url": "https://coord.taifoon.dev/v1/agents/register",
+       "body": {
+        "card_url": "https://your-agent.example/.well-known/agent-card.json"
+       }
+      },
+      "mcp": {
+       "tool": "taifoon_agents_register",
+       "arguments": {
+        "card_url": "https://your-agent.example/.well-known/agent-card.json"
+       }
+      },
+      "cli": "taifoon register agent <chain>:<id>",
+      "docs": "https://coord.taifoon.dev/SELLERS.md"
+     }
+    ]
+   },
+   "hint": "no list step by that id: a list step id is the `id` that POST /v1/list answered when the step was made (lst_ and 16 hex); a listing itself is read with GET /v1/listings/:id"
+  }
+ },
+ "coord_sha": "ff6e4413fd7ffc8a1595a58b2f43e2f979cfcd38",
+ "read_at": "2026-11-22T10:35:47.549Z"
+}

@@ -25,6 +25,24 @@ export const VENUE_REGISTER: RegisterSnapshot = {
    "read_at": "2026-11-15T20:10:22.621Z"
   }
  },
+ "list_markets": {
+  "a2a": {
+   "market": "a2a_registry",
+   "directory": true
+  },
+  "erc8004": {
+   "market": "erc8004",
+   "directory": true
+  },
+  "erc8183-base": {
+   "market": "virtuals_acp",
+   "directory": false
+  },
+  "mcp": {
+   "market": "mcp_registry",
+   "directory": true
+  }
+ },
  "markets": [
   {
    "id": "x402-base",
