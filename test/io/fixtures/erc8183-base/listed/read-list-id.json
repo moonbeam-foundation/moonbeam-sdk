@@ -11,67 +11,118 @@
   "query": {}
  },
  "response": {
-  "status": 404,
+  "status": 200,
   "body": {
-   "ok": false,
-   "code": "not_found",
-   "error": "no list step lst_37f9a1a251d3af46",
-   "message": "no list step lst_37f9a1a251d3af46",
-   "next_step": {
-    "action": "read",
-    "why": "no list step by that id: a list step id is the `id` that POST /v1/list answered when the step was made (lst_ and 16 hex); a listing itself is read with GET /v1/listings/:id",
-    "http": {
-     "method": "GET",
-     "url": "https://coord.taifoon.dev/v1/listings"
+   "ok": true,
+   "list": {
+    "agent": {
+     "agent_id": null,
+     "board": {
+      "classes": [
+       "finance.market_read",
+       "trading.order",
+       "media.image"
+      ],
+      "host": "ax1.vc",
+      "input": {
+       "method": "POST",
+       "schema": {
+        "additionalProperties": false,
+        "properties": {
+         "chain": {
+          "description": "Default base. Solana requires chain=solana and deployment readiness; supported chains are listed in supported_token_chains of the unsigned quote.",
+          "enum": [
+           "base",
+           "solana"
+          ],
+          "type": "string"
+         },
+         "requestKey": {
+          "description": "Optional correlation key. Does not replace the original payment authorization for recovery.",
+          "maxLength": 128,
+          "minLength": 16,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{15,127}$",
+          "type": "string"
+         },
+         "tokenAddress": {
+          "description": "Base EVM contract (case-insensitive) or Solana base58 mint (case-sensitive, decodes to 32 bytes).",
+          "type": "string"
+         }
+        },
+        "required": [
+         "tokenAddress"
+        ],
+        "type": "object"
+       }
+      },
+      "resource": "https://console.ax1.vc/api/dashboard/q-verdict/resource",
+      "seller_usdc": 0.02
+     },
+     "chain_id": null,
+     "class": "finance.market_read",
+     "description": "Any agent can buy a Token Verdict over x402: AI grade, roast and live onchain metrics for any Base, Solana or Robinhood token. $0.02 in USDC, no account.\n\nCheck supported_token_chains in the quote for",
+     "handle": "ax1-vc-6571678d37f0",
+     "name": "ax1.vc",
+     "offer_usdc": "0.024",
+     "own": null,
+     "ref": "x402:6571678d37f0"
     },
-    "also": [
+    "created_at": "2026-11-22T16:09:05.116Z",
+    "doors": {
+     "a2a_card": null,
+     "mcp": null
+    },
+    "events": [
      {
-      "action": "fix_request",
-      "why": "make a list step: POST /v1/list with a key on a running plan",
-      "http": {
-       "method": "POST",
-       "url": "https://coord.taifoon.dev/v1/list"
-      }
+      "at": "2026-11-22T16:09:05.116Z",
+      "market": null,
+      "state": "asked",
+      "why": "asked for virtuals_acp"
      },
      {
-      "action": "get_free_key",
-      "why": "get a free key in one call (no payment, nothing signed) and send it as X-API-Key: it has its own budget on demands, /gw/rpc, /gw/mcp and agent registration",
-      "http": {
-       "method": "POST",
-       "url": "https://coord.taifoon.dev/v1/register",
-       "body": {}
-      },
-      "mcp": {
-       "tool": "taifoon_register",
-       "arguments": {}
-      },
-      "cli": "npx @taifoon/cli login --free",
-      "docs": "https://coord.taifoon.dev/v1/quickstart"
-     },
-     {
-      "action": "list_yourself",
-      "why": "list your own agent as a seller in one call: send the URL of its card (A2A agent card, MCP server card or ERC-8004 registration); the layer probes it, names the classes it can serve and the auto-match loop can hire it",
-      "http": {
-       "method": "POST",
-       "url": "https://coord.taifoon.dev/v1/agents/register",
-       "body": {
-        "card_url": "https://your-agent.example/.well-known/agent-card.json"
-       }
-      },
-      "mcp": {
-       "tool": "taifoon_agents_register",
-       "arguments": {
-        "card_url": "https://your-agent.example/.well-known/agent-card.json"
-       }
-      },
-      "cli": "taifoon register agent <chain>:<id>",
-      "docs": "https://coord.taifoon.dev/SELLERS.md"
+      "at": "2026-11-22T16:09:39.249Z",
+      "market": "virtuals_acp",
+      "state": "held",
+      "why": "the agent is made and registered; offerings show once its seller answers"
      }
-    ]
-   },
-   "hint": "no list step by that id: a list step id is the `id` that POST /v1/list answered when the step was made (lst_ and 16 hex); a listing itself is read with GET /v1/listings/:id"
+    ],
+    "fee": {
+     "rule": "LIST_FEE_v1",
+     "usdc": "0",
+     "why": "listing is part of a running plan; no per-listing price is set yet"
+    },
+    "id": "lst_37f9a1a251d3af46",
+    "listing": null,
+    "markets": {
+     "virtuals_acp": {
+      "approval": null,
+      "at": "2026-11-22T16:09:39.249Z",
+      "owner_step": null,
+      "state": "held",
+      "tx": null,
+      "url": "https://app.virtuals.io/acp/agents/01a1cc7f-97ae-74da-8f87-b25514174a22",
+      "virtuals": {
+       "agent_id": "01a1cc7f-97ae-74da-8f87-b25514174a22",
+       "erc8004_agent_id": 1185268,
+       "offerings_shown": 0
+      },
+      "why": "the agent is made and registered; offerings show once its seller answers"
+     }
+    },
+    "plan": {
+     "slug": "house"
+    },
+    "schema": "taifoon.list.v1",
+    "status": "live",
+    "updated_at": "2026-11-22T16:09:39.249Z"
+   }
   }
  },
- "coord_sha": "ff6e4413fd7ffc8a1595a58b2f43e2f979cfcd38",
- "read_at": "2026-11-22T10:35:47.549Z"
+ "coord_sha": "88b680ab1d2dd1050366cddce690f6554550bddb",
+ "read_at": "2026-11-22T16:11:10.612Z",
+ "notes": {
+  "trimmed": [
+   "get_key (the free-key offer every keyless answer carries)"
+  ]
+ }
 }
