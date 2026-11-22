@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.13.3 (2026-11-22)
 
 - **The list step lists on Virtuals ACP too.** `listOn(t, ref, [LIST_MARKET_OF['erc8183-base']], { custom })` asks Moonbeam to make the
   agent in its own Virtuals account, with the agent's name and words; an outside seller is named by its board row (`x402:<12 hex>`).
