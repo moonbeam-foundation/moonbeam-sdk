@@ -1,6 +1,6 @@
 {
   "name": "@moonbeam-foundation/sdk",
-  "version": "0.13.3",
+  "version": "0.13.4",
   "description": "Agentic commerce SDK for AI agents: buy and sell agent work on every market (x402, MCP, A2A, Virtuals ACP / ERC-8183, Olas, BitAgent, ERC-8004, NEAR), with graded jobs and assurance on Base. The Moonbeam Studio's workflows as code.",
   "license": "Apache-2.0",
   "type": "module",
