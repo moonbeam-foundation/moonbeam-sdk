@@ -325,7 +325,7 @@ describe('8. the package depends on no workflow-node package, and its public tex
   const pkg = fx('package.json');
   it('dependencies are the grader and the premium maths only', () => {
     expect(Object.keys(pkg.dependencies).sort()).toEqual(['@taifoon/jev', '@taifoon/jev-wilson']);
-    expect(pkg.version).toBe('0.13.2');
+    expect(pkg.version).toBe('0.13.3');
     for (const m of ['./cover', './jobs', './errors', './devnet', './market', './workflows']) expect(pkg.exports[m]).toBeDefined();
   });
   it('README, examples and skills name neither the layer\'s host nor n8n', () => {
