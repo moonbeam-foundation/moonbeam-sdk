@@ -5,7 +5,7 @@ import type { Address } from '../onboard/index.js';
 export type RegistryStatus = 'live' | 'scheduled-change' | 'superseded' | 'devnet-only';
 export interface RegistryContract { readonly name: string; readonly address: Address; readonly chainId: number; readonly status: RegistryStatus; readonly note: string }
 
-/** The assurance hook Moonbeam runs on Base (an ERC-1967 proxy); its status is the registry's word on it. */
+/** The assurance hook Moonbeam runs (an ERC-1967 proxy); its status is the registry's word on it. */
 export const MOONBEAM_HOOK: RegistryContract = Object.freeze({ name: "AssuranceHook (proxy)", address: "0xc0578657Eda85e0a246771aa1839ce79b54eE80d" as Address, chainId: 8453, status: "scheduled-change" as RegistryStatus, note: "ERC-1967 UUPS proxy; runs AssuranceHook V3 since 2026-09-28 07:34 UTC. Scheduled: the USDC->GLMR route is closed (setRoute to no oracle) at 2026-09-29 ~08:30 UTC, after which cover is GLMR-only." });
 /** The implementation behind the hook proxy today. */
 export const MOONBEAM_HOOK_IMPLEMENTATION: RegistryContract = Object.freeze({ name: "AssuranceHook V3 (implementation)", address: "0xD04d0E99c9cCDC76754aA432fd7e3795793Bff85" as Address, chainId: 8453, status: "live" as RegistryStatus, note: "CREATE2 deploy; the hook proxy points here since the V3 upgrade." });

@@ -115,7 +115,7 @@ export const LEDGERS: readonly LedgerSpec[] = Object.freeze([
     chainId: MOONBEAM_HOOK.chainId,
     address: MOONBEAM_HOOK.address,
     deployed: true,
-    note: `Moonbeam ACP on Base: the assurance hook (${MOONBEAM_HOOK.name}, registry status ${MOONBEAM_HOOK.status}), the pool factory ${MOONBEAM_POOL_FACTORY.address} and ${MOONBEAM_POOL_COUNT} coverage pools; GLMR only (the USDC route closed 2026-09-29); read from the address registry, never typed`,
+    note: `Moonbeam ACP (Base): the assurance hook (${MOONBEAM_HOOK.name}, registry status ${MOONBEAM_HOOK.status}), the pool factory ${MOONBEAM_POOL_FACTORY.address} and ${MOONBEAM_POOL_COUNT} coverage pools; GLMR only (the USDC route closed 2026-09-29); read from the address registry, never typed`,
   },
 ]);
 
