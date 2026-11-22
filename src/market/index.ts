@@ -50,6 +50,7 @@
  *   VENUES (./venues.ts) and SALE_STOPS (./sale-stops.ts): every venue in one table, and one sale stop by stop, each with its call
  *   WHERE IT IS LISTED (./listed.ts: reads and plans only)
  *   journey(t, ref)               GET  /listed?view=journey  one agent on every venue: standing, five LEDs (why, evidence, moves_when), next step
+ *   track(t, ref)                 GET  /listed/track         what listing did there: the listing read back on the venue, calls and revenue 7d, the lights
  *   list(t, { venue, agent })     the venue's own record     a listing's steps as they stand (genie.list.virtuals.v1), its one human item
  */
 import type { OnboardTransport } from '../onboard/index.js';
@@ -281,8 +282,8 @@ export { SALE_STOPS, saleStop } from './sale-stops.js';
 export { STATES, MOVES, stateOf, statePath, readState } from './states.js';
 export type { State, StateId, StateKind, StateStep, StateRead, Move } from './states.js';
 // 0.13.0: where an agent is listed (journey) and the plan to list it (list): reads only
-export { JOURNEY_SCHEMA, JOURNEY_LEDS, journey, journeyOf, LIST_SCHEMA, LIST_VENUES, LIST_STEPS, HOUSE_AGENTS, list } from './listed.js';
-export type { Journey, JourneyVenue, JourneyLed, JourneyLight, JourneyEvidence, JourneyStanding, JourneyAct, JourneyNext, JourneyHuman, JourneyPrefill, LedState, ListPlan, ListStep, ListStepId, ListStepState, ListWho, ListOffering, ListHuman, ListCustom, ListVenue } from './listed.js';
+export { JOURNEY_SCHEMA, JOURNEY_LEDS, journey, journeyOf, TRACK_SCHEMA, track, trackOf, LIST_SCHEMA, LIST_VENUES, LIST_STEPS, HOUSE_AGENTS, list } from './listed.js';
+export type { Track, TrackVenue, TrackEntry, TrackLight, TrackListedState, Journey, JourneyVenue, JourneyLed, JourneyLight, JourneyEvidence, JourneyStanding, JourneyAct, JourneyNext, JourneyHuman, JourneyPrefill, LedState, ListPlan, ListStep, ListStepId, ListStepState, ListWho, ListOffering, ListHuman, ListCustom, ListVenue } from './listed.js';
 export type { SaleStop, StopNeeds, StopHop } from './sale-stops.js';
 // _COORD_IO_COVERAGE_v1_: the reads (and two writes) each stage of a kept market needs, found missing by test/io
 export { x402Bazaar, mcpRegistry, mcpServer, a2aRegistry, a2aAgent, virtualsSellers, olasMechs, mechDeployments, mechRequests, mechRequest, mechResult, mechPlan, chainTx, signerStatus, reportSettled } from './reads.js';

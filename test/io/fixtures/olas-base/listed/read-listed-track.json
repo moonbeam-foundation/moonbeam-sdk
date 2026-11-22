@@ -1,0 +1,947 @@
+{
+ "op": "GET listed/track",
+ "market": "olas-base",
+ "stage": "listed",
+ "dir": "read",
+ "sdk": "market.track",
+ "source": "live",
+ "request": {
+  "method": "GET",
+  "path": "/v1/listed/track",
+  "query": {
+   "agent": "8453:1176098"
+  }
+ },
+ "response": {
+  "status": 200,
+  "body": {
+   "agent": {
+    "class": "data.onchain_query",
+    "host": "next.moonbeam.network",
+    "kind": "house",
+    "name": "On-chain Reads",
+    "ref": "8453:1176098"
+   },
+   "journey_read_at": "2026-11-22T14:26:07.004Z",
+   "read_at": "2026-11-22T14:26:05.354Z",
+   "reads": [
+    {
+     "kind": "journey",
+     "read_at": "2026-11-22T14:26:07.004Z",
+     "state": "ok"
+    },
+    {
+     "kind": "listed",
+     "read_at": "2026-11-22T14:26:06.104Z",
+     "state": "ok"
+    },
+    {
+     "kind": "sales",
+     "read_at": "2026-11-22T14:22:27.251Z",
+     "state": "ok"
+    },
+    {
+     "kind": "outside:x402-base#0",
+     "read_at": "2026-11-22T14:26:12.179Z",
+     "state": "ok"
+    },
+    {
+     "kind": "outside:x402-base#1",
+     "read_at": "2026-11-22T14:26:12.110Z",
+     "state": "ok"
+    },
+    {
+     "kind": "outside:x402-base#2",
+     "read_at": "2026-11-22T14:26:12.380Z",
+     "state": "ok"
+    },
+    {
+     "kind": "outside:x402-base#3",
+     "read_at": "2026-11-22T14:26:12.596Z",
+     "state": "ok"
+    },
+    {
+     "kind": "outside:mcp#0",
+     "read_at": "2026-11-22T14:26:12.296Z",
+     "state": "ok"
+    },
+    {
+     "kind": "outside:a2a#0",
+     "read_at": "2026-11-22T14:26:12.715Z",
+     "state": "ok"
+    },
+    {
+     "kind": "outside:a2a#1",
+     "read_at": "2026-11-22T14:26:12.718Z",
+     "state": "ok"
+    },
+    {
+     "kind": "outside:erc8004#0",
+     "read_at": "2026-11-22T14:26:12.540Z",
+     "state": "unread"
+    }
+   ],
+   "rule": "LISTED_TRACK_v1",
+   "schema": "listed.track.v1",
+   "totals": {
+    "calls_7d": 0,
+    "listed_outside": 6,
+    "own_usd_7d": 0,
+    "revenue_7d_usd": 0,
+    "vanished": 0,
+    "venues": 10,
+    "visible": 6
+   },
+   "unread": [
+    "erc8004: 8004scan answered 429"
+   ],
+   "venues": [
+    {
+     "label": "Listed on x402 by Moonbeam",
+     "lights": {
+      "hire": {
+       "evidence": [
+        {
+         "kind": "feature_cell",
+         "read_at": "2026-11-15T03:49:52.599Z",
+         "ref": "x402-base/hire"
+        }
+       ],
+       "state": "on",
+       "why": "a buyer calls the wall, reads the 402 and pays it in the retry"
+      },
+      "list": {
+       "evidence": [
+        {
+         "kind": "x402_door",
+         "read_at": "2026-11-22T14:26:08.018Z",
+         "ref": "door:data.onchain_query"
+        }
+       ],
+       "state": "on",
+       "why": "Moonbeam's x402 door sells it as data.onchain_query"
+      },
+      "offer": {
+       "evidence": [
+        {
+         "kind": "x402_door",
+         "read_at": "2026-11-22T14:26:08.018Z",
+         "ref": "door:data.onchain_query"
+        }
+       ],
+       "state": "on",
+       "why": "Moonbeam's offer carries it on x402"
+      },
+      "paid": {
+       "evidence": [],
+       "state": "unread",
+       "why": "its seller profile did not answer"
+      },
+      "read_back": {
+       "evidence": [
+        {
+         "kind": "venue_read",
+         "read_at": "2026-11-22T14:26:05.354Z",
+         "ref": "x402scan:1e570ff0-a889-44b3-ab3b-6bafcfa69d97"
+        },
+        {
+         "kind": "venue_read",
+         "read_at": "2026-11-22T14:26:05.354Z",
+         "ref": "Ultravioleta:https://next.moonbeam.network/api/acp/x402/class/data.onchain_query"
+        },
+        {
+         "kind": "register_row",
+         "read_at": "2026-11-22T14:26:09.338Z",
+         "ref": "listed:x402-base/data.onchain_query"
+        },
+        {
+         "kind": "register_row",
+         "read_at": "2026-11-22T14:26:07.692Z",
+         "ref": "listed:x402-base/ultravioleta:data.onchain_query"
+        }
+       ],
+       "state": "on",
+       "why": "x402scan shows it now"
+      }
+     },
+     "listed": {
+      "entries": [
+       {
+        "id": "1e570ff0-a889-44b3-ab3b-6bafcfa69d97",
+        "last_seen": "2026-11-22T14:26:05.354Z",
+        "read_at": "2026-11-22T14:26:05.354Z",
+        "says_at": "2026-11-11T20:28:40.262Z",
+        "state": "live",
+        "url": "https://www.x402scan.com/server/1e570ff0-a889-44b3-ab3b-6bafcfa69d97",
+        "where": "x402scan"
+       },
+       {
+        "id": "https://next.moonbeam.network/api/acp/x402/class/data.onchain_query",
+        "last_seen": "2026-11-22T14:26:05.354Z",
+        "read_at": "2026-11-22T14:26:05.354Z",
+        "says_at": "2026-11-15T02:04:44.000Z",
+        "state": "live",
+        "url": "https://next.moonbeam.network/api/acp/x402/class/data.onchain_query",
+        "where": "Ultravioleta"
+       },
+       {
+        "id": "data.onchain_query",
+        "last_seen": "2026-11-22T14:26:09.338Z",
+        "read_at": "2026-11-22T14:26:09.338Z",
+        "register": "listed:x402-base/data.onchain_query",
+        "state": "live",
+        "url": "https://next.moonbeam.network/api/acp/x402/class/data.onchain_query",
+        "via": "its own entry",
+        "where": "x402",
+        "why": "the wall answers with its price"
+       },
+       {
+        "id": "ultravioleta:data.onchain_query",
+        "last_seen": "2026-11-22T14:26:07.692Z",
+        "read_at": "2026-11-22T14:26:07.692Z",
+        "register": "listed:x402-base/ultravioleta:data.onchain_query",
+        "state": "live",
+        "url": "https://facilitator.ultravioletadao.xyz/discovery/resources?q=next.moonbeam.network&limit=100",
+        "via": "its own entry",
+        "where": "Ultravioleta discovery",
+        "why": "Ultravioleta discovery shows it"
+       }
+      ],
+      "last_seen": "2026-11-22T14:26:09.338Z",
+      "state": "live"
+     },
+     "mark": "x402",
+     "own_7d": null,
+     "sales": {
+      "calls_7d": 0,
+      "calls_all": 1,
+      "from": "sale_run",
+      "last_call": "2026-10-12T08:49:10.832Z",
+      "read_at": "2026-11-22T14:22:27.251Z",
+      "revenue_7d_usd": 0
+     },
+     "standing": "listed_by_moonbeam",
+     "venue": "x402",
+     "venue_id": "x402-base"
+    },
+    {
+     "label": "Listed on Virtuals ACP by Moonbeam",
+     "lights": {
+      "hire": {
+       "evidence": [
+        {
+         "kind": "feature_cell",
+         "read_at": "2026-11-17T13:55:16.920Z",
+         "ref": "erc8183-base/hire"
+        }
+       ],
+       "state": "on",
+       "why": "Hire / buy on Virtuals ACP: it works here now"
+      },
+      "list": {
+       "evidence": [
+        {
+         "kind": "feature_cell",
+         "read_at": "2026-11-17T13:54:52.972Z",
+         "ref": "erc8183-base/list"
+        }
+       ],
+       "state": "on",
+       "why": "List on Virtuals ACP: it works here now"
+      },
+      "offer": {
+       "evidence": [
+        {
+         "kind": "feature_cell",
+         "read_at": "2026-11-17T13:54:52.972Z",
+         "ref": "erc8183-base/discover"
+        }
+       ],
+       "state": "on",
+       "why": "Discover / search on Virtuals ACP: buyers find the agent's shown offerings in Virtuals' search"
+      },
+      "paid": {
+       "evidence": [],
+       "state": "unread",
+       "why": "its seller profile did not answer"
+      },
+      "read_back": {
+       "evidence": [
+        {
+         "kind": "register_row",
+         "read_at": "2026-11-22T14:26:07.044Z",
+         "ref": "listed:erc8183-base/01a1cc7f-97ae-74da-8f87-b25514174a22"
+        }
+       ],
+       "state": "on",
+       "why": "Virtuals ACP shows it now"
+      }
+     },
+     "listed": {
+      "entries": [
+       {
+        "id": "01a1cc7f-97ae-74da-8f87-b25514174a22",
+        "last_seen": "2026-11-22T14:26:07.044Z",
+        "read_at": "2026-11-22T14:26:07.044Z",
+        "register": "listed:erc8183-base/01a1cc7f-97ae-74da-8f87-b25514174a22",
+        "state": "live",
+        "url": "https://api.acp.virtuals.io/agents/01a1cc7f-97ae-74da-8f87-b25514174a22",
+        "via": "Moonbeam's own entry, which carries it",
+        "where": "Virtuals ACP",
+        "why": "11 offerings shown"
+       }
+      ],
+      "last_seen": "2026-11-22T14:26:07.044Z",
+      "state": "live"
+     },
+     "mark": "virtuals",
+     "own_7d": null,
+     "sales": {
+      "calls_7d": 0,
+      "calls_all": 0,
+      "from": "sale_run",
+      "last_call": null,
+      "read_at": "2026-11-22T14:22:27.251Z",
+      "revenue_7d_usd": 0
+     },
+     "standing": "listed_by_moonbeam",
+     "venue": "Virtuals ACP",
+     "venue_id": "erc8183-base"
+    },
+    {
+     "label": "Virtuals memo jobs takes no new sellers",
+     "lights": {
+      "hire": {
+       "evidence": [],
+       "state": "off",
+       "why": "not listed on Virtuals memo jobs, so nobody can hire it there"
+      },
+      "list": {
+       "evidence": [],
+       "state": "off",
+       "why": "Virtuals memo jobs takes no new listing"
+      },
+      "offer": {
+       "evidence": [],
+       "state": "off",
+       "why": "Virtuals memo jobs is closed to new sellers"
+      },
+      "paid": {
+       "evidence": [],
+       "state": "off",
+       "why": "not listed on Virtuals memo jobs"
+      },
+      "read_back": {
+       "evidence": [
+        {
+         "kind": "register_closed",
+         "read_at": null,
+         "ref": "listed:memoacp-base"
+        }
+       ],
+       "state": "on",
+       "why": "read: Virtuals memo jobs is closed to new sellers"
+      }
+     },
+     "listed": {
+      "entries": [],
+      "last_seen": null,
+      "state": "none"
+     },
+     "mark": "memo",
+     "own_7d": null,
+     "sales": {
+      "calls_7d": 0,
+      "calls_all": 0,
+      "from": "sale_run",
+      "last_call": null,
+      "read_at": "2026-11-22T14:22:27.251Z",
+      "revenue_7d_usd": 0
+     },
+     "standing": "closed",
+     "venue": "Virtuals memo jobs",
+     "venue_id": "memoacp-base"
+    },
+    {
+     "label": "BitAgent did not answer just now",
+     "lights": {
+      "hire": {
+       "evidence": [],
+       "state": "unread",
+       "why": "the listed register did not answer, so Moonbeam's seat here is not known"
+      },
+      "list": {
+       "evidence": [],
+       "state": "unread",
+       "why": "the listed register did not answer, so Moonbeam's seat here is not known"
+      },
+      "offer": {
+       "evidence": [],
+       "state": "unread",
+       "why": "the listed register did not answer, so Moonbeam's seat here is not known"
+      },
+      "paid": {
+       "evidence": [],
+       "state": "off",
+       "why": "not listed on BitAgent"
+      },
+      "read_back": {
+       "evidence": [],
+       "state": "unread",
+       "why": "the listed register did not answer, so Moonbeam's seat here is not known"
+      }
+     },
+     "listed": {
+      "entries": [],
+      "last_seen": null,
+      "state": "none"
+     },
+     "mark": "bitagent",
+     "own_7d": null,
+     "sales": {
+      "calls_7d": 0,
+      "calls_all": 0,
+      "from": "sale_run",
+      "last_call": null,
+      "read_at": "2026-11-22T14:22:27.251Z",
+      "revenue_7d_usd": 0
+     },
+     "standing": "unread",
+     "venue": "BitAgent",
+     "venue_id": "bitagent-base"
+    },
+    {
+     "label": "Olas Mech did not answer just now",
+     "lights": {
+      "hire": {
+       "evidence": [],
+       "state": "unread",
+       "why": "the listed register did not answer, so Moonbeam's seat here is not known"
+      },
+      "list": {
+       "evidence": [],
+       "state": "unread",
+       "why": "the listed register did not answer, so Moonbeam's seat here is not known"
+      },
+      "offer": {
+       "evidence": [],
+       "state": "unread",
+       "why": "the listed register did not answer, so Moonbeam's seat here is not known"
+      },
+      "paid": {
+       "evidence": [],
+       "state": "off",
+       "why": "not listed on Olas Mech"
+      },
+      "read_back": {
+       "evidence": [],
+       "state": "unread",
+       "why": "the listed register did not answer, so Moonbeam's seat here is not known"
+      }
+     },
+     "listed": {
+      "entries": [],
+      "last_seen": null,
+      "state": "none"
+     },
+     "mark": "olas",
+     "own_7d": null,
+     "sales": {
+      "calls_7d": 0,
+      "calls_all": 0,
+      "from": "sale_run",
+      "last_call": null,
+      "read_at": "2026-11-22T14:22:27.251Z",
+      "revenue_7d_usd": 0
+     },
+     "standing": "unread",
+     "venue": "Olas Mech",
+     "venue_id": "olas-base"
+    },
+    {
+     "changed": [
+      {
+       "from": "partial",
+       "light": "offer",
+       "to": "on",
+       "why": "NEAR AI market lists it"
+      }
+     ],
+     "label": "Listed on NEAR AI market by Moonbeam",
+     "lights": {
+      "hire": {
+       "evidence": [
+        {
+         "kind": "feature_cell",
+         "read_at": "2026-11-17T13:55:15.659Z",
+         "ref": "near-agent-market/hire"
+        }
+       ],
+       "state": "partial",
+       "why": "Hire / buy on NEAR AI market: a buyer hires the agent on its per-call plan; the market holds the payment in escrow"
+      },
+      "list": {
+       "evidence": [
+        {
+         "kind": "feature_cell",
+         "read_at": "2026-11-17T13:54:53.201Z",
+         "ref": "near-agent-market/list"
+        }
+       ],
+       "state": "on",
+       "why": "List on NEAR AI market: the fleet registers and onboards each agent on the NEAR market and flips it live"
+      },
+      "offer": {
+       "evidence": [
+        {
+         "kind": "register_row",
+         "read_at": "2026-11-22T14:26:06.621Z",
+         "ref": "listed:near-agent-market/moonbeam"
+        }
+       ],
+       "state": "on",
+       "why": "NEAR AI market lists it"
+      },
+      "paid": {
+       "evidence": [],
+       "state": "unread",
+       "why": "its seller profile did not answer"
+      },
+      "read_back": {
+       "evidence": [
+        {
+         "kind": "register_row",
+         "read_at": "2026-11-22T14:26:06.621Z",
+         "ref": "listed:near-agent-market/moonbeam"
+        }
+       ],
+       "state": "on",
+       "why": "NEAR AI market shows it now"
+      }
+     },
+     "listed": {
+      "entries": [
+       {
+        "id": "moonbeam",
+        "last_seen": "2026-11-22T14:26:06.621Z",
+        "read_at": "2026-11-22T14:26:06.621Z",
+        "register": "listed:near-agent-market/moonbeam",
+        "state": "live",
+        "url": "https://market.near.ai/v1/agents/moonbeam",
+        "via": "Moonbeam's own entry, which carries it",
+        "where": "NEAR AI market",
+        "why": "live, 0 jobs delivered"
+       }
+      ],
+      "last_seen": "2026-11-22T14:26:06.621Z",
+      "state": "live"
+     },
+     "mark": "near",
+     "own_7d": null,
+     "sales": {
+      "calls_7d": 0,
+      "calls_all": 0,
+      "from": "sale_run",
+      "last_call": null,
+      "read_at": "2026-11-22T14:22:27.251Z",
+      "revenue_7d_usd": 0
+     },
+     "standing": "listed_by_moonbeam",
+     "venue": "NEAR AI market",
+     "venue_id": "near-agent-market"
+    },
+    {
+     "label": "Listed on MCP Registry by Moonbeam",
+     "lights": {
+      "hire": {
+       "evidence": [
+        {
+         "kind": "feature_cell",
+         "read_at": "2026-11-15T03:49:54.372Z",
+         "ref": "mcp/hire"
+        }
+       ],
+       "state": "on",
+       "why": "Hire / buy on MCP Registry: a buyer connects over MCP and calls a tool; a paid tool answers 402 first"
+      },
+      "list": {
+       "evidence": [
+        {
+         "kind": "feature_cell",
+         "read_at": "2026-11-17T13:54:53.203Z",
+         "ref": "mcp/list"
+        }
+       ],
+       "state": "on",
+       "why": "List on MCP Registry: Moonbeam's server is published to the official MCP Registry as network.moonbeam.next/paid-calls; Glama mirrors it"
+      },
+      "offer": {
+       "evidence": [
+        {
+         "kind": "feature_cell",
+         "read_at": "2026-11-15T03:49:40.950Z",
+         "ref": "mcp/discover"
+        }
+       ],
+       "state": "on",
+       "why": "Discover / search on MCP Registry: buyers find the server in the MCP Registry, Glama and the remote-server lists"
+      },
+      "paid": {
+       "evidence": [],
+       "state": "unread",
+       "why": "its seller profile did not answer"
+      },
+      "read_back": {
+       "evidence": [
+        {
+         "kind": "venue_read",
+         "read_at": "2026-11-22T14:26:05.354Z",
+         "ref": "MCP Registry:network.moonbeam.next/paid-calls@1.1.0"
+        },
+        {
+         "kind": "register_row",
+         "read_at": "2026-11-22T14:26:08.429Z",
+         "ref": "listed:mcp/network.moonbeam.next/paid-calls"
+        }
+       ],
+       "state": "on",
+       "why": "MCP Registry shows it now"
+      }
+     },
+     "listed": {
+      "entries": [
+       {
+        "id": "network.moonbeam.next/paid-calls@1.1.0",
+        "last_seen": "2026-11-22T14:26:05.354Z",
+        "read_at": "2026-11-22T14:26:05.354Z",
+        "says_at": "2026-11-14T23:22:05.262303Z",
+        "state": "live",
+        "status": "active",
+        "url": "https://registry.modelcontextprotocol.io/v0/servers?search=network.moonbeam.next%2Fpaid-calls",
+        "where": "MCP Registry"
+       },
+       {
+        "id": "network.moonbeam.next/paid-calls",
+        "last_seen": "2026-11-22T14:26:08.429Z",
+        "read_at": "2026-11-22T14:26:08.429Z",
+        "register": "listed:mcp/network.moonbeam.next/paid-calls",
+        "state": "live",
+        "url": null,
+        "via": "Moonbeam's own entry, which carries it",
+        "where": "MCP Registry",
+        "why": "its entry answers"
+       },
+       {
+        "id": "glama.ai/network.moonbeam.next/paid-calls",
+        "kept": true,
+        "last_seen": "2026-11-22T14:22:50.027Z",
+        "read_at": "2026-11-22T14:22:50.027Z",
+        "register": "listed:mcp/glama.ai/network.moonbeam.next/paid-calls",
+        "state": "live",
+        "url": "https://glama.ai/mcp/connectors/network.moonbeam.next/paid-calls",
+        "via": "Moonbeam's own entry, which carries it",
+        "where": "MCP Registry",
+        "why": "the market answered 525; the last good read stands"
+       }
+      ],
+      "last_seen": "2026-11-22T14:26:08.429Z",
+      "state": "live"
+     },
+     "mark": "mcp",
+     "own_7d": null,
+     "sales": {
+      "calls_7d": 0,
+      "calls_all": 0,
+      "from": "sale_run",
+      "last_call": null,
+      "read_at": "2026-11-22T14:22:27.251Z",
+      "revenue_7d_usd": 0
+     },
+     "standing": "listed_by_moonbeam",
+     "venue": "MCP Registry",
+     "venue_id": "mcp"
+    },
+    {
+     "label": "Listed on A2A Registry by Moonbeam",
+     "lights": {
+      "hire": {
+       "evidence": [
+        {
+         "kind": "feature_cell",
+         "read_at": "2026-11-17T13:55:08.345Z",
+         "ref": "a2a/hire"
+        }
+       ],
+       "state": "on",
+       "why": "Hire / buy on A2A Registry: a buyer sends an A2A message to the endpoint the card names"
+      },
+      "list": {
+       "evidence": [
+        {
+         "kind": "feature_cell",
+         "read_at": "2026-11-17T13:54:53.069Z",
+         "ref": "a2a/list"
+        }
+       ],
+       "state": "on",
+       "why": "List on A2A Registry: registered on the A2A Registry with its agent card; LocalMark shows it"
+      },
+      "offer": {
+       "evidence": [
+        {
+         "kind": "feature_cell",
+         "read_at": "2026-11-17T13:54:53.069Z",
+         "ref": "a2a/discover"
+        }
+       ],
+       "state": "on",
+       "why": "Discover / search on A2A Registry: buyers find the agent in the A2A Registry, LocalMark and Agentropolis, and read its card"
+      },
+      "paid": {
+       "evidence": [],
+       "state": "unread",
+       "why": "its seller profile did not answer"
+      },
+      "read_back": {
+       "evidence": [
+        {
+         "kind": "register_row",
+         "read_at": "2026-11-22T14:26:08.397Z",
+         "ref": "listed:a2a/cf34994a-39a2-41c7-9ff5-53ba134fdc3d"
+        },
+        {
+         "kind": "register_row",
+         "read_at": "2026-11-22T14:26:07.158Z",
+         "ref": "listed:a2a/localmark:590767"
+        }
+       ],
+       "state": "on",
+       "why": "A2A Registry shows it now"
+      }
+     },
+     "listed": {
+      "entries": [
+       {
+        "id": "cf34994a-39a2-41c7-9ff5-53ba134fdc3d",
+        "last_seen": "2026-11-22T14:26:08.397Z",
+        "read_at": "2026-11-22T14:26:08.397Z",
+        "register": "listed:a2a/cf34994a-39a2-41c7-9ff5-53ba134fdc3d",
+        "state": "live",
+        "url": null,
+        "via": "Moonbeam's own entry, which carries it",
+        "where": "A2A Registry",
+        "why": "its entry answers"
+       },
+       {
+        "id": "localmark:590767",
+        "last_seen": "2026-11-22T14:26:07.158Z",
+        "read_at": "2026-11-22T14:26:07.158Z",
+        "register": "listed:a2a/localmark:590767",
+        "state": "live",
+        "url": "https://localmark.ai/agents/590767",
+        "via": "Moonbeam's own entry, which carries it",
+        "where": "LocalMark",
+        "why": "LocalMark shows it"
+       }
+      ],
+      "last_seen": "2026-11-22T14:26:08.397Z",
+      "state": "live"
+     },
+     "mark": "a2a",
+     "own_7d": null,
+     "sales": {
+      "calls_7d": 0,
+      "calls_all": 0,
+      "from": "sale_run",
+      "last_call": null,
+      "read_at": "2026-11-22T14:22:27.251Z",
+      "revenue_7d_usd": 0
+     },
+     "standing": "listed_by_moonbeam",
+     "venue": "A2A Registry",
+     "venue_id": "a2a"
+    },
+    {
+     "changed": [
+      {
+       "from": "partial",
+       "light": "list",
+       "to": "on",
+       "why": "ERC-8004 lists it"
+      }
+     ],
+     "label": "ERC-8004 did not answer just now",
+     "lights": {
+      "hire": {
+       "evidence": [
+        {
+         "kind": "feature_cell",
+         "read_at": "2026-11-15T03:49:58.409Z",
+         "ref": "erc8004/hire"
+        }
+       ],
+       "state": "on",
+       "why": "Hire / buy on ERC-8004: a buyer hires through the endpoint the identity declares (MCP here)"
+      },
+      "list": {
+       "evidence": [
+        {
+         "kind": "register_row",
+         "read_at": "2026-11-22T14:26:07.302Z",
+         "ref": "listed:erc8004/8453:1176098"
+        },
+        {
+         "kind": "register_row",
+         "read_at": "2026-11-22T14:26:07.693Z",
+         "ref": "listed:erc8004/quicknode:base-mainnet:1176098"
+        }
+       ],
+       "state": "on",
+       "why": "ERC-8004 lists it"
+      },
+      "offer": {
+       "evidence": [
+        {
+         "kind": "feature_cell",
+         "read_at": "2026-11-15T03:49:40.934Z",
+         "ref": "erc8004/discover"
+        }
+       ],
+       "state": "on",
+       "why": "Discover / search on ERC-8004: buyers find the identity on 8004scan, QuickNode's explorer and the hireable-agents read, and follow its declared endpoint"
+      },
+      "paid": {
+       "evidence": [],
+       "state": "off",
+       "why": "not listed on ERC-8004"
+      },
+      "read_back": {
+       "evidence": [
+        {
+         "kind": "register_row",
+         "read_at": "2026-11-22T14:26:07.302Z",
+         "ref": "listed:erc8004/8453:1176098"
+        },
+        {
+         "kind": "register_row",
+         "read_at": "2026-11-22T14:26:07.693Z",
+         "ref": "listed:erc8004/quicknode:base-mainnet:1176098"
+        }
+       ],
+       "state": "on",
+       "why": "ERC-8004 shows it now"
+      }
+     },
+     "listed": {
+      "entries": [
+       {
+        "id": "8453:1176098",
+        "last_seen": "2026-11-22T14:26:07.302Z",
+        "read_at": "2026-11-22T14:26:07.302Z",
+        "register": "listed:erc8004/8453:1176098",
+        "state": "live",
+        "url": null,
+        "via": "its own entry",
+        "where": "ERC-8004",
+        "why": "its entry answers"
+       },
+       {
+        "id": "8004scan:8453:1176098",
+        "kept": true,
+        "last_seen": "2026-11-22T14:15:17.332Z",
+        "read_at": "2026-11-22T14:15:17.332Z",
+        "register": "listed:erc8004/8004scan:8453:1176098",
+        "state": "live",
+        "url": "https://api.8004scan.io/api/v1/agents/8453/1176098",
+        "via": "its own entry",
+        "where": "8004scan",
+        "why": "8004scan answered 429; the last good read stands"
+       },
+       {
+        "id": "quicknode:base-mainnet:1176098",
+        "last_seen": "2026-11-22T14:26:07.693Z",
+        "read_at": "2026-11-22T14:26:07.693Z",
+        "register": "listed:erc8004/quicknode:base-mainnet:1176098",
+        "state": "live",
+        "url": "https://erc-8004.quicknode.com/agents/base-mainnet/1176098",
+        "via": "its own entry",
+        "where": "QuickNode ERC-8004 Explorer",
+        "why": "QuickNode ERC-8004 Explorer shows it"
+       }
+      ],
+      "last_seen": "2026-11-22T14:26:07.693Z",
+      "state": "live"
+     },
+     "mark": "erc8004",
+     "own_7d": null,
+     "sales": {
+      "calls_7d": 0,
+      "calls_all": 0,
+      "from": "sale_run",
+      "last_call": null,
+      "read_at": "2026-11-22T14:22:27.251Z",
+      "revenue_7d_usd": 0
+     },
+     "standing": "unread",
+     "venue": "ERC-8004",
+     "venue_id": "erc8004"
+    },
+    {
+     "label": "Workflow nodes did not answer just now",
+     "lights": {
+      "hire": {
+       "evidence": [],
+       "state": "unread",
+       "why": "the listed register did not answer, so Moonbeam's seat here is not known"
+      },
+      "list": {
+       "evidence": [],
+       "state": "unread",
+       "why": "the listed register did not answer, so Moonbeam's seat here is not known"
+      },
+      "offer": {
+       "evidence": [],
+       "state": "unread",
+       "why": "the listed register did not answer, so Moonbeam's seat here is not known"
+      },
+      "paid": {
+       "evidence": [],
+       "state": "off",
+       "why": "not listed on Workflow nodes"
+      },
+      "read_back": {
+       "evidence": [],
+       "state": "unread",
+       "why": "the listed register did not answer, so Moonbeam's seat here is not known"
+      }
+     },
+     "listed": {
+      "entries": [],
+      "last_seen": null,
+      "state": "none"
+     },
+     "mark": "nodes",
+     "own_7d": null,
+     "sales": {
+      "calls_7d": 0,
+      "calls_all": 0,
+      "from": "sale_run",
+      "last_call": null,
+      "read_at": "2026-11-22T14:22:27.251Z",
+      "revenue_7d_usd": 0
+     },
+     "standing": "unread",
+     "venue": "Workflow nodes",
+     "venue_id": "workflow-nodes"
+    }
+   ]
+  }
+ },
+ "coord_sha": "4a0e00d3ffa2120ba93a9d45dcf48347a1671b5b",
+ "read_at": "2026-11-22T14:35:56.486Z",
+ "notes": {
+  "trimmed": [
+   "get_key (the free-key offer every keyless answer carries)"
+  ]
+ }
+}

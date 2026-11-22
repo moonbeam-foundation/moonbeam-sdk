@@ -66,17 +66,20 @@ await planOffers(t);                               // builder 99, team 199, prot
 `planOffers` reads Moonbeam's 402 answer, so nothing is minted or paid. `agentSales(t, 'mcp.digest')` reads what an agent's
 class wall sold, by day and buying market, and where each seller share stands.
 
-### Where it is listed, and the plan to list it
+### Where it is listed, what listing did, and the plan to list it
 
 ```ts
-import { transportFromEnv, journey, list } from '@moonbeam-foundation/sdk/market';
+import { transportFromEnv, journey, track, list } from '@moonbeam-foundation/sdk/market';
 
 const j = await journey(t, '8453:1170141');        // every venue: standing, five LEDs (offer, hire, list, read back, paid), next step
 j.venues['erc8183-base'].leds.list;                // { state: 'on', why, evidence: [{ kind, ref, read_at }], moves_when }
+const k = await track(t, 'x402:6571678d37f0');     // every venue: the listing read back on the venue itself, calls 7d, the lights
+k.venues['x402-base'].listed.entries;              // [{ where: 'CDP Bazaar', url, state: 'live', last_seen }, …]
 await list(t, { venue: 'erc8183-base', agent: 'moonbeam' });   // the Virtuals ACP listing step by step, its offerings, done
 ```
 
-Both only read. `list` plans: it never asks for a signer, registers or shows an offering, and its `human` item (the one
+All three only read. `track` says what listing did: each venue's own search read back (a listing that vanished
+there is `vanished` and its Visible light is off), and the calls and revenue through Moonbeam over 7 days. `list` plans: it never asks for a signer, registers or shows an offering, and its `human` item (the one
 approval a person gives in the Moonbeam Studio) is returned, never acted on.
 
 ## One sale, stop by stop

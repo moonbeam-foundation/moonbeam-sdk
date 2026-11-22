@@ -29,6 +29,8 @@ const LIST_ROWS = JSON.parse(readFileSync(new URL('../../src/market/venues-regis
 const LIST_MARKET = Object.fromEntries(Object.entries(LIST_ROWS).map(([venue, r]) => [venue, r.market]));
 /** the agent a market lists: the house agent's ERC-8004 id on a directory; an outside seller's board row on a market venue (ax1.vc, the first cohort) */
 export const BOARD_AGENT = 'x402:6571678d37f0';
+/** Moonbeam's house agent On-chain Reads (ERC-8004 8453:1176098): listed on the directories and markets by Moonbeam, read back on each */
+export const TRACK_AGENT = '8453:1176098';
 const LIST_AGENT = (market) => (LIST_ROWS[market]?.directory ? AGENT : BOARD_AGENT);
 /** the protocol a hire hands the task over in, per market (NEAR hires over A2A) */
 const HIRE_KIND = { 'x402-base': 'x402', mcp: 'mcp', a2a: 'a2a', 'near-agent-market': 'a2a' };
@@ -50,6 +52,19 @@ const rowsLen = (b, k) => (Array.isArray(b?.[k]) ? b[k].length : 0);
 /** the machine state a coord read belongs to: the first state of the table whose read is the op (nothing typed: the table is derived from coord's machine) */
 const stateOfOp = (s, op) => s.STATES.find((st) => `${st.read.method} ${st.read.path.replace(/^\/v1\//, '')}` === op);
 
+/** what every listed.track.v1 answer holds for the market of its fixture */
+function trackCheck({ result, x, expect, s }, ref) {
+  expect(result.agent.ref).toBe(ref);
+  expect(result.read_at).toBe(x.fx.response.body.read_at);
+  const v = result.venues[x.market];
+  expect(v, `the track has a row for ${x.market}`).toBeTruthy();
+  expect(Object.keys(v.lights).sort()).toEqual([...s.JOURNEY_LEDS].sort());
+  expect(v.sales.from).toBe('sale_run');
+  if (v.listed.state === 'absent') expect(v.lights.read_back.state).toBe('off');
+  if (v.lights.read_back.state === 'on' && v.standing !== 'closed' && v.listed.state !== 'none') expect(['live', 'unread']).toContain(v.listed.state);
+  for (const e of v.listed.entries) if (e.state === 'live') expect(e.last_seen).toBeTruthy();
+}
+
 export const CALLS = {
   // ── listed ──────────────────────────────────────────────────────────────────────────────────────────────────────────
   // the machine's state reads (src/market/states.ts): the SDK reads the state's route and answers its status and body as served
@@ -63,6 +78,9 @@ export const CALLS = {
       expect(Object.keys(v.leds).sort()).toEqual([...s.JOURNEY_LEDS].sort());
       expect(result.read_at).toBe(x.fx.response.body.read_at);
     } },
+  // listed.track.v1: the market's row is there with its five lights, Visible on only while an entry the market answers shows it
+  track: { fn: 'market.track', run: (s, t) => s.track(t, TRACK_AGENT), check: (a) => trackCheck(a, TRACK_AGENT) },
+  trackOutside: { fn: 'market.track', run: (s, t) => s.track(t, BOARD_AGENT), check: (a) => trackCheck(a, BOARD_AGENT) },
   market: { fn: 'market.market', run: (s, t, x) => s.market(t, VENUE_MARKET[x.market]),
     check: ({ result, x, expect }) => expect(result).toEqual(x.fx.response.body) },
   x402Bazaar: { fn: 'market.x402Bazaar', run: (s, t) => s.x402Bazaar(t, { limit: 3 }),

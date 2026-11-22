@@ -24,6 +24,8 @@
   "chain": { "devnet": 36927, "identity": 8453 },
   "rows": [
     { "op": "GET listed", "markets": "all", "stage": "listed", "dir": "read", "call": "journey", "source": "live", "accept": ["query:agent"], "why": "the listed register's journey view: one row per market with its five LEDs (coord declares view and cohort, market, feature; the journey's ?agent= and view=journey are not in the catalogue yet)" },
+    { "op": "GET listed/track", "markets": "all", "stage": "listed", "dir": "read", "call": "track", "source": "live", "why": "what listing did for one agent on every market (listed.track.v1): the listing read back on the market's own record, calls and revenue 7d, the five lights; Moonbeam's house agent On-chain Reads (8453:1176098)" },
+    { "op": "GET listed/track", "markets": "all", "stage": "listed", "dir": "read", "call": "trackOutside", "source": "live", "variant": "outside", "why": "the same read for an outside x402 seller (ax1.vc, the board row x402:6571678d37f0): listed on the x402 directories, absent on the identity directories it has no identity for" },
     { "op": "GET x402/bazaar", "markets": ["x402-base"], "stage": "listed", "dir": "read", "call": "x402Bazaar", "source": "live", "why": "the x402 market's own listing read (CDP Bazaar resources)" },
     { "op": "GET venues/:id", "markets": ["x402-base", "erc8183-base"], "stage": "listed", "dir": "read", "call": "market", "source": "live", "why": "the market's week of money, buyers and admitted sellers" },
     { "op": "GET mcp/registry", "markets": ["mcp"], "stage": "listed", "dir": "read", "call": "mcpRegistry", "source": "live", "why": "the official MCP Registry as read" },
@@ -96,6 +98,7 @@
   ],
   "ignore": [
     { "op": "GET grid/rank", "why": "a grid ranking across venues, no sale stage" },
+    { "op": "GET list/listed", "why": "the list step's own register of the outside sellers it put on Virtuals ACP as offerings of Moonbeam's agent (read by the seller loop and the hourly sync); no SDK reader yet, so no cell until one reads it" },
     { "op": "GET agents/jobs", "why": "all-time totals of the ACP job market (a dashboard), not one job's stage: a job is read through GET jobs?ids=" },
     { "op": "GET agents/providers", "why": "the ACP market's providers (a dashboard), not a sale stage" },
     { "op": "GET agents/ledger", "why": "the ACP job ledger's rows (a dashboard), not one job's stage: a job is read through GET jobs?ids=" },
