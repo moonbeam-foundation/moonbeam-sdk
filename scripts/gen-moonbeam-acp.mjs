@@ -54,7 +54,7 @@ import type { Address } from '../onboard/index.js';
 export type RegistryStatus = 'live' | 'scheduled-change' | 'superseded' | 'devnet-only';
 export interface RegistryContract { readonly name: string; readonly address: Address; readonly chainId: number; readonly status: RegistryStatus; readonly note: string }
 
-/** The assurance hook Moonbeam runs on Base (an ERC-1967 proxy); its status is the registry's word on it. */
+/** The assurance hook Moonbeam runs (an ERC-1967 proxy); its status is the registry's word on it. */
 export const MOONBEAM_HOOK: RegistryContract = Object.freeze({ name: ${q(hook.name)}, address: ${q(hook.address)} as Address, chainId: ${BASE}, status: ${q(hook.status)} as RegistryStatus, note: ${note(hook)} });
 /** The implementation behind the hook proxy today. */
 export const MOONBEAM_HOOK_IMPLEMENTATION: RegistryContract = Object.freeze({ name: ${q(hookImpl.name)}, address: ${q(hookImpl.address)} as Address, chainId: ${BASE}, status: ${q(hookImpl.status)} as RegistryStatus, note: ${note(hookImpl)} });

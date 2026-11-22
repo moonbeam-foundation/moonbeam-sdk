@@ -8,7 +8,7 @@ const ans = (id: string, value: string, probabilities: Record<string, number>, c
 const CLEAN = [ans('spec_met', 'yes', { yes: 0.93, no: 0.07 }, 0.86), ans('unsupported_claim', 'no', { yes: 0.04, no: 0.96 }, 0.92), ans('ending', 'complete', { complete: 0.9, reject: 0.03, expire: 0, needs_review: 0.07 }, 0.83), ans('cheat_shaped', 'no', { yes: 0.02, no: 0.98 }, 0.96)];
 const MID = CLEAN.map((a) => (a.id === 'spec_met' ? ans('spec_met', 'yes', { yes: 0.6, no: 0.4 }, 0.6) : a));
 
-describe('judge (Moonbeam hook on Base)', () => {
+describe('judge (Moonbeam hook)', () => {
   it('a complete verdict ends the job with exactly the call the pilot mined', async () => {
     const r = await gradeJob({ jobId: PILOT_JOB, evidence: 'x', answers: CLEAN, model: 'jev-1.13.0' });
     expect(r.verdict).toBe('complete');

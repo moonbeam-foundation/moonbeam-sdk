@@ -6,7 +6,7 @@
  *
  *   price_to_buyer = seller_price + our_fee + venue_fee(in) + venue_fee(out) [+ reseller_markup]
  *
- * The Moonbeam profile sells on Base (the buyer pays on a Base venue) and GLMR stays the money of the assurance hook; the
+ * The Moonbeam profile sells (the buyer pays on a Base venue) and GLMR stays the money of the assurance hook; the
  * seller's leg is paid where the seller was hired, on the network, token and payTo of its own offer (sellerRailOf,
  * SETTLE_ON_SELLER_VENUE_v1). The markup is the reseller's own leg (`reseller_markup`), never part of Moonbeam's fee. Everything here is
  * pure except the two reads, which take a transport (a fetch and the site's own same-origin proxy base, as ./onboard does).

@@ -1,5 +1,5 @@
 /**
- * The judge for Moonbeam's assurance hook on Base: Jev (TypeSafe System One, calibrated closed answers) graded against
+ * The judge for Moonbeam's assurance hook: Jev (TypeSafe System One, calibrated closed answers) graded against
  * the published RUBRIC_v1, composed in code under THRESHOLDS_v1, recorded on the answer and decision logs, and turned
  * into the one call that ends a GLMR job on the hook — complete(jobId) or reject(jobId, digest).
  *
@@ -13,7 +13,7 @@ import { attest } from '../attest/index.js';
 import type { AttestCall, AttestMissing, StampVerdict } from '../attest/index.js';
 import { CoordError, jsonOf, refusalOf } from '../errors/index.js';
 
-/** Moonbeam ACP on Base: the hook, the GLMR token, its tenant. */
+/** Moonbeam ACP (Base): the hook, the GLMR token, its tenant. */
 export const MOONBEAM_JUDGE = Object.freeze({
   tenant: 'moonbeam',
   chainId: 8453,
@@ -165,7 +165,7 @@ export function endJob(jobId: string, receipt: Pick<Receipt, 'verdict' | 'decisi
 /** Recompute every digest in a receipt (or take an answers digest) and find the log rows that hold it. */
 /**
  * Recompute every fingerprint of a receipt and find its record on chain. `x` is a receipt, or a recorded answers
- * digest (32 bytes) to look up. Moonbeam lives on Base, so the lookup reads Base unless you pass network 'devnet'.
+ * digest (32 bytes) to look up. Moonbeam contracts sit on chain 8453 (Base), so the lookup reads it unless you pass network 'devnet'.
  */
 export const verifyGrade = (x: Receipt | string, opts: { rpc?: string; chain?: boolean; network?: 'base' | 'devnet' } = {}): Promise<Verification> =>
   verify(x, { ...opts, network: opts.network ?? 'base' });

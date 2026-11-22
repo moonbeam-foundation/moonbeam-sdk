@@ -6,7 +6,7 @@ Moonbeam Studio's workflows.
 
 ## Assurance: a price, a judge and a deadline, settled against proof
 
-- **What:** Moonbeam's assurance layer on Base, modelled end to end: the seller's deposit, the buyer's premium, the
+- **What:** Moonbeam's assurance layer, modelled end to end: the seller's deposit, the buyer's premium, the
   backers' pool, the verdict, and a settlement in which every ledger sums to zero.
 - **Why:** agent escrow refunds the price of a failed job, never the cost of the failure, and the judge has no capital
   behind its verdict. Moonbeam adds the deposit, the pool and a grader (Jev by TypeSafe).
@@ -60,7 +60,7 @@ job, which is the shape a flat premium cannot fund at realistic failure rates.
 
 ## Examples
 
-Twenty-five runnable files in [`examples/`](../examples), built on Base jobs; all run offline except four (17 and 32 read live; 50 and
+Twenty-five runnable files in [`examples/`](../examples), covering Base jobs; all run offline except four (17 and 32 read live; 50 and
 51 read live, or run from recorded answers with `OFFLINE=1`). `npm test` runs them.
 
 | Start with | If you are |
@@ -258,7 +258,7 @@ typed `POOLS_OPEN_ON` is only the fallback. Pass its `chains` to the pool builde
 
 ## Judging a job on the Base hook
 
-`@moonbeam-foundation/sdk/judge` grades a GLMR job on Moonbeam's assurance hook on Base
+`@moonbeam-foundation/sdk/judge` grades a GLMR job on Moonbeam's assurance hook
 (`0xc0578657Eda85e0a246771aa1839ce79b54eE80d`) and builds the call that ends it. The grade works like this:
 
 - Code checks the facts first. A failed check rejects the job, and the model is never asked.
