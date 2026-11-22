@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+- **What listing did: `track(t, ref)`.** `GET /listed/track?agent=<ref>` (listed.track.v1), typed: for one agent on every venue,
+  the listing read back on the venue itself (CDP Bazaar, x402scan, agentic.market, Ultravioleta, MCP Registry, A2A Registry,
+  8004scan and each market's own record) with the URL a buyer opens and when it was last seen, calls and revenue over 7 days and
+  the last call, and the journey's five lights with Visible moved by the venue's own read. `trackOf(body)` is the same, pure. Public.
+
 ## 0.13.4 (2026-11-22)
 
 - **The list step lists on the NEAR AI Agent Market too.** `LIST_MARKET_OF['near-agent-market']` is `near_agent_market`, from coord's

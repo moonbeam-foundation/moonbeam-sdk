@@ -1,7 +1,9 @@
-// WHERE AN AGENT IS LISTED, AND THE PLAN TO LIST IT. Two reads, nothing signed, nothing paid:
+// WHERE AN AGENT IS LISTED, WHAT LISTING DID, AND THE PLAN TO LIST IT. Three reads, nothing signed, nothing paid:
 //   journey(t, ref)                 GET /listed?agent=<ref>&view=journey   listed.journey.v1: one agent on every venue, its standing,
 //                                                                          five LEDs (offer, hire, list, read back, paid), each with why,
 //                                                                          its evidence and what would move it, and the one next step
+//   track(t, ref)                   GET /listed/track?agent=<ref>          listed.track.v1: what listing did on every venue, the
+//                                                                          listing read back there, calls and revenue 7d, the lights
 //   list(t, { venue, agent, custom })   the market's own public read of the agent   genie.list.virtuals.v1: the listing's steps as
 //                                                                          they stand, its offerings, and the one item a person must do
 // `list` is read and plan only. It never asks for a signer, registers, shows an offering or approves anything: the Moonbeam
@@ -106,6 +108,105 @@ export function journeyOf(j: Record<string, unknown>, what = 'listed.journey.v1'
     checks: j['checks'] as Journey['checks'],
     venues,
     reads: Array.isArray(j['reads']) ? (j['reads'] as Journey['reads']) : [],
+    unread: Array.isArray(j['unread']) ? (j['unread'] as string[]) : [],
+    extra: [...by.keys()].filter((id) => !(VENUE_IDS as readonly string[]).includes(id)),
+    body: j,
+  };
+}
+
+// ── track ─────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+export const TRACK_SCHEMA = 'listed.track.v1';
+/** Where a listing stands on a venue as the venue itself answers: shown, shown but paused, not there, or its read did not answer. */
+export type TrackListedState = 'live' | 'paused' | 'absent' | 'unread';
+/** One entry that names the agent on a venue's own record: the directory, its id there, the URL a buyer opens, when we last saw it. */
+export type TrackEntry = {
+  where: string;
+  id: string;
+  url: string | null;
+  state: TrackListedState;
+  read_at: string | null;
+  /** when the entry was last seen there; kept from the read before when the venue now answers without it (`vanished`) */
+  last_seen: string | null;
+  /** the venue's own date on the entry */
+  says_at?: string | null;
+  status?: string | null;
+  register?: string;
+  why?: string;
+  via?: string;
+  /** the venue's read did not answer this time: the entry is the last good read's */
+  kept?: true;
+  /** seen before, and the venue now answers without it */
+  vanished?: true;
+};
+/** A light as the track reads it: the journey's LED, with read_back moved by the venue's own read. */
+export type TrackLight = { state: LedState; why: string; evidence: JourneyEvidence[] };
+/** The agent on one venue: the listing read back there, its calls and revenue over 7 days from the sale record, and the five lights. */
+export type TrackVenue = {
+  [k: string]: unknown;
+  venue_id: VenueId;
+  venue: string;
+  mark: string;
+  standing: JourneyStanding;
+  label: string;
+  /** `none`: the venue has no public read that names an agent */
+  listed: { state: TrackListedState | 'none'; entries: TrackEntry[]; last_seen: string | null };
+  /** calls and revenue through Moonbeam over 7 days and the last call (the sale record) */
+  sales: { calls_7d: number | null; revenue_7d_usd: number | null; last_call: string | null; calls_all: number | null; from: 'sale_run'; read_at: string | null };
+  /** the agent's own paid figure on the venue's own record (the journey's `agent_paid_7d`) */
+  own_7d: { usd: number | null; buyers: number | null; jobs?: number | null; from: string; read_at: string | null } | null;
+  lights: Record<JourneyLed, TrackLight>;
+  /** each light that differs from the journey's, and why */
+  changed?: { light: JourneyLed; from: string; to: string; why: string }[];
+};
+/** listed.track.v1, with the venues keyed by id: every venue of `VENUE_IDS` is there, or the read is refused. */
+export type Track = {
+  schema: typeof TRACK_SCHEMA;
+  agent: { ref: string; name: string; kind: 'outside' | 'house'; class: string | null; host?: string };
+  read_at: string;
+  journey_read_at: string | null;
+  previous_read_at?: string;
+  totals: { venues: number; listed_outside: number; visible: number; vanished: number; calls_7d: number; revenue_7d_usd: number; own_usd_7d: number };
+  venues: Record<VenueId, TrackVenue>;
+  reads: { kind: string; state: 'ok' | 'unread'; read_at: string | null }[];
+  unread: string[];
+  extra: string[];
+  body: Record<string, unknown>;
+};
+
+/**
+ * What listing did, for one agent on every venue (`GET /listed/track?agent=<ref>`): the listing read back on the venue itself
+ * (each directory's own search: CDP Bazaar, x402scan, agentic.market, Ultravioleta, MCP Registry, A2A Registry, 8004scan, and each
+ * market's own record), with the URL a buyer opens and when it was last seen; calls and revenue over 7 days and the last call; and the
+ * journey's five lights, Visible (`read_back`) moved by the venue's own read. A listing seen before that a venue now answers without
+ * is `vanished` and its Visible light is off. Public. The refs are the journey's.
+ */
+export async function track(t: OnboardTransport, ref: string): Promise<Track> {
+  const r = String(ref ?? '').trim();
+  if (!JOURNEY_REF.test(r)) throw new RangeError(`not an agent ref: ${ref} (8453:<id>, erc8004:<chain>:<id>, x402:<12 hex>, x402:host:<host>, or virtuals: / bitagent: / near: / olas: + 12 hex)`);
+  const j = await call<Record<string, unknown>>(t, 'GET', `/listed/track${query({ agent: r })}`);
+  return trackOf(j, 'GET /listed/track');
+}
+
+/** A listed.track.v1 body as the typed answer, its venues keyed by id. Pure; throws a MarketError when the body breaks the schema. */
+export function trackOf(j: Record<string, unknown>, what = 'listed.track.v1'): Track {
+  const rows = j['venues'];
+  if (j['schema'] !== TRACK_SCHEMA || !Array.isArray(rows) || !j['agent'] || !j['totals']) {
+    const said = Array.isArray(j['unread']) && j['unread'].length ? `: ${String(j['unread'][0]).slice(0, 200)}` : '';
+    throw new MarketError(502, what, { ok: false, code: 'bad_answer', error: `${what} did not answer ${TRACK_SCHEMA}${said}` });
+  }
+  const by = new Map((rows as TrackVenue[]).map((v) => [v.venue_id, v]));
+  const missing = VENUE_IDS.filter((id) => !by.has(id) || !by.get(id)?.lights || !by.get(id)?.listed);
+  if (missing.length) throw new MarketError(502, what, { ok: false, code: 'bad_answer', error: `${what} has no row for ${missing.join(', ')}` });
+  return {
+    schema: TRACK_SCHEMA,
+    agent: j['agent'] as Track['agent'],
+    read_at: String(j['read_at'] ?? ''),
+    journey_read_at: typeof j['journey_read_at'] === 'string' ? j['journey_read_at'] : null,
+    ...(typeof j['previous_read_at'] === 'string' ? { previous_read_at: j['previous_read_at'] } : {}),
+    totals: j['totals'] as Track['totals'],
+    venues: Object.fromEntries(VENUE_IDS.map((id) => [id, by.get(id)!])) as Record<VenueId, TrackVenue>,
+    reads: Array.isArray(j['reads']) ? (j['reads'] as Track['reads']) : [],
     unread: Array.isArray(j['unread']) ? (j['unread'] as string[]) : [],
     extra: [...by.keys()].filter((id) => !(VENUE_IDS as readonly string[]).includes(id)),
     body: j,

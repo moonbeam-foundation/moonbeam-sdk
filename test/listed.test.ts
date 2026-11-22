@@ -5,7 +5,7 @@ import { describe, expect, it } from 'vitest';
 import * as market from '../src/market/index.js';
 import type { OnboardTransport } from '../src/onboard/index.js';
 
-const { journey, journeyOf, list, JOURNEY_LEDS, LIST_STEPS, LIST_VENUES, HOUSE_AGENTS, VENUE_IDS, MarketError } = market;
+const { journey, journeyOf, track, trackOf, TRACK_SCHEMA, list, JOURNEY_LEDS, LIST_STEPS, LIST_VENUES, HOUSE_AGENTS, VENUE_IDS, MarketError } = market;
 type Seen = { url: string; method: string; headers: Record<string, string>; body: unknown };
 function transport(answer: (u: string, method: string) => [number, unknown], apiKey?: string) {
   const seen: Seen[] = [];
@@ -94,6 +94,87 @@ const freshRecord = { data: { id: BUILDER, name: 'My agent', description: 'mine'
   offerings: [{ name: 'Summarize', description: 's', priceValue: 0.05, isHidden: true }] } };
 const AT = '2026-11-15T00:00:00.000Z';
 const now = () => AT;
+
+// two live answers of GET /v1/listed/track, 2026-11-22: the outside x402 seller ax1.vc and Moonbeam's house agent On-chain Reads
+const TRACK_AX1 = JSON.parse(readFileSync(new URL('./fixtures/listed/track-ax1-vc.json', import.meta.url), 'utf8'));
+const TRACK_HOUSE = JSON.parse(readFileSync(new URL('./fixtures/listed/track-1176098.json', import.meta.url), 'utf8'));
+const clone = <X>(x: X): X => JSON.parse(JSON.stringify(x));
+
+describe('track: what listing did, one agent on every venue (listed.track.v1)', () => {
+  it('reads GET /listed/track?agent=<ref>, public, and keys the venues by every VENUE_ID', async () => {
+    const { t, seen } = transport(() => [200, TRACK_AX1]);
+    const k = await track(t, ' x402:6571678d37f0 ');
+    expect(seen).toHaveLength(1);
+    expect(seen[0]!.url).toBe('https://api.example/v1/listed/track?agent=x402%3A6571678d37f0');
+    expect(seen[0]!.method).toBe('GET'); expect(seen[0]!.headers['x-api-key']).toBeUndefined();
+    expect(k.schema).toBe(TRACK_SCHEMA); expect(Object.keys(k.venues)).toEqual([...VENUE_IDS]);
+    expect(k.agent).toMatchObject({ ref: 'x402:6571678d37f0', kind: 'outside', host: 'ax1.vc' });
+    expect(k.extra).toEqual([]); expect(k.body).toBe(TRACK_AX1);
+  });
+  it('an outside x402 seller: listed on the x402 directories it is in and on the NEAR AI market, read back on each, absent where it has no identity', () => {
+    const k = trackOf(clone(TRACK_AX1));
+    const x = k.venues['x402-base'];
+    expect(x.listed.state).toBe('live');
+    const where = new Set(x.listed.entries.filter((e) => e.state === 'live').map((e) => e.where));
+    expect(where.has('x402scan')).toBe(true);
+    for (const w of where) expect(['CDP Bazaar', 'x402scan', 'agentic.market', 'Ultravioleta']).toContain(w);
+    for (const e of x.listed.entries) if (e.state === 'live') { expect(e.url).toMatch(/^https:\/\//); expect(e.last_seen).toBeTruthy(); }
+    expect(x.lights.read_back.state).toBe('on');
+    // listed by Moonbeam as @mbf-ax1-vc: the market's own record of the handle reads it live
+    const n = k.venues['near-agent-market'];
+    expect(n.listed.state).toBe('live'); expect(n.listed.entries[0]).toMatchObject({ where: 'NEAR AI market', url: 'https://market.near.ai/a/mbf-ax1-vc', state: 'live' });
+    expect(n.lights.read_back.state).toBe('on');
+    // MCP and A2A name an agent by its identity: ax1.vc has none, so each directory answers without it (8004scan may not answer: unread)
+    for (const id of ['mcp', 'a2a'] as const) { expect(k.venues[id].listed.state, id).toBe('absent'); expect(k.venues[id].lights.read_back.state, id).toBe('off'); }
+    expect(['absent', 'unread']).toContain(k.venues.erc8004.listed.state);
+    expect(k.totals).toMatchObject({ venues: 10, listed_outside: 2, vanished: 0 });
+    expect(k.totals.own_usd_7d).toBeGreaterThan(0);
+  });
+  it('a house agent: read back on x402, Virtuals ACP, NEAR, MCP Registry, A2A Registry and ERC-8004', () => {
+    const k = trackOf(clone(TRACK_HOUSE));
+    expect(k.agent).toMatchObject({ ref: '8453:1176098', kind: 'house', class: 'data.onchain_query' });
+    const live = VENUE_IDS.filter((id) => k.venues[id].listed.state === 'live');
+    expect(live.sort()).toEqual(['a2a', 'erc8004', 'erc8183-base', 'mcp', 'near-agent-market', 'x402-base'].sort());
+    for (const id of live) expect(k.venues[id].lights.read_back.state, id).toBe('on');
+    expect(k.totals.listed_outside).toBe(6);
+    // the one sale on record through Moonbeam (2026-10-12) is the last call; none in the 7 days
+    expect(k.venues['x402-base'].sales).toMatchObject({ calls_7d: 0, from: 'sale_run' });
+    expect(k.venues['x402-base'].sales.last_call).toMatch(/^2026-10-12T/);
+  });
+  it('every venue: a listed state, sales from the sale record, five lights; Visible on only while an entry shows it', () => {
+    for (const body of [TRACK_AX1, TRACK_HOUSE]) {
+      const k = trackOf(clone(body));
+      for (const id of VENUE_IDS) {
+        const v = k.venues[id];
+        expect(Object.keys(v.lights).sort(), id).toEqual([...JOURNEY_LEDS].sort());
+        for (const l of JOURNEY_LEDS) if (v.lights[l].state === 'on') expect(v.lights[l].evidence.length, `${id}.${l}`).toBeGreaterThan(0);
+        expect(['live', 'paused', 'absent', 'unread', 'none']).toContain(v.listed.state);
+        if (v.listed.state === 'absent') expect(v.lights.read_back.state, id).toBe('off');
+        if (v.lights.read_back.state === 'on' && v.standing !== 'closed' && v.listed.state !== 'none') expect(['live', 'unread'], id).toContain(v.listed.state);
+        expect(v.sales.from).toBe('sale_run');
+      }
+    }
+  });
+  it('a listing that vanished outside reads absent with when it was last seen, and Visible off', () => {
+    const b = clone(TRACK_AX1); const x = b.venues.find((v: { venue_id: string }) => v.venue_id === 'x402-base');
+    const seenAt = x.listed.last_seen;
+    x.listed = { state: 'absent', last_seen: seenAt, entries: x.listed.entries.map((e: object) => ({ ...e, state: 'absent', vanished: true, last_seen: seenAt })) };
+    x.lights.read_back = { state: 'off', why: 'every directory that showed it answers without it now', evidence: [] };
+    const k = trackOf(b);
+    expect(k.venues['x402-base'].listed.entries.every((e) => e.vanished && e.last_seen === seenAt)).toBe(true);
+    expect(k.venues['x402-base'].lights.read_back.state).toBe('off');
+  });
+  it('refuses a ref that is not one before a read, and a body that breaks the schema', async () => {
+    const { t, seen } = transport(() => [200, TRACK_HOUSE]);
+    for (const bad of ['', 'foo', '8453:', 'x402:XYZ']) await expect(track(t, bad), bad).rejects.toThrow(RangeError);
+    expect(seen).toHaveLength(0);
+    expect(() => trackOf({ ...clone(TRACK_HOUSE), schema: 'listed.track.v0' })).toThrow(MarketError);
+    const lacks = clone(TRACK_HOUSE); lacks.venues = lacks.venues.filter((v: { venue_id: string }) => v.venue_id !== 'a2a');
+    expect(() => trackOf(lacks)).toThrow(/no row for a2a/);
+    // the route's answer when the journey did not answer: no venues, the reason in unread
+    expect(() => trackOf({ schema: 'listed.track.v1', agent: { ref: '8453:1' }, venues: [], unread: ['the journey did not answer'] })).toThrow(/the journey did not answer/);
+  });
+});
 
 describe('list: the plan of a Virtuals ACP listing (genie.list.virtuals.v1), read and plan only', () => {
   it('Moonbeam\'s own agent, listed: every step done, its ERC-8004 id, its offerings shown, nothing for a person', async () => {
