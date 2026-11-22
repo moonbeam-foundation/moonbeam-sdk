@@ -1,8 +1,8 @@
 import type { IDataObject, IExecuteSingleFunctions, IHttpRequestOptions, IN8nHttpFullResponse, INodeExecutionData, INodeProperties } from 'n8n-workflow';
-import { LIST_MARKETS } from '../sdk.generated';
+import { LIST_MARKETS, LIST_MARKET_NAMES } from '../sdk.generated';
 import { AGENT_REF, LISTING_ID, asItems, failed, needKey, param, refuse, show } from './shared';
 
-const MARKET_NAMES: Record<string, string> = { erc8004: 'ERC-8004 on Base', mcp_registry: 'MCP Registry', a2a_registry: 'A2A Registry' };
+const MARKET_NAMES = LIST_MARKET_NAMES;
 
 /** listOn(): an agent on Base and one or more of the list step's markets. */
 async function listOnBody(this: IExecuteSingleFunctions, requestOptions: IHttpRequestOptions): Promise<IHttpRequestOptions> {

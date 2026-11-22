@@ -13,4 +13,7 @@ export const JOURNEY_LEDS: readonly string[] = ["offer","hire","list","read_back
 export const JOURNEY_SCHEMA = "listed.journey.v1";
 
 /** The markets the list step lists on (LIST_MARKETS). */
-export const LIST_MARKETS: readonly string[] = ["erc8004","mcp_registry","a2a_registry"];
+export const LIST_MARKETS: readonly string[] = ["a2a_registry","erc8004","mcp_registry"];
+
+/** Each list market's name, its venue's (LIST_MARKET_OF, VENUES[].name). */
+export const LIST_MARKET_NAMES: Readonly<Record<string, string>> = {"a2a_registry":"A2A Registry","erc8004":"ERC-8004","mcp_registry":"MCP Registry"};
