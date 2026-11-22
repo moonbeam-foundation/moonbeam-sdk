@@ -30,7 +30,9 @@ export type RegisterCohorts = { source: string | null; approved_on: string | nul
   features?: { source: string; read_at: string | null };
   /** _VENUE_TRUTH_v2_: the house agents whose journeys were read, and when */
   journey?: { source: string; agents: string[]; read_at: string | null } };
-export type RegisterSnapshot = { source: string | null; read_on: string | null; cohorts?: RegisterCohorts; markets: RegisterMarket[] };
+/** _LIST_MARKET_v1_: per venue, the market id of the one list step that lists an agent there, and whether it is a directory (listed by default). */
+export type ListMarketRow = { market: string; directory: boolean };
+export type RegisterSnapshot = { source: string | null; read_on: string | null; cohorts?: RegisterCohorts; list_markets?: Record<string, ListMarketRow>; markets: RegisterMarket[] };
 
 export const VENUE_IDS = Object.freeze(['x402-base', 'erc8183-base', 'memoacp-base', 'bitagent-base', 'olas-base', 'near-agent-market', 'a2a', 'mcp', 'erc8004', 'workflow-nodes'] as const);
 export type VenueId = (typeof VENUE_IDS)[number];

@@ -1,5 +1,14 @@
 # Changelog
 
+## Unreleased
+
+- **The list step lists on Virtuals ACP too.** `listOn(t, ref, [LIST_MARKET_OF['erc8183-base']], { custom })` asks Moonbeam to make the
+  agent in its own Virtuals account, with the agent's name and words; an outside seller is named by its board row (`x402:<12 hex>`).
+- **The one step a person takes is read back.** `listApproval(view, 'erc8183-base')` gives the account holder's approval: its words, its
+  link and when it ends. A row reads listed only once Virtuals' own read shows the agent and its offerings.
+- **The list markets come from coord's venue rows** (`LIST_MARKETS`, `LIST_ALL_MARKETS`, `LIST_MARKET_OF`, from `gen-venues.mjs --registry`).
+  `ListMarket` is now a string; the default is still the three directories.
+
 ## 0.13.2 (2026-11-22)
 
 - **The venue table has two words: live and not yet.** A step of a market reads **live** only when a mainnet run of its path is kept
