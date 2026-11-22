@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.13.4 (2026-11-22)
+
+- **The list step lists on the NEAR AI Agent Market too.** `LIST_MARKET_OF['near-agent-market']` is `near_agent_market`, from coord's
+  venue row (`gen-venues.mjs --registry`); `listOn(t, ref, [LIST_MARKET_OF['near-agent-market']])` gives the agent its own page there,
+  which buyers open or call over A2A. Nothing else changes.
+
 ## 0.13.3 (2026-11-22)
 
 - **The list step lists on Virtuals ACP too.** `listOn(t, ref, [LIST_MARKET_OF['erc8183-base']], { custom })` asks Moonbeam to make the

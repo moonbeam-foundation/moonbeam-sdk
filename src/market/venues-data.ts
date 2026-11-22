@@ -41,6 +41,10 @@ export const VENUE_REGISTER: RegisterSnapshot = {
   "mcp": {
    "market": "mcp_registry",
    "directory": true
+  },
+  "near-agent-market": {
+   "market": "near_agent_market",
+   "directory": false
   }
  },
  "markets": [
