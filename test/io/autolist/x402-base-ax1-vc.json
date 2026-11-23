@@ -1,0 +1,797 @@
+{
+ "schema": "moonbeam.io.autolist.v1",
+ "venue": "x402-base",
+ "ref": "x402:6571678d37f0",
+ "origin": "https://next.moonbeam.network",
+ "recorded_at": "2026-11-23T10:24:20.909Z",
+ "exchanges": [
+  {
+   "method": "POST",
+   "url": "https://next.moonbeam.network/api/acp/x402/seller/ax1-vc/call/q-verdict-resource",
+   "request": {},
+   "status": 402,
+   "response": {
+    "status": "payment_required",
+    "supported_token_chains": {
+     "0": "base",
+     "1": "solana"
+    },
+    "availability": "ready",
+    "message": "Save the signed payment and exact request before sending. After a response, GET status_url for free without a signature or login. Never sign a new payment for an unknown outcome."
+   },
+   "at": "2026-11-23T10:24:17.376Z"
+  },
+  {
+   "method": "GET",
+   "url": "https://next.moonbeam.network/openapi.json?r=1795429457703",
+   "request": null,
+   "status": 200,
+   "response": {
+    "truncated_bytes": 64743
+   },
+   "at": "2026-11-23T10:24:17.703Z"
+  },
+  {
+   "method": "GET",
+   "url": "https://next.moonbeam.network/.well-known/x402?r=1795429457703",
+   "request": null,
+   "status": 200,
+   "response": {
+    "truncated_bytes": 3722
+   },
+   "at": "2026-11-23T10:24:18.457Z"
+  },
+  {
+   "method": "GET",
+   "url": "https://www.x402scan.com/api/trpc/public.resources.checkRegistered?input=%7B%22json%22%3A%7B%22resources%22%3A%5B%7B%22url%22%3A%22https%3A%2F%2Fnext.moonbeam.network%2Fapi%2Facp%2Fx402%2Fseller%2Fax1-vc%2Fcall%2Fq-verdict-resource%22%7D%5D%7D%7D",
+   "request": null,
+   "status": 200,
+   "response": {
+    "result": {
+     "data": {
+      "json": {
+       "registered": {
+        "0": "https://next.moonbeam.network/api/acp/x402/seller/ax1-vc/call/q-verdict-resource"
+       },
+       "unregistered": {}
+      }
+     }
+    }
+   },
+   "at": "2026-11-23T10:24:19.201Z"
+  },
+  {
+   "method": "GET",
+   "url": "https://facilitator.ultravioletadao.xyz/discovery/resources?q=https%3A%2F%2Fnext.moonbeam.network%2Fapi%2Facp%2Fx402%2Fseller%2Fax1-vc%2Fcall%2Fq-verdict-resource&limit=5",
+   "request": null,
+   "status": 200,
+   "response": {
+    "x402Version": 2,
+    "items": {},
+    "pagination": {
+     "limit": 5,
+     "offset": 0,
+     "total": 0
+    }
+   },
+   "at": "2026-11-23T10:24:19.385Z"
+  },
+  {
+   "method": "POST",
+   "url": "https://facilitator.ultravioletadao.xyz/discovery/register",
+   "request": {
+    "url": "https://next.moonbeam.network/api/acp/x402/seller/ax1-vc/call/q-verdict-resource",
+    "type": "http",
+    "description": "Any agent can buy a Token Verdict over x402: AI grade, roast and live onchain metrics for any Base, Solana or Robinhood token. $0.02 in USDC, no account. 0.02 USDC a call.",
+    "accepts": {
+     "0": {
+      "scheme": "exact",
+      "network": "eip155:8453",
+      "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+      "amount": "20000",
+      "payTo": "0x7284D41b5b852F2bd4c99bDf95043D84452d299C",
+      "maxTimeoutSeconds": 300
+     }
+    },
+    "metadata": {
+     "provider": "Moonbeam",
+     "tags": {
+      "0": "x402"
+     }
+    },
+    "extensions": {
+     "bazaar": {
+      "info": {
+       "input": {
+        "type": "http",
+        "method": "POST",
+        "bodyType": "json",
+        "body": {
+         "tokenAddress": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913"
+        }
+       },
+       "output": {
+        "type": "json",
+        "example": {
+         "operation_id": "4f7b2c1e-8a4d-4e9f-9c21-0b6d7a5e1f22",
+         "status_url": "https://console.ax1.vc/api/q-verdict/operations/4f7b2c1e-8a4d-4e9f-9c21-0b6d7a5e1f22",
+         "status": "paid",
+         "result": {
+          "grade": "MID",
+          "one_liner": "An incomplete snapshot, not a trading signal",
+          "roast": "Liquidity data is unavailable in this example. An incomplete snapshot is not a trading signal.",
+          "metrics": {
+           "tokenAddress": "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+           "ticker": "USDC",
+           "tokenName": "USD Coin",
+           "fetchedAt": "2026-10-06T00:00:00.000Z",
+           "metrics": {
+            "0": {
+             "key": "liquidity_usd",
+             "label": "Liquidity",
+             "availability": "unavailable",
+             "value": null,
+             "unit": "USD",
+             "provenance": null,
+             "unavailableReason": "not_reported"
+            }
+           }
+          },
+          "generatedAt": "2026-10-06T00:00:00.000Z",
+          "fromCache": false,
+          "disclaimer": "Not financial advice."
+         },
+         "page_url": "https://console.ax1.vc/q-verdict/abcdefghijklmnopqrstuv",
+         "image_url": "https://console.ax1.vc/api/q-verdict/share/abcdefghijklmnopqrstuv/card",
+         "payment": {
+          "status": "paid",
+          "amount_raw": "20000",
+          "network": "eip155:8453",
+          "tx_hash": "0x0000000000000000000000000000000000000000000000000000000000000000"
+         },
+         "recovery": {
+          "url": "https://console.ax1.vc/api/dashboard/q-verdict/resource",
+          "method": "POST"
+         }
+        }
+       }
+      },
+      "schema": {
+       "$schema": "https://json-schema.org/draft/2020-12/schema",
+       "type": "object",
+       "properties": {
+        "input": {
+         "type": "object",
+         "properties": {
+          "type": {
+           "const": "http"
+          },
+          "method": {
+           "const": "POST"
+          },
+          "bodyType": {
+           "const": "json"
+          },
+          "body": {
+           "type": "object",
+           "additionalProperties": false,
+           "properties": {
+            "tokenAddress": {
+             "type": "string",
+             "description": "Base EVM contract (case-insensitive) or Solana base58 mint (case-sensitive, decodes to 32 bytes)."
+            },
+            "chain": {
+             "type": "string",
+             "enum": {
+              "0": "base",
+              "1": "solana"
+             },
+             "description": "Default base. Solana requires chain=solana and deployment readiness; supported chains are listed in supported_token_chains of the unsigned quote."
+            },
+            "requestKey": {
+             "type": "string",
+             "minLength": 16,
+             "maxLength": 128,
+             "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{15,127}$",
+             "description": "Optional correlation key. Does not replace the original payment authorization for recovery."
+            }
+           },
+           "required": {
+            "0": "tokenAddress"
+           },
+           "allOf": {
+            "0": {
+             "if": {
+              "properties": {
+               "chain": {
+                "const": "solana"
+               }
+              },
+              "required": {
+               "0": "chain"
+              }
+             },
+             "then": {
+              "properties": {
+               "tokenAddress": {
+                "pattern": "^[1-9A-HJ-NP-Za-km-z]{32,44}$"
+               }
+              }
+             },
+             "else": {
+              "properties": {
+               "tokenAddress": {
+                "pattern": "^0x[0-9a-fA-F]{40}$"
+               }
+              }
+             }
+            }
+           }
+          }
+         },
+         "required": {
+          "0": "type",
+          "1": "method",
+          "2": "bodyType",
+          "3": "body"
+         }
+        },
+        "output": {
+         "type": "object",
+         "properties": {
+          "type": {
+           "const": "json"
+          },
+          "example": {
+           "type": "object",
+           "additionalProperties": false,
+           "properties": {
+            "token_chain": {
+             "enum": {
+              "0": "base",
+              "1": "solana"
+             },
+             "description": "Analyzed token network; absent means legacy Base. Payment remains on Base."
+            },
+            "operation_id": {
+             "type": "string",
+             "format": "uuid"
+            },
+            "status_url": {
+             "type": "string",
+             "format": "uri",
+             "description": "Free GET receipt endpoint. No payment signature, cookie or AX1 account required. The URL and operation_id identify the same receipt."
+            },
+            "status": {
+             "enum": {
+              "0": "admitted",
+              "1": "preparing",
+              "2": "prepared",
+              "3": "dispatching",
+              "4": "unknown",
+              "5": "paid",
+              "6": "unpaid"
+             }
+            },
+            "result": {
+             "type": {
+              "0": "object",
+              "1": "null"
+             },
+             "additionalProperties": false,
+             "properties": {
+              "grade": {
+               "enum": {
+                "0": "BASED",
+                "1": "MID",
+                "2": "COOKED",
+                "3": "RADIOACTIVE"
+               }
+              },
+              "roast": {
+               "type": "string",
+               "maxLength": 242
+              },
+              "one_liner": {
+               "type": "string",
+               "maxLength": 70
+              },
+              "metrics": {
+               "type": "object",
+               "additionalProperties": false,
+               "properties": {
+                "tokenAddress": {
+                 "type": "string",
+                 "pattern": "^(?:0x[0-9a-fA-F]{40}|[1-9A-HJ-NP-Za-km-z]{32,44})$",
+                 "description": "Address on token_chain (absent means Base); Solana mint case is preserved."
+                },
+                "ticker": {
+                 "type": "string"
+                },
+                "tokenName": {
+                 "type": {
+                  "0": "string",
+                  "1": "null"
+                 }
+                },
+                "fetchedAt": {
+                 "type": "string",
+                 "format": "date-time"
+                },
+                "metrics": {
+                 "type": "array",
+                 "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                   "key": {
+                    "type": "string"
+                   },
+                   "label": {
+                    "type": "string"
+                   },
+                   "availability": {
+                    "enum": {
+                     "0": "available",
+                     "1": "unavailable"
+                    }
+                   },
+                   "value": {
+                    "type": {
+                     "0": "string",
+                     "1": "null"
+                    },
+                    "description": "Numeric values remain strings; unavailable values are null, never zero."
+                   },
+                   "unit": {
+                    "type": {
+                     "0": "string",
+                     "1": "null"
+                    }
+                   },
+                   "provenance": {
+                    "type": {
+                     "0": "object",
+                     "1": "null"
+                    },
+                    "additionalProperties": false,
+                    "properties": {
+                     "source": {
+                      "enum": {
+                       "0": "onchain",
+                       "1": "token_metrics_provider",
+                       "2": "derived"
+                      }
+                     },
+                     "observedAt": {
+                      "type": "string",
+                      "format": "date-time"
+                     },
+                     "blockNumber": {
+                      "type": {
+                       "0": "string",
+                       "1": "null"
+                      },
+                      "pattern": "^[0-9]+$"
+                     }
+                    },
+                    "required": {
+                     "0": "source",
+                     "1": "observedAt",
+                     "2": "blockNumber"
+                    }
+                   },
+                   "unavailableReason": {
+                    "enum": {
+                     "0": null,
+                     "1": "not_reported",
+                     "2": "not_applicable",
+                     "3": "provider_error",
+                     "4": "conflicting_sources",
+                     "5": "stale"
+                    }
+                   }
+                  },
+                  "required": {
+                   "0": "key",
+                   "1": "label",
+                   "2": "availability",
+                   "3": "value",
+                   "4": "unit",
+                   "5": "provenance",
+                   "6": "unavailableReason"
+                  }
+                 }
+                }
+               },
+               "required": {
+                "0": "tokenAddress",
+                "1": "ticker",
+                "2": "tokenName",
+                "3": "fetchedAt",
+                "4": "metrics"
+               }
+              },
+              "generatedAt": {
+               "type": "string",
+               "format": "date-time"
+              },
+              "fromCache": {
+               "type": "boolean"
+              },
+              "disclaimer": {
+               "const": "Not financial advice."
+              }
+             },
+             "required": {
+              "0": "grade",
+              "1": "roast",
+              "2": "one_liner",
+              "3": "metrics",
+              "4": "generatedAt",
+              "5": "fromCache",
+              "6": "disclaimer"
+             }
+            },
+            "page_url": {
+             "type": {
+              "0": "string",
+              "1": "null"
+             },
+             "format": "uri"
+            },
+            "image_url": {
+             "type": {
+              "0": "string",
+              "1": "null"
+             },
+             "format": "uri"
+            },
+            "payment": {
+             "type": "object",
+             "additionalProperties": false,
+             "properties": {
+              "status": {
+               "enum": {
+                "0": "pending",
+                "1": "paid",
+                "2": "unpaid"
+               }
+              },
+              "amount_raw": {
+               "type": "string",
+               "pattern": "^[0-9]+$",
+               "description": "USDC atomic units, 6 decimals."
+              },
+              "network": {
+               "const": "eip155:8453"
+              },
+              "tx_hash": {
+               "type": {
+                "0": "string",
+                "1": "null"
+               },
+               "pattern": "^0x[0-9a-fA-F]{64}$"
+              }
+             },
+             "required": {
+              "0": "status",
+              "1": "amount_raw",
+              "2": "network",
+              "3": "tx_hash"
+             }
+            },
+            "recovery": {
+             "type": "object",
+             "additionalProperties": false,
+             "properties": {
+              "url": {
+               "type": "string",
+               "format": "uri"
+              },
+              "method": {
+               "const": "POST"
+              }
+             },
+             "required": {
+              "0": "url",
+              "1": "method"
+             }
+            }
+           },
+           "required": {
+            "0": "operation_id",
+            "1": "status_url",
+            "2": "status",
+            "3": "result",
+            "4": "page_url",
+            "5": "image_url",
+            "6": "payment",
+            "7": "recovery"
+           },
+           "allOf": {
+            "0": {
+             "if": {
+              "properties": {
+               "status": {
+                "const": "paid"
+               }
+              },
+              "required": {
+               "0": "status"
+              }
+             },
+             "then": {
+              "properties": {
+               "result": {
+                "type": "object"
+               },
+               "page_url": {
+                "type": "string"
+               },
+               "image_url": {
+                "type": "string"
+               },
+               "payment": {
+                "properties": {
+                 "status": {
+                  "const": "paid"
+                 },
+                 "tx_hash": {
+                  "type": "string"
+                 }
+                }
+               }
+              }
+             },
+             "else": {
+              "properties": {
+               "result": {
+                "type": "null"
+               },
+               "page_url": {
+                "type": "null"
+               },
+               "image_url": {
+                "type": "null"
+               },
+               "payment": {
+                "properties": {
+                 "status": {
+                  "enum": {
+                   "0": "pending",
+                   "1": "unpaid"
+                  }
+                 },
+                 "tx_hash": {
+                  "type": "null"
+                 }
+                }
+               }
+              }
+             }
+            }
+           }
+          }
+         },
+         "required": {
+          "0": "type",
+          "1": "example"
+         }
+        }
+       },
+       "required": {
+        "0": "input",
+        "1": "output"
+       }
+      }
+     }
+    }
+   },
+   "status": 201,
+   "response": {
+    "success": true,
+    "message": "Resource registered successfully",
+    "url": "https://next.moonbeam.network/api/acp/x402/seller/ax1-vc/call/q-verdict-resource"
+   },
+   "at": "2026-11-23T10:24:19.854Z"
+  },
+  {
+   "method": "GET",
+   "url": "https://facilitator.ultravioletadao.xyz/discovery/resources?q=https%3A%2F%2Fnext.moonbeam.network%2Fapi%2Facp%2Fx402%2Fseller%2Fax1-vc%2Fcall%2Fq-verdict-resource&limit=5",
+   "request": null,
+   "status": 200,
+   "response": {
+    "x402Version": 2,
+    "items": {},
+    "pagination": {
+     "limit": 5,
+     "offset": 0,
+     "total": 0
+    }
+   },
+   "at": "2026-11-23T10:24:20.222Z"
+  },
+  {
+   "method": "GET",
+   "url": "https://api.cdp.coinbase.com/platform/v2/x402/discovery/search?query=next.moonbeam.network&limit=20",
+   "request": null,
+   "status": 200,
+   "response": {
+    "partialResults": false,
+    "resources": {},
+    "searchMethod": "hybrid",
+    "x402Version": 2,
+    "meta": {
+     "searchToken": "xmygf4w3quoisaa"
+    }
+   },
+   "at": "2026-11-23T10:24:20.711Z"
+  }
+ ],
+ "steps": [
+  {
+   "id": "door",
+   "who": "machine",
+   "state": "done",
+   "readback": {
+    "url": "https://next.moonbeam.network/api/acp/x402/seller/ax1-vc/call/q-verdict-resource",
+    "seen": true,
+    "at": "2026-11-23T10:24:17.703Z",
+    "facts": {
+     "calls": 1,
+     "price_usdc": "0.02"
+    }
+   },
+   "evidence": [
+    {
+     "method": "POST",
+     "url": "https://next.moonbeam.network/api/acp/x402/seller/ax1-vc/call/q-verdict-resource",
+     "status": 402,
+     "at": "2026-11-23T10:24:17.376Z"
+    }
+   ]
+  },
+  {
+   "id": "discovery",
+   "who": "machine",
+   "state": "done",
+   "readback": {
+    "url": "https://next.moonbeam.network/openapi.json",
+    "seen": true,
+    "at": "2026-11-23T10:24:19.200Z",
+    "facts": {
+     "calls": 1
+    }
+   },
+   "evidence": [
+    {
+     "method": "GET",
+     "url": "https://next.moonbeam.network/openapi.json?r=1795429457703",
+     "status": 200,
+     "at": "2026-11-23T10:24:17.703Z"
+    },
+    {
+     "method": "GET",
+     "url": "https://next.moonbeam.network/.well-known/x402?r=1795429457703",
+     "status": 200,
+     "at": "2026-11-23T10:24:18.457Z"
+    }
+   ]
+  },
+  {
+   "id": "x402scan",
+   "who": "machine",
+   "state": "done",
+   "readback": {
+    "url": "https://www.x402scan.com/server/next.moonbeam.network",
+    "seen": true,
+    "at": "2026-11-23T10:24:19.385Z",
+    "facts": {
+     "checked": true
+    }
+   },
+   "evidence": [
+    {
+     "method": "GET",
+     "url": "https://www.x402scan.com/api/trpc/public.resources.checkRegistered?input=%7B%22json%22%3A%7B%22resources%22%3A%5B%7B%22url%22%3A%22https%3A%2F%2Fnext.moonbeam.network%2Fapi%2Facp%2Fx402%2Fseller%2Fax1-vc%2Fcall%2Fq-verdict-resource%22%7D%5D%7D%7D",
+     "status": 200,
+     "at": "2026-11-23T10:24:19.201Z"
+    }
+   ]
+  },
+  {
+   "id": "ultravioleta",
+   "who": "machine",
+   "state": "done",
+   "evidence": [
+    {
+     "method": "GET",
+     "url": "https://facilitator.ultravioletadao.xyz/discovery/resources?q=https%3A%2F%2Fnext.moonbeam.network%2Fapi%2Facp%2Fx402%2Fseller%2Fax1-vc%2Fcall%2Fq-verdict-resource&limit=5",
+     "status": 200,
+     "at": "2026-11-23T10:24:19.385Z"
+    },
+    {
+     "method": "POST",
+     "url": "https://facilitator.ultravioletadao.xyz/discovery/register",
+     "status": 201,
+     "at": "2026-11-23T10:24:19.854Z"
+    },
+    {
+     "method": "GET",
+     "url": "https://facilitator.ultravioletadao.xyz/discovery/resources?q=https%3A%2F%2Fnext.moonbeam.network%2Fapi%2Facp%2Fx402%2Fseller%2Fax1-vc%2Fcall%2Fq-verdict-resource&limit=5",
+     "status": 200,
+     "at": "2026-11-23T10:24:20.222Z"
+    }
+   ]
+  },
+  {
+   "id": "bazaar",
+   "who": "owner",
+   "state": "held",
+   "reason": "needs_payment",
+   "approve": {
+    "kind": "payment",
+    "amount": "0.02",
+    "asset": "USDC",
+    "chain": "eip155:8453",
+    "payee": "0x7284D41b5b852F2bd4c99bDf95043D84452d299C",
+    "reason": "needs_payment",
+    "call": {
+     "method": "POST",
+     "url": "https://next.moonbeam.network/api/acp/x402/seller/ax1-vc/call/q-verdict-resource",
+     "body": {
+      "tokenAddress": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913"
+     }
+    },
+    "accept": {
+     "scheme": "exact",
+     "network": "eip155:8453",
+     "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+     "amount": "20000",
+     "payTo": "0x7284D41b5b852F2bd4c99bDf95043D84452d299C",
+     "maxTimeoutSeconds": 300,
+     "extra": {
+      "name": "USD Coin",
+      "version": "2"
+     }
+    }
+   },
+   "evidence": [
+    {
+     "method": "GET",
+     "url": "https://api.cdp.coinbase.com/platform/v2/x402/discovery/search?query=next.moonbeam.network&limit=20",
+     "status": 200,
+     "at": "2026-11-23T10:24:20.711Z"
+    }
+   ]
+  },
+  {
+   "id": "readback",
+   "who": "machine",
+   "state": "done",
+   "readback": {
+    "url": "https://www.x402scan.com/server/next.moonbeam.network",
+    "seen": true,
+    "at": "2026-11-23T10:24:20.907Z",
+    "facts": {
+     "markets": 1
+    }
+   },
+   "evidence": []
+  }
+ ],
+ "done": {
+  "ok": true,
+  "state": "listed",
+  "see_it": {
+   "url": "https://www.x402scan.com/server/next.moonbeam.network"
+  },
+  "held": [
+   {
+    "id": "bazaar",
+    "reason": "needs_payment"
+   }
+  ]
+ }
+}

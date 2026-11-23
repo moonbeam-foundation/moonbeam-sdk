@@ -1,0 +1,344 @@
+{
+ "schema": "moonbeam.io.autolist.v1",
+ "venue": "mcp",
+ "ref": "x402:6571678d37f0",
+ "origin": "https://next.moonbeam.network",
+ "recorded_at": "2026-11-23T10:24:28.034Z",
+ "exchanges": [
+  {
+   "method": "POST",
+   "url": "https://next.moonbeam.network/api/acp/x402/seller/ax1-vc/mcp",
+   "request": {
+    "jsonrpc": "2.0",
+    "id": 1,
+    "method": "initialize",
+    "params": {
+     "protocolVersion": "2025-06-18"
+    }
+   },
+   "status": 200,
+   "response": {
+    "jsonrpc": "2.0",
+    "id": 1,
+    "result": {
+     "protocolVersion": "2025-06-18",
+     "capabilities": {
+      "tools": {}
+     },
+     "serverInfo": {
+      "name": "ax1-vc",
+      "title": "ax1.vc",
+      "version": "1.0.0"
+     },
+     "instructions": "Moonbeam lists agents on ERC-8004, the MCP Registry and A2A; listing runs on a plan (https://next.moonbeam.network/acp/plans). moonbeam_where_listed is free: it reads where an agent is listed. Each other tool answers one call, priced in USDC and paid with x402: call it once to read its terms, then again with the signed payment in params._meta[\"x402/payment\"]."
+    }
+   },
+   "at": "2026-11-23T10:24:24.456Z"
+  },
+  {
+   "method": "POST",
+   "url": "https://next.moonbeam.network/api/acp/x402/seller/ax1-vc/mcp",
+   "request": {
+    "jsonrpc": "2.0",
+    "id": 2,
+    "method": "tools/list"
+   },
+   "status": 200,
+   "response": {
+    "jsonrpc": "2.0",
+    "id": 2,
+    "result": {
+     "tools": {
+      "0": {
+       "name": "ax1_vc_q_verdict_resource",
+       "title": "Q verdict resource",
+       "description": "Any agent can buy a Token Verdict over x402: AI grade, roast and live onchain metrics for any Base, Solana or Robinhood token. $0.02 in USDC, no account. 0.02 USDC a call.",
+       "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+         "tokenAddress": {
+          "type": "string",
+          "description": "Base EVM contract (case-insensitive) or Solana base58 mint (case-sensitive, decodes to 32 bytes)."
+         },
+         "chain": {
+          "type": "string",
+          "enum": {
+           "0": "base",
+           "1": "solana"
+          },
+          "description": "Default base. Solana requires chain=solana and deployment readiness; supported chains are listed in supported_token_chains of the unsigned quote."
+         },
+         "requestKey": {
+          "type": "string",
+          "minLength": 16,
+          "maxLength": 128,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{15,127}$",
+          "description": "Optional correlation key. Does not replace the original payment authorization for recovery."
+         }
+        },
+        "required": {
+         "0": "tokenAddress"
+        },
+        "allOf": {
+         "0": {
+          "if": {
+           "properties": {
+            "chain": {
+             "const": "solana"
+            }
+           },
+           "required": {
+            "0": "chain"
+           }
+          },
+          "then": {
+           "properties": {
+            "tokenAddress": {
+             "pattern": "^[1-9A-HJ-NP-Za-km-z]{32,44}$"
+            }
+           }
+          },
+          "else": {
+           "properties": {
+            "tokenAddress": {
+             "pattern": "^0x[0-9a-fA-F]{40}$"
+            }
+           }
+          }
+         }
+        }
+       },
+       "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": true
+       },
+       "_meta": {
+        "x402/price": {
+         "amount": "20000",
+         "asset": "USDC",
+         "decimals": 6,
+         "scheme": "exact",
+         "network": "eip155:8453",
+         "usdc": "0.02"
+        }
+       }
+      }
+     }
+    }
+   },
+   "at": "2026-11-23T10:24:24.511Z"
+  },
+  {
+   "method": "GET",
+   "url": "https://registry.modelcontextprotocol.io/v0/servers/network.moonbeam.next%2Fax1-vc/versions/latest",
+   "request": null,
+   "status": 404,
+   "response": {
+    "title": "Not Found",
+    "status": 404,
+    "detail": "Server not found"
+   },
+   "at": "2026-11-23T10:24:24.591Z"
+  },
+  {
+   "method": "POST",
+   "url": "https://registry.modelcontextprotocol.io/v0/auth/http",
+   "request": {
+    "domain": "next.moonbeam.network",
+    "timestamp": "2026-11-23T10:24:25Z",
+    "signed_timestamp": "ae8d67c4288e5c5dd69c088f00f7c68d2eea6b1605adde24fabafc9a991054ec41c101d4b12506a4d23c6ec549a80881f072baac7f8b9f02c7fcf82a9a898f01"
+   },
+   "status": 200,
+   "response": {
+    "registry_token": "(not kept)",
+    "expires_at": 1795429767
+   },
+   "at": "2026-11-23T10:24:26.854Z"
+  },
+  {
+   "method": "POST",
+   "url": "https://registry.modelcontextprotocol.io/v0/publish",
+   "request": {
+    "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+    "name": "network.moonbeam.next/ax1-vc",
+    "description": "Read a market (prices, books, stats); Buy, sell or bid in a market; Generate an image",
+    "title": "ax1.vc",
+    "version": "1.0.0",
+    "websiteUrl": "https://next.moonbeam.network/acp/agents/x402%3A6571678d37f0",
+    "remotes": {
+     "0": {
+      "type": "streamable-http",
+      "url": "https://next.moonbeam.network/api/acp/x402/seller/ax1-vc/mcp"
+     }
+    }
+   },
+   "status": 200,
+   "response": {
+    "server": {
+     "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+     "name": "network.moonbeam.next/ax1-vc",
+     "description": "Read a market (prices, books, stats); Buy, sell or bid in a market; Generate an image",
+     "title": "ax1.vc",
+     "version": "1.0.0",
+     "websiteUrl": "https://next.moonbeam.network/acp/agents/x402%3A6571678d37f0",
+     "remotes": {
+      "0": {
+       "type": "streamable-http",
+       "url": "https://next.moonbeam.network/api/acp/x402/seller/ax1-vc/mcp"
+      }
+     }
+    },
+    "_meta": {
+     "io.modelcontextprotocol.registry/official": {
+      "status": "active",
+      "statusChangedAt": "2026-11-23T10:24:27.8952423Z",
+      "publishedAt": "2026-11-23T10:24:27.8952423Z",
+      "updatedAt": "2026-11-23T10:24:27.8952423Z",
+      "isLatest": true
+     }
+    }
+   },
+   "at": "2026-11-23T10:24:27.768Z"
+  },
+  {
+   "method": "GET",
+   "url": "https://registry.modelcontextprotocol.io/v0/servers/network.moonbeam.next%2Fax1-vc/versions/1.0.0",
+   "request": null,
+   "status": 200,
+   "response": {
+    "server": {
+     "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+     "name": "network.moonbeam.next/ax1-vc",
+     "description": "Read a market (prices, books, stats); Buy, sell or bid in a market; Generate an image",
+     "title": "ax1.vc",
+     "version": "1.0.0",
+     "websiteUrl": "https://next.moonbeam.network/acp/agents/x402%3A6571678d37f0",
+     "remotes": {
+      "0": {
+       "type": "streamable-http",
+       "url": "https://next.moonbeam.network/api/acp/x402/seller/ax1-vc/mcp"
+      }
+     }
+    },
+    "_meta": {
+     "io.modelcontextprotocol.registry/official": {
+      "status": "active",
+      "statusChangedAt": "2026-11-23T10:24:27.895242Z",
+      "publishedAt": "2026-11-23T10:24:27.895242Z",
+      "updatedAt": "2026-11-23T10:24:27.895242Z",
+      "isLatest": true
+     }
+    }
+   },
+   "at": "2026-11-23T10:24:27.905Z"
+  }
+ ],
+ "steps": [
+  {
+   "id": "door",
+   "who": "machine",
+   "state": "done",
+   "readback": {
+    "url": "https://next.moonbeam.network/api/acp/x402/seller/ax1-vc/mcp",
+    "seen": true,
+    "at": "2026-11-23T10:24:24.591Z",
+    "facts": {
+     "tools": 1
+    }
+   },
+   "evidence": [
+    {
+     "method": "POST",
+     "url": "https://next.moonbeam.network/api/acp/x402/seller/ax1-vc/mcp",
+     "status": 200,
+     "at": "2026-11-23T10:24:24.456Z"
+    },
+    {
+     "method": "POST",
+     "url": "https://next.moonbeam.network/api/acp/x402/seller/ax1-vc/mcp",
+     "status": 200,
+     "at": "2026-11-23T10:24:24.511Z"
+    }
+   ]
+  },
+  {
+   "id": "server_json",
+   "who": "machine",
+   "state": "done",
+   "readback": {
+    "url": "https://registry.modelcontextprotocol.io/v0/servers/network.moonbeam.next%2Fax1-vc/versions/latest",
+    "seen": false,
+    "at": "2026-11-23T10:24:25.100Z",
+    "facts": {
+     "name": "network.moonbeam.next/ax1-vc",
+     "version": "1.0.0"
+    }
+   },
+   "evidence": [
+    {
+     "method": "GET",
+     "url": "https://registry.modelcontextprotocol.io/v0/servers/network.moonbeam.next%2Fax1-vc/versions/latest",
+     "status": 404,
+     "at": "2026-11-23T10:24:24.591Z"
+    }
+   ]
+  },
+  {
+   "id": "signin",
+   "who": "machine",
+   "state": "done",
+   "evidence": [
+    {
+     "method": "POST",
+     "url": "https://registry.modelcontextprotocol.io/v0/auth/http",
+     "status": 200,
+     "at": "2026-11-23T10:24:26.854Z"
+    }
+   ]
+  },
+  {
+   "id": "publish",
+   "who": "machine",
+   "state": "done",
+   "evidence": [
+    {
+     "method": "POST",
+     "url": "https://registry.modelcontextprotocol.io/v0/publish",
+     "status": 200,
+     "at": "2026-11-23T10:24:27.768Z"
+    }
+   ]
+  },
+  {
+   "id": "readback",
+   "who": "machine",
+   "state": "done",
+   "readback": {
+    "url": "https://registry.modelcontextprotocol.io/v0/servers?search=network.moonbeam.next%2Fax1-vc",
+    "seen": true,
+    "at": "2026-11-23T10:24:28.032Z",
+    "facts": {
+     "version": "1.0.0",
+     "status": "active"
+    }
+   },
+   "evidence": [
+    {
+     "method": "GET",
+     "url": "https://registry.modelcontextprotocol.io/v0/servers/network.moonbeam.next%2Fax1-vc/versions/1.0.0",
+     "status": 200,
+     "at": "2026-11-23T10:24:27.905Z"
+    }
+   ]
+  }
+ ],
+ "done": {
+  "ok": true,
+  "state": "listed",
+  "see_it": {
+   "url": "https://registry.modelcontextprotocol.io/v0/servers?search=network.moonbeam.next%2Fax1-vc"
+  },
+  "held": []
+ }
+}
