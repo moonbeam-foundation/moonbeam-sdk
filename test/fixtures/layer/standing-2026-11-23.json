@@ -1,0 +1,378 @@
+{
+ "schema": "moonbeam.io.standing.v1",
+ "why": "the paid-plan gate of a tenant vault and the key door, as the layer answers them: /access/key read live without a key and with a key that is not one; /vault/arm answered by the layer's own door code over a test tenant (t-fixture: a generated owner wallet, test addresses, a sandbox-free plan period added then taken back), nothing sent to any chain",
+ "recorded": "2026-11-23",
+ "fixtures": [
+  {
+   "name": "key-none",
+   "op": "GET access/key",
+   "source": "live",
+   "request": {
+    "method": "GET",
+    "path": "/v1/access/key",
+    "key": "none"
+   },
+   "response": {
+    "status": 401,
+    "body": {
+     "ok": false,
+     "code": "unauthorized",
+     "error": "send X-API-Key (a tfr_ key), or sign in on www.taifoon.io",
+     "get_key": {
+      "http": "POST https://coord.taifoon.dev/v1/register (no body needed)",
+      "mcp": "taifoon_register"
+     },
+     "message": "send X-API-Key (a tfr_ key), or sign in on www.taifoon.io",
+     "next_step": {
+      "action": "get_free_key",
+      "why": "get a free key in one call (no payment, nothing signed) and send it as X-API-Key: it has its own budget on demands, /gw/rpc, /gw/mcp and agent registration",
+      "http": {
+       "method": "POST",
+       "url": "https://coord.taifoon.dev/v1/register",
+       "body": {}
+      },
+      "mcp": {
+       "tool": "taifoon_register",
+       "arguments": {}
+      },
+      "cli": "npx @taifoon/cli login --free",
+      "docs": "https://coord.taifoon.dev/v1/quickstart"
+     },
+     "hint": "get a free key in one call (no payment, nothing signed) and send it as X-API-Key: it has its own budget on demands, /gw/rpc, /gw/mcp and agent registration"
+    }
+   }
+  },
+  {
+   "name": "key-invalid",
+   "op": "GET access/key",
+   "source": "live",
+   "request": {
+    "method": "GET",
+    "path": "/v1/access/key",
+    "key": "invalid"
+   },
+   "response": {
+    "status": 401,
+    "body": {
+     "ok": false,
+     "code": "unauthorized",
+     "error": "that API key is not valid, or has been revoked",
+     "next_step": {
+      "action": "replace_key",
+      "why": "this key is unknown or was revoked, so nothing it asks is served. Send a valid key, or no key at all (the anonymous budget), or take a new one: one free tenant per caller a day; past the free allowance, pay",
+      "http": {
+       "method": "POST",
+       "url": "https://coord.taifoon.dev/v1/register"
+      },
+      "also": {
+       "method": "GET",
+       "url": "https://coord.taifoon.dev/v1/judge/credits/key",
+       "why": "buy grades with USDC on Base; the paying wallet gets a key"
+      }
+     }
+    }
+   }
+  },
+  {
+   "name": "arm-without-plan",
+   "op": "POST vault/arm",
+   "source": "contract",
+   "request": {
+    "method": "POST",
+    "path": "/v1/vault/arm"
+   },
+   "response": {
+    "status": 402,
+    "body": {
+     "ok": false,
+     "code": "plan_required",
+     "error": "a running paid plan arms this vault",
+     "vault": "vault:tenant:t-fixture"
+    }
+   }
+  },
+  {
+   "name": "arm-with-plan",
+   "op": "POST vault/arm",
+   "source": "contract",
+   "request": {
+    "method": "POST",
+    "path": "/v1/vault/arm"
+   },
+   "response": {
+    "status": 201,
+    "body": {
+     "ok": true,
+     "schema": "taifoon.vault.arm.v1",
+     "stored": true,
+     "vault": "vault:tenant:t-fixture",
+     "arm": {
+      "vault": "vault:tenant:t-fixture",
+      "armed": true,
+      "policy": "0x711047bad6c5a2e4ee99d2fa41a12168bd9c68cfc213567b9a8595e50125cfd7",
+      "expires": 1796044411,
+      "nonce": 1,
+      "signature": "0x52eb2e2f06cb4a64bc1e98d55fe6a5fee522509ffec12ed6571b21e19c0a66d633b54a379932b0e124ef05873be3af3679e2b647f2c2dad52af11e19683b8f321b",
+      "signer": "0xc6b05D0747b2a77450c72C4A92B6c04D8d432215",
+      "recorded_at": "2026-11-23T13:13:42.000Z"
+     },
+     "state": "armed",
+     "armed_until": "2026-11-30T13:13:31.000Z",
+     "stream": "recorded",
+     "envelope_id": "0xabababababababababababababababababababababababababababababababab",
+     "effect": "armed until 2026-11-30T13:13:31.000Z: the runner may act live inside policy 0x711047bad6c5a2e4ee99d2fa41a12168bd9c68cfc213567b9a8595e50125cfd7"
+    }
+   }
+  },
+  {
+   "name": "state-armed",
+   "op": "GET vault/arm",
+   "source": "contract",
+   "request": {
+    "method": "GET",
+    "path": "/v1/vault/arm",
+    "query": {
+     "vault": "vault:tenant:t-fixture"
+    }
+   },
+   "response": {
+    "status": 200,
+    "body": {
+     "ok": true,
+     "schema": "taifoon.vault.arm.v1",
+     "vault": "vault:tenant:t-fixture",
+     "tenant": "t-fixture",
+     "arm": {
+      "vault": "vault:tenant:t-fixture",
+      "armed": true,
+      "policy": "0x711047bad6c5a2e4ee99d2fa41a12168bd9c68cfc213567b9a8595e50125cfd7",
+      "expires": 1796044411,
+      "nonce": 1,
+      "signature": "0x52eb2e2f06cb4a64bc1e98d55fe6a5fee522509ffec12ed6571b21e19c0a66d633b54a379932b0e124ef05873be3af3679e2b647f2c2dad52af11e19683b8f321b",
+      "signer": "0xc6b05D0747b2a77450c72C4A92B6c04D8d432215",
+      "recorded_at": "2026-11-23T13:13:42.000Z"
+     },
+     "policy_hash": "0x711047bad6c5a2e4ee99d2fa41a12168bd9c68cfc213567b9a8595e50125cfd7",
+     "owner_key": "0xc6b05D0747b2a77450c72C4A92B6c04D8d432215",
+     "state": "armed",
+     "armed_until": "2026-11-30T13:13:31.000Z",
+     "next_nonce": 2,
+     "max_days": 30,
+     "eip712": {
+      "domain": {
+       "name": "Taifoon Vault",
+       "version": "1"
+      },
+      "primaryType": "VaultArm",
+      "types": {
+       "VaultArm": [
+        {
+         "name": "vault",
+         "type": "string"
+        },
+        {
+         "name": "armed",
+         "type": "bool"
+        },
+        {
+         "name": "policy",
+         "type": "bytes32"
+        },
+        {
+         "name": "expires",
+         "type": "uint64"
+        },
+        {
+         "name": "nonce",
+         "type": "uint64"
+        }
+       ]
+      }
+     },
+     "addresses": [
+      {
+       "purpose": "vault",
+       "address": "0x1111111111111111111111111111111111111111"
+      },
+      {
+       "purpose": "topup",
+       "address": "0x1212121212121212121212121212121212121212"
+      },
+      {
+       "purpose": "spend",
+       "address": "0x1313131313131313131313131313131313131313"
+      }
+     ],
+     "chains": [
+      "eip155:4663"
+     ],
+     "caps": {
+      "spend": {
+       "per_tx_usdc": 10,
+       "per_day_usdc": 20,
+       "payees": [
+        "x-api-key",
+        "settler",
+        "layer"
+       ],
+       "settler_max_bps_over_quote": 2000
+      },
+      "debit": {
+       "asset": "GRID",
+       "per_call": 1,
+       "per_day": 500,
+       "per_month": 5000,
+       "payee": "taifoon-energy",
+       "expires_at": "pending"
+      },
+      "keys": [],
+      "program": "pons-buyback",
+      "program_limits": {
+       "MM_BAND_ETH": "0.01",
+       "MM_MAX_ETH": "0.03",
+       "GAS_CAP_ETH": "0.01",
+       "SLIPPAGE_BPS": "300",
+       "MM_DIP_PCT": "5",
+       "MM_TAKE_PCT": "8",
+       "MIN_WETH": "0.0005",
+       "SWEEP_MIN_ETH": "0.002",
+       "SWEEP_MAX_GAS_BPS": "200",
+       "HOLD_MIN": "500000",
+       "MAX_RECIPIENTS": "500",
+       "MM_DIP_MAX_PCT": "40",
+       "DAY_MAX_ETH": "0.05",
+       "MAX_FEE_GWEI": "1",
+       "AIRDROP_MAX_SHARE_BPS": "1000"
+      }
+     },
+     "cockpit": "https://www.taifoon.io/cockpit?tab=vaults&vault=vault%3Atenant%3At-fixture"
+    }
+   }
+  },
+  {
+   "name": "state-unpaid",
+   "op": "GET vault/arm",
+   "source": "contract",
+   "request": {
+    "method": "GET",
+    "path": "/v1/vault/arm",
+    "query": {
+     "vault": "vault:tenant:t-fixture"
+    }
+   },
+   "response": {
+    "status": 200,
+    "body": {
+     "ok": true,
+     "schema": "taifoon.vault.arm.v1",
+     "vault": "vault:tenant:t-fixture",
+     "tenant": "t-fixture",
+     "arm": {
+      "vault": "vault:tenant:t-fixture",
+      "armed": true,
+      "policy": "0x711047bad6c5a2e4ee99d2fa41a12168bd9c68cfc213567b9a8595e50125cfd7",
+      "expires": 1796044411,
+      "nonce": 1,
+      "signature": "0x52eb2e2f06cb4a64bc1e98d55fe6a5fee522509ffec12ed6571b21e19c0a66d633b54a379932b0e124ef05873be3af3679e2b647f2c2dad52af11e19683b8f321b",
+      "signer": "0xc6b05D0747b2a77450c72C4A92B6c04D8d432215",
+      "recorded_at": "2026-11-23T13:13:42.000Z"
+     },
+     "policy_hash": "0x711047bad6c5a2e4ee99d2fa41a12168bd9c68cfc213567b9a8595e50125cfd7",
+     "owner_key": "0xc6b05D0747b2a77450c72C4A92B6c04D8d432215",
+     "state": "unpaid",
+     "armed_until": null,
+     "next_nonce": 2,
+     "max_days": 30,
+     "eip712": {
+      "domain": {
+       "name": "Taifoon Vault",
+       "version": "1"
+      },
+      "primaryType": "VaultArm",
+      "types": {
+       "VaultArm": [
+        {
+         "name": "vault",
+         "type": "string"
+        },
+        {
+         "name": "armed",
+         "type": "bool"
+        },
+        {
+         "name": "policy",
+         "type": "bytes32"
+        },
+        {
+         "name": "expires",
+         "type": "uint64"
+        },
+        {
+         "name": "nonce",
+         "type": "uint64"
+        }
+       ]
+      }
+     },
+     "addresses": [
+      {
+       "purpose": "vault",
+       "address": "0x1111111111111111111111111111111111111111"
+      },
+      {
+       "purpose": "topup",
+       "address": "0x1212121212121212121212121212121212121212"
+      },
+      {
+       "purpose": "spend",
+       "address": "0x1313131313131313131313131313131313131313"
+      }
+     ],
+     "chains": [
+      "eip155:4663"
+     ],
+     "caps": {
+      "spend": {
+       "per_tx_usdc": 10,
+       "per_day_usdc": 20,
+       "payees": [
+        "x-api-key",
+        "settler",
+        "layer"
+       ],
+       "settler_max_bps_over_quote": 2000
+      },
+      "debit": {
+       "asset": "GRID",
+       "per_call": 1,
+       "per_day": 500,
+       "per_month": 5000,
+       "payee": "taifoon-energy",
+       "expires_at": "pending"
+      },
+      "keys": [],
+      "program": "pons-buyback",
+      "program_limits": {
+       "MM_BAND_ETH": "0.01",
+       "MM_MAX_ETH": "0.03",
+       "GAS_CAP_ETH": "0.01",
+       "SLIPPAGE_BPS": "300",
+       "MM_DIP_PCT": "5",
+       "MM_TAKE_PCT": "8",
+       "MIN_WETH": "0.0005",
+       "SWEEP_MIN_ETH": "0.002",
+       "SWEEP_MAX_GAS_BPS": "200",
+       "HOLD_MIN": "500000",
+       "MAX_RECIPIENTS": "500",
+       "MM_DIP_MAX_PCT": "40",
+       "DAY_MAX_ETH": "0.05",
+       "MAX_FEE_GWEI": "1",
+       "AIRDROP_MAX_SHARE_BPS": "1000"
+      }
+     },
+     "cockpit": "https://www.taifoon.io/cockpit?tab=vaults&vault=vault%3Atenant%3At-fixture"
+    }
+   }
+  }
+ ]
+}
