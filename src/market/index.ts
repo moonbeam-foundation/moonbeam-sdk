@@ -46,6 +46,7 @@
  *   agentSales(t, ref)            the sale run's slices     what an agent sold, by day and market, and where each share stands
  *   olasRequest(t, id)            GET  /judge/evidence/olas/:id   one Olas Mech request: prompt, mech, fee, response
  *   SALE (./sale.ts: the reads after the money is in)
+ *   vaultArmState(t, vault) · armVault(t, signed)   GET · POST /vault/arm   a tenant vault's arm: live only on armed (a paid plan), else dry
  *   saleLedger · payoutQueues · vaultPolicy · claimablePayouts · salePaid · saleRecord · agentPayTo   GET /resale · /pipe/queues · /vault/policy · /pipe/claimable · /resale/sales/:id · /root · /agents/payments
  *   VENUES (./venues.ts) and SALE_STOPS (./sale-stops.ts): every venue in one table, and one sale stop by stop, each with its call
  *   WHERE IT IS LISTED (./listed.ts: reads and plans only)
@@ -270,7 +271,7 @@ export async function keyStanding(t: OnboardTransport): Promise<{ plan: Record<s
 // ── the journey, the sale's reads, every venue, and one sale stop by stop ───────────────────────────────────────────────
 export { LIST_MARKETS, LIST_ALL_MARKETS, LIST_MARKET_OF, listApproval, listIdOf, listOn, listStatus, pauseListing, resumeListing, delistListing, MAX_INLINE_URI, inlineRegistration, register8004Calls, usage, tenantKeys, planOffers, agentSales, olasRequest } from './journey.js';
 export type { ListMarket, ListRow, ListView, PlanOffer, Share, SaleRow, SaleSlice } from './journey.js';
-export { saleLedger, payoutQueues, vaultPolicy, claimablePayouts, salePaid, saleRecord, agentPayTo } from './sale.js';
+export { saleLedger, payoutQueues, vaultPolicy, vaultArmState, armVault, claimablePayouts, salePaid, saleRecord, agentPayTo } from './sale.js';
 export type { QueueDepth, VaultRule, ClaimablePayout, SalePaid, PayTo } from './sale.js';
 export { VENUES, VENUE_IDS, VENUE_STEPS, VENUES_READ_ON, VENUE_EVIDENCE_OF, MAINNET_IO_OF, MOONBEAM_LISTS_ON, listsOn, provenOnMainnet, venueById, venues } from './venues.js';
 export { VENUE_MAINNET } from './venue-mainnet-data.js';

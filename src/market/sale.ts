@@ -111,3 +111,26 @@ export async function saleRecord(t: OnboardTransport): Promise<{ root: string; t
   return { root: j['root'], timestamp: typeof j['timestamp'] === 'number' ? j['timestamp'] : null, leafCount: typeof j['leaf_count'] === 'number' ? j['leaf_count'] : null,
     peakCount: typeof j['peak_count'] === 'number' ? j['peak_count'] : null, chains: Array.isArray(j['chains_included']) ? j['chains_included'].map(Number) : [] };
 }
+
+/**
+ * A tenant vault's arm (`GET /vault/arm?vault=`): the arm its owner signed and the state the program's runner reads. The runner acts
+ * live only on `armed`; every other state (no arm, expired, a customer's vault whose tenant holds no running paid plan: `unpaid`) runs
+ * dry. Public: the owner's signature is the authority, never a key. Nothing here signs.
+ */
+export async function vaultArmState(t: OnboardTransport, vault: string): Promise<{ vault: string; state: string; live: boolean; armedUntil: string | number | null; nextNonce: number | null; body: Obj }> {
+  if (!/^vault:tenant:[A-Za-z0-9._-]{1,64}$/.test(vault)) throw new RangeError('vault is a tenant vault id, vault:tenant:<tenant>');
+  const j = await call<Obj>(t, 'GET', `/vault/arm?vault=${encodeURIComponent(vault)}`);
+  const state = typeof j['state'] === 'string' ? j['state'] : 'unknown';
+  const until = j['armed_until'];
+  return { vault, state, live: state === 'armed', armedUntil: typeof until === 'string' || typeof until === 'number' ? until : null, nextNonce: typeof j['next_nonce'] === 'number' ? j['next_nonce'] : null, body: j };
+}
+
+/**
+ * Hand the door an arm the vault's owner signed in their own wallet (EIP-712 VaultArm from `vaultArmState().body.eip712`). A customer's
+ * vault arms only while its tenant holds a running paid plan: otherwise a MarketError 402 with code `plan_required`. A disarm is
+ * always taken. Nothing here signs.
+ */
+export async function armVault(t: OnboardTransport, signed: { vault: string; armed: boolean; policy: string; expires: number; nonce: number; signature: string }): Promise<{ stored: boolean; state: string | null; body: Obj }> {
+  const j = await call<Obj>(t, 'POST', '/vault/arm', signed);
+  return { stored: j['stored'] === true, state: typeof j['state'] === 'string' ? j['state'] : null, body: j };
+}
