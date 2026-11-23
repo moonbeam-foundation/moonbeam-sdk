@@ -1,0 +1,266 @@
+{
+ "schema": "moonbeam.io.autolist.v1",
+ "venue": "a2a",
+ "ref": "x402:6571678d37f0",
+ "origin": "https://next.moonbeam.network",
+ "recorded_at": "2026-11-23T10:23:40.291Z",
+ "exchanges": [
+  {
+   "method": "GET",
+   "url": "https://next.moonbeam.network/api/acp/x402/seller/ax1-vc/a2a/.well-known/agent-card.json",
+   "request": null,
+   "status": 200,
+   "response": {
+    "protocolVersion": "0.3.0",
+    "name": "ax1.vc",
+    "version": "1.0.0",
+    "url": "https://next.moonbeam.network/api/acp/x402/seller/ax1-vc/a2a",
+    "preferredTransport": "JSONRPC",
+    "description": "Read a market (prices, books, stats); Buy, sell or bid in a market; Generate an image",
+    "provider": {
+     "organization": "Moonbeam",
+     "url": "https://next.moonbeam.network"
+    },
+    "capabilities": {
+     "streaming": false,
+     "pushNotifications": false,
+     "extensions": {
+      "0": {
+       "uri": "https://github.com/google-a2a/a2a-x402/v0.1",
+       "required": true,
+       "description": "x402 on Base",
+       "params": {
+        "prices": {
+         "ax1_vc_q_verdict_resource": {
+          "amount": "20000",
+          "asset": "USDC",
+          "decimals": 6,
+          "scheme": "exact",
+          "network": "eip155:8453",
+          "usdc": "0.02"
+         }
+        }
+       }
+      }
+     }
+    },
+    "defaultInputModes": {
+     "0": "application/json"
+    },
+    "defaultOutputModes": {
+     "0": "application/json"
+    },
+    "skills": {
+     "0": {
+      "id": "ax1_vc_q_verdict_resource",
+      "name": "Q verdict resource",
+      "description": "Any agent can buy a Token Verdict over x402: AI grade, roast and live onchain metrics for any Base, Solana or Robinhood token. $0.02 in USDC, no account. 0.02 USDC a call.",
+      "tags": {
+       "0": "x402",
+       "1": "paid",
+       "2": "base"
+      },
+      "examples": {
+       "0": "{\"skill\":\"ax1_vc_q_verdict_resource\",\"input\":{\"tokenAddress\":\"0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913\"}}"
+      },
+      "inputModes": {
+       "0": "application/json"
+      },
+      "outputModes": {
+       "0": "application/json"
+      }
+     }
+    }
+   },
+   "at": "2026-11-23T10:23:38.586Z"
+  },
+  {
+   "method": "POST",
+   "url": "https://a2aregistry.org/api/agents/preview",
+   "request": {
+    "wellKnownURI": "https://next.moonbeam.network/api/acp/x402/seller/ax1-vc/a2a/.well-known/agent-card.json"
+   },
+   "status": 200,
+   "response": {
+    "agent": {
+     "protocolVersion": "0.3.0",
+     "name": "ax1.vc",
+     "description": "Read a market (prices, books, stats); Buy, sell or bid in a market; Generate an image",
+     "author": "Moonbeam",
+     "wellKnownURI": "https://next.moonbeam.network/api/acp/x402/seller/ax1-vc/a2a/.well-known/agent-card.json",
+     "url": "https://next.moonbeam.network/api/acp/x402/seller/ax1-vc/a2a",
+     "version": "1.0.0",
+     "provider": {
+      "organization": "Moonbeam",
+      "url": "https://next.moonbeam.network/"
+     },
+     "documentationUrl": null,
+     "iconUrl": null,
+     "supportsAuthenticatedExtendedCard": null,
+     "security": null,
+     "securitySchemes": null,
+     "capabilities": {
+      "streaming": false,
+      "pushNotifications": false,
+      "stateTransitionHistory": false,
+      "extensions": {
+       "0": {
+        "uri": "https://github.com/google-a2a/a2a-x402/v0.1",
+        "required": true,
+        "description": "x402 on Base",
+        "params": {
+         "prices": {
+          "ax1_vc_q_verdict_resource": {
+           "amount": "20000",
+           "asset": "USDC",
+           "decimals": 6,
+           "scheme": "exact",
+           "network": "eip155:8453",
+           "usdc": "0.02"
+          }
+         }
+        }
+       }
+      }
+     },
+     "defaultInputModes": {
+      "0": "application/json"
+     },
+     "defaultOutputModes": {
+      "0": "application/json"
+     },
+     "skills": {
+      "0": {
+       "id": "ax1_vc_q_verdict_resource",
+       "name": "Q verdict resource",
+       "description": "Any agent can buy a Token Verdict over x402: AI grade, roast and live onchain metrics for any Base, Solana or Robinhood token. $0.02 in USDC, no account. 0.02 USDC a call.",
+       "tags": {
+        "0": "x402",
+        "1": "paid",
+        "2": "base"
+       },
+       "examples": {
+        "0": "{\"skill\":\"ax1_vc_q_verdict_resource\",\"input\":{\"tokenAddress\":\"0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913\"}}"
+       },
+       "inputModes": {
+        "0": "application/json"
+       },
+       "outputModes": {
+        "0": "application/json"
+       }
+      }
+     },
+     "conformance": null,
+     "conformance_errors": null,
+     "homepage": null,
+     "repository": null,
+     "license": null,
+     "pricing": null,
+     "contact": null
+    },
+    "evidence": {
+     "fetched": true,
+     "conformant": true,
+     "errors": {}
+    }
+   },
+   "at": "2026-11-23T10:23:38.658Z"
+  },
+  {
+   "method": "GET",
+   "url": "https://a2aregistry.org/api/agents?search=ax1.vc&limit=50",
+   "request": null,
+   "status": 200,
+   "response": {
+    "agents": {},
+    "total": 0,
+    "limit": 50,
+    "offset": 0
+   },
+   "at": "2026-11-23T10:23:39.439Z"
+  },
+  {
+   "method": "POST",
+   "url": "https://a2aregistry.org/api/agents/register",
+   "request": {
+    "wellKnownURI": "https://next.moonbeam.network/api/acp/x402/seller/ax1-vc/a2a/.well-known/agent-card.json",
+    "author": "Moonbeam"
+   },
+   "status": 409,
+   "response": {
+    "detail": "This agent is already listed (id=cf34994a-39a2-41c7-9ff5-53ba134fdc3d) with wellKnownURI https://next.moonbeam.network/api/acp/x402/a2a/.well-known/agent-card.json. A listing moves only to the root card (/.well-known/agent-card.json or /.well-known/agent.json) on the host of the endpoint that the card at the registered URL declares. Update that card's url, or open an issue."
+   },
+   "at": "2026-11-23T10:23:39.769Z"
+  }
+ ],
+ "steps": [
+  {
+   "id": "door",
+   "who": "machine",
+   "state": "done",
+   "readback": {
+    "url": "https://next.moonbeam.network/api/acp/x402/seller/ax1-vc/a2a/.well-known/agent-card.json",
+    "seen": true,
+    "at": "2026-11-23T10:23:38.658Z",
+    "facts": {
+     "skills": 1,
+     "protocolVersion": "0.3.0"
+    }
+   },
+   "evidence": [
+    {
+     "method": "GET",
+     "url": "https://next.moonbeam.network/api/acp/x402/seller/ax1-vc/a2a/.well-known/agent-card.json",
+     "status": 200,
+     "at": "2026-11-23T10:23:38.586Z"
+    }
+   ]
+  },
+  {
+   "id": "preview",
+   "who": "machine",
+   "state": "done",
+   "evidence": [
+    {
+     "method": "POST",
+     "url": "https://a2aregistry.org/api/agents/preview",
+     "status": 200,
+     "at": "2026-11-23T10:23:38.658Z"
+    }
+   ]
+  },
+  {
+   "id": "register",
+   "who": "machine",
+   "state": "failed",
+   "reason": "registry_refused",
+   "evidence": [
+    {
+     "method": "GET",
+     "url": "https://a2aregistry.org/api/agents?search=ax1.vc&limit=50",
+     "status": 200,
+     "at": "2026-11-23T10:23:39.439Z"
+    },
+    {
+     "method": "POST",
+     "url": "https://a2aregistry.org/api/agents/register",
+     "status": 409,
+     "at": "2026-11-23T10:23:39.769Z"
+    }
+   ]
+  },
+  {
+   "id": "readback",
+   "who": "machine",
+   "state": "todo",
+   "reason": "blocked",
+   "evidence": []
+  }
+ ],
+ "done": {
+  "ok": false,
+  "state": "failed",
+  "see_it": null,
+  "held": []
+ }
+}
