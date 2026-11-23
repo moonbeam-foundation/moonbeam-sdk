@@ -1,0 +1,98 @@
+{
+  "rule": "APPROVAL_POLICY_v1",
+  "venue": "olas-base",
+  "mode": "fork of Base (nothing sent to the live chain)",
+  "chain": 8453,
+  "fork_block": 61179181,
+  "read_on": "2026-11-23",
+  "steps": [
+    {
+      "n": 1,
+      "value_wei": "0",
+      "gas": 609857
+    },
+    {
+      "n": 2,
+      "value_wei": "1",
+      "gas": 62030
+    },
+    {
+      "n": 3,
+      "value_wei": "1",
+      "gas": 236510
+    },
+    {
+      "n": 4,
+      "value_wei": "0",
+      "gas": 391320
+    },
+    {
+      "n": 5,
+      "value_wei": "0",
+      "gas": 2890256
+    },
+    {
+      "n": 6,
+      "value_wei": "0",
+      "gas": 37447
+    },
+    {
+      "n": 7,
+      "value_wei": "0",
+      "gas": 104343
+    }
+  ],
+  "policy": [
+    {
+      "n": 1,
+      "decision": "allowed",
+      "cost_micro": "39208"
+    },
+    {
+      "n": 2,
+      "decision": "owner_send"
+    },
+    {
+      "n": 3,
+      "decision": "owner_send"
+    },
+    {
+      "n": 4,
+      "decision": "allowed",
+      "cost_micro": "28964"
+    },
+    {
+      "n": 5,
+      "decision": "allowed",
+      "cost_micro": "79025"
+    },
+    {
+      "n": 6,
+      "decision": "contract_not_allowed"
+    },
+    {
+      "n": 7,
+      "decision": "contract_not_allowed"
+    }
+  ],
+  "checks_ok": true,
+  "checks": [
+    "the service belongs to the Taifoon Safe",
+    "the service Safe has one owner: the instance",
+    "the service Safe\u2019s threshold is 1",
+    "the mech\u2019s operator is the service Safe",
+    "the mech\u2019s price is the config\u2019s",
+    "the mech is paid in USDC through the registry\u2019s balance tracker",
+    "the marketplace knows the mech as the service\u2019s",
+    "the published card hash is the card\u2019s IPFS digest",
+    "the deployer can no longer terminate the service",
+    "the deployer can no longer publish a card",
+    "the deployer can no longer deliver for the mech"
+  ],
+  "request_served": {
+    "paid_in": "USDC",
+    "paid_units": "10000",
+    "mech_received_units": "8500"
+  },
+  "gas_total": 4331763
+}

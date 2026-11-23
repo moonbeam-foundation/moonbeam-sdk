@@ -1,0 +1,34 @@
+{
+  "rule": "APPROVAL_POLICY_v1",
+  "mode": "fork of Base (nothing sent to the live chain)",
+  "chain": 8453,
+  "fork_block": 61180987,
+  "market": "erc8004",
+  "call": "register(string)",
+  "uri": "https://next.moonbeam.network/api/acp/registration/ax1-vc.json",
+  "verdict": {
+    "ok": true,
+    "cost_micro": "37403",
+    "rules": [
+      "sign-known-requester",
+      "sign-fresh",
+      "sign-registry-publish",
+      "sign-approval-policy"
+    ]
+  },
+  "landed": {
+    "status": 1,
+    "gas_used": 160860,
+    "agent_id": "1226544",
+    "owner": "the registrar vault",
+    "token_uri": "https://next.moonbeam.network/api/acp/registration/ax1-vc.json"
+  },
+  "refused": {
+    "transfer": "selector_not_allowed",
+    "approve": "selector_not_allowed",
+    "value_send": "value_not_zero",
+    "unknown_selector": "selector_not_allowed"
+  },
+  "read_on": "2026-11-23",
+  "venue": "erc8004"
+}
