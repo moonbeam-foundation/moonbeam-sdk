@@ -427,6 +427,13 @@
       "at": "2026-11-22T16:11:10.612Z",
       "path": "/list/lst_37f9a1a251d3af46",
       "status": 200
+    },
+    {
+      "n": 68,
+      "at": "2026-11-24T08:50:54.604Z",
+      "path": "/catalog?kind=near-agent-market",
+      "status": 200,
+      "keyed": true
     }
   ]
 }
