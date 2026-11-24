@@ -3,7 +3,7 @@
 // The states are never set here: they come from the register's snapshot (venues-data.ts, scripts/gen-venues.mjs), mapped one way:
 //   live → live · tested → tested · partial → partial · self_test → self-test · claimed, contradicted → not yet · none (the market has no such step) → n/a
 import type { OnboardTransport } from '../onboard/index.js';
-import { VENUE_REGISTER } from './venues-data.js';
+import { VENUE_IDS, VENUE_REGISTER } from './venues-data.js';
 import { VENUE_MAINNET } from './venue-mainnet-data.js';
 import { listStatus, type ListMarket, type ListRow } from './journey.js';
 import { markets } from './index.js';
@@ -34,7 +34,8 @@ export type RegisterCohorts = { source: string | null; approved_on: string | nul
 export type ListMarketRow = { market: string; directory: boolean };
 export type RegisterSnapshot = { source: string | null; read_on: string | null; cohorts?: RegisterCohorts; list_markets?: Record<string, ListMarketRow>; markets: RegisterMarket[] };
 
-export const VENUE_IDS = Object.freeze(['x402-base', 'erc8183-base', 'memoacp-base', 'bitagent-base', 'olas-base', 'near-agent-market', 'a2a', 'mcp', 'erc8004', 'workflow-nodes'] as const);
+/** Every venue id, generated from the register snapshot (scripts/gen-venues.mjs), never typed here. */
+export { VENUE_IDS };
 export type VenueId = (typeof VENUE_IDS)[number];
 /**
  * _MARKETS_CUT_v1_ (2026-11-16) / _MARKETS_CUT_v2_ (2026-11-19): the markets Moonbeam lists agents on, read from coord (its listed register's
