@@ -1,0 +1,114 @@
+{
+ "schema": "taifoon.chain.kinds.v1",
+ "generated_from": "lang/cue/chains.cue (lang/emit/chains.mjs)",
+ "rule": "devnet: a test chain whose coin and tokens are minted test money; a send there moves no value. A chain not listed here is not a devnet.",
+ "chains": {
+  "eip155:8453": {
+   "key": "8453",
+   "name": "Base",
+   "family": "evm",
+   "devnet": false
+  },
+  "eip155:42161": {
+   "key": "42161",
+   "name": "Arbitrum One",
+   "family": "evm",
+   "devnet": false
+  },
+  "eip155:5042": {
+   "key": "5042",
+   "name": "Arc",
+   "family": "evm",
+   "devnet": false
+  },
+  "eip155:143": {
+   "key": "143",
+   "name": "Monad",
+   "family": "evm",
+   "devnet": false
+  },
+  "eip155:4663": {
+   "key": "4663",
+   "name": "Robinhood Chain",
+   "family": "evm",
+   "devnet": false
+  },
+  "eip155:100": {
+   "key": "100",
+   "name": "Gnosis",
+   "family": "evm",
+   "devnet": false
+  },
+  "eip155:130": {
+   "key": "130",
+   "name": "Unichain",
+   "family": "evm",
+   "devnet": false
+  },
+  "eip155:24101": {
+   "key": "24101",
+   "name": "Incentiv",
+   "family": "evm",
+   "devnet": false
+  },
+  "eip155:36927": {
+   "key": "36927",
+   "name": "Taifoon devnet",
+   "family": "evm",
+   "devnet": true
+  },
+  "eip155:3692781": {
+   "key": "3692781",
+   "name": "Taifoon mainnet",
+   "family": "evm",
+   "devnet": false
+  },
+  "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp": {
+   "key": "solana",
+   "name": "Solana",
+   "family": "solana",
+   "devnet": false,
+   "aliases": [
+    "solana:mainnet"
+   ]
+  }
+ },
+ "addresses": {
+  "eip155": {
+   "namespace": "eip155",
+   "family": "evm",
+   "pattern": "^0x[0-9a-fA-F]{40}$",
+   "what": "a 20-byte address in hex"
+  },
+  "solana": {
+   "namespace": "solana",
+   "family": "solana",
+   "pattern": "^[1-9A-HJ-NP-Za-km-z]{32,44}$",
+   "what": "a base58 public key"
+  },
+  "cosmos": {
+   "namespace": "cosmos",
+   "family": "cosmos",
+   "pattern": "^[a-z]{1,20}1[02-9ac-hj-np-z]{38,58}$",
+   "what": "a bech32 account with its chain's prefix (akash1…)"
+  },
+  "bittensor": {
+   "namespace": "bittensor",
+   "family": "substrate",
+   "pattern": "^[1-9A-HJ-NP-Za-km-z]{46,48}$",
+   "what": "an SS58 account"
+  },
+  "ton": {
+   "namespace": "ton",
+   "family": "ton",
+   "pattern": "^(-?[0-9]+:[0-9a-fA-F]{64}|[A-Za-z0-9_-]{48})$",
+   "what": "a raw (workchain:hex) or user-friendly (base64url) TON address"
+  },
+  "near": {
+   "namespace": "near",
+   "family": "near",
+   "pattern": "^(?=.{2,64}$)(([a-z\\d]+[-_])*[a-z\\d]+\\.)*([a-z\\d]+[-_])*[a-z\\d]+$",
+   "what": "a NEAR account id: a named account (a.near, x.market.near.ai) or a 64-hex implicit account"
+  }
+ }
+}

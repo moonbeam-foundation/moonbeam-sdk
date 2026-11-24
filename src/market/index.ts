@@ -54,6 +54,8 @@
  *   track(t, ref)                 GET  /listed/track         what listing did there: the listing read back on the venue, calls and revenue 7d, the lights
  *   list(t, { venue, agent })     the venue's own record     a listing's steps as they stand (genie.list.virtuals.v1), its one human item
  */
+import { accountOk, addressFormatOf } from './chain-address.js';
+export { accountOk, addressFormatOf, namespaceOf, type AddressFormat } from './chain-address.js';
 import type { OnboardTransport } from '../onboard/index.js';
 import { MarketError, call, needKey, query, seg } from './http.js';
 
@@ -193,17 +195,19 @@ export async function testEndpoint(t: OnboardTransport, input: { url: string; ki
 
 // ── hire ──────────────────────────────────────────────────────────────────────────────────────────────────────────────
 
-/** A seller to hand a task to: its protocol, its owner address, and its ERC-8004 id. Moonbeam reads its endpoint from its own record. */
-export type Candidate = { kind: 'mcp' | 'a2a' | (string & {}); address: string; agentId: string; chainId: number };
+/** A seller to hand a task to: its protocol, its account on its chain, and its ERC-8004 id. Moonbeam reads its endpoint from its own record.
+ *  `chain` (CAIP-2, e.g. near:mainnet) names a chain that is not an EVM chain id; the account is checked by that chain's format. */
+export type Candidate = { kind: 'mcp' | 'a2a' | (string & {}); address: string; agentId: string; chainId: number; chain?: string; endpoint?: string };
 /**
  * Hand a task to a seller in its own protocol (`POST /handshake`). With `dispatch: false` (the default) the handshake is only
  * opened: nothing reaches the seller. With `dispatch: true` the broker delivers it and answers the reply's digest and head.
  */
 export async function handOver(t: OnboardTransport, a: { candidate: Candidate; task: string; dispatch?: boolean; tool?: string; args?: Record<string, unknown> }): Promise<{ handshakeId: string; delivery: Record<string, unknown> | null; body: Record<string, unknown> }> {
   if (!a.task?.trim() || a.task.length > 4000) throw new RangeError('the task is 1 to 4,000 characters, in words');
-  if (!/^0x[0-9a-fA-F]{40}$/.test(a.candidate.address)) throw new RangeError('a seller is named by its owner address');
+  const chain = a.candidate.chain ?? String(a.candidate.chainId);
+  if (!accountOk(chain, a.candidate.address)) throw new RangeError(`a seller is named by ${addressFormatOf(chain)?.what ?? 'an account of a chain the layer names'} on ${chain}`);
   needKey(t, 'POST /handshake');
-  const j = await call<{ handshake_id?: string; delivery?: Record<string, unknown> | null }>(t, 'POST', '/handshake', { candidate: a.candidate, task: a.task.trim(), required_skills: [], chain: String(a.candidate.chainId), dispatch: a.dispatch === true, ...(a.tool ? { tool: a.tool, args: a.args ?? {} } : {}) });
+  const j = await call<{ handshake_id?: string; delivery?: Record<string, unknown> | null }>(t, 'POST', '/handshake', { candidate: a.candidate, task: a.task.trim(), required_skills: [], chain, dispatch: a.dispatch === true, ...(a.tool ? { tool: a.tool, args: a.args ?? {} } : {}) });
   if (!j.handshake_id) throw new MarketError(502, 'POST /handshake', j);
   return { handshakeId: j.handshake_id, delivery: j.delivery ?? null, body: j as Record<string, unknown> };
 }

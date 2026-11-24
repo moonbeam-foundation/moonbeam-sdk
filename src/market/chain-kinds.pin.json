@@ -1,0 +1,6 @@
+{
+  "about": "a byte-identical copy of the coordination layer’s chain kinds (coord lang/gen/chain-kinds.json, vendored to the layer as packages/resale/core/coord-lang/chain-kinds.json): the account format of each CAIP-2 namespace; do not edit, re-sync it with npm run sync",
+  "source": "the coordination layer: packages/resale/core/coord-lang/chain-kinds.json",
+  "commit": "0642e22d",
+  "sha256": "d6a95e606efb8a812b4368b1f14dde82eb512effc32e2ceefc31679a0dd2ac62"
+}

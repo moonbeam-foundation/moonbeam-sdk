@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// The two vendored files are byte-identical copies pinned by sha256: the assurance machine (src/assurance/assurance-shared.ts,
+// The vendored files are byte-identical copies pinned by sha256: the assurance machine (src/assurance/assurance-shared.ts,
 // re-synced with the layer's packages/assurance/scripts/sync.mjs --profile moonbeam) and the payment scheme
 // (src/resale/payment-scheme.mjs). This checks the local copies against their pins (no network); with TAIFOON_AGENTS set to a
 // checkout of the layer it also checks the scheme against the source file there.
@@ -10,7 +10,7 @@ import { fileURLToPath } from 'node:url';
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const sha = (p) => createHash('sha256').update(readFileSync(p)).digest('hex');
 let bad = 0;
-for (const [file, pin] of [['src/assurance/assurance-shared.ts', 'src/assurance/assurance-shared.pin.json'], ['src/resale/payment-scheme.mjs', 'src/resale/payment-scheme.pin.json']]) {
+for (const [file, pin] of [['src/assurance/assurance-shared.ts', 'src/assurance/assurance-shared.pin.json'], ['src/resale/payment-scheme.mjs', 'src/resale/payment-scheme.pin.json'], ['src/market/chain-kinds.json', 'src/market/chain-kinds.pin.json']]) {
   const want = JSON.parse(readFileSync(join(root, pin), 'utf8')).sha256; const got = sha(join(root, file));
   if (want !== got) { console.error(`${file}: sha256 ${got} is not the pinned ${want} (the copy was edited: re-sync it)`); bad++; } else console.log(`${file}: pinned ${got.slice(0, 12)}… ok`);
 }

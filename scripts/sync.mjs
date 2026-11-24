@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Re-sync the two vendored files from the coordination layer's sources, the way @taifoon/jev and taifoon-sdk do it:
+// Re-sync the vendored files from the coordination layer's sources, the way @taifoon/jev and taifoon-sdk do it:
 //   src/assurance/assurance-shared.ts  ← packages/assurance (scripts/sync.mjs --profile moonbeam: the machine, the Moonbeam
 //                                         venue and the attestation helper, one import-free file + its pin)
 //   src/resale/payment-scheme.mjs      ← packages/resale/core/payment-scheme.mjs (byte for byte + its pin)
@@ -43,5 +43,25 @@ if (check) {
   const pin = JSON.parse(readFileSync(SCHEME_PIN, 'utf8'));
   writeFileSync(SCHEME_PIN, JSON.stringify({ ...pin, commit, sha256: sha(body) }, null, 2) + '\n');
   console.log(`synced src/resale/payment-scheme.mjs (${commit})`);
+}
+// the chain kinds: the account format of each CAIP-2 namespace (src/market/chain-address.ts reads it through chain-kinds-data.ts)
+const KINDS = join(root, 'src', 'market', 'chain-kinds.json');
+const KINDS_PIN = join(root, 'src', 'market', 'chain-kinds.pin.json');
+const KINDS_TS = join(root, 'src', 'market', 'chain-kinds-data.ts');
+const kindsSrc = join(agents, 'packages', 'resale', 'core', 'coord-lang', 'chain-kinds.json');
+const KINDS_HEAD = '// generated: do not edit (scripts/sync.mjs ← src/market/chain-kinds.json, pinned)';
+const kindsTs = (b) => `${KINDS_HEAD}\nexport const CHAIN_ADDRESSES: Record<string, { namespace: string; family: string; pattern: string; what: string }> = ${JSON.stringify(JSON.parse(b.toString('utf8')).addresses ?? {})};\n`;
+if (!existsSync(kindsSrc)) { console.error(`TAIFOON_AGENTS: no ${kindsSrc}`); bad++; }
+else {
+  const kb = readFileSync(kindsSrc);
+  if (check) {
+    if (sha(readFileSync(KINDS)) !== sha(kb) || readFileSync(KINDS_TS, 'utf8') !== kindsTs(kb)) { console.error('src/market/chain-kinds.json differs from the layer’s chain kinds: run sync again'); bad++; }
+    else console.log(`src/market/chain-kinds.json equals the layer’s source (${commit})`);
+  } else {
+    writeFileSync(KINDS, kb); writeFileSync(KINDS_TS, kindsTs(kb));
+    const pin = JSON.parse(readFileSync(KINDS_PIN, 'utf8'));
+    writeFileSync(KINDS_PIN, JSON.stringify({ ...pin, commit, sha256: sha(kb) }, null, 2) + '\n');
+    console.log(`synced src/market/chain-kinds.json (${commit})`);
+  }
 }
 process.exit(bad ? 1 : 0);
