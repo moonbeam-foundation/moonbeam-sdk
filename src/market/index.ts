@@ -45,6 +45,10 @@
  *   planOffers(t)                 POST /access/subscribe    the plans and the top-up from the 402 answer: nothing paid or minted
  *   agentSales(t, ref)            the sale run's slices     what an agent sold, by day and market, and where each share stands
  *   olasRequest(t, id)            GET  /judge/evidence/olas/:id   one Olas Mech request: prompt, mech, fee, response
+ *   PICK (./pick.ts: one pick, the same on every surface; the core is shared with the Studio, the CLI and the MCP tools)
+ *   refOf(id) · hireBody(need, { ref }) · readAnswer(body) · movesOf(ref)   the ref an id names, its hire, an answer, the moves (no call)
+ *   resolveRef(t, id, { need })   GET  /ref/:ref        what a pick is, its seller and its moves
+ *   quote(t, need, { ref }) · hire(t, need, { ref })   POST /demands   the pick's hire as a dry run, or the hire (keyed)
  *   SALE (./sale.ts: the reads after the money is in)
  *   vaultArmState(t, vault) · armVault(t, signed)   GET · POST /vault/arm   a tenant vault's arm: live only on armed (a paid plan), else dry
  *   saleLedger · payoutQueues · vaultPolicy · claimablePayouts · salePaid · saleRecord · agentPayTo   GET /resale · /pipe/queues · /vault/policy · /pipe/claimable · /resale/sales/:id · /root · /agents/payments
@@ -285,6 +289,8 @@ export { COHORT_IDS, COHORT_ALIASES, COHORT_STEPS, PUBLIC_STATES, cohortIdOf, co
 export type { CohortId, DeprecatedCohortId, CohortRows, CohortState, CohortStep, CohortFacts, CohortStepRow, CohortSource, VenueCohort, PublicState, MainnetProof, MainnetProofs, FeatureId, FeatureMark, FeatureRead, JourneyRead } from './cohorts.js';
 export { SALE_STOPS, saleStop } from './sale-stops.js';
 export { STATES, MOVES, stateOf, statePath, readState } from './states.js';
+// _SELECTION_v1_: a pick, the same on every surface (./pick.ts over the shared core in ../selection)
+export { PICK_ROLE, refOf, hireBody, readAnswer, movesOf, resolveRef, quote, hire, type Resolved } from './pick.js';
 export type { State, StateId, StateKind, StateStep, StateRead, Move } from './states.js';
 // 0.13.0: where an agent is listed (journey) and the plan to list it (list): reads only
 export { JOURNEY_SCHEMA, JOURNEY_LEDS, journey, journeyOf, TRACK_SCHEMA, track, trackOf, LIST_SCHEMA, LIST_VENUES, LIST_STEPS, HOUSE_AGENTS, list } from './listed.js';

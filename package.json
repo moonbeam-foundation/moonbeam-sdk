@@ -144,7 +144,7 @@
     "check:registry": "node scripts/gen-moonbeam-acp.mjs --check",
     "check:pins": "node scripts/check-pins.mjs",
     "check:diagrams": "node scripts/gen-diagrams.mjs >/dev/null && git diff --exit-code -- 'docs/workflows/*.svg' docs/WORKFLOWS.md",
-    "check": "npm run typecheck && npm run build && npm test && npm run check:pins && npm run check:workflows && npm run check:paths && npm run check:venues && npm run check:acceptance && npm run check:states && npm run check:readme && npm run check:diagrams && npm run check:playground",
+    "check": "npm run typecheck && npm run build && npm test && npm run check:pins && npm run check:workflows && npm run check:paths && npm run check:venues && npm run check:acceptance && npm run check:states && npm run check:selection && npm run check:readme && npm run check:diagrams && npm run check:playground",
     "sync": "node scripts/sync.mjs",
     "check:sync": "node scripts/sync.mjs --check",
     "test:fork": "node test/fork/run-fork.mjs",
@@ -168,7 +168,9 @@
     "check:acceptance": "node scripts/gen-acceptance-tests.mjs --check",
     "gen:states": "node scripts/gen-states.mjs",
     "check:states": "node scripts/gen-states.mjs --check",
-    "io:record-api": "node scripts/record-api-rung.mjs"
+    "io:record-api": "node scripts/record-api-rung.mjs",
+    "gen:selection": "node scripts/gen-selection.mjs",
+    "check:selection": "node scripts/gen-selection.mjs --check"
   },
   "keywords": [
     "moonbeam",

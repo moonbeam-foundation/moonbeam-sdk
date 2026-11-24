@@ -1,0 +1,43 @@
+{
+ "schema": "taifoon.selection.vectors.v1",
+ "rule": "the golden cases of the one selection core (lang/emit/selection.mjs over lang/gen/selection.json), written by hand: every surface that holds a copy (taifoon-web, the taifoon CLI, the Moonbeam SDK) runs them and must give these answers",
+ "refs": [
+  { "in": "agent:erc8004:8453:59272", "out": { "ok": true, "text": "agent:erc8004:8453:59272" } },
+  { "in": "8453:59272", "out": { "ok": true, "text": "agent:erc8004:8453:59272" } },
+  { "in": "agent:8453:59272", "out": { "ok": true, "text": "agent:erc8004:8453:59272" } },
+  { "in": "grid:agentverse/agent1qw2499d5y2u9khdecjazzkrav2e6tdvfthrl6kqhngehh043clevya797fd", "out": { "ok": true, "text": "agent:agentverse:agent1qw2499d5y2u9khdecjazzkrav2e6tdvfthrl6kqhngehh043clevya797fd" } },
+  { "in": "agentverse.agent1qw2499d5y2u9khdecjazzkrav2e6tdvfthrl6kqhngehh043clevya797fd", "out": { "ok": true, "text": "agent:agentverse:agent1qw2499d5y2u9khdecjazzkrav2e6tdvfthrl6kqhngehh043clevya797fd" } },
+  { "in": " listing:agentverse:ls_1 ", "out": { "ok": true, "text": "listing:agentverse:ls_1" } },
+  { "in": "venue:deepinfra:deepinfra", "out": { "ok": true, "text": "venue:deepinfra:deepinfra" } },
+  { "in": "grid:no-such-venue/x", "out": { "ok": false, "reason": "ref_unknown" } },
+  { "in": "ls_8f3a01", "out": { "ok": false, "reason": "ref_unknown" } },
+  { "in": "cat_0123456789abcdef", "out": { "ok": false, "reason": "ref_unknown" } },
+  { "in": "", "out": { "ok": false, "reason": "ref_malformed" } },
+  { "in": "two words", "out": { "ok": false, "reason": "ref_malformed" } },
+  { "in": "<script>", "out": { "ok": false, "reason": "ref_malformed" } },
+  { "in": null, "out": { "ok": false, "reason": "ref_malformed" } }
+ ],
+ "hires": [
+  { "need": " count the words ", "o": { "ref": "agent:erc8004:8453:59272" }, "out": { "need": "count the words", "ref": "agent:erc8004:8453:59272", "dry_run": true } },
+  { "need": "count the words", "o": { "ref": "agent:erc8004:8453:59272", "run": true }, "out": { "need": "count the words", "ref": "agent:erc8004:8453:59272" } },
+  { "need": "count the words", "o": { "ref": "  " }, "out": { "need": "count the words", "dry_run": true } },
+  { "need": "count the words", "o": {}, "out": { "need": "count the words", "dry_run": true } }
+ ],
+ "answers": [
+  { "body": { "ok": true, "dry_run": true, "picked": { "ref": "agent:erc8004:8453:59272", "via": "registry", "catalog_id": "cat_1", "seller": "seller-1" } }, "role": "house", "out": { "seller": "seller-1", "example": null, "job": null, "links": {}, "reason": null } },
+  { "body": { "ok": true, "demand": { "id": "dm_1" }, "catalog": { "seller": "seller-1" }, "links": { "commerce": "/studio/commerce?job=dm_1", "status": "/v1/demands/dm_1" } }, "role": "house", "out": { "seller": "seller-1", "example": null, "job": "dm_1", "links": { "commerce": "/studio/commerce?job=dm_1", "status": "/v1/demands/dm_1" }, "reason": null } },
+  { "body": { "ok": true, "demand": { "id": "dm_1" }, "catalog": { "seller": "seller-1" }, "links": { "commerce": "/studio/commerce?job=dm_1", "status": "/v1/demands/dm_1" } }, "role": "reseller", "out": { "seller": "seller-1", "example": null, "job": "dm_1", "links": { "status": "/v1/demands/dm_1" }, "reason": null } },
+  { "body": { "ok": false, "code": "incomplete", "picked": { "seller": "seller-1" }, "candidates": [{ "class": "chat.word_count" }, { "class": "chat.word_count", "example": "how many words are in \"the quick brown fox\"" }] }, "role": "reseller", "out": { "seller": "seller-1", "example": "how many words are in \"the quick brown fox\"", "job": null, "links": {}, "reason": "incomplete" } },
+  { "body": { "ok": false, "code": "ref_unknown" }, "role": "house", "out": { "seller": null, "example": null, "job": null, "links": {}, "reason": "ref_unknown" } }
+ ],
+ "moves": [
+  { "ref": "agent:erc8004:8453:59272", "o": { "need": "count the words" }, "out": [
+   { "id": "quote", "op": { "method": "POST", "name": "demands" }, "needs": "nothing", "body": { "need": "count the words", "ref": "agent:erc8004:8453:59272", "dry_run": true } },
+   { "id": "hire", "op": { "method": "POST", "name": "demands" }, "needs": "sign_in", "body": { "need": "count the words", "ref": "agent:erc8004:8453:59272" } } ] },
+  { "ref": "agent:erc8004:8453:59272", "o": { "need": "count the words", "signedIn": true }, "out": [
+   { "id": "quote", "op": { "method": "POST", "name": "demands" }, "needs": "nothing", "body": { "need": "count the words", "ref": "agent:erc8004:8453:59272", "dry_run": true } },
+   { "id": "hire", "op": { "method": "POST", "name": "demands" }, "needs": "nothing", "body": { "need": "count the words", "ref": "agent:erc8004:8453:59272" } } ] },
+  { "ref": "venue:deepinfra:deepinfra", "o": {}, "out": [] },
+  { "ref": "job:erc8004:dm_1", "o": {}, "out": [ { "id": "status", "op": { "method": "GET", "name": "demands/:id" }, "needs": "nothing", "body": null } ] }
+ ]
+}

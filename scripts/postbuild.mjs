@@ -8,6 +8,8 @@ import { fileURLToPath } from 'node:url';
 import { parse } from '@babel/parser';
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 mkdirSync(join(root, 'dist', 'resale'), { recursive: true });
+mkdirSync(join(root, 'dist', 'selection'), { recursive: true });
+for (const f of ['selection.mjs', 'selection.d.mts']) copyFileSync(join(root, 'src', 'selection', f), join(root, 'dist', 'selection', f));
 for (const f of ['payment-scheme.mjs', 'payment-scheme.d.mts']) copyFileSync(join(root, 'src', 'resale', f), join(root, 'dist', 'resale', f));
 const pin = JSON.parse(readFileSync(join(root, 'src', 'resale', 'payment-scheme.pin.json'), 'utf8'));
 writeFileSync(join(root, 'dist', 'resale', 'payment-scheme.pin.json'), JSON.stringify({
@@ -24,7 +26,7 @@ export function stripComments(code, ts) {
   parse(out, { sourceType: 'module', plugins: ts ? [['typescript', { dts: true }]] : [] }); // still parses
   return out;
 }
-for (const [f, ts] of [['resale/payment-scheme.mjs', false], ['resale/payment-scheme.d.mts', true], ['assurance/assurance-shared.js', false], ['assurance/assurance-shared.d.ts', true]]) {
+for (const [f, ts] of [['resale/payment-scheme.mjs', false], ['resale/payment-scheme.d.mts', true], ['selection/selection.mjs', false], ['selection/selection.d.mts', true], ['assurance/assurance-shared.js', false], ['assurance/assurance-shared.d.ts', true]]) {
   const p = join(root, 'dist', f); const before = readFileSync(p, 'utf8'); const after = stripComments(before, ts);
   writeFileSync(p, after);
   rmSync(`${p}.map`, { force: true }); // its map pointed at the commented lines (the sourceMappingURL line was a comment too)
