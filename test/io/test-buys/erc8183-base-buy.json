@@ -1,0 +1,52 @@
+{
+ "schema": "moonbeam.io.test-buy.v1",
+ "rule": "_TEST_BUYS_v1_: one owner-approved mainnet test buy through coord's audited route (coord lang/cue/sign.cue buy.test_acp8183): one job of one pinned seller on Virtuals ACP v3 (ERC-8183), the desk asks coord-sign over the pipe, the loop vault pays and evaluates, every call after createJob bound to that job; the tx ids are filled after the real send",
+ "market": "erc8183-base",
+ "coord_market": "erc8183-base",
+ "op": "buy",
+ "stage": "bought",
+ "seller": {
+  "offering": "korea_market_brief",
+  "network": "eip155:8453",
+  "price_units": "10000",
+  "asset": "USDC"
+ },
+ "sign": {
+  "purpose": "buy.test_acp8183",
+  "rule": "sign-test-buy-job",
+  "requester": "taifoon-vault-desk",
+  "mode": "shadow"
+ },
+ "envelope": {
+  "kind": "sign",
+  "to": "coord-sign",
+  "stream": "operator.acp-escrow"
+ },
+ "steps": [
+  {
+   "id": "opened",
+   "read": "GET /v1/jobs?ids={job}",
+   "tx": null
+  },
+  {
+   "id": "funded",
+   "read": "GET /v1/jobs?ids={job}",
+   "tx": null
+  },
+  {
+   "id": "delivered",
+   "read": "GET /v1/jobs?ids={job}",
+   "tx": null
+  },
+  {
+   "id": "settled",
+   "read": "GET /v1/jobs?ids={job}",
+   "tx": null
+  }
+ ],
+ "job": null,
+ "run": {
+  "rung": "live",
+  "on": null
+ }
+}
