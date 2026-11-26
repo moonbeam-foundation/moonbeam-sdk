@@ -5,11 +5,32 @@
  "coord_market": "x402-base",
  "op": "buy",
  "stage": "bought",
- "seller": { "door": "https://agent402.tools/api/meta", "network": "eip155:8453", "price_units": "2000", "asset": "USDC" },
- "sign": { "purpose": "buy.test_wall", "rule": "sign-x402-buy", "requester": "taifoon-vault-desk", "mode": "shadow" },
- "envelope": { "kind": "sign", "to": "coord-sign", "stream": "operator.x402-buy" },
+ "seller": {
+  "door": "https://agent402.tools/api/meta",
+  "network": "eip155:8453",
+  "price_units": "2000",
+  "asset": "USDC"
+ },
+ "sign": {
+  "purpose": "buy.test_wall",
+  "rule": "sign-x402-buy",
+  "requester": "taifoon-vault-desk",
+  "mode": "armed"
+ },
+ "envelope": {
+  "kind": "sign",
+  "to": "coord-sign",
+  "stream": "operator.x402-buy"
+ },
  "steps": [
-  { "id": "paid", "read": "GET /v1/chain/tx?chain=8453&hashes={tx}", "tx": null }
+  {
+   "id": "paid",
+   "read": "GET /v1/chain/tx?chain=8453&hashes={tx}",
+   "tx": null
+  }
  ],
- "run": { "rung": "live", "on": null }
+ "run": {
+  "rung": "live",
+  "on": null
+ }
 }

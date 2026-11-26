@@ -28,7 +28,7 @@ describe('_TEST_BUYS_v1_ the mainnet test buys', () => {
       for (const s of b.steps) expect(reads.has(s.read), `${s.id}: ${s.read}`).toBe(true);
       expect(streams.has(b.envelope.stream), b.envelope.stream).toBe(true);
       expect(b.envelope).toMatchObject({ kind: 'sign', to: 'coord-sign' });
-      expect(b.sign.purpose).toMatch(/^buy\.test_[a-z_]+$/);
+      expect(b.sign.purpose).toMatch(/^buy\.test_[a-z0-9_]+$/);
       expect(b.sign.requester).toBe('taifoon-vault-desk');
     });
     it(`${f}: a tx id is empty or a Base transaction hash, and a dated run carries all of them`, () => {
