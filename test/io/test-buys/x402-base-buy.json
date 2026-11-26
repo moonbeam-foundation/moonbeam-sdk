@@ -1,0 +1,15 @@
+{
+ "schema": "moonbeam.io.test-buy.v1",
+ "rule": "_TEST_BUYS_v1_: one owner-approved mainnet test buy through coord's audited route (coord lang/cue/sign.cue buy.test_wall): the desk asks coord-sign over the pipe, the loop vault pays; the tx ids are filled after the real send",
+ "market": "x402-base",
+ "coord_market": "x402-base",
+ "op": "buy",
+ "stage": "bought",
+ "seller": { "door": "https://agent402.tools/api/meta", "network": "eip155:8453", "price_units": "2000", "asset": "USDC" },
+ "sign": { "purpose": "buy.test_wall", "rule": "sign-x402-buy", "requester": "taifoon-vault-desk", "mode": "shadow" },
+ "envelope": { "kind": "sign", "to": "coord-sign", "stream": "operator.x402-buy" },
+ "steps": [
+  { "id": "paid", "read": "GET /v1/chain/tx?chain=8453&hashes={tx}", "tx": null }
+ ],
+ "run": { "rung": "live", "on": null }
+}
