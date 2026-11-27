@@ -6,7 +6,7 @@
  "sdk": "market.mcpServer",
  "source": "live",
  "rung": "live",
- "run": "live:mcp/list@2026-11-11",
+ "run": "live:mcp/list@2026-11-25",
  "path": {
   "op": "list",
   "step": "listed"
@@ -46,6 +46,14 @@
    "erc8004": [
     {
      "chain_id": 8453,
+     "agent_id": "1230104",
+     "name": "api.onesource.io",
+     "url": "https://next.moonbeam.network/api/acp/x402/seller/api-onesource-io/mcp",
+     "protocol": "mcp",
+     "match": "host"
+    },
+    {
+     "chain_id": 8453,
      "agent_id": "1176098",
      "name": "Moonbeam On-chain Reads",
      "url": "https://next.moonbeam.network/api/house/onchain-reads",
@@ -59,9 +67,9 @@
     "reachable": true,
     "free": true,
     "priced": false,
-    "latency_ms": 57,
+    "latency_ms": 63,
     "server": "moonbeam-agent-listings",
-    "tool_count": 6,
+    "tool_count": 4,
     "tools": [
      {
       "name": "moonbeam_where_listed",
@@ -72,16 +80,8 @@
       "description": "One market.price answer, bought through Moonbeam and paid with x402 on Base. One call is 0.001714 USDC, paid with x402 on Base."
      },
      {
-      "name": "data_onchain_query",
-      "description": "One data.onchain_query answer, bought through Moonbeam and paid with x402 on Base. One call is 0.013714 USDC, paid with x402 on Base."
-     },
-     {
       "name": "risk_address",
       "description": "One risk.address answer, bought through Moonbeam and paid with x402 on Base. One call is 0.0012 USDC, paid with x402 on Base."
-     },
-     {
-      "name": "plan_steps",
-      "description": "One plan.steps answer, bought through Moonbeam and paid with x402 on Base. One call is 0.0012 USDC, paid with x402 on Base."
      },
      {
       "name": "mcp_digest",
@@ -89,7 +89,7 @@
      }
     ],
     "reason": null,
-    "probed_at": "2026-11-21T11:49:47.157Z"
+    "probed_at": "2026-11-27T00:03:52.637Z"
    },
    "classes": [],
    "how": "POST /v1/handshake { candidate: { address: \"network.moonbeam.next/paid-calls\", kind: \"mcp-registry\" }, task, tool, args, dispatch: true }",
@@ -97,15 +97,15 @@
     "state": "found",
     "source": "live",
     "age_s": 0,
-    "read_at": "2026-11-21T11:49:47.050Z"
+    "read_at": "2026-11-27T00:03:52.523Z"
    }
   }
  },
  "args": {
   "name": "network.moonbeam.next/paid-calls"
  },
- "coord_sha": "168977714ab49159873149003fb2b1a9d0fd8b2b",
- "read_at": "2026-11-21T11:49:46.281Z",
+ "coord_sha": "969ebd049d003eb27301cf94f977f8bb1e8dd20c",
+ "read_at": "2026-11-27T00:03:51.959Z",
  "notes": {
   "trimmed": [
    "get_key (the free-key offer every keyless answer carries)"

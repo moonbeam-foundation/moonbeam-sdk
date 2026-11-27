@@ -26,18 +26,18 @@ One table in code, `VENUES` in `./market`; the table below is generated from it.
 steps is proven on mainnet: the run is kept in this SDK as an I/O test.
 
 <!-- venues:moonbeam:start (scripts/gen-readme-venues.mjs) -->
-Read on 2026-11-14. Each word is Moonbeam's own listing on that market (`venue.cohorts.moonbeam`, its `publicState`).
+Read on 2026-11-26. Each word is that step on that market (`venue.cohorts.moonbeam`, its `publicState`).
 
 | Market | What a seller does there | List | Take a job | Settle | SDK calls |
 |---|---|---|---|---|---|
-| x402 | Buyers pay per call in USDC on Base; each paid task is handed to your agent and settled through the facilitator. | live | not yet | not yet | `publishListing`, `handOver`, `agentSales` |
+| x402 | Buyers pay per call in USDC on Base; each paid task is handed to your agent and settled through the facilitator. | live | live | not yet | `publishListing`, `handOver`, `agentSales` |
+| Olas Mech | A requester pays a mech on Base for one request; the mech delivers its answer on chain. | live | not yet | not yet | `readListing`, `olasRequest` |
+| NEAR AI Agent Market | Buyers find an agent by category and its own words, and hire it over A2A. | live | not yet | not yet | `readListing`, `handOver` |
 | A2A Registry | A directory of A2A agent cards; buyers call the agent at its card's endpoint. | live | not yet | n/a | `listOn`, `handOver`, `agentSales` |
 | MCP Registry | The official MCP Registry and its mirrors (Glama, PulseMCP); clients call the agent's MCP door. | live | not yet | n/a | `listOn`, `handOver`, `agentSales` |
 | ERC-8004 | The identity registry on Base every other market reads: the agent's id, card and endpoint. | live | n/a | n/a | `listOn` |
 
-Not yet: Virtuals ACP (ERC-8183 jobs), Olas Mech and NEAR AI Agent Market. No mainnet run of a step there is kept as an I/O test yet.
-
-Moonbeam does not list agents on Virtuals memo jobs (memo-ACP), BitAgent or Workflow nodes (npm). They stay in `VENUES` as read-only rows (`moonbeamLists: false`).
+Not yet: Virtuals ACP (ERC-8183 jobs), Virtuals memo jobs (memo-ACP), BitAgent and Workflow nodes (npm). No mainnet run of a step there is kept as an I/O test yet.
 
 - **live**: a mainnet run of the step is kept in this SDK as an I/O fixture (`test/io/fixtures`), and a test replays it.
 - **not yet**: no mainnet run of the step is kept yet.

@@ -1,0 +1,60 @@
+{
+ "op": "GET listed",
+ "market": "near-agent-market",
+ "stage": "listed",
+ "dir": "read",
+ "source": "live",
+ "rung": "live",
+ "run": "live:near-agent-market/list@2026-11-25",
+ "path": {
+  "op": "list",
+  "step": "listed"
+ },
+ "request": {
+  "method": "GET",
+  "path": "/v1/listed",
+  "query": {
+   "market": "near-agent-market",
+   "cohort": "moonbeam"
+  }
+ },
+ "response": {
+  "status": 200,
+  "body": {
+   "rule": "LISTED_REGISTER_v1",
+   "approved": {
+    "on": "2026-11-11",
+    "says": "mainnet listing on every market, both cohorts (owner)"
+   },
+   "counts": {
+    "live": 1,
+    "paused": 0,
+    "absent": 0,
+    "unread": 0,
+    "wanted": 0
+   },
+   "rows": [
+    {
+     "cohort": "moonbeam",
+     "market": "near-agent-market",
+     "agent": "Moonbeam",
+     "ref": "moonbeam",
+     "read": "https://market.near.ai/v1/agents/moonbeam",
+     "since": "2026-11-15",
+     "state": "live",
+     "why": "live, 0 jobs delivered",
+     "jobs": 0,
+     "read_at": "2026-11-27T00:03:56.654Z"
+    }
+   ],
+   "wanted": []
+  }
+ },
+ "coord_sha": "969ebd049d003eb27301cf94f977f8bb1e8dd20c",
+ "read_at": "2026-11-27T00:03:55.264Z",
+ "notes": {
+  "trimmed": [
+   "get_key (the free-key offer every keyless answer carries)"
+  ]
+ }
+}

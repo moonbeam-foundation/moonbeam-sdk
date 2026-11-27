@@ -25,7 +25,7 @@ const out = new URL('../src/market/venues-data.ts', import.meta.url);
 const arg = (k) => { const i = process.argv.indexOf(k); return i > 0 ? process.argv[i + 1] : null; };
 
 // the register's id of the workflow-node market is renamed; every other id is kept
-const RENAME = { n8n: 'workflow-nodes' };
+import { RENAME } from './market-ids.mjs';
 // _VENUE_TRUTH_v1_: the operator's cohort is named by its role (`operator`; 0.12 snapshots said `layer`); the register's evidence was read for it
 const COHORT_RENAME = { taifoon: 'operator', layer: 'operator' };
 const COHORTS = ['operator', 'moonbeam'];
@@ -67,13 +67,13 @@ if (from || listedPath || featuresPath || journeyPaths || marketReadPath || regi
       const ev = m.evidence ?? {};
       // an outside seller is not named in public text: a host in brackets is dropped
       // and so is a note in brackets that names an internal repo or tool
-      const words = (t) => (typeof t === 'string' ? t.replace(/\s*\((?:[a-z0-9-]+\.)+[a-z]{2,}\)/gi, '').replace(/\s*\([^()]*(?:taifoon|\bn8n\b)[^()]*\)/gi, '') : null);
+      const words = (t) => (typeof t === 'string' ? t.replace(/\bthe layer['’]s\b/gi, 'the operator’s').replace(/\bthe layer\b/gi, 'the operator').replace(/\bn8n\b/gi, 'workflow').replace(/\s*\((?:[a-z0-9-]+\.)+[a-z]{2,}\)/gi, '').replace(/\s*\([^()]*(?:taifoon|\bn8n\b)[^()]*\)/gi, '') : null);
       const step = (s) => ({ register: m.sell?.[s] ?? 'none', proof: ev[s]?.proof ?? 'none', says: words(ev[s]?.says), read_on: ev[s]?.read_on ?? null });
       const mid = RENAME[id] ?? id;
       const kept = prior?.markets?.find((x) => x.id === mid)?.cohorts;
       return {
         id: mid,
-        entry: { cost: m.entry?.cost ?? 'unknown', done: m.entry?.done === true, what: m.entry?.what ?? null },
+        entry: { cost: m.entry?.cost ?? 'unknown', done: m.entry?.done === true, what: words(m.entry?.what) },
         ...Object.fromEntries(STEPS.map((s) => [s, step(s)])),
         paid: ev.payout ? { proof: ev.payout.proof, says: words(ev.payout.says), read_on: ev.payout.read_on } : null,
         ...(kept ? { cohorts: kept } : {}),

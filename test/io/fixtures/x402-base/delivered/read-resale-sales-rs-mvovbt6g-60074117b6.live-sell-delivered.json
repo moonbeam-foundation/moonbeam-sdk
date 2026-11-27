@@ -1,0 +1,112 @@
+{
+ "op": "GET resale/sales/rs_mvovbt6g_60074117b6",
+ "market": "x402-base",
+ "stage": "delivered",
+ "dir": "read",
+ "source": "live",
+ "rung": "live",
+ "run": "live:x402-base/sell@2026-11-26",
+ "path": {
+  "op": "sell",
+  "step": "delivered"
+ },
+ "request": {
+  "method": "GET",
+  "path": "/v1/resale/sales/rs_mvovbt6g_60074117b6",
+  "query": {}
+ },
+ "response": {
+  "status": 200,
+  "body": {
+   "ok": true,
+   "rule": "RESALE_SALE_READ_v1",
+   "sale": {
+    "schema": "taifoon.resale.sale.v1",
+    "rule": "RESALE_WALL_v1",
+    "id": "rs_mvovbt6g_60074117b6",
+    "at": "2026-10-26T06:21:09.890Z",
+    "class": "risk.address",
+    "seller": "polymarket-odds-72343955726.us-central1.run.app",
+    "handshake_id": "hs_e017683d423ace5d48b1be90",
+    "door": "https://coord.taifoon.dev/v1/x402/class/risk.address",
+    "settle": "direct",
+    "channel": null,
+    "payment": {
+     "tx": "0xc89817d02337344611f283711d5d31376f569ed9a0029249900e7d96829cc787",
+     "network": "eip155:8453",
+     "payer": "0xec2abd3eda89bed90124736e317e847d5fb6d034",
+     "asset": "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+     "paid_units": "9978"
+    },
+    "terms": {
+     "price_units": "9978",
+     "fee_units": "1663",
+     "payout_units": "8315"
+    },
+    "content_check": {
+     "ok": true
+    }
+   },
+   "delivery": null,
+   "listing": {
+    "id": "ls_0ca108a31df1d82a",
+    "key": "polymarket-odds-72343955726.us-central1.run.app",
+    "kind": "a2a",
+    "endpoint": "https://polymarket-odds-72343955726.us-central1.run.app/a2a",
+    "whose": "outside",
+    "state": "listed",
+    "payout": "0xec5275d5b03bc390fca63d902d0b2d0db2eb5573",
+    "owner": null,
+    "probes": [
+     {
+      "at": "2026-11-26T11:21:17.415Z",
+      "method": "class_probe",
+      "class": "a2a.json_normalize",
+      "ok": true
+     },
+     {
+      "at": "2026-11-26T11:21:17.415Z",
+      "method": "class_probe",
+      "class": "mcp.digest",
+      "ok": true
+     },
+     {
+      "at": "2026-11-26T05:09:02.615Z",
+      "method": "class_probe",
+      "class": "market.price",
+      "ok": true
+     },
+     {
+      "at": "2026-11-26T05:09:02.615Z",
+      "method": "class_probe",
+      "class": "data.onchain_query",
+      "ok": true
+     },
+     {
+      "at": "2026-11-25T22:55:23.592Z",
+      "method": "class_probe",
+      "class": "risk.address",
+      "ok": true
+     },
+     {
+      "at": "2026-11-25T22:55:23.592Z",
+      "method": "class_probe",
+      "class": "plan.steps",
+      "ok": false
+     }
+    ],
+    "updated_at": "2026-11-26T13:35:17.068Z"
+   }
+  }
+ },
+ "coord_sha": "969ebd049d003eb27301cf94f977f8bb1e8dd20c",
+ "read_at": "2026-11-27T00:04:29.627Z",
+ "notes": {
+  "dropped": [
+   "sale.payment.pay_to (a payee, requester, signer or treasury-like address field)"
+  ],
+  "trimmed": [
+   "get_key (the free-key offer every keyless answer carries)"
+  ]
+ }
+}

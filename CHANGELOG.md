@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.13.6 (2026-11-27)
+
+- **The venue table is read again from coord's evidence (2026-11-26).** Six markets are proven on mainnet: x402 (list and take),
+  Olas Mech, the NEAR AI Agent Market, the A2A Registry, the MCP Registry and ERC-8004 (list). Virtuals ACP, Virtuals memo jobs, BitAgent
+  and the workflow nodes read not yet: Virtuals ACP has one self-test job only, and no step there is public.
+- **Moonbeam lists on every market** coord's listed register holds no cut row for (BitAgent, memo jobs and the workflow nodes are back).
+- **A market's own newer read stands.** A feature mark older than the register's read of the same step no longer holds that step down;
+  a market's evidence-read live state counts toward `publicState` once its mainnet run is kept whole.
+- **New mainnet reads kept as I/O fixtures:** every live run re-recorded against its new ref, the x402 settle read on a Base transaction
+  and the sale record that goes with it, and the MCP Registry listing run of a second seller (`test/io/autolist`).
+
 ## 0.13.5 (2026-11-22)
 
 - **What listing did: `track(t, ref)`.** `GET /listed/track?agent=<ref>` (listed.track.v1), typed: for one agent on every venue,

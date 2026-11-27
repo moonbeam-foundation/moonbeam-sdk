@@ -23,7 +23,8 @@
 //
 // _MAINNET_IO_v1_ (owner 2026-11-21: "if we say we support a market it must be e2e tested with I/O tests for mainnet"): the words above
 // stay in the typed data for callers. What a customer reads is `publicState`, and it has two words: live and not yet (n/a where the
-// market has no such step). A step reads live only when its own state is live AND a mainnet run of its path is kept in this SDK as an
+// market has no such step). A step reads live only when its state is live (or the market's own evidence-read state is live: the
+// operator's proven reads, which Moonbeam's listing there resells; a cut or closed market, or a shared listing, never) AND a mainnet run of its path is kept in this SDK as an
 // I/O fixture with the recorded read of every step it covers (venue-mainnet-data.ts, written by scripts/gen-paths.mjs from the
 // fixtures on disk). A fork run, a devnet run, a self-test or a part of a step is evidence for us, never a public word.
 import type { VenueState, VenueStep, VenueStepRow } from './venues.js';
@@ -100,9 +101,13 @@ export const PUBLIC_STATES: readonly PublicState[] = Object.freeze(['live', 'not
 export type MainnetProof = { op: string; ref: string; on: string; run: string; steps: Record<string, string | null>; proven: boolean };
 /** Per market, the mainnet run kept for each feature of the matrix (`STEP_FEATURE`). */
 export type MainnetProofs = Record<string, Record<string, MainnetProof>>;
-/** The public word of a step: live only on its own live state and a mainnet run kept whole; n/a stays; everything else is not yet. */
-export const publicStateOf = (state: CohortState | VenueState, proof?: MainnetProof | null): PublicState =>
-  (state === 'n/a' ? 'n/a' : state === 'live' && proof?.proven === true && Object.values(proof.steps).every(Boolean) ? 'live' : 'not yet');
+/** The public word of a step: live only on a live state (the cohort's own, or the market's evidence-read one) and a mainnet run kept whole; n/a stays; everything else is not yet. */
+export const publicStateOf = (state: CohortState | VenueState, proof?: MainnetProof | null, register: VenueState = state as VenueState): PublicState => {
+  if (state === 'n/a') return 'n/a';
+  const kept = proof?.proven === true && Object.values(proof.steps).every(Boolean);
+  const standing = state === 'live' || (register === 'live' && state !== 'cut' && state !== 'closed' && state !== 'shared');
+  return kept && standing ? 'live' : 'not yet';
+};
 export type CohortStepRow = { state: CohortState; says: string | null; read_on: string | null; from?: CohortSource; who?: string | null;
   /** _MAINNET_IO_v1_: what a customer reads: live, not yet or n/a. Tables, docs and pages print this, never `state`. */
   publicState: PublicState;
@@ -131,7 +136,7 @@ export function cohortOf(cohortIn: CohortId | DeprecatedCohortId, facts: CohortF
   type Read = Omit<CohortStepRow, 'publicState' | 'mainnet'>;
   const row = (state: CohortState, says: string | null, read_on: string | null): Read => ({ state, says, read_on });
   const step = (k: CohortStep): CohortStepRow => {
-    const r = read(k); const proof = mainnet[STEP_FEATURE[k]]; const publicState = publicStateOf(r.state, proof);
+    const r = read(k); const proof = mainnet[STEP_FEATURE[k]]; const publicState = publicStateOf(r.state, proof, steps[k].state);
     return { ...r, publicState, ...(publicState === 'live' && proof ? { mainnet: { ref: proof.ref, on: proof.on, run: proof.run } } : {}) };
   };
   const read = (k: CohortStep): Read => {

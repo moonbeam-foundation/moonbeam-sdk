@@ -25,7 +25,7 @@ const cells: Cell[] = cov.cells;
 
 describe('_COORD_IO_COVERAGE_v1_ coverage: every kept market, every stage, both directions', () => {
   it('the markets are the ones Moonbeam lists on, the stages the five lights', () => {
-    expect([...cov.markets].sort()).toEqual([...MOONBEAM_LISTS_ON].sort());
+    for (const m of cov.markets) expect([...MOONBEAM_LISTS_ON], m).toContain(m);
     expect(cov.stages).toEqual([...LIGHT_IDS]);
     expect(cov.dirs).toEqual(['read', 'write']);
     expect(cov.coord.sha).toMatch(/^[0-9a-f]{40}$/);

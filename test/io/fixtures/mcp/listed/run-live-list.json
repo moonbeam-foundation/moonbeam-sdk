@@ -9,8 +9,8 @@
  ],
  "run": {
   "rung": "live",
-  "on": "2026-11-11",
-  "ref": "live:mcp/list@2026-11-11"
+  "on": "2026-11-25",
+  "ref": "live:mcp/list@2026-11-25"
  },
  "covers": [
   "listed"
@@ -27,5 +27,5 @@
    "party": null
   }
  ],
- "coord_sha": "9738fe3f9fd76db4257b8ccc5bf2e390a27e8643"
+ "coord_sha": "969ebd049d003eb27301cf94f977f8bb1e8dd20c"
 }

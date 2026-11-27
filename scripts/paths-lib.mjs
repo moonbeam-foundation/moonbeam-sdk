@@ -25,12 +25,13 @@ const publicRow = (r) => ({ ...r,
 });
 
 /** Moonbeam's part of the public paths: its kept markets in coord's order, their rows and gaps, the coord sha they came from. */
-export function moonbeamPaths(pub, sha) {
+export function moonbeamPaths(pub, sha, known = null) {
   if (pub?.rule !== 'VENUE_PATHS_v1' || !Array.isArray(pub.rows)) throw new Error('not coord venue paths (rule VENUE_PATHS_v1, rows)');
   if (!/^[0-9a-f]{40}$/.test(sha ?? '')) throw new Error(`no coord sha (${sha})`);
   const kept = pub.kept?.moonbeam;
   if (!Array.isArray(kept) || !kept.length) throw new Error('coord venue paths name no Moonbeam markets (kept.moonbeam)');
-  const markets = [...pub.order.filter((m) => kept.includes(m)), ...kept.filter((m) => !pub.order.includes(m))];
+  // a market the SDK names differently (known lacks coord's id) has its own table row and is not in these public paths
+  const markets = [...pub.order.filter((m) => kept.includes(m)), ...kept.filter((m) => !pub.order.includes(m))].filter((m) => !known || known.has(m));
   const rows = pub.rows.filter((r) => markets.includes(r.market) && (r.cohorts ?? []).includes('moonbeam'))
     .sort((a, b) => markets.indexOf(a.market) - markets.indexOf(b.market)).map(publicRow);
   const gaps = (pub.gaps ?? []).filter((g) => markets.includes(g.market));

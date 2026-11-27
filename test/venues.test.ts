@@ -46,7 +46,9 @@ describe('VENUES: every venue, one table', () => {
         const word = k === 'paid' ? r.paid?.proof : r[k].register;
         const read = word ? WORD[word] ?? 'not yet' : 'not yet';
         // _VENUE_TRUTH_v2_: the evidence cohort's mark may hold the state lower, never higher, and says so in `capped`
-        const m = market.markOf(r.cohorts?.[market.VENUE_EVIDENCE_OF], k);
+        const m0 = market.markOf(r.cohorts?.[market.VENUE_EVIDENCE_OF], k);
+        // a mark older than the register's own read of the step is stale: the newer read stands
+        const m = m0 && !(m0.read_at && s.read_on && m0.read_at.slice(0, 10) < s.read_on.slice(0, 10)) ? m0 : null;
         if (s.state !== 'n/a') expect(s.state, `${v.id}.${k}`).toBe(m ? market.capState(read as market.VenueState, m.state) : read);
         else { expect(s.call, `${v.id}.${k} n/a has no call`).toBeNull(); expect(s.says, `${v.id}.${k} n/a says why`).toBeTruthy(); }
         if (s.capped) { expect(s.capped.mark, `${v.id}.${k}`).toBe(m!.mark); expect(s.state).not.toBe(read); }
@@ -60,8 +62,9 @@ describe('VENUES: every venue, one table', () => {
     // ERC-8183 settle: the register's self-test; the operator's mark reads partial on Virtuals' own read, so it is not capped
     expect(VENUE_STEPS.map((k) => at('erc8183-base')[k].state)).toEqual(['not yet', 'self-test', 'self-test', 'self-test']);
     expect(at('erc8183-base').settle.capped).toBeUndefined();
-    // Olas list: proven by the register, held at not yet while coord's feature matrix reads the list broken (2026-11-19T07:31Z)
-    expect(at('olas-base').list).toMatchObject({ state: 'not yet', register: 'live', capped: { mark: 'broken' } });
+    // Olas list: proven by the register after the feature matrix's older read of the list, so no mark holds it down
+    expect(at('olas-base').list).toMatchObject({ state: 'live', register: 'live' });
+    expect(at('olas-base').list.capped).toBeUndefined();
     expect(VENUE_STEPS.map((k) => at('near-agent-market')[k].state)).toEqual(['live', 'not yet', 'not yet', 'not yet']);
     expect(VENUE_STEPS.map((k) => at('erc8004')[k].state)).toEqual(['live', 'n/a', 'n/a', 'n/a']);
   });
@@ -294,15 +297,12 @@ describe('the sale\'s reads', () => {
   });
 });
 
-describe('_MARKETS_CUT_v1_: the seven markets Moonbeam lists on', () => {
-  it('names x402, Virtuals ACP, Olas Mech, NEAR, A2A, MCP and ERC-8004, and keeps the three cut markets as read-only rows', () => {
-    expect([...market.MOONBEAM_LISTS_ON].sort()).toEqual(['a2a', 'erc8004', 'erc8183-base', 'mcp', 'near-agent-market', 'olas-base', 'x402-base']);
-    for (const id of ['bitagent-base', 'memoacp-base', 'workflow-nodes']) {
-      expect(market.listsOn(id), id).toBe(false);
-      expect(market.venueById(id)?.moonbeamLists, id).toBe(false);
-    }
+describe('_MARKETS_CUT_v2_: Moonbeam lists wherever the listed register holds no cut row', () => {
+  it('MOONBEAM_LISTS_ON is every market less the cut rows, and each row says so', () => {
+    const cut = market.VENUES.filter((v) => VENUE_REGISTER.markets.find((m) => m.id === v.id)?.cohorts?.moonbeam?.cut).map((v) => v.id);
+    expect([...market.MOONBEAM_LISTS_ON].sort()).toEqual(market.VENUES.map((v) => v.id).filter((id) => !cut.includes(id)).sort());
+    for (const id of cut) expect(market.listsOn(id), id).toBe(false);
     for (const v of market.VENUES) expect(v.moonbeamLists, v.id).toBe(market.listsOn(v.id));
-    expect(market.VENUES.filter((v) => v.moonbeamLists)).toHaveLength(7);
   });
 });
 

@@ -12,10 +12,11 @@ const files = (existsSync(dir) ? readdirSync(dir) : []).filter((f) => f.endsWith
 const WRITE: Record<string, RegExp> = { a2a: /\/agents\/register$/, mcp: /\/v0\/publish$/, 'x402-base': /discovery\/register$|public\.resources\.register$/ };
 
 describe('list op fixtures', () => {
-  it('each recorded run is of a market the op lists on, at most one per market', () => {
-    const venues = files.map((f) => JSON.parse(readFileSync(join(dir, f), 'utf8')).venue as string);
-    expect(new Set(venues).size).toBe(venues.length);
-    for (const v of venues) expect(Object.keys(WRITE)).toContain(v);
+  it('each recorded run is of a market the op lists on, at most one per market and agent', () => {
+    const runs = files.map((f) => JSON.parse(readFileSync(join(dir, f), 'utf8')) as { venue: string; ref: string });
+    const keys = runs.map((r) => `${r.venue}|${r.ref}`);
+    expect(new Set(keys).size).toBe(keys.length);
+    for (const r of runs) expect(Object.keys(WRITE)).toContain(r.venue);
   });
   for (const f of files) {
     const fx = JSON.parse(readFileSync(join(dir, f), 'utf8')) as Fx;

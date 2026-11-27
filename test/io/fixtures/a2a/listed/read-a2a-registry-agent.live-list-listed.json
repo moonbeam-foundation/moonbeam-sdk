@@ -3,10 +3,9 @@
  "market": "a2a",
  "stage": "listed",
  "dir": "read",
- "sdk": "market.a2aAgent",
  "source": "live",
  "rung": "live",
- "run": "live:a2a/list@2026-11-06",
+ "run": "live:a2a/list@2026-11-25",
  "path": {
   "op": "list",
   "step": "listed"
@@ -37,24 +36,99 @@
      "description": "One market.price answer, bought through Moonbeam and paid with x402 on Base. One call is 0.001714 USDC, paid with x402 on Base."
     },
     {
-     "id": "data_onchain_query",
-     "name": "Data onchain query",
-     "description": "One data.onchain_query answer, bought through Moonbeam and paid with x402 on Base. One call is 0.013714 USDC, paid with x402 on Base."
-    },
-    {
      "id": "risk_address",
      "name": "Risk address",
      "description": "One risk.address answer, bought through Moonbeam and paid with x402 on Base. One call is 0.0012 USDC, paid with x402 on Base."
     },
     {
-     "id": "plan_steps",
-     "name": "Plan steps",
-     "description": "One plan.steps answer, bought through Moonbeam and paid with x402 on Base. One call is 0.0012 USDC, paid with x402 on Base."
-    },
-    {
      "id": "mcp_digest",
      "name": "MCP digest",
      "description": "One mcp.digest answer, bought through Moonbeam and paid with x402 on Base. One call is 0.0012 USDC, paid with x402 on Base."
+    },
+    {
+     "id": "api_bitrefill_com_gift_cards_search",
+     "name": "Gift cards search",
+     "description": "Search 10,000+ gift card & voucher brands across 180+ countries by name and country. Pay in USDC via x402, no account. 0.002 USDC a call."
+    },
+    {
+     "id": "api_bitrefill_com_products_detail",
+     "name": "Products detail",
+     "description": "Get a product's packages, pricing, and recipient requirements before creating an invoice. 0.001 USDC a call."
+    },
+    {
+     "id": "api_bitrefill_com_invoice_create",
+     "name": "Invoice create",
+     "description": "Create a price-locked invoice for one or more gift cards, eSIMs, or mobile top-ups, payable in USDC or over Lightning. 0.002 USDC a call."
+    },
+    {
+     "id": "api_bitrefill_com_invoice_status",
+     "name": "Invoice status",
+     "description": "Check an invoice status and, with SIWX from the paying wallet or the Lightning payment preimage, retrieve redemption codes. 0.001 USDC a call."
+    },
+    {
+     "id": "api_bitrefill_com_checkout_info",
+     "name": "Checkout info",
+     "description": "Discover the Bitrefill x402 storefront: supported networks, the full route flow, and wallet persistence rules. 0.001 USDC a call."
+    },
+    {
+     "id": "ax1_vc_q_verdict_resource",
+     "name": "Q verdict resource",
+     "description": "Any agent can buy a Token Verdict over x402: AI grade, roast and live onchain metrics for any Base, Solana or Robinhood token. $0.02 in USDC, no account. 0.02 USDC a call."
+    },
+    {
+     "id": "x402_clashofcoins_com_x402_buy",
+     "name": "X402 buy",
+     "description": "Agentic checkout for Clash of Coins 0.02 USDC a call."
+    },
+    {
+     "id": "x402_clashofcoins_com_x402_cheap_health",
+     "name": "X402 cheap health",
+     "description": "Low-cost gateway health probe for real x402 settlement checks 0.001 USDC a call."
+    },
+    {
+     "id": "blockrun_ai_chat_completions",
+     "name": "Chat completions",
+     "description": "AI chat completions API - pay per request with USDC on Base 0.002 USDC a call."
+    },
+    {
+     "id": "blockrun_ai_polymarket_markets",
+     "name": "Polymarket markets",
+     "description": "Query Polymarket markets with filtering, sorting, and pagination 0.0085 USDC a call."
+    },
+    {
+     "id": "blockrun_ai_defillama_protocols",
+     "name": "Defillama protocols",
+     "description": "List of every DeFi protocol DefiLlama tracks, with current and historical TVL across chains. 0.006 USDC a call."
+    },
+    {
+     "id": "blockrun_ai_exa_search",
+     "name": "Exa search",
+     "description": "Neural and keyword web search. Optional category filter: company, research paper, news, pdf, github, personal site, linkedin profile, financial report. 0.011 USDC a call."
+    },
+    {
+     "id": "blockrun_ai_rpc_base",
+     "name": "Rpc base",
+     "description": "Multi-chain JSON-RPC from BlockRun across 40 chains (Ethereum, Base, Solana, Polygon, BSC, Arbitrum, Optimism, Avalanche, Bitcoin, Sui, and more). One endpoint, every chain, pay-per-call in USDC, no A"
+    },
+    {
+     "id": "stableenrich_dev_exa_search",
+     "name": "Exa search",
+     "description": "Exa Search - Neural search across the web 0.01 USDC a call."
+    },
+    {
+     "id": "stableenrich_dev_firecrawl_search",
+     "name": "Firecrawl search",
+     "description": "Firecrawl Search - Search the web 0.0252 USDC a call."
+    },
+    {
+     "id": "stableenrich_dev_fullenrich_people_search",
+     "name": "Fullenrich people search",
+     "description": "FullEnrich People Search — filter by company domain/name/LinkedIn URL, seniority, title, location, skills, and 20+ FullEnrich filters. Default lean roster: companies map + company_id refs; include_emp"
+    },
+    {
+     "id": "stableenrich_dev_pdl_people_enrich",
+     "name": "Pdl people enrich",
+     "description": "PDL Person Enrich — career history, emails, phone. Requires one of: `email`, `profile` (LinkedIn URL), or `first_name` + `last_name` + (`company_name` OR `company_domain`). 0.28 USDC a call."
     }
    ],
    "open": true,
@@ -62,15 +136,23 @@
    "access": "open: an https URL and no security scheme in its card",
    "registry_health": {
     "healthy": true,
-    "uptime_percentage": 97.82608695652173,
-    "avg_response_time_ms": 2599,
-    "last_check": "2026-11-21T11:45:11.456453Z",
+    "uptime_percentage": 97.87234042553192,
+    "avg_response_time_ms": 3022,
+    "last_check": "2026-11-26T23:47:08.655740Z",
     "task_conformance": "WORKING",
     "task_passed": true
    },
    "hidden": false,
    "flags": 0,
    "erc8004": [
+    {
+     "chain_id": 8453,
+     "agent_id": "1230104",
+     "name": "api.onesource.io",
+     "url": "https://next.moonbeam.network/api/acp/x402/seller/api-onesource-io/mcp",
+     "protocol": "mcp",
+     "match": "host"
+    },
     {
      "chain_id": 8453,
      "agent_id": "1176098",
@@ -84,20 +166,35 @@
    "probe": {
     "reachable": true,
     "status": 200,
-    "latency_ms": 17,
+    "latency_ms": 739,
     "card_url": "https://next.moonbeam.network/api/acp/x402/a2a",
     "url_matches": true,
     "protocol_version": "0.3.0",
     "dialect": "0.3",
     "skills": [
      "market_price",
-     "data_onchain_query",
      "risk_address",
-     "plan_steps",
-     "mcp_digest"
+     "mcp_digest",
+     "api_bitrefill_com_gift_cards_search",
+     "api_bitrefill_com_products_detail",
+     "api_bitrefill_com_invoice_create",
+     "api_bitrefill_com_invoice_status",
+     "api_bitrefill_com_checkout_info",
+     "ax1_vc_q_verdict_resource",
+     "x402_clashofcoins_com_x402_buy",
+     "x402_clashofcoins_com_x402_cheap_health",
+     "blockrun_ai_chat_completions",
+     "blockrun_ai_polymarket_markets",
+     "blockrun_ai_defillama_protocols",
+     "blockrun_ai_exa_search",
+     "blockrun_ai_rpc_base",
+     "stableenrich_dev_exa_search",
+     "stableenrich_dev_firecrawl_search",
+     "stableenrich_dev_fullenrich_people_search",
+     "stableenrich_dev_pdl_people_enrich"
     ],
     "reason": null,
-    "probed_at": "2026-11-21T11:49:50.683Z"
+    "probed_at": "2026-11-27T00:03:54.057Z"
    },
    "classes": [],
    "how": "POST /v1/handshake { candidate: { address: \"cf34994a-39a2-41c7-9ff5-53ba134fdc3d\", kind: \"a2a-registry\" }, task, args?: <the A2A data part>, dispatch: true }",
@@ -105,15 +202,12 @@
     "state": "found",
     "source": "live",
     "age_s": 0,
-    "read_at": "2026-11-21T11:49:50.634Z"
+    "read_at": "2026-11-27T00:03:53.284Z"
    }
   }
  },
- "args": {
-  "id": "cf34994a-39a2-41c7-9ff5-53ba134fdc3d"
- },
- "coord_sha": "168977714ab49159873149003fb2b1a9d0fd8b2b",
- "read_at": "2026-11-21T11:49:50.304Z",
+ "coord_sha": "969ebd049d003eb27301cf94f977f8bb1e8dd20c",
+ "read_at": "2026-11-27T00:03:53.061Z",
  "notes": {
   "trimmed": [
    "get_key (the free-key offer every keyless answer carries)"

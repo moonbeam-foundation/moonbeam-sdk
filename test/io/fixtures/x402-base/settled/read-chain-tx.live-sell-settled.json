@@ -1,0 +1,90 @@
+{
+ "op": "GET chain/tx",
+ "market": "x402-base",
+ "stage": "settled",
+ "dir": "read",
+ "source": "live",
+ "rung": "live",
+ "run": "live:x402-base/sell@2026-11-26",
+ "path": {
+  "op": "sell",
+  "step": "settled"
+ },
+ "request": {
+  "method": "GET",
+  "path": "/v1/chain/tx",
+  "query": {
+   "chain": "8453",
+   "hashes": "0xc89817d02337344611f283711d5d31376f569ed9a0029249900e7d96829cc787"
+  }
+ },
+ "response": {
+  "status": 200,
+  "body": {
+   "ok": true,
+   "chain": 8453,
+   "head": null,
+   "txs": [
+    {
+     "block": 53103162,
+     "block_time": 1792995671,
+     "contract_created": null,
+     "effective_gas_price": "10000000",
+     "events": [
+      {
+       "log_index": 79,
+       "address": "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+       "label": "USDC",
+       "topic0": "0x98de503528ee59b575ef0c0a2576a82497bfc029a5685b209e9ec333479b10a5",
+       "event": null,
+       "family": null,
+       "args": null
+      },
+      {
+       "log_index": 80,
+       "address": "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+       "label": "USDC",
+       "topic0": "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef",
+       "event": "Transfer",
+       "family": "erc20",
+       "args": {
+        "from": "0xec2aBD3EDA89BeD90124736e317e847D5fb6d034",
+        "to": "0x3574999dd4c96eB73Bd6e11D4177010C83E14f5b",
+        "value": "9978"
+       }
+      }
+     ],
+     "explorer": "https://basescan.org/tx/0xc89817d02337344611f283711d5d31376f569ed9a0029249900e7d96829cc787",
+     "fee_wei": "862420000000",
+     "from": "0x67b9ce703d9ce658d7c4ac3c289cea112fe662af",
+     "gas_used": "86242",
+     "hash": "0xc89817d02337344611f283711d5d31376f569ed9a0029249900e7d96829cc787",
+     "input": "0xe3ee160e000000000000000000000000ec2abd3eda89bed90124736e317e847d5fb6d0340000000000000000000000003574999dd4c96eb73bd6e11d4177010c83e14f5b00000000000000000000000000000000000000000000000000000000000026fa0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000006adef27d27b6ba6ba348166bcb710a70269888e5bc760aeeb0b11937cee88dffc45202bd000000000000000000000000000000000000000000000000000000000000001be80ac6ca4013f95a3e60f57bad1d0d44e85410c8d3f54528a08640f43638bcad489ae03a255ff6d35478411eb7720bc1fb08a5f23a30184decf02e0678586ee7a161776a6364705f666163696c31000e0280218021802180218021802180218021",
+     "input_bytes": 325,
+     "method": "0xe3ee160e",
+     "nonce": 3410922,
+     "status": "success",
+     "to": "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+     "to_label": "USDC",
+     "value_wei": "0",
+     "confirmations": null,
+     "final": true,
+     "cached": "store"
+    }
+   ],
+   "cost": {
+    "http_requests": 0,
+    "endpoints": [],
+    "cached": 1
+   },
+   "how": "status success|reverted|pending|not_found|unreadable; final = at least the chain's finality depth and kept, so it is never read again; events[] are decoded when the layer knows the event, else topic0 + address"
+  }
+ },
+ "coord_sha": "969ebd049d003eb27301cf94f977f8bb1e8dd20c",
+ "read_at": "2026-11-27T00:04:28.526Z",
+ "notes": {
+  "trimmed": [
+   "get_key (the free-key offer every keyless answer carries)"
+  ]
+ }
+}

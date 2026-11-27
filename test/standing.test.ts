@@ -21,7 +21,7 @@ describe('the key door', () => {
   it('no key is refused before any call; a key the layer does not know is a 401 MarketError', async () => {
     const none = replay(fx('key-none'));
     await expect(keyStanding(none.t)).rejects.toMatchObject({ status: 401 }); expect(none.seen).toHaveLength(0);
-    const bad = replay(fx('key-invalid'), 'tfr_free_not_a_key');
+    const bad = replay(fx('key-invalid'), 'tfr_bad');
     const e = await keyStanding(bad.t).catch((x) => x);
     expect(e).toBeInstanceOf(MarketError); expect(e).toMatchObject({ status: 401, code: fx('key-invalid').response.body.code });
     expect(bad.seen[0]).toEqual({ url: 'https://api.example/v1/access/key', method: 'GET' });

@@ -25,7 +25,8 @@ if (coord) {
   if (check) throw new Error('--check reads the snapshot; take a new one without --check');
   const sha = arg('--sha') ?? execFileSync('git', ['-C', coord, 'rev-parse', 'HEAD'], { encoding: 'utf8' }).trim();
   const pub = JSON.parse(readFileSync(join(coord, PUBLIC_FILE), 'utf8'));
-  writeFileSync(SNAP, json(moonbeamPaths(pub, sha)));
+  const known = new Set(JSON.parse(readFileSync(join(root, 'src/market/venues-register.json'), 'utf8')).markets.map((m) => m.id));
+  writeFileSync(SNAP, json(moonbeamPaths(pub, sha, known)));
 }
 if (!existsSync(SNAP)) throw new Error('no snapshot: node scripts/gen-paths.mjs --coord <coord checkout>');
 const paths = JSON.parse(readFileSync(SNAP, 'utf8'));
