@@ -30,10 +30,6 @@ export const VENUE_REGISTER: RegisterSnapshot = {
    "market": "a2a_registry",
    "directory": true
   },
-  "bitagent-base": {
-   "market": "bitagent",
-   "directory": false
-  },
   "erc8004": {
    "market": "erc8004",
    "directory": true
@@ -48,10 +44,6 @@ export const VENUE_REGISTER: RegisterSnapshot = {
   },
   "near-agent-market": {
    "market": "near_agent_market",
-   "directory": false
-  },
-  "olas-base": {
-   "market": "olas_mech",
    "directory": false
   }
  },
