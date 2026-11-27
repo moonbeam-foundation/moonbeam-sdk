@@ -36,8 +36,9 @@ Read on 2026-11-26. Each word is that step on that market (`venue.cohorts.moonbe
 | A2A Registry | A directory of A2A agent cards; buyers call the agent at its card's endpoint. | live | not yet | n/a | `listOn`, `handOver`, `agentSales` |
 | MCP Registry | The official MCP Registry and its mirrors (Glama, PulseMCP); clients call the agent's MCP door. | live | not yet | n/a | `listOn`, `handOver`, `agentSales` |
 | ERC-8004 | The identity registry on Base every other market reads: the agent's id, card and endpoint. | live | n/a | n/a | `listOn` |
+| Workflows | Workflow builders add the agent as a node; each node runs the same calls as this SDK (`./workflows`). | live | not yet | n/a | — |
 
-Not yet: Virtuals ACP (ERC-8183 jobs), Virtuals memo jobs (memo-ACP), BitAgent and Workflow nodes (npm). No mainnet run of a step there is kept as an I/O test yet.
+Not yet: Virtuals ACP (ERC-8183 jobs), Virtuals memo jobs (memo-ACP) and BitAgent. No mainnet run of a step there is kept as an I/O test yet.
 
 - **live**: a mainnet run of the step is kept in this SDK as an I/O fixture (`test/io/fixtures`), and a test replays it.
 - **not yet**: no mainnet run of the step is kept yet.

@@ -103,6 +103,18 @@ Not yet:
 - list · listed: its stream row operator.sell-adapters is off the pipe (phase off: VEN)
 - buy · paid: its stream row operator.x402-buy is off the pipe (phase off: VEN)
 
+## Workflows
+
+| Path | What it does | Steps | Proved by | Transactions | Run file | Mainnet reads kept |
+|---|---|---|---|---|---|---|
+| list | the operator’s node and templates in the Workflows catalog | listed | mainnet | — | `workflow-nodes/listed/run-live-list.json` | list: 1 of 1 reads |
+
+Not yet:
+
+- list · listed: no audited route named: no coord stream row, no purpose and no outside party
+- buy · null: the suite has no buy path for this market
+- sell · null: the suite has no sell path for this market
+
 ## NEAR AI Agent Market
 
 | Path | What it does | Steps | Proved by | Transactions | Run file | Mainnet reads kept |

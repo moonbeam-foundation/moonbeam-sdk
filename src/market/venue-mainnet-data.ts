@@ -87,6 +87,18 @@ export const VENUE_MAINNET: MainnetProofs = {
    "proven": true
   }
  },
+ "workflow-nodes": {
+  "list": {
+   "op": "list",
+   "ref": "live:workflow-nodes/list@2026-11-25",
+   "on": "2026-11-25",
+   "run": "test/io/fixtures/workflow-nodes/listed/run-live-list.json",
+   "steps": {
+    "listed": "test/io/fixtures/workflow-nodes/listed/read-n8n-catalog.live-list-listed.json"
+   },
+   "proven": true
+  }
+ },
  "near-agent-market": {
   "list": {
    "op": "list",

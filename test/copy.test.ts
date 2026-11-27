@@ -25,6 +25,7 @@ const WIRE: RegExp[] = [
   /taifoon\.(?:pipe\.envelope|sign\.request|sign\.result)\.v1/g, // the coord pipe's envelope and sign request/result schema ids
   /\b(?:reseller_markup|markup_bps|markup_units)\b/g,   // ledger and request field names
   /['"]n8n['"]/g,                                       // the onboard protocol and own label value
+  /read-n8n-catalog\.live-/g,                          // the recorded read of coord's own route, named after the route
   /\/taifoon\|n8n\|genie\/i/g,                          // the journey's scrubber, which removes these words
 ];
 /** The vendored modules' remaining data strings, after their comments are cut (scripts/postbuild.mjs). It may only fall. */

@@ -12,13 +12,14 @@ import { describe, expect, it } from 'vitest';
 import { MOONBEAM_LISTS_ON } from '../../src/market/index.js';
 import { LIGHT_IDS } from '../../src/playground/index.js';
 // @ts-expect-error: a plain ES module shared with the generator
-import { GAP_REASONS, SOURCES, buildCoverage, expandRows, fixturesOnDisk, gapCount, renderDoc, shapeIssues, summaryOf } from '../../scripts/io-coverage-lib.mjs';
+import { GAP_REASONS, SOURCES, buildCoverage, expandRows, extraMarkets, fixturesOnDisk, gapCount, renderDoc, shapeIssues, summaryOf } from '../../scripts/io-coverage-lib.mjs';
 
 const root = join(__dirname, '..', '..');
 const read = (p: string) => JSON.parse(readFileSync(join(root, p), 'utf8'));
 const cov = read('test/io/coverage.json');
 const map = read('test/io/op-map.json');
 const baseline = read('test/io/gaps.baseline.json');
+const extra: string[] = extraMarkets(map, read('src/market/venues-register.json'));
 const fixtures: Map<string, { source: string; coord_sha: string; response: { body: unknown } }> = fixturesOnDisk(root);
 type Cell = { market: string; stage: string; dir: string; op: string | null; chain: number | null; cite: string | null; fixture?: string | null; source?: string; gap?: { reason: string; why: string } };
 const cells: Cell[] = cov.cells;
@@ -46,17 +47,21 @@ describe('_COORD_IO_COVERAGE_v1_ coverage: every kept market, every stage, both 
     }
   });
   it('coverage.json is current with the op-map and the fixtures, and io:check found no issue', () => {
-    const rows = expandRows(map);
+    const rows = expandRows(map, extra);
     expect(cells.map((c) => `${c.market}/${c.stage}/${c.dir}/${c.op}`)).toEqual(rows.map((r: Cell) => `${r.market}/${r.stage}/${r.dir}/${r.op}`));
     expect(rows.filter((r: Cell) => r.fixture).map((r: Cell) => r.fixture).sort()).toEqual([...fixtures.keys()].sort());
     expect(cov.issues).toEqual([]);
-    expect(cov.summary).toEqual(summaryOf(map, cells));
+    expect(cov.summary).toEqual(summaryOf(map, cells, extra));
+    expect(cov.markets).toEqual([...map.markets, ...extra]);
     for (const [p, f] of fixtures) expect(f.coord_sha, p).toMatch(/^[0-9a-f]{40}$/);
   });
-  it('the ratchet: the gap count only goes down', () => {
-    const g = gapCount(cov);
+  it('the ratchet: the gap count only goes down, for the mapped markets and for the markets with no SDK call yet', () => {
+    const own = { ...cov, cells: cells.filter((c) => !extra.includes(c.market)) };
+    const g = gapCount(own);
     expect(g.total, 'more gaps than test/io/gaps.baseline.json allows').toBeLessThanOrEqual(baseline.total);
     for (const r of GAP_REASONS) expect(g.by[r], `${r} gaps`).toBeLessThanOrEqual(baseline.by[r] ?? 0);
+    const more = gapCount({ ...cov, cells: cells.filter((c) => extra.includes(c.market)) });
+    expect(more.total, 'more gaps on the markets with no SDK call than the baseline allows').toBeLessThanOrEqual(baseline.extra_markets.total);
   });
   it('docs/io-coverage.md is the rendered coverage', () => {
     expect(readFileSync(join(root, 'docs/io-coverage.md'), 'utf8')).toBe(renderDoc(cov));

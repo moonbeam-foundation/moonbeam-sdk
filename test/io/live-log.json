@@ -526,6 +526,12 @@
       "at": "2026-11-27T00:04:30.730Z",
       "path": "/resale/sales/rs_mvovbt6g_60074117b6",
       "status": 200
+    },
+    {
+      "n": 84,
+      "at": "2026-11-27T00:29:42.645Z",
+      "path": "/n8n/catalog",
+      "status": 200
     }
   ]
 }

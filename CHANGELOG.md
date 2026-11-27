@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.13.8 (2026-11-27)
+
+- **Workflows is back in the venue table.** The workflow-node market reads under its public word, "Workflows": list live (a mainnet
+  run of the listing is kept as an I/O fixture), take not yet, settle n/a. Coord's own id for it never reaches public text.
+- **I/O coverage names every market Moonbeam lists on.** BitAgent, memo jobs and Workflows get a cell per stage and direction, each a
+  named gap (`no_sdk_call`) until an SDK call reads it; the gap ratchet counts them apart from the mapped markets.
+
 ## 0.13.7 (2026-11-27)
 
 - **The list markets are those of 0.13.5 again.** 0.13.6 took coord's two newer list_market rows (BitAgent and Olas Mech) into

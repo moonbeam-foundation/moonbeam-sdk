@@ -122,6 +122,9 @@
     { "op": "GET a2a", "why": "Moonbeam's own A2A door (browser view); A2A Registry hires go POST handshake kind a2a-registry" },
     { "op": "POST a2a", "why": "Moonbeam's own A2A JSON-RPC door (opens a demand); A2A Registry hires go POST handshake kind a2a-registry" },
     { "op": "GET agent-listings/:id/payee", "why": "a listing's payout address setting (keyed), read by the publish gate, no stage of its own" },
-    { "op": "POST agent-listings/:id/payee", "why": "a listing's payout address setting (keyed), read by the publish gate, no stage of its own" }
+    { "op": "POST agent-listings/:id/payee", "why": "a listing's payout address setting (keyed), read by the publish gate, no stage of its own" },
+    { "op": "GET cloud", "why": "the hosting product's region table; 'near' in its keywords is a region, not the NEAR market" },
+    { "op": "GET listings/:id/footprint", "why": "where one listing is visible across the markets; no SDK reader yet, so no cell until one reads it" },
+    { "op": "POST deals/:id/bid", "why": "a bid on a deal of the deal engine, which is a sale of the operator's own, not a stage of a market's path" }
   ]
 }
