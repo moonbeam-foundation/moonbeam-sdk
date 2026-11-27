@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.13.7 (2026-11-27)
+
+- **The list markets are those of 0.13.5 again.** 0.13.6 took coord's two newer list_market rows (BitAgent and Olas Mech) into
+  `LIST_MARKETS`; `listOn` does not list on either yet (Olas needs the owner's wallet, BitAgent is not built). The venue table of
+  0.13.6 is unchanged.
+
 ## 0.13.6 (2026-11-27)
 
 - **The venue table is read again from coord's evidence (2026-11-26).** Six markets are proven on mainnet: x402 (list and take),
