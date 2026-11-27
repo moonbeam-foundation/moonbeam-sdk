@@ -13,6 +13,7 @@
   "erc8004",
   "mcp",
   "a2a",
+  "workflow-nodes",
   "near-agent-market"
  ],
  "rows": [
@@ -1800,6 +1801,67 @@
    }
   },
   {
+   "market": "workflow-nodes",
+   "chain": "door",
+   "op": "list",
+   "what": "the operator’s node and templates in the Workflows catalog",
+   "paid_by": "none",
+   "chat": "GET /v1/n8n/catalog",
+   "cohorts": [
+    "operator",
+    "moonbeam"
+   ],
+   "steps": [
+    {
+     "id": "listed",
+     "leaves": "the catalog entry",
+     "read": "GET /v1/n8n/catalog",
+     "stream": null,
+     "sign": null,
+     "party": null
+    }
+   ],
+   "rungs": {
+    "fork": null,
+    "devnet": null,
+    "api": null,
+    "live": {
+     "proof": "proven",
+     "read_on": "2026-11-25",
+     "says": "npm and the Workflows community node directory list the package at 2.1.0 (published 2026-11-15), 150 downloads in the last week"
+    }
+   },
+   "features": [
+    {
+     "feature": "list",
+     "genie": "listed.list",
+     "stage": "listed",
+     "fixture": null,
+     "run": null,
+     "live": {
+      "fixture": "test/io/fixtures/workflow-nodes/listed/run-live-list.json",
+      "run": {
+       "rung": "live",
+       "on": "2026-11-25",
+       "ref": "live:workflow-nodes/list@2026-11-25"
+      },
+      "steps": [
+       "listed"
+      ],
+      "ids": {},
+      "needs": []
+     }
+    }
+   ],
+   "tx": {
+    "mainnet": {
+     "count": 0,
+     "last_block": null
+    },
+    "devnet": {}
+   }
+  },
+  {
    "market": "near-agent-market",
    "chain": "near",
    "op": "list",
@@ -2149,6 +2211,24 @@
    "op": "buy",
    "step": "paid",
    "why": "its stream row operator.x402-buy is off the pipe (phase off: VEN)"
+  },
+  {
+   "market": "workflow-nodes",
+   "op": "list",
+   "step": "listed",
+   "why": "no audited route named: no coord stream row, no purpose and no outside party"
+  },
+  {
+   "market": "workflow-nodes",
+   "op": "buy",
+   "step": null,
+   "why": "the suite has no buy path for this market"
+  },
+  {
+   "market": "workflow-nodes",
+   "op": "sell",
+   "step": null,
+   "why": "the suite has no sell path for this market"
   },
   {
    "market": "near-agent-market",

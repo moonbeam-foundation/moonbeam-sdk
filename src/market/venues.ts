@@ -111,7 +111,7 @@ const S: Record<VenueId, Static> = {
     does: 'The identity registry on Base every other market reads: the agent\'s id, card and endpoint.',
     howListed: 'The list step records it; for an id your own wallet owns, `register8004Calls` builds `register(agentURI)` for you to sign.',
     calls: { list: 'market.listOn', take: null, settle: null, paid: null }, na: { take: 'an identity registry takes no hire', settle: 'an identity registry settles nothing', paid: 'an identity registry pays nothing' } },
-  'workflow-nodes': { id: 'workflow-nodes', name: 'Workflow nodes (npm)', marketId: null, listedBy: 'registry',
+  'workflow-nodes': { id: 'workflow-nodes', name: 'Workflows', marketId: null, listedBy: 'registry',
     does: 'Workflow builders add the agent as a node; each node runs the same calls as this SDK (`./workflows`).',
     howListed: 'A node package on npm; the node directory lists it after its review.',
     calls: { list: null, take: null, settle: null, paid: null }, na: { settle: 'a workflow node has no settlement of its own', paid: 'a workflow node has no payout of its own' } },

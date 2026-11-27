@@ -11,5 +11,12 @@
  },
  "note_2026_11_21": "seven listed reads recorded with the recorder key (needs_payment 28 to 20 with the row below); the Olas Base request read moved from needs_payment to not_in_coord (coord lists no Olas Base request id), so not_in_coord 17 to 18 is that row, not a new gap; total 54 to 47",
  "note_2026_11_21b": "the devnet job's submit transaction (chain/tx, delivered) and its ending proof (proof/tx, settled) recorded with the recorder key on all six sale markets: needs_payment 20 to 8, total 47 to 35",
- "note_2026_11_21c": "POST settle and POST assurance/call typed in coord (api_bodies.SettlePlan, AssuranceCall; coord #1930): the six sale-market hire plans and the Virtuals fund-job calls carry contract fixtures; not_in_coord 18 to 11, total 35 to 28"
+ "note_2026_11_21c": "POST settle and POST assurance/call typed in coord (api_bodies.SettlePlan, AssuranceCall; coord #1930): the six sale-market hire plans and the Virtuals fund-job calls carry contract fixtures; not_in_coord 18 to 11, total 35 to 28",
+ "extra_markets": {
+  "total": 30,
+  "by": {
+   "no_sdk_call": 30
+  }
+ },
+ "note_2026_11_27": "BitAgent, memo jobs and Workflows enter the coverage with no SDK call placed by the op-map yet: 30 no_sdk_call cells, counted apart from the mapped markets' total"
 }

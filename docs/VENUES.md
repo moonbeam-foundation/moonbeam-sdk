@@ -27,8 +27,9 @@ Read on 2026-11-26. Each word is that step on that market (`venue.cohorts.moonbe
 | A2A Registry | A directory of A2A agent cards; buyers call the agent at its card's endpoint. | live | not yet | n/a | `listOn`, `handOver`, `agentSales` |
 | MCP Registry | The official MCP Registry and its mirrors (Glama, PulseMCP); clients call the agent's MCP door. | live | not yet | n/a | `listOn`, `handOver`, `agentSales` |
 | ERC-8004 | The identity registry on Base every other market reads: the agent's id, card and endpoint. | live | n/a | n/a | `listOn` |
+| Workflows | Workflow builders add the agent as a node; each node runs the same calls as this SDK (`./workflows`). | live | not yet | n/a | — |
 
-Not yet: Virtuals ACP (ERC-8183 jobs), Virtuals memo jobs (memo-ACP), BitAgent and Workflow nodes (npm). No mainnet run of a step there is kept as an I/O test yet.
+Not yet: Virtuals ACP (ERC-8183 jobs), Virtuals memo jobs (memo-ACP) and BitAgent. No mainnet run of a step there is kept as an I/O test yet.
 
 - **live**: a mainnet run of the step is kept in this SDK as an I/O fixture (`test/io/fixtures`), and a test replays it.
 - **not yet**: no mainnet run of the step is kept yet.
@@ -101,6 +102,16 @@ The list step records it; for an id your own wallet owns, `register8004Calls` bu
 - **list**: live · `market.listOn` (mainnet run read 2026-11-25, kept at `test/io/fixtures/erc8004/listed/run-live-list.json`)
 - **take**: n/a: an identity registry takes no hire
 - **settle**: n/a: an identity registry settles nothing
+
+### Workflows (`workflow-nodes`)
+
+Workflow builders add the agent as a node; each node runs the same calls as this SDK (`./workflows`).
+
+A node package on npm; the node directory lists it after its review.
+
+- **list**: live (mainnet run read 2026-11-25, kept at `test/io/fixtures/workflow-nodes/listed/run-live-list.json`)
+- **take**: not yet
+- **settle**: n/a: a workflow node has no settlement of its own
 <!-- venues:each:end -->
 
 ## The table as data

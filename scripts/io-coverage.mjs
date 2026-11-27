@@ -7,7 +7,7 @@
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { buildCoverage, fixturesOnDisk, gapCount, loadCoord, renderDoc } from './io-coverage-lib.mjs';
+import { buildCoverage, extraMarkets, fixturesOnDisk, gapCount, loadCoord, renderDoc } from './io-coverage-lib.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const arg = (k) => { const i = process.argv.indexOf(k); return i > 0 ? process.argv[i + 1] : undefined; };
@@ -19,7 +19,8 @@ const c = loadCoord(resolve(coordPath), { sha: arg('--sha') });
 const map = JSON.parse(readFileSync(join(root, 'test/io/op-map.json'), 'utf8'));
 const covFile = join(root, 'test/io/coverage.json');
 const before = existsSync(covFile) ? JSON.parse(readFileSync(covFile, 'utf8')) : null;
-const cov = buildCoverage(c, map, fixturesOnDisk(root), { ref: arg('--ref') });
+const extra = extraMarkets(map, JSON.parse(readFileSync(join(root, 'src/market/venues-register.json'), 'utf8')));
+const cov = buildCoverage(c, map, fixturesOnDisk(root), { ref: arg('--ref'), extra });
 
 // what coord's declared shapes did since the last coverage.json (reported, not failing: a fixture that no longer fits fails above)
 const changed = [];
