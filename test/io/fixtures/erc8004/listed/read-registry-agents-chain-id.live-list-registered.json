@@ -6,7 +6,7 @@
  "sdk": "market.registryAgent",
  "source": "live",
  "rung": "live",
- "run": "live:erc8004/list@2026-11-06",
+ "run": "live:erc8004/list@2026-11-25",
  "path": {
   "op": "list",
   "step": "registered"
@@ -25,7 +25,7 @@
    "chainId": 8453,
    "endpoint": "https://next.moonbeam.network/api/house/onchain-reads",
    "endpointKind": "A2a",
-   "evidenceAsOf": 1795250811,
+   "evidenceAsOf": 1795710716,
    "filterReason": "None",
    "firstSeen": 1794269640,
    "jobClasses": [
@@ -57,9 +57,9 @@
     "teeServed": false
    },
    "wire": {
-    "probedAt": 1795250811,
+    "probedAt": 1795710716,
     "protocol": "a2a",
-    "readyAt": 1795250811,
+    "readyAt": 1795710716,
     "status": "ready"
    }
   }
@@ -68,8 +68,8 @@
   "chain": "8453",
   "id": "1176098"
  },
- "coord_sha": "d7af0f1634626fc01ddaf31a1bb6f350a24d134e",
- "read_at": "2026-11-21T11:52:55.026Z",
+ "coord_sha": "969ebd049d003eb27301cf94f977f8bb1e8dd20c",
+ "read_at": "2026-11-27T00:03:50.859Z",
  "notes": {
   "dropped": [
    "owner (the address that owns the record)"

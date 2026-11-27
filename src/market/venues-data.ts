@@ -3,7 +3,7 @@ import type { RegisterSnapshot } from './venues.js';
 
 export const VENUE_REGISTER: RegisterSnapshot = {
  "source": "_BUSINESS_AGENT_v1_",
- "read_on": "2026-11-14",
+ "read_on": "2026-11-26",
  "cohorts": {
   "source": "LISTED_REGISTER_v1",
   "approved_on": "2026-11-11",
@@ -30,6 +30,10 @@ export const VENUE_REGISTER: RegisterSnapshot = {
    "market": "a2a_registry",
    "directory": true
   },
+  "bitagent-base": {
+   "market": "bitagent",
+   "directory": false
+  },
   "erc8004": {
    "market": "erc8004",
    "directory": true
@@ -45,6 +49,10 @@ export const VENUE_REGISTER: RegisterSnapshot = {
   "near-agent-market": {
    "market": "near_agent_market",
    "directory": false
+  },
+  "olas-base": {
+   "market": "olas_mech",
+   "directory": false
   }
  },
  "markets": [
@@ -58,25 +66,25 @@ export const VENUE_REGISTER: RegisterSnapshot = {
    "list": {
     "register": "live",
     "proof": "proven",
-    "says": "listed in the CDP Bazaar, x402scan, Ultravioleta and PayAI",
-    "read_on": "2026-11-06"
+    "says": "the CDP Bazaar lists 23 of the operator’s walls and Ultravioleta 86; the first pages of PayAI and agentic.market show none",
+    "read_on": "2026-11-25"
    },
    "take": {
     "register": "live",
     "proof": "proven",
-    "says": "outside payers paid the operator's walls on Base",
-    "read_on": "2026-11-06"
+    "says": "the CDP Bazaar counts 63 paid calls to the operator’s walls in 30 days, from up to 44 payers counted per wall",
+    "read_on": "2026-11-25"
    },
    "settle": {
     "register": "live",
     "proof": "proven",
-    "says": "18 settle transactions on Base from payers outside the operator's addresses",
-    "read_on": "2026-11-06"
+    "says": "all 21 on-chain settles of the paid-in register read back as successful on Base, paid by 7 payers outside the operator’s addresses; the newest is from 2026-11-05",
+    "read_on": "2026-11-26"
    },
    "paid": {
     "proof": "claimed",
-    "says": "the payout releaser is armed on Base since 2026-10-16 and has sent nothing: its 2 owed sales are held, their seller publishes no payee",
-    "read_on": "2026-11-07"
+    "says": "no payout to a seller of the operator was seen on Base: the pipe holds nothing claimable there, and the held sales stayed unread past the free rate",
+    "read_on": "2026-11-25"
    },
    "cohorts": {
     "operator": {
@@ -92,7 +100,7 @@ export const VENUE_REGISTER: RegisterSnapshot = {
      "closed": null,
      "cut": null,
      "wanted": 1,
-     "since": "2026-11-11",
+     "since": "2026-11-26",
      "features": {
       "list": {
        "mark": "ok",
@@ -178,25 +186,25 @@ export const VENUE_REGISTER: RegisterSnapshot = {
    "list": {
     "register": "claimed",
     "proof": "claimed",
-    "says": "the seller record exists with 15 offerings, mcp.digest among them; that buyers can find it was not shown",
-    "read_on": "2026-11-09"
+    "says": "the seller record exists with 15 offerings, 2 of them resold; that buyers can find them was not shown",
+    "read_on": "2026-11-25"
    },
    "take": {
     "register": "self_test",
     "proof": "self_test",
-    "says": "the one Base job, 81734, had the operator as client and provider",
-    "read_on": "2026-11-06"
+    "says": "of 384 Base jobs opened since 2026-11-06 none had the operator on either side; job 81734 stays the one, the operator as client and provider",
+    "read_on": "2026-11-25"
    },
    "settle": {
     "register": "self_test",
     "proof": "self_test",
-    "says": "job 81734 completed and released, the operator on both sides",
-    "read_on": "2026-11-06"
+    "says": "job 81734 completed and released, the operator on both sides; no job of the operator settled on Base since 2026-11-06",
+    "read_on": "2026-11-25"
    },
    "paid": {
     "proof": "self_test",
-    "says": "job 81734's provider was paid by the contract; the operator was on both sides",
-    "read_on": "2026-11-07"
+    "says": "job 81734's provider was paid by the contract, the operator on both sides; no outside seller was paid for a sale of the operator",
+    "read_on": "2026-11-25"
    },
    "cohorts": {
     "operator": {
@@ -289,7 +297,7 @@ export const VENUE_REGISTER: RegisterSnapshot = {
    "entry": {
     "cost": "none",
     "done": false,
-    "what": "the same Virtuals agent; the memo router's registry does not hold the operator's record (venue read 2026-11-06)"
+    "what": "the same Virtuals agent; the memo router's registry does not hold the operator’s record (venue read 2026-11-06)"
    },
    "list": {
     "register": "contradicted",
@@ -300,19 +308,19 @@ export const VENUE_REGISTER: RegisterSnapshot = {
    "take": {
     "register": "claimed",
     "proof": "claimed",
-    "says": "no memo-ACP job of the operator was found",
-    "read_on": "2026-11-06"
+    "says": "no memo-ACP job of the operator was found: the observatory holds no memo-ACP job on Base",
+    "read_on": "2026-11-25"
    },
    "settle": {
     "register": "claimed",
     "proof": "claimed",
-    "says": "no memo-ACP settlement of the operator was found",
-    "read_on": "2026-11-06"
+    "says": "no memo-ACP settlement of the operator was found: the observatory holds no memo-ACP job on Base",
+    "read_on": "2026-11-25"
    },
    "paid": {
     "proof": "claimed",
     "says": "no memo-ACP payment to a seller of the operator was found",
-    "read_on": "2026-11-07"
+    "read_on": "2026-11-25"
    },
    "cohorts": {
     "operator": {
@@ -328,8 +336,8 @@ export const VENUE_REGISTER: RegisterSnapshot = {
      "listings": 0,
      "directories": [],
      "shared": null,
-     "closed": null,
-     "cut": "Moonbeam does not list on Virtuals memo jobs; they are folded into Virtuals ACP (erc8183-base), whose agent covers these buyers",
+     "closed": "closed to new providers by Virtuals (Compatibility Notice, https",
+     "cut": null,
      "wanted": 0,
      "since": null
     }
@@ -406,8 +414,8 @@ export const VENUE_REGISTER: RegisterSnapshot = {
      "directories": [],
      "shared": null,
      "closed": null,
-     "cut": "Moonbeam does not list on BitAgent",
-     "wanted": 0,
+     "cut": null,
+     "wanted": 1,
      "since": null,
      "features": {
       "list": {
@@ -448,25 +456,25 @@ export const VENUE_REGISTER: RegisterSnapshot = {
    "list": {
     "register": "live",
     "proof": "proven",
-    "says": "the operator's mech service page answers on the Olas marketplace",
-    "read_on": "2026-11-06"
+    "says": "the operator’s mech service page (AI Agent #774) answers on the Olas marketplace with its name and description",
+    "read_on": "2026-11-26"
    },
    "take": {
     "register": "claimed",
     "proof": "claimed",
-    "says": "0 requests to the operator's mech; the answer code exists but no outside hire has been answered",
-    "read_on": "2026-11-14"
+    "says": "the venue board counts 0 paid Base Olas requests in 7 days; the answer code exists but no outside hire has been answered",
+    "read_on": "2026-11-25"
    },
    "settle": {
     "register": "claimed",
     "proof": "claimed",
-    "says": "no Olas delivery of the operator was found",
-    "read_on": "2026-11-06"
+    "says": "no Olas delivery of the operator was found: the venue board shows no paid delivery on Base in 7 days",
+    "read_on": "2026-11-25"
    },
    "paid": {
     "proof": "claimed",
-    "says": "no delivery of the operator's mech, so no payment to it",
-    "read_on": "2026-11-07"
+    "says": "no delivery of the operator’s mech, so no payment to it; the 30-day market volume holds Olas on Gnosis and Polygon only",
+    "read_on": "2026-11-25"
    },
    "cohorts": {
     "operator": {
@@ -551,14 +559,14 @@ export const VENUE_REGISTER: RegisterSnapshot = {
    "list": {
     "register": "live",
     "proof": "proven",
-    "says": "the operator's listing answers on the NEAR AI Agent Market",
-    "read_on": "2026-11-06"
+    "says": "the list step lists any agent with zero clicks (genie list near): @mbf-ax1-vc and @moonbeam read listing_status live and available_now true on the market. Search finds agents in a person's account only, so @mbf-ax1-vc is reached by its page, card and A2A call until it is adopted",
+    "read_on": "2026-11-25"
    },
    "take": {
     "register": "claimed",
     "proof": "claimed",
-    "says": "0 delivered jobs of the operator on the NEAR market",
-    "read_on": "2026-11-06"
+    "says": "0 delivered jobs of @moonbeam and of @mbf-ax1-vc; no outside paid hire yet",
+    "read_on": "2026-11-25"
    },
    "settle": {
     "register": "claimed",
@@ -569,7 +577,7 @@ export const VENUE_REGISTER: RegisterSnapshot = {
    "paid": null,
    "cohorts": {
     "operator": {
-     "listings": 9,
+     "listings": 8,
      "directories": [],
      "shared": null,
      "closed": null,
@@ -657,14 +665,14 @@ export const VENUE_REGISTER: RegisterSnapshot = {
    "list": {
     "register": "live",
     "proof": "proven",
-    "says": "the A2A Registry lists the operator; its entry is stale",
-    "read_on": "2026-11-06"
+    "says": "the A2A Registry lists the operator’s text digest agent; Moonbeam's paid-calls entry was submitted again and the registry holds it for review",
+    "read_on": "2026-11-25"
    },
    "take": {
     "register": "claimed",
     "proof": "claimed",
-    "says": "only the operator's own test traffic was found",
-    "read_on": "2026-11-06"
+    "says": "no A2A hire is attributable: the registry's uptime checks are health probes, not paid calls",
+    "read_on": "2026-11-25"
    },
    "settle": {
     "register": "none",
@@ -674,7 +682,7 @@ export const VENUE_REGISTER: RegisterSnapshot = {
    },
    "paid": {
     "proof": "claimed",
-    "says": "the A2A doer whose share is held is the operator's own wallet; no outside A2A doer was paid",
+    "says": "the A2A doer whose share is held is the operator’s own wallet; no outside A2A doer was paid",
     "read_on": "2026-11-07"
    },
    "cohorts": {
@@ -719,14 +727,14 @@ export const VENUE_REGISTER: RegisterSnapshot = {
      }
     },
     "moonbeam": {
-     "listings": 1,
+     "listings": 0,
      "directories": [
       "LocalMark"
      ],
      "shared": null,
      "closed": null,
      "cut": null,
-     "wanted": 1,
+     "wanted": 2,
      "since": "2026-11-11",
      "journey": {
       "standing": "listed_by_moonbeam",
@@ -776,14 +784,14 @@ export const VENUE_REGISTER: RegisterSnapshot = {
    "list": {
     "register": "live",
     "proof": "proven",
-    "says": "the official MCP Registry lists Moonbeam's network.moonbeam.next/paid-calls 1.1.0 (Moonbeam agent listings) as active (published 2026-11-14; its remote answers tools/list with 4 tools), beside the operator's own two entries; Glama mirrors",
-    "read_on": "2026-11-14"
+    "says": "the official MCP Registry lists Moonbeam's network.moonbeam.next/paid-calls 1.1.0 and network.moonbeam.next/ax1-vc as active (1.0.0 deprecated); Glama mirrors",
+    "read_on": "2026-11-25"
    },
    "take": {
     "register": "claimed",
     "proof": "claimed",
-    "says": "the MCP endpoint answers; no paid hire through it was found",
-    "read_on": "2026-11-06"
+    "says": "the MCP endpoint answers; no paid hire through it is attributable, since the Base settles name no route",
+    "read_on": "2026-11-25"
    },
    "settle": {
     "register": "none",
@@ -892,8 +900,8 @@ export const VENUE_REGISTER: RegisterSnapshot = {
    "list": {
     "register": "live",
     "proof": "proven",
-    "says": "the operator's identities are registered on Base",
-    "read_on": "2026-11-06"
+    "says": "the operator’s two identities are registered on Base and read by the registry and 8004scan",
+    "read_on": "2026-11-25"
    },
    "take": {
     "register": "none",
@@ -1004,8 +1012,8 @@ export const VENUE_REGISTER: RegisterSnapshot = {
    "list": {
     "register": "live",
     "proof": "proven",
-    "says": "the package is on npm and the community node directory lists it (2.0.1, since 2026-11-06)",
-    "read_on": "2026-11-09"
+    "says": "npm and the workflow community node directory list the package at 2.1.0 (published 2026-11-15), 150 downloads in the last week",
+    "read_on": "2026-11-25"
    },
    "take": {
     "register": "claimed",
@@ -1061,8 +1069,8 @@ export const VENUE_REGISTER: RegisterSnapshot = {
      "directories": [],
      "shared": null,
      "closed": null,
-     "cut": "the owner cut this market",
-     "wanted": 0,
+     "cut": null,
+     "wanted": 1,
      "since": null,
      "features": {
       "list": {

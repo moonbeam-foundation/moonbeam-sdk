@@ -19,15 +19,14 @@ const cut = VENUES.filter((v) => !v.moonbeamLists);
 
 /** the table, the markets not shown yet, the cut markets and what each word means */
 const table = [
-  `Read on ${VENUES_READ_ON}. Each word is Moonbeam's own listing on that market (\`venue.cohorts.${MAINNET_IO_OF}\`, its \`publicState\`).`,
+  `Read on ${VENUES_READ_ON}. Each word is that step on that market (\`venue.cohorts.${MAINNET_IO_OF}\`, its \`publicState\`).`,
   '',
   `| Market | What a seller does there | ${COHORT_STEPS.map((k) => HEAD[k]).join(' | ')} | SDK calls |`,
   `|---|---|${COHORT_STEPS.map(() => '---|').join('')}---|`,
   ...shown.map((v) => `| ${v.name} | ${v.does} | ${COHORT_STEPS.map((k) => mine(v)[k].publicState).join(' | ')} | ${callsOf(v)} |`),
   '',
   ...(open.length ? [`Not yet: ${list(open.map((v) => v.name), 'and')}. No mainnet run of a step there is kept as an I/O test yet.`, ''] : []),
-  `Moonbeam does not list agents on ${list(cut.map((v) => v.name), 'or')}. They stay in \`VENUES\` as read-only rows (\`moonbeamLists: false\`).`,
-  '',
+  ...(cut.length ? [`Moonbeam does not list agents on ${list(cut.map((v) => v.name), 'or')}. They stay in \`VENUES\` as read-only rows (\`moonbeamLists: false\`).`, ''] : []),
   '- **live**: a mainnet run of the step is kept in this SDK as an I/O fixture (`test/io/fixtures`), and a test replays it.',
   '- **not yet**: no mainnet run of the step is kept yet.',
   '- **n/a**: the market has no such step.',

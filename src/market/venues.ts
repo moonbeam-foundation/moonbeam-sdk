@@ -133,9 +133,11 @@ function venueOf(s: Static, r: RegisterMarket): Venue {
     const read: VenueState = na ? 'n/a' : k === 'paid' && !r.paid ? 'not yet' : stateOf(reg.register);
     // the evidence cohort's live mark never lifts the register's state, and holds it lower when the market reads less now
     const m = markOf(r.cohorts?.[VENUE_EVIDENCE_OF] ?? r.cohorts?.layer, k);
-    const state = m ? capState(read, m.state) : read;
+    // a mark older than the register's own read of the step is stale: the newer read stands
+    const stale = !!m && !!m.read_at && !!reg.read_on && m.read_at.slice(0, 10) < reg.read_on.slice(0, 10);
+    const state = m && !stale ? capState(read, m.state) : read;
     return { state, register: reg.register, says: reg.says ?? na ?? null, read_on: reg.read_on, call: state === 'n/a' ? null : s.calls[k],
-      ...(m && state !== read ? { capped: { mark: m.mark, read_at: m.read_at } } : {}) };
+      ...(m && !stale && state !== read ? { capped: { mark: m.mark, read_at: m.read_at } } : {}) };
   };
   const { calls: _c, na: _n, ...v } = s;
   const steps = { list: row('list'), take: row('take'), settle: row('settle'), paid: row('paid') };

@@ -5,8 +5,8 @@ export const VENUE_MAINNET: MainnetProofs = {
  "x402-base": {
   "list": {
    "op": "list",
-   "ref": "live:x402-base/list@2026-11-06",
-   "on": "2026-11-06",
+   "ref": "live:x402-base/list@2026-11-25",
+   "on": "2026-11-25",
    "run": "test/io/fixtures/x402-base/listed/run-live-list.json",
    "steps": {
     "published": "test/io/fixtures/x402-base/listed/read-x402-class-class.live-list-published.json",
@@ -16,46 +16,46 @@ export const VENUE_MAINNET: MainnetProofs = {
   },
   "jobs_received": {
    "op": "sell",
-   "ref": "live:x402-base/sell@2026-11-06",
-   "on": "2026-11-06",
+   "ref": "live:x402-base/sell@2026-11-26",
+   "on": "2026-11-26",
    "run": "test/io/fixtures/x402-base/bought/run-live-sell.json",
    "steps": {
-    "settled": null,
-    "delivered": null,
-    "legs": null
+    "settled": "test/io/fixtures/x402-base/settled/read-chain-tx.live-sell-settled.json",
+    "delivered": "test/io/fixtures/x402-base/delivered/read-resale-sales-rs-mvovbt6g-60074117b6.live-sell-delivered.json",
+    "legs": "test/io/fixtures/x402-base/bought/read-resale-sales-rs-mvovbt6g-60074117b6.live-sell-legs.json"
    },
-   "proven": false
+   "proven": true
   },
   "deliver": {
    "op": "sell",
-   "ref": "live:x402-base/sell@2026-11-06",
-   "on": "2026-11-06",
+   "ref": "live:x402-base/sell@2026-11-26",
+   "on": "2026-11-26",
    "run": "test/io/fixtures/x402-base/delivered/run-live-sell.json",
    "steps": {
-    "settled": null,
-    "delivered": null,
-    "legs": null
+    "settled": "test/io/fixtures/x402-base/settled/read-chain-tx.live-sell-settled.json",
+    "delivered": "test/io/fixtures/x402-base/delivered/read-resale-sales-rs-mvovbt6g-60074117b6.live-sell-delivered.json",
+    "legs": "test/io/fixtures/x402-base/bought/read-resale-sales-rs-mvovbt6g-60074117b6.live-sell-legs.json"
    },
-   "proven": false
+   "proven": true
   }
  },
  "olas-base": {
   "list": {
    "op": "list",
-   "ref": "live:olas-base/list@2026-11-06",
-   "on": "2026-11-06",
+   "ref": "live:olas-base/list@2026-11-26",
+   "on": "2026-11-26",
    "run": "test/io/fixtures/olas-base/listed/run-live-list.json",
    "steps": {
-    "listed": null
+    "listed": "test/io/fixtures/olas-base/listed/read-olas-mechs.live-list-listed.json"
    },
-   "proven": false
+   "proven": true
   }
  },
  "erc8004": {
   "list": {
    "op": "list",
-   "ref": "live:erc8004/list@2026-11-06",
-   "on": "2026-11-06",
+   "ref": "live:erc8004/list@2026-11-25",
+   "on": "2026-11-25",
    "run": "test/io/fixtures/erc8004/listed/run-live-list.json",
    "steps": {
     "registered": "test/io/fixtures/erc8004/listed/read-registry-agents-chain-id.live-list-registered.json"
@@ -66,8 +66,8 @@ export const VENUE_MAINNET: MainnetProofs = {
  "mcp": {
   "list": {
    "op": "list",
-   "ref": "live:mcp/list@2026-11-11",
-   "on": "2026-11-11",
+   "ref": "live:mcp/list@2026-11-25",
+   "on": "2026-11-25",
    "run": "test/io/fixtures/mcp/listed/run-live-list.json",
    "steps": {
     "listed": "test/io/fixtures/mcp/listed/read-mcp-registry-server.live-list-listed.json"
@@ -78,8 +78,8 @@ export const VENUE_MAINNET: MainnetProofs = {
  "a2a": {
   "list": {
    "op": "list",
-   "ref": "live:a2a/list@2026-11-06",
-   "on": "2026-11-06",
+   "ref": "live:a2a/list@2026-11-25",
+   "on": "2026-11-25",
    "run": "test/io/fixtures/a2a/listed/run-live-list.json",
    "steps": {
     "listed": "test/io/fixtures/a2a/listed/read-a2a-registry-agent.live-list-listed.json"
@@ -90,13 +90,13 @@ export const VENUE_MAINNET: MainnetProofs = {
  "near-agent-market": {
   "list": {
    "op": "list",
-   "ref": "live:near-agent-market/list@2026-11-15",
-   "on": "2026-11-15",
+   "ref": "live:near-agent-market/list@2026-11-25",
+   "on": "2026-11-25",
    "run": "test/io/fixtures/near-agent-market/listed/run-live-list.json",
    "steps": {
-    "listed": null
+    "listed": "test/io/fixtures/near-agent-market/listed/read-listed.live-list-listed.json"
    },
-   "proven": false
+   "proven": true
   }
  }
 };

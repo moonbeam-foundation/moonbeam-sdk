@@ -5,7 +5,7 @@
  "dir": "read",
  "source": "live",
  "rung": "live",
- "run": "live:x402-base/list@2026-11-06",
+ "run": "live:x402-base/list@2026-11-25",
  "path": {
   "op": "list",
   "step": "published"
@@ -26,16 +26,16 @@
     "error": "Payment Required",
     "resource": {
      "url": "https://coord.taifoon.dev/v1/x402/class/market.price",
-     "description": "Latest USD price of BTC, ETH, SOL, NQ, ES, YM from the Taifoon venue tape: the close of the last closed 1-minute bar, its time, age and sha256 digest, replayable with one GET. Only symbols the tape holds; a price older than 180 s is never served as current (nothing is charged). BTC, ETH, SOL are held to Chainlink on Base within 1 % when its feed is under 1 h old. 0.001714 USDC a call.",
+     "description": "Crypto price, token price and market price in USD: the latest price feed value of BTC, ETH, SOL, NQ, ES, YM from the Taifoon venue tape, the close of the last closed 1-minute bar, with its time, age and sha256 digest, replayable with one GET. Only symbols the tape holds; a price older than 180 s is never served as current (nothing is charged). BTC, ETH and SOL are held to Chainlink on Base within 1 % when its feed is under 1 h old. 0.001714 USDC a call.",
      "mimeType": "application/json",
-     "serviceName": "Crypto price: BTC, ETH, SOL",
+     "serviceName": "Crypto price, market price and token price: BTC, ETH, SOL",
      "iconUrl": "https://www.taifoon.io/apple-touch-icon.png",
      "tags": [
-      "price",
-      "crypto",
-      "btc",
-      "eth",
-      "sol"
+      "crypto-price",
+      "token-price",
+      "price-feed",
+      "market-price",
+      "crypto"
      ]
     },
     "accepts": [
@@ -47,7 +47,7 @@
       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
       "maxTimeoutSeconds": 300,
       "resource": "https://coord.taifoon.dev/v1/x402/class/market.price",
-      "description": "Latest USD price of BTC, ETH, SOL, NQ, ES, YM from the Taifoon venue tape: the close of the last closed 1-minute bar, its time, age and sha256 digest, replayable with one GET. Only symbols the tape holds; a price older than 180 s is never served as current (nothing is charged). BTC, ETH, SOL are held to Chainlink on Base within 1 % when its feed is under 1 h old. 0.001714 USDC a call.",
+      "description": "Crypto price, token price and market price in USD: the latest price feed value of BTC, ETH, SOL, NQ, ES, YM from the Taifoon venue tape, the close of the last closed 1-minute bar, with its time, age and sha256 digest, replayable with one GET. Only symbols the tape holds; a price older than 180 s is never served as current (nothing is charged). BTC, ETH and SOL are held to Chainlink on Base within 1 % when its feed is under 1 h old. 0.001714 USDC a call.",
       "mimeType": "application/json",
       "extra": {
        "name": "USD Coin",
@@ -62,7 +62,7 @@
       "asset": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
       "maxTimeoutSeconds": 300,
       "resource": "https://coord.taifoon.dev/v1/x402/class/market.price",
-      "description": "Latest USD price of BTC, ETH, SOL, NQ, ES, YM from the Taifoon venue tape: the close of the last closed 1-minute bar, its time, age and sha256 digest, replayable with one GET. Only symbols the tape holds; a price older than 180 s is never served as current (nothing is charged). BTC, ETH, SOL are held to Chainlink on Base within 1 % when its feed is under 1 h old. 0.001714 USDC a call.",
+      "description": "Crypto price, token price and market price in USD: the latest price feed value of BTC, ETH, SOL, NQ, ES, YM from the Taifoon venue tape, the close of the last closed 1-minute bar, with its time, age and sha256 digest, replayable with one GET. Only symbols the tape holds; a price older than 180 s is never served as current (nothing is charged). BTC, ETH and SOL are held to Chainlink on Base within 1 % when its feed is under 1 h old. 0.001714 USDC a call.",
       "mimeType": "application/json",
       "extra": {
        "name": "USD Coin",
@@ -77,7 +77,7 @@
       "asset": "0x3600000000000000000000000000000000000000",
       "maxTimeoutSeconds": 300,
       "resource": "https://coord.taifoon.dev/v1/x402/class/market.price",
-      "description": "Latest USD price of BTC, ETH, SOL, NQ, ES, YM from the Taifoon venue tape: the close of the last closed 1-minute bar, its time, age and sha256 digest, replayable with one GET. Only symbols the tape holds; a price older than 180 s is never served as current (nothing is charged). BTC, ETH, SOL are held to Chainlink on Base within 1 % when its feed is under 1 h old. 0.001714 USDC a call.",
+      "description": "Crypto price, token price and market price in USD: the latest price feed value of BTC, ETH, SOL, NQ, ES, YM from the Taifoon venue tape, the close of the last closed 1-minute bar, with its time, age and sha256 digest, replayable with one GET. Only symbols the tape holds; a price older than 180 s is never served as current (nothing is charged). BTC, ETH and SOL are held to Chainlink on Base within 1 % when its feed is under 1 h old. 0.001714 USDC a call.",
       "mimeType": "application/json",
       "extra": {
        "name": "USDC",
@@ -92,7 +92,7 @@
       "asset": "0x5fc5360D0400a0Fd4f2af552ADD042D716F1d168",
       "maxTimeoutSeconds": 300,
       "resource": "https://coord.taifoon.dev/v1/x402/class/market.price",
-      "description": "Latest USD price of BTC, ETH, SOL, NQ, ES, YM from the Taifoon venue tape: the close of the last closed 1-minute bar, its time, age and sha256 digest, replayable with one GET. Only symbols the tape holds; a price older than 180 s is never served as current (nothing is charged). BTC, ETH, SOL are held to Chainlink on Base within 1 % when its feed is under 1 h old. 0.001714 USDC a call.",
+      "description": "Crypto price, token price and market price in USD: the latest price feed value of BTC, ETH, SOL, NQ, ES, YM from the Taifoon venue tape, the close of the last closed 1-minute bar, with its time, age and sha256 digest, replayable with one GET. Only symbols the tape holds; a price older than 180 s is never served as current (nothing is charged). BTC, ETH and SOL are held to Chainlink on Base within 1 % when its feed is under 1 h old. 0.001714 USDC a call.",
       "mimeType": "application/json",
       "extra": {
        "name": "Global Dollar",
@@ -104,9 +104,10 @@
       "network": "eip155:143",
       "amount": "1714",
       "maxAmountRequired": "1714",
+      "asset": "0x754704Bc059F8C67012fEd69BC8A327a5aafb603",
       "maxTimeoutSeconds": 300,
       "resource": "https://coord.taifoon.dev/v1/x402/class/market.price",
-      "description": "Latest USD price of BTC, ETH, SOL, NQ, ES, YM from the Taifoon venue tape: the close of the last closed 1-minute bar, its time, age and sha256 digest, replayable with one GET. Only symbols the tape holds; a price older than 180 s is never served as current (nothing is charged). BTC, ETH, SOL are held to Chainlink on Base within 1 % when its feed is under 1 h old. 0.001714 USDC a call.",
+      "description": "Crypto price, token price and market price in USD: the latest price feed value of BTC, ETH, SOL, NQ, ES, YM from the Taifoon venue tape, the close of the last closed 1-minute bar, with its time, age and sha256 digest, replayable with one GET. Only symbols the tape holds; a price older than 180 s is never served as current (nothing is charged). BTC, ETH and SOL are held to Chainlink on Base within 1 % when its feed is under 1 h old. 0.001714 USDC a call.",
       "mimeType": "application/json",
       "extra": {
        "name": "USDC",
@@ -121,7 +122,7 @@
       "asset": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
       "maxTimeoutSeconds": 300,
       "resource": "https://coord.taifoon.dev/v1/x402/class/market.price",
-      "description": "Latest USD price of BTC, ETH, SOL, NQ, ES, YM from the Taifoon venue tape: the close of the last closed 1-minute bar, its time, age and sha256 digest, replayable with one GET. Only symbols the tape holds; a price older than 180 s is never served as current (nothing is charged). BTC, ETH, SOL are held to Chainlink on Base within 1 % when its feed is under 1 h old. 0.001714 USDC a call.",
+      "description": "Crypto price, token price and market price in USD: the latest price feed value of BTC, ETH, SOL, NQ, ES, YM from the Taifoon venue tape, the close of the last closed 1-minute bar, with its time, age and sha256 digest, replayable with one GET. Only symbols the tape holds; a price older than 180 s is never served as current (nothing is charged). BTC, ETH and SOL are held to Chainlink on Base within 1 % when its feed is under 1 h old. 0.001714 USDC a call.",
       "mimeType": "application/json",
       "extra": {
        "feePayer": "CjNFTjvBhbJJd2B5ePPMHRLx1ELZpa8dwQgGL727eKww"
@@ -505,12 +506,11 @@
   }
  },
  "wall": true,
- "coord_sha": "d7af0f1634626fc01ddaf31a1bb6f350a24d134e",
- "read_at": "2026-11-21T12:29:38.212Z",
+ "coord_sha": "969ebd049d003eb27301cf94f977f8bb1e8dd20c",
+ "read_at": "2026-11-27T00:03:43.834Z",
  "notes": {
   "dropped": [
-   "x402.accepts[].payTo (a payee, requester, signer or treasury-like address field)",
-   "x402.accepts[].asset (the address a fee payee or payTo names)"
+   "x402.accepts[].payTo (a payee, requester, signer or treasury-like address field)"
   ]
  }
 }

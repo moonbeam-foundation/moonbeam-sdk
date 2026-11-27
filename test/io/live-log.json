@@ -427,6 +427,105 @@
       "at": "2026-11-22T16:11:10.612Z",
       "path": "/list/lst_37f9a1a251d3af46",
       "status": 200
+    },
+    {
+      "n": 68,
+      "at": "2026-11-26T19:44:02.431Z",
+      "path": "/x402/class/market.price",
+      "status": 402,
+      "wall": true
+    },
+    {
+      "n": 69,
+      "at": "2026-11-26T19:44:03.953Z",
+      "path": "/x402/bazaar",
+      "status": 402,
+      "refused": true
+    },
+    {
+      "n": 70,
+      "at": "2026-11-27T00:03:43.834Z",
+      "path": "/x402/class/market.price",
+      "status": 402,
+      "wall": true
+    },
+    {
+      "n": 71,
+      "at": "2026-11-27T00:03:45.349Z",
+      "path": "/x402/bazaar",
+      "status": 200
+    },
+    {
+      "n": 72,
+      "at": "2026-11-27T00:03:46.452Z",
+      "path": "/chain/tx?chain=8453&hashes=0xfa8a070b926f816580f95ff8de10bdadbecea85eba4213571257bf7811275993",
+      "status": 200
+    },
+    {
+      "n": 73,
+      "at": "2026-11-27T00:03:47.553Z",
+      "path": "/resale/sales/sale%3A8453%3A0xfa8a070b926f816580f95ff8de10bdadbecea85eba4213571257bf7811275993",
+      "status": 400
+    },
+    {
+      "n": 74,
+      "at": "2026-11-27T00:03:48.653Z",
+      "path": "/resale/sales/sale%3A8453%3A0xfa8a070b926f816580f95ff8de10bdadbecea85eba4213571257bf7811275993",
+      "status": 400
+    },
+    {
+      "n": 75,
+      "at": "2026-11-27T00:03:49.756Z",
+      "path": "/olas/mechs",
+      "status": 200
+    },
+    {
+      "n": 76,
+      "at": "2026-11-27T00:03:50.859Z",
+      "path": "/registry/agents/8453/1176098",
+      "status": 200
+    },
+    {
+      "n": 77,
+      "at": "2026-11-27T00:03:51.959Z",
+      "path": "/mcp/registry/server?name=network.moonbeam.next%2Fpaid-calls",
+      "status": 200
+    },
+    {
+      "n": 78,
+      "at": "2026-11-27T00:03:53.061Z",
+      "path": "/a2a/registry/agent?id=cf34994a-39a2-41c7-9ff5-53ba134fdc3d",
+      "status": 200
+    },
+    {
+      "n": 79,
+      "at": "2026-11-27T00:03:54.163Z",
+      "path": "/n8n/catalog",
+      "status": 200
+    },
+    {
+      "n": 80,
+      "at": "2026-11-27T00:03:55.264Z",
+      "path": "/listed?market=near-agent-market&cohort=moonbeam",
+      "status": 200
+    },
+    {
+      "n": 81,
+      "at": "2026-11-27T00:04:28.526Z",
+      "path": "/chain/tx?chain=8453&hashes=0xc89817d02337344611f283711d5d31376f569ed9a0029249900e7d96829cc787",
+      "status": 200
+    },
+    {
+      "n": 82,
+      "at": "2026-11-27T00:04:29.627Z",
+      "path": "/resale/sales/rs_mvovbt6g_60074117b6",
+      "status": 200
+    },
+    {
+      "n": 83,
+      "at": "2026-11-27T00:04:30.730Z",
+      "path": "/resale/sales/rs_mvovbt6g_60074117b6",
+      "status": 200
     }
   ]
 }

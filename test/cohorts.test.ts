@@ -97,6 +97,8 @@ describe('VENUES[].cohorts: the shipped table, per cohort', () => {
       if (facts.closed) continue;
       for (const k of COHORT_STEPS) {
         const c = v.cohorts.operator[k];
+        // a mark older than the register's own read of the step does not hold it down
+        if (c.from === 'features' && v[k].state !== 'n/a' && !v[k].capped && c.read_on && v[k].read_on && c.read_on.slice(0, 10) < v[k].read_on.slice(0, 10)) continue;
         if (c.from === 'features' && v[k].state !== 'n/a') expect(STATE_RANK[v[k].state]!, `${v.id}.${k}`).toBeLessThanOrEqual(STATE_RANK[c.state as string]!);
       }
     }
@@ -112,19 +114,19 @@ describe('VENUES[].cohorts: the shipped table, per cohort', () => {
     expect(states('erc8183-base', 'moonbeam')).toEqual(['live', 'tested', 'tested']);
     expect(at('erc8183-base').cohorts.moonbeam.list).toMatchObject({ from: 'journey', state: 'live' });
     expect(states('memoacp-base', 'operator')).toEqual(['closed', 'closed', 'closed']);
-    // _MARKETS_CUT_v2_: the three markets coord's listed register cuts from Moonbeam read cut, with the register's reason
-    expect(states('memoacp-base', 'moonbeam')).toEqual(['cut', 'cut', 'cut']);
-    expect(states('workflow-nodes', 'moonbeam')).toEqual(['cut', 'cut', 'cut']);
+    // a market the listed register closes to new providers reads closed for both cohorts
+    expect(states('memoacp-base', 'moonbeam')).toEqual(['closed', 'closed', 'closed']);
+    expect(states('workflow-nodes', 'moonbeam')).toEqual(['not yet', 'not yet', 'n/a']);
     expect(states('mcp', 'moonbeam')).toEqual(['live', 'tested', 'n/a']);
     expect(states('a2a', 'moonbeam')).toEqual(['live', 'tested', 'n/a']);
     expect(states('erc8004', 'moonbeam')).toEqual(['live', 'n/a', 'n/a']);
     expect(states('near-agent-market', 'operator')).toEqual(['live', 'live', 'partial']);
     expect(states('near-agent-market', 'moonbeam')).toEqual(['live', 'partial', 'partial']);
-    expect(states('bitagent-base', 'moonbeam')).toEqual(['cut', 'cut', 'cut']);
-    expect(at('bitagent-base').cohorts.moonbeam.list.says).toBe('Moonbeam does not list on BitAgent');
-    expect([...MOONBEAM_LISTS_ON].sort()).toEqual(['a2a', 'erc8004', 'erc8183-base', 'mcp', 'near-agent-market', 'olas-base', 'x402-base']);
+    expect(states('bitagent-base', 'moonbeam')).toEqual(['not yet', 'not yet', 'not yet']);
+    // Moonbeam lists wherever the listed register holds no cut row for it
+    expect([...MOONBEAM_LISTS_ON].sort()).toEqual(VENUES.filter((v) => !VENUE_REGISTER.markets.find((m) => m.id === v.id)?.cohorts?.moonbeam?.cut).map((v) => v.id).sort());
     expect(states('olas-base', 'moonbeam')).toEqual(['not yet', 'not yet', 'not yet']);
-    expect(at('near-agent-market').cohorts.operator.listings).toBe(9);
+    expect(at('near-agent-market').cohorts.operator.listings).toBe(8);
   });
   it('a cohort with no listing, no own mark and no journey on a market never shows the other cohort\'s live state', () => {
     for (const v of VENUES) for (const c of COHORT_IDS) {
@@ -206,10 +208,14 @@ describe('publicState: live only on a mainnet run kept as an I/O fixture', () =>
     expect(cohortOf('moonbeam', listed, steps, 'operator', { list: proof() }).list.mainnet).toBeDefined();
     expect(cohortOf('moonbeam', listed, steps, 'operator', { list: proof({ proven: false }) }).list.mainnet).toBeUndefined();
   });
-  it('a mainnet run never lifts a step whose own state is not live: a run of ours on a fork stays our evidence', () => {
+  it('a mainnet run lifts a step only where the market\'s own evidence state is live: a self-test or a claim stays not yet', () => {
     const c = cohortOf('moonbeam', listed, steps, 'operator', { list: proof(), jobs_received: proof({ op: 'sell' }) });
-    expect(c.take).toMatchObject({ state: 'tested', publicState: 'not yet' });
-    expect(cohortOf('moonbeam', f({ listings: 1, features: { list: { mark: 'partial', who: null, says: null, read_at: null } } }), steps, 'operator', { list: proof() }).list.publicState).toBe('not yet');
+    expect(c.take).toMatchObject({ state: 'tested', publicState: 'live' });
+    const claimed = { ...steps, take: r('not yet') };
+    expect(cohortOf('moonbeam', listed, claimed, 'operator', { jobs_received: proof({ op: 'sell' }) }).take.publicState).toBe('not yet');
+    const selfTest = { ...steps, take: r('self-test') };
+    expect(cohortOf('moonbeam', listed, selfTest, 'operator', { jobs_received: proof({ op: 'sell' }) }).take.publicState).toBe('not yet');
+    expect(cohortOf('moonbeam', f({ listings: 1, closed: 'closed to new agents' }), steps, 'operator', { list: proof() }).list.publicState).toBe('not yet');
   });
   it('a cohort never borrows another cohort\'s mainnet run', () => {
     const all = cohortsOf({ operator: listed, moonbeam: listed }, steps, 'operator', { moonbeam: { list: proof() } });
@@ -224,10 +230,10 @@ describe('publicState: live only on a mainnet run kept as an I/O fixture', () =>
       const c = v.cohorts.moonbeam[k];
       expect(PUBLIC_STATES, `${v.id}.${k}`).toContain(c.publicState);
       const p = VENUE_MAINNET[v.id]?.[STEP_FEATURE[k]];
-      expect(c.publicState, `${v.id}.${k}`).toBe(publicStateOf(c.state, p));
+      expect(c.publicState, `${v.id}.${k}`).toBe(publicStateOf(c.state, p, v[k].state));
       if (c.publicState !== 'live') { expect(c.mainnet, `${v.id}.${k}`).toBeUndefined(); continue; }
       live += 1;
-      expect(c.state).toBe('live'); expect(v.moonbeamLists).toBe(true);
+      expect([c.state, v[k].state], `${v.id}.${k}`).toContain('live'); expect(v.moonbeamLists).toBe(true);
       const run = at(p!.run);
       expect([run.market, run.run.rung, run.run.ref]).toEqual([v.id, 'live', p!.ref]);
       expect(run.features).toContain(STEP_FEATURE[k]);

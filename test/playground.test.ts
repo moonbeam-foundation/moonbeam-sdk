@@ -244,7 +244,7 @@ describe('_PLAYGROUND_NETS_v1_ gates', () => {
     expect(gate({ devnetGreen: undefined })).toBe('devnetGreen');
     expect(gate({ devnetGreen: { market: MARKET, runs: ['devnet-run-1'] } })).toBe('devnetGreen');
     expect(gate({ devnetGreen: { market: MARKET, runs: ['devnet-run-1', 'devnet-run-1'] } })).toBe('devnetGreen');
-    expect(gate({ devnetGreen: { market: 'workflow-nodes', runs: GREEN.runs } })).toBe('market');
+    expect(gate({ devnetGreen: { market: 'no-such-market', runs: GREEN.runs } })).toBe('market');
   });
   it('Base plans only for the market the green runs were of, and within the budget', () => {
     expect(() => base.plan('auto-complete', args(undefined, { market: 'x402-base' }))).toThrow(PlaygroundGateError);
@@ -254,7 +254,7 @@ describe('_PLAYGROUND_NETS_v1_ gates', () => {
   });
   it('the devnet opens without the gates; a market Moonbeam does not list on is refused', () => {
     expect(dev.net.id).toBe('devnet');
-    expect(() => dev.plan('auto-complete', args(undefined, { market: 'bitagent-base' }))).toThrow(/not one Moonbeam lists on/);
+    expect(() => dev.plan('auto-complete', args(undefined, { market: 'no-such-market' }))).toThrow(/not one Moonbeam lists on/);
     expect(() => dev.plan('rejected', args())).toThrow(/needs \{ via \}/);
     const { loss: _l, ...noLoss } = args();
     expect(() => dev.plan('cheated', noLoss)).toThrow(/loss/);

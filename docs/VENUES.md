@@ -17,18 +17,18 @@ A market is in the table when at least one of its steps is live. The others are 
 ## Every venue
 
 <!-- venues:moonbeam:start (scripts/gen-readme-venues.mjs) -->
-Read on 2026-11-14. Each word is Moonbeam's own listing on that market (`venue.cohorts.moonbeam`, its `publicState`).
+Read on 2026-11-26. Each word is that step on that market (`venue.cohorts.moonbeam`, its `publicState`).
 
 | Market | What a seller does there | List | Take a job | Settle | SDK calls |
 |---|---|---|---|---|---|
-| x402 | Buyers pay per call in USDC on Base; each paid task is handed to your agent and settled through the facilitator. | live | not yet | not yet | `publishListing`, `handOver`, `agentSales` |
+| x402 | Buyers pay per call in USDC on Base; each paid task is handed to your agent and settled through the facilitator. | live | live | not yet | `publishListing`, `handOver`, `agentSales` |
+| Olas Mech | A requester pays a mech on Base for one request; the mech delivers its answer on chain. | live | not yet | not yet | `readListing`, `olasRequest` |
+| NEAR AI Agent Market | Buyers find an agent by category and its own words, and hire it over A2A. | live | not yet | not yet | `readListing`, `handOver` |
 | A2A Registry | A directory of A2A agent cards; buyers call the agent at its card's endpoint. | live | not yet | n/a | `listOn`, `handOver`, `agentSales` |
 | MCP Registry | The official MCP Registry and its mirrors (Glama, PulseMCP); clients call the agent's MCP door. | live | not yet | n/a | `listOn`, `handOver`, `agentSales` |
 | ERC-8004 | The identity registry on Base every other market reads: the agent's id, card and endpoint. | live | n/a | n/a | `listOn` |
 
-Not yet: Virtuals ACP (ERC-8183 jobs), Olas Mech and NEAR AI Agent Market. No mainnet run of a step there is kept as an I/O test yet.
-
-Moonbeam does not list agents on Virtuals memo jobs (memo-ACP), BitAgent or Workflow nodes (npm). They stay in `VENUES` as read-only rows (`moonbeamLists: false`).
+Not yet: Virtuals ACP (ERC-8183 jobs), Virtuals memo jobs (memo-ACP), BitAgent and Workflow nodes (npm). No mainnet run of a step there is kept as an I/O test yet.
 
 - **live**: a mainnet run of the step is kept in this SDK as an I/O fixture (`test/io/fixtures`), and a test replays it.
 - **not yet**: no mainnet run of the step is kept yet.
@@ -46,9 +46,31 @@ Your listing sells through the class wall of its job class. The Bazaar indexes a
 
 `market(t, 'x402')` reads its week of money.
 
-- **list**: live · `market.publishListing` (mainnet run read 2026-11-06, kept at `test/io/fixtures/x402-base/listed/run-live-list.json`)
-- **take**: not yet · `market.handOver`
+- **list**: live · `market.publishListing` (mainnet run read 2026-11-25, kept at `test/io/fixtures/x402-base/listed/run-live-list.json`)
+- **take**: live · `market.handOver` (mainnet run read 2026-11-26, kept at `test/io/fixtures/x402-base/bought/run-live-sell.json`)
 - **settle**: not yet · `market.agentSales`
+
+### Olas Mech (`olas-base`)
+
+A requester pays a mech on Base for one request; the mech delivers its answer on chain.
+
+An Olas service registered from your own wallet (a bond and gas): `readListing().export.olas` holds its service, mech and worker.
+
+`market(t, 'olas')` reads its week of money.
+
+- **list**: live · `market.readListing` (mainnet run read 2026-11-26, kept at `test/io/fixtures/olas-base/listed/run-live-list.json`)
+- **take**: not yet · `market.olasRequest`
+- **settle**: not yet · `market.olasRequest`
+
+### NEAR AI Agent Market (`near-agent-market`)
+
+Buyers find an agent by category and its own words, and hire it over A2A.
+
+Your own account on market.near.ai: `readListing().export.near` is the registration to send.
+
+- **list**: live · `market.readListing` (mainnet run read 2026-11-25, kept at `test/io/fixtures/near-agent-market/listed/run-live-list.json`)
+- **take**: not yet · `market.handOver`
+- **settle**: not yet
 
 ### A2A Registry (`a2a`)
 
@@ -56,7 +78,7 @@ A directory of A2A agent cards; buyers call the agent at its card's endpoint.
 
 The list step: Moonbeam serves the agent's A2A card and publishes it to the registry.
 
-- **list**: live · `market.listOn` (mainnet run read 2026-11-06, kept at `test/io/fixtures/a2a/listed/run-live-list.json`)
+- **list**: live · `market.listOn` (mainnet run read 2026-11-25, kept at `test/io/fixtures/a2a/listed/run-live-list.json`)
 - **take**: not yet · `market.handOver`
 - **settle**: n/a: an A2A directory has no settlement step
 
@@ -66,7 +88,7 @@ The official MCP Registry and its mirrors (Glama, PulseMCP); clients call the ag
 
 The list step: Moonbeam serves the agent's MCP door and publishes it to the official registry.
 
-- **list**: live · `market.listOn` (mainnet run read 2026-11-11, kept at `test/io/fixtures/mcp/listed/run-live-list.json`)
+- **list**: live · `market.listOn` (mainnet run read 2026-11-25, kept at `test/io/fixtures/mcp/listed/run-live-list.json`)
 - **take**: not yet · `market.handOver`
 - **settle**: n/a: an MCP registry has no settlement step
 
@@ -76,7 +98,7 @@ The identity registry on Base every other market reads: the agent's id, card and
 
 The list step records it; for an id your own wallet owns, `register8004Calls` builds `register(agentURI)` for you to sign.
 
-- **list**: live · `market.listOn` (mainnet run read 2026-11-06, kept at `test/io/fixtures/erc8004/listed/run-live-list.json`)
+- **list**: live · `market.listOn` (mainnet run read 2026-11-25, kept at `test/io/fixtures/erc8004/listed/run-live-list.json`)
 - **take**: n/a: an identity registry takes no hire
 - **settle**: n/a: an identity registry settles nothing
 <!-- venues:each:end -->

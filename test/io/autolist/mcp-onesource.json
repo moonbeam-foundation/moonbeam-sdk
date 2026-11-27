@@ -1,0 +1,499 @@
+{
+ "schema": "moonbeam.io.autolist.v1",
+ "venue": "mcp",
+ "ref": "x402:19a6a30e0bec",
+ "origin": "https://next.moonbeam.network",
+ "recorded_at": "2026-11-26T20:48:46.117Z",
+ "exchanges": [
+  {
+   "method": "POST",
+   "url": "https://next.moonbeam.network/api/acp/x402/seller/api-onesource-io/mcp",
+   "request": {
+    "jsonrpc": "2.0",
+    "id": 1,
+    "method": "initialize",
+    "params": {
+     "protocolVersion": "2025-06-18"
+    }
+   },
+   "status": 200,
+   "response": {
+    "jsonrpc": "2.0",
+    "id": 1,
+    "result": {
+     "protocolVersion": "2025-06-18",
+     "capabilities": {
+      "tools": {}
+     },
+     "serverInfo": {
+      "name": "api-onesource-io",
+      "title": "api.onesource.io",
+      "version": "1.0.0"
+     },
+     "instructions": "Moonbeam lists agents on ERC-8004, the MCP Registry and A2A; listing runs on a plan (https://next.moonbeam.network/acp/plans). moonbeam_where_listed is free: it reads where an agent is listed. Each other tool answers one call, priced in USDC and paid with x402: call it once to read its terms, then again with the signed payment in params._meta[\"x402/payment\"]."
+    }
+   },
+   "at": "2026-11-26T20:48:43.119Z"
+  },
+  {
+   "method": "POST",
+   "url": "https://next.moonbeam.network/api/acp/x402/seller/api-onesource-io/mcp",
+   "request": {
+    "jsonrpc": "2.0",
+    "id": 2,
+    "method": "tools/list"
+   },
+   "status": 200,
+   "response": {
+    "jsonrpc": "2.0",
+    "id": 2,
+    "result": {
+     "tools": {
+      "0": {
+       "name": "api_onesource_io_chain_erc20_balance",
+       "title": "Chain erc20 balance",
+       "description": "ERC20 token balance for any Ethereum wallet - USDC, USDT, DAI, or any token - via balanceOf (eth_call) on OneSource live Ethereum RPC 0.003 USDC a call.",
+       "inputSchema": {
+        "properties": {
+         "address": {
+          "pattern": "^0x[a-fA-F0-9]{40}$",
+          "type": "string"
+         },
+         "contract": {
+          "pattern": "^0x[a-fA-F0-9]{40}$",
+          "type": "string"
+         },
+         "network": {
+          "default": "ethereum",
+          "enum": {
+           "0": "ethereum",
+           "1": "sepolia",
+           "2": "robinhood"
+          },
+          "type": "string"
+         }
+        },
+        "required": {
+         "0": "address",
+         "1": "contract"
+        },
+        "type": "object"
+       },
+       "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": true
+       },
+       "_meta": {
+        "x402/price": {
+         "amount": "3000",
+         "asset": "USDC",
+         "decimals": 6,
+         "scheme": "exact",
+         "network": "eip155:8453",
+         "usdc": "0.003"
+        }
+       }
+      },
+      "1": {
+       "name": "api_onesource_io_chain_block_number",
+       "title": "Chain block number",
+       "description": "Latest Ethereum block height - current chain tip via eth_blockNumber 0.001 USDC a call.",
+       "inputSchema": {
+        "properties": {
+         "network": {
+          "default": "ethereum",
+          "enum": {
+           "0": "ethereum",
+           "1": "sepolia",
+           "2": "robinhood"
+          },
+          "type": "string"
+         }
+        },
+        "type": "object"
+       },
+       "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": true
+       },
+       "_meta": {
+        "x402/price": {
+         "amount": "1000",
+         "asset": "USDC",
+         "decimals": 6,
+         "scheme": "exact",
+         "network": "eip155:8453",
+         "usdc": "0.001"
+        }
+       }
+      },
+      "2": {
+       "name": "api_onesource_io_chain_live_balance",
+       "title": "Chain live balance",
+       "description": "Live wallet balance - native ETH plus up to 20 caller-supplied ERC20 tokens in one bounded RPC batch 0.003 USDC a call.",
+       "inputSchema": {
+        "properties": {
+         "address": {
+          "pattern": "^0x[a-fA-F0-9]{40}$",
+          "type": "string"
+         },
+         "network": {
+          "default": "ethereum",
+          "enum": {
+           "0": "ethereum",
+           "1": "sepolia",
+           "2": "robinhood"
+          },
+          "type": "string"
+         },
+         "tokens": {
+          "maxLength": 859,
+          "pattern": "^0x[a-fA-F0-9]{40}(,0x[a-fA-F0-9]{40}){0,19}$",
+          "type": "string"
+         }
+        },
+        "required": {
+         "0": "address"
+        },
+        "type": "object"
+       },
+       "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": true
+       },
+       "_meta": {
+        "x402/price": {
+         "amount": "3000",
+         "asset": "USDC",
+         "decimals": 6,
+         "scheme": "exact",
+         "network": "eip155:8453",
+         "usdc": "0.003"
+        }
+       }
+      },
+      "3": {
+       "name": "api_onesource_io_contract_address",
+       "title": "Contract address",
+       "description": "Best-effort contract introspection via batched RPC - bytecode presence, token metadata, and ERC20-like/ERC721/ERC1155 classification 0.005 USDC a call.",
+       "inputSchema": {
+        "type": "object"
+       },
+       "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": true
+       },
+       "_meta": {
+        "x402/price": {
+         "amount": "5000",
+         "asset": "USDC",
+         "decimals": 6,
+         "scheme": "exact",
+         "network": "eip155:8453",
+         "usdc": "0.005"
+        }
+       }
+      },
+      "4": {
+       "name": "api_onesource_io_chain_erc20_transfers",
+       "title": "Chain erc20 transfers",
+       "description": "ERC20 Transfer logs via eth_getLogs - raw Transfer events for a token or wallet 0.005 USDC a call.",
+       "inputSchema": {
+        "properties": {
+         "address": {
+          "pattern": "^0x[a-fA-F0-9]{40}$",
+          "type": "string"
+         },
+         "contract": {
+          "pattern": "^0x[a-fA-F0-9]{40}$",
+          "type": "string"
+         },
+         "from_block": {
+          "oneOf": {
+           "0": {
+            "minimum": 0,
+            "type": "integer"
+           },
+           "1": {
+            "enum": {
+             "0": "latest",
+             "1": "pending",
+             "2": "earliest",
+             "3": "safe",
+             "4": "finalized"
+            },
+            "type": "string"
+           },
+           "2": {
+            "pattern": "^0[xX][a-fA-F0-9]+$",
+            "type": "string"
+           }
+          }
+         },
+         "network": {
+          "default": "ethereum",
+          "enum": {
+           "0": "ethereum",
+           "1": "sepolia",
+           "2": "robinhood"
+          },
+          "type": "string"
+         },
+         "to_block": {
+          "oneOf": {
+           "0": {
+            "minimum": 0,
+            "type": "integer"
+           },
+           "1": {
+            "enum": {
+             "0": "latest",
+             "1": "pending",
+             "2": "earliest",
+             "3": "safe",
+             "4": "finalized"
+            },
+            "type": "string"
+           },
+           "2": {
+            "pattern": "^0[xX][a-fA-F0-9]+$",
+            "type": "string"
+           }
+          }
+         }
+        },
+        "type": "object"
+       },
+       "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": true
+       },
+       "_meta": {
+        "x402/price": {
+         "amount": "5000",
+         "asset": "USDC",
+         "decimals": 6,
+         "scheme": "exact",
+         "network": "eip155:8453",
+         "usdc": "0.005"
+        }
+       }
+      }
+     }
+    }
+   },
+   "at": "2026-11-26T20:48:43.160Z"
+  },
+  {
+   "method": "GET",
+   "url": "https://registry.modelcontextprotocol.io/v0/servers/network.moonbeam.next%2Fapi-onesource-io/versions/latest",
+   "request": null,
+   "status": 404,
+   "response": {
+    "title": "Not Found",
+    "status": 404,
+    "detail": "Server not found"
+   },
+   "at": "2026-11-26T20:48:43.211Z"
+  },
+  {
+   "method": "POST",
+   "url": "https://registry.modelcontextprotocol.io/v0/auth/http",
+   "request": {
+    "domain": "next.moonbeam.network",
+    "timestamp": "2026-11-26T20:48:43Z",
+    "signed_timestamp": "4509b1e15affd5a0ef6b77431fd121056ff75d10d686d5081d57e9f6fe25b346e4d171b633b35b28f9832194f6832e02633821563f55caabfd41042506c41504"
+   },
+   "status": 200,
+   "response": {
+    "registry_token": "(not kept)",
+    "expires_at": 1795726425
+   },
+   "at": "2026-11-26T20:48:44.945Z"
+  },
+  {
+   "method": "POST",
+   "url": "https://registry.modelcontextprotocol.io/v0/publish",
+   "request": {
+    "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+    "name": "network.moonbeam.next/api-onesource-io",
+    "description": "ERC20 token balance for any Ethereum wallet - USDC, USDT, DAI, or any token - via balanceOf (eth_cal",
+    "title": "api.onesource.io",
+    "version": "1.0.0",
+    "websiteUrl": "https://next.moonbeam.network/acp/agents/x402%3A19a6a30e0bec",
+    "remotes": {
+     "0": {
+      "type": "streamable-http",
+      "url": "https://next.moonbeam.network/api/acp/x402/seller/api-onesource-io/mcp"
+     }
+    }
+   },
+   "status": 200,
+   "response": {
+    "server": {
+     "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+     "name": "network.moonbeam.next/api-onesource-io",
+     "description": "ERC20 token balance for any Ethereum wallet - USDC, USDT, DAI, or any token - via balanceOf (eth_cal",
+     "title": "api.onesource.io",
+     "version": "1.0.0",
+     "websiteUrl": "https://next.moonbeam.network/acp/agents/x402%3A19a6a30e0bec",
+     "remotes": {
+      "0": {
+       "type": "streamable-http",
+       "url": "https://next.moonbeam.network/api/acp/x402/seller/api-onesource-io/mcp"
+      }
+     }
+    },
+    "_meta": {
+     "io.modelcontextprotocol.registry/official": {
+      "status": "active",
+      "statusChangedAt": "2026-11-26T20:48:45.923878295Z",
+      "publishedAt": "2026-11-26T20:48:45.923878295Z",
+      "updatedAt": "2026-11-26T20:48:45.923878295Z",
+      "isLatest": true
+     }
+    }
+   },
+   "at": "2026-11-26T20:48:45.842Z"
+  },
+  {
+   "method": "GET",
+   "url": "https://registry.modelcontextprotocol.io/v0/servers/network.moonbeam.next%2Fapi-onesource-io/versions/1.0.0",
+   "request": null,
+   "status": 200,
+   "response": {
+    "server": {
+     "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+     "name": "network.moonbeam.next/api-onesource-io",
+     "description": "ERC20 token balance for any Ethereum wallet - USDC, USDT, DAI, or any token - via balanceOf (eth_cal",
+     "title": "api.onesource.io",
+     "version": "1.0.0",
+     "websiteUrl": "https://next.moonbeam.network/acp/agents/x402%3A19a6a30e0bec",
+     "remotes": {
+      "0": {
+       "type": "streamable-http",
+       "url": "https://next.moonbeam.network/api/acp/x402/seller/api-onesource-io/mcp"
+      }
+     }
+    },
+    "_meta": {
+     "io.modelcontextprotocol.registry/official": {
+      "status": "active",
+      "statusChangedAt": "2026-11-26T20:48:45.923878Z",
+      "publishedAt": "2026-11-26T20:48:45.923878Z",
+      "updatedAt": "2026-11-26T20:48:45.923878Z",
+      "isLatest": true
+     }
+    }
+   },
+   "at": "2026-11-26T20:48:45.985Z"
+  }
+ ],
+ "steps": [
+  {
+   "id": "door",
+   "who": "machine",
+   "state": "done",
+   "readback": {
+    "url": "https://next.moonbeam.network/api/acp/x402/seller/api-onesource-io/mcp",
+    "seen": true,
+    "at": "2026-11-26T20:48:43.210Z",
+    "facts": {
+     "tools": 5
+    }
+   },
+   "evidence": [
+    {
+     "method": "POST",
+     "url": "https://next.moonbeam.network/api/acp/x402/seller/api-onesource-io/mcp",
+     "status": 200,
+     "at": "2026-11-26T20:48:43.119Z"
+    },
+    {
+     "method": "POST",
+     "url": "https://next.moonbeam.network/api/acp/x402/seller/api-onesource-io/mcp",
+     "status": 200,
+     "at": "2026-11-26T20:48:43.160Z"
+    }
+   ]
+  },
+  {
+   "id": "server_json",
+   "who": "machine",
+   "state": "done",
+   "readback": {
+    "url": "https://registry.modelcontextprotocol.io/v0/servers/network.moonbeam.next%2Fapi-onesource-io/versions/latest",
+    "seen": false,
+    "at": "2026-11-26T20:48:43.599Z",
+    "facts": {
+     "name": "network.moonbeam.next/api-onesource-io",
+     "version": "1.0.0"
+    }
+   },
+   "evidence": [
+    {
+     "method": "GET",
+     "url": "https://registry.modelcontextprotocol.io/v0/servers/network.moonbeam.next%2Fapi-onesource-io/versions/latest",
+     "status": 404,
+     "at": "2026-11-26T20:48:43.211Z"
+    }
+   ]
+  },
+  {
+   "id": "signin",
+   "who": "machine",
+   "state": "done",
+   "evidence": [
+    {
+     "method": "POST",
+     "url": "https://registry.modelcontextprotocol.io/v0/auth/http",
+     "status": 200,
+     "at": "2026-11-26T20:48:44.945Z"
+    }
+   ]
+  },
+  {
+   "id": "publish",
+   "who": "machine",
+   "state": "done",
+   "evidence": [
+    {
+     "method": "POST",
+     "url": "https://registry.modelcontextprotocol.io/v0/publish",
+     "status": 200,
+     "at": "2026-11-26T20:48:45.842Z"
+    }
+   ]
+  },
+  {
+   "id": "readback",
+   "who": "machine",
+   "state": "done",
+   "readback": {
+    "url": "https://registry.modelcontextprotocol.io/v0/servers?search=network.moonbeam.next%2Fapi-onesource-io",
+    "seen": true,
+    "at": "2026-11-26T20:48:46.117Z",
+    "facts": {
+     "version": "1.0.0",
+     "status": "active"
+    }
+   },
+   "evidence": [
+    {
+     "method": "GET",
+     "url": "https://registry.modelcontextprotocol.io/v0/servers/network.moonbeam.next%2Fapi-onesource-io/versions/1.0.0",
+     "status": 200,
+     "at": "2026-11-26T20:48:45.985Z"
+    }
+   ]
+  }
+ ],
+ "done": {
+  "ok": true,
+  "state": "listed",
+  "see_it": {
+   "url": "https://registry.modelcontextprotocol.io/v0/servers?search=network.moonbeam.next%2Fapi-onesource-io"
+  },
+  "held": []
+ }
+}
